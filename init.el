@@ -73,7 +73,12 @@
     auto-complete
     popup 
     cl-lib
-    solarized-theme))
+    solarized-theme
+    
+    haskell-mode
+    shm ; structured haskell mode
+    ghc
+    company-ghc))
 
 ;; On OS X, an Emacs instance started from the graphical user
 ;; interface will have a different environment than a shell in a
@@ -137,3 +142,7 @@
 ;; Langauage-specific
 (load "setup-clojure.el")
 (load "setup-js.el")
+; (load "setup-haskell.el")
+
+
+
