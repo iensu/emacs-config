@@ -66,7 +66,14 @@
     tagedit
 
     ;; git integration
-    magit))
+    magit
+
+    ac-cider
+    ac-cider-compliment
+    auto-complete
+    popup 
+    cl-lib
+    solarized-theme))
 
 ;; On OS X, an Emacs instance started from the graphical user
 ;; interface will have a different environment than a shell in a
