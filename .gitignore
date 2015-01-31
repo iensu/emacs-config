@@ -13,3 +13,4 @@ auto-save-list
 backups
 elpa
 session*
+.python-environments

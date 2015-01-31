@@ -50,6 +50,7 @@
     ;; customizations/navigation.el line 23 for a description
     ;; of ido
     ido-ubiquitous
+    ido-vertical-mode
 
     ;; Enhances M-x to allow easier execution of commands. Provides
     ;; a filterable list of possible commands in the minibuffer
@@ -68,17 +69,25 @@
     ;; git integration
     magit
 
+    ;; Clojure etc
     ac-cider
     ac-cider-compliment
     auto-complete
     popup 
     cl-lib
     solarized-theme
-    
+    deferred
+
+    ;; Haskell
     haskell-mode
     shm ; structured haskell mode
     ghc
-    company-ghc))
+    company-ghc
+    
+    ;; Python
+    jedi
+    epc
+    ))
 
 ;; On OS X, an Emacs instance started from the graphical user
 ;; interface will have a different environment than a shell in a
@@ -143,6 +152,8 @@
 (load "setup-clojure.el")
 (load "setup-js.el")
 ; (load "setup-haskell.el")
+(load "setup-python.el")
 
-
+;; Autocomplete
+;(load "setup-ac.el")
 

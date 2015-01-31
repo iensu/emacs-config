@@ -4,6 +4,15 @@
 ;; http://www.emacswiki.org/emacs/HippieExpand
 (global-set-key (kbd "M-/") 'hippie-expand)
 
+(require 'auto-complete)
+(require 'auto-complete-config)
+(defun auto-complete-mode-maybe ()
+  "No maybe for you. Only AC!"
+  (unless (minibufferp (current-buffer))
+    (auto-complete-mode 1)))
+
+(setq global-auto-complete-mode t)
+
 ;; OSX Meta remap
 (setq mac-option-modifier nil
       mac-command-modifier 'meta
@@ -47,9 +56,6 @@
 (setq backup-directory-alist `(("." . ,(concat user-emacs-directory
                                                "backups"))))
 (setq auto-save-default nil)
-
-;; Auto-complete
-(global-auto-complete-mode t)
 
 ;; comments
 (defun toggle-comment-on-line ()
