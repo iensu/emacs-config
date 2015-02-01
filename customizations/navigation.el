@@ -51,6 +51,9 @@
 (ido-mode 1)
 (ido-vertical-mode 1)
 
+; (setq ido-vertical-define-keys 'C-n-C-p-up-down)
+(setq ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
+
 ;; Shows a list of buffers
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 

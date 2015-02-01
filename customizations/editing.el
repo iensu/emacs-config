@@ -13,6 +13,8 @@
 
 (setq global-auto-complete-mode t)
 
+(add-hook 'after-init-hook 'global-company-mode)
+
 ;; OSX Meta remap
 (setq mac-option-modifier nil
       mac-command-modifier 'meta

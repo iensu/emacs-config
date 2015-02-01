@@ -69,14 +69,21 @@
     ;; git integration
     magit
 
+    ;; autocomplete
+    auto-complete
+    company
+
+    ;; themes
+    solarized-theme
+    
+    ;; misc
+    deferred
+    popup
+
     ;; Clojure etc
     ac-cider
     ac-cider-compliment
-    auto-complete
-    popup 
     cl-lib
-    solarized-theme
-    deferred
 
     ;; Haskell
     haskell-mode
@@ -85,8 +92,11 @@
     company-ghc
     
     ;; Python
-    jedi
-    epc
+    elpy
+
+    ;; Elixir
+    elixir-mode
+    alchemist
     ))
 
 ;; On OS X, an Emacs instance started from the graphical user
@@ -151,9 +161,8 @@
 ;; Langauage-specific
 (load "setup-clojure.el")
 (load "setup-js.el")
-; (load "setup-haskell.el")
+(load "setup-haskell.el")
 (load "setup-python.el")
+(load "setup-elixir.el")
 
-;; Autocomplete
-;(load "setup-ac.el")
 
