@@ -79,6 +79,7 @@
     ;; misc
     deferred
     popup
+    iedit
 
     ;; Clojure etc
     ac-cider
