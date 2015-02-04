@@ -15,3 +15,10 @@
 (setq elpy-rpc-backen "rope")
 
 (elpy-use-ipython)
+
+(defun custom-python-indentation-hook ()
+  (setq indent-tabs-mode nil)
+  (setq python-indent 2)
+  (setq tab-width 2))
+
+(add-hook 'python-mode-hook 'custom-python-indentation-hook)
