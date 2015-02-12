@@ -50,7 +50,7 @@
 
 ;; When there's a cider error, show its buffer and switch to it
 (setq cider-show-error-buffer t)
-; (setq cider-auto-select-error-buffer t)
+(setq cider-auto-select-error-buffer nil)
 
 ;; Where to store the cider history.
 (setq cider-repl-history-file "~/.emacs.d/cider-history")

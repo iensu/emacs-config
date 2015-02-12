@@ -67,3 +67,7 @@
 
 ;; no bell
 (setq ring-bell-function 'ignore)
+
+;; Set default font
+(if (member "DejaVu Sans Mono" (font-family-list))
+    (set-default-font "DejaVu Sans Mono 9"))
