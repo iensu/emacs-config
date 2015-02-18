@@ -71,3 +71,9 @@
 ;; Set default font
 (if (member "DejaVu Sans Mono" (font-family-list))
     (set-default-font "DejaVu Sans Mono 9"))
+
+;; Window size modification
+(global-set-key (kbd "C-s-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "C-s-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "C-s-<down>") 'shrink-window)
+(global-set-key (kbd "C-s-<up>") 'enlarge-window)
