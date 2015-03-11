@@ -103,6 +103,7 @@
     groovy-mode
     inf-groovy
     grails-mode
+    gradle-mode
     ))
 
 ;; On OS X, an Emacs instance started from the graphical user
@@ -173,6 +174,7 @@
 (load "setup-haskell.el")
 (load "setup-python.el")
 (load "setup-elixir.el")
+(load "groovy-electric.el")
 (load "setup-groovy.el")
 
 
