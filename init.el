@@ -98,6 +98,11 @@
     ;; Elixir
     elixir-mode
     alchemist
+
+    ;; Groovy
+    groovy-mode
+    inf-groovy
+    grails-mode
     ))
 
 ;; On OS X, an Emacs instance started from the graphical user
@@ -159,11 +164,15 @@
 ;; For editing lisps
 (load "elisp-editing.el")
 
+;; For auto-complete
+(load "setup-ac.el")
+
 ;; Langauage-specific
 (load "setup-clojure.el")
 (load "setup-js.el")
 (load "setup-haskell.el")
 (load "setup-python.el")
 (load "setup-elixir.el")
+(load "setup-groovy.el")
 
 

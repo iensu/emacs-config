@@ -6,12 +6,8 @@
 
 (require 'auto-complete)
 (require 'auto-complete-config)
-(defun auto-complete-mode-maybe ()
-  "No maybe for you. Only AC!"
-  (unless (minibufferp (current-buffer))
-    (auto-complete-mode 1)))
 
-(setq global-auto-complete-mode t)
+(add-hook 'after-init-hook 'global-auto-complete-mode)
 
 (add-hook 'after-init-hook 'global-company-mode)
 
@@ -20,7 +16,7 @@
       mac-command-modifier 'meta
       x-select-enable-clipboard t)
 
-;; Lisp-friendly hippie expand
+ ;; Lisp-friendly hippie expand
 (setq hippie-expand-try-functions-list
       '(try-expand-dabbrev
         try-expand-dabbrev-all-buffers
