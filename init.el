@@ -192,7 +192,7 @@
  ;; If there is more than one, they won't work right.
  '(coffee-tab-width 2)
  '(company-ghc-show-info t)
- '(edts-man-root "/home/jens.ostlund/.emacs.d/edts/doc/17.5")
+ '(edts-man-root "~/.emacs.d/edts/doc/17.5")
  '(haskell-process-auto-import-loaded-modules t)
  '(haskell-process-log t)
  '(haskell-process-suggest-remove-import-lines t)
