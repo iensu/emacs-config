@@ -104,6 +104,12 @@
     inf-groovy
     grails-mode
     gradle-mode
+
+    ;; Latex
+    auctex
+
+    ;; Erlang
+    edts
     ))
 
 ;; On OS X, an Emacs instance started from the graphical user
@@ -176,5 +182,26 @@
 (load "setup-elixir.el")
 (load "groovy-electric.el")
 (load "setup-groovy.el")
+(load "setup-erlang.el")
 
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(coffee-tab-width 2)
+ '(company-ghc-show-info t)
+ '(edts-man-root "/home/jens.ostlund/.emacs.d/edts/doc/17.5")
+ '(haskell-process-auto-import-loaded-modules t)
+ '(haskell-process-log t)
+ '(haskell-process-suggest-remove-import-lines t)
+ '(haskell-process-type (quote cabal-repl))
+ '(haskell-tags-on-save t)
+ '(org-agenda-files (quote ("~/Documents/org/chinese.org"))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

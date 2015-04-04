@@ -14,3 +14,5 @@ backups
 elpa
 session*
 .python-environments
+url
+edts
