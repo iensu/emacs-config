@@ -91,6 +91,7 @@
     shm ; structured haskell mode
     ghc
     company-ghc
+    hindent
     
     ;; Python
     elpy
