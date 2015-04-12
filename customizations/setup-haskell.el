@@ -6,14 +6,14 @@
 ;; present
 ;; ghc-mod
 ;; hlint
+;; hindent
 ;; hoogle (remember to run 'hoogle data' in terminal to populate db)
 ;; structured-haskell-mode
 
 (autoload 'ghc-init "ghc" nil t)
 (autoload 'ghc-debug "ghc" nil t)
 
-(add-hook 'haskell-mode-hook (lambda () 
-                               (ghc-init)))
+(add-hook 'haskell-mode-hook (lambda () (ghc-init)))
 (add-hook 'haskell-mode-hook 'haskell-indent-mode)
 (add-hook 'haskell-mode-hook 'haskell-decl-scan-mode)
 (add-hook 'haskell-mode-hook 'haskell-doc-mode)
@@ -29,9 +29,6 @@
   (setenv "PATH" (concat my-cabal-path ":" (getenv "PATH")))
   (add-to-list 'exec-path my-cabal-path))
 
-(custom-set-variables '(haskell-tags-on-save t))
-(custom-set-variables '(haskell-process-type 'cabal-repl))
-
 ;; Keyboard mappings
 (eval-after-load "haskell-mode"
   '(progn
@@ -43,3 +40,8 @@
      (define-key haskell-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
      (define-key haskell-mode-map (kbd "C-c M-.") nil)
      (define-key haskell-mode-map (kbd "C-c C-d") nil)))
+
+;; Other customizations
+(custom-set-variables '(haskell-tags-on-save t)
+                      '(haskell-process-type 'cabal-repl)
+                      '(hindent-style "johan-tibell"))
