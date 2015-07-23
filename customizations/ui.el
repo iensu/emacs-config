@@ -26,10 +26,10 @@
 ;; for a more technical explanation.
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (add-to-list 'load-path "~/.emacs.d/themes")
-(load-theme 'solarized-dark t)
+(load-theme 'solarized-light t)
 
 ;; increase font size for better readability
-(set-face-attribute 'default nil :height 100)
+(set-face-attribute 'default nil :height 120)
 
 ;; Uncomment the lines below by removing semicolons and play with the
 ;; values in order to set the width (in characters wide) and height
@@ -70,7 +70,7 @@
 
 ;; Set default font
 (if (member "DejaVu Sans Mono" (font-family-list))
-    (set-default-font "DejaVu Sans Mono 9"))
+    (set-default-font "DejaVu Sans Mono 11"))
 
 ;; Window size modification
 (global-set-key (kbd "C-s-<left>") 'shrink-window-horizontally)
