@@ -44,7 +44,7 @@
 
     ;; integration with a Clojure REPL
     ;; https://github.com/clojure-emacs/cider
-    ; cider
+    cider
 
     ;; allow ido usage in as many contexts as possible. see
     ;; customizations/navigation.el line 23 for a description
@@ -88,7 +88,8 @@
     iedit
 
     ;; Clojure etc
-    ; ac-cider
+    ac-cider
+    slamhound
     ; ac-cider-compliment
     ; cl-lib
 
@@ -193,7 +194,7 @@
 (load "setup-ac.el")
 
 ;; Langauage-specific
-; (load "setup-clojure.el")
+(load "setup-clojure.el")
 (load "setup-js.el")
 ; (load "setup-haskell.el")
 ; (load "setup-python.el")
