@@ -8,6 +8,7 @@
 ;; hlint
 ;; hindent
 ;; hoogle (remember to run 'hoogle data' in terminal to populate db)
+;; scientific
 ;; structured-haskell-mode
 
 (autoload 'ghc-init "ghc" nil t)
@@ -44,4 +45,5 @@
 ;; Other customizations
 (custom-set-variables '(haskell-tags-on-save t)
                       '(haskell-process-type 'cabal-repl)
-                      '(hindent-style "johan-tibell"))
+                      '(hindent-style "johan-tibell")
+                      '(haskell-stylish-on-save t))
