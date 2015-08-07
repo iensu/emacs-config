@@ -11,6 +11,11 @@
 
 (add-hook 'after-init-hook 'global-company-mode)
 
+(require 'expand-region)
+
+(global-set-key (kbd "C-=") 'er/expand-region)
+(global-set-key (kbd "C-M-=") 'er/contract-region)
+
 ;; OSX Meta remap
 (setq mac-option-modifier nil
       mac-command-modifier 'meta
@@ -69,7 +74,7 @@
 ;; use 2 spaces for tabs
 (defun die-tabs ()
   (interactive)
-  (set-variable 'tab-width 2)
+  (set-variable 'tab-width 4)
   (mark-whole-buffer)
   (untabify (region-beginning) (region-end))
   (keyboard-quit))
@@ -83,3 +88,9 @@
 
 (setq electric-indent-mode nil)
 
+(defun my-paredit-nonlisp ()
+  "Turn on paredit mode for non-lisps."
+  (interactive)
+  (set (make-local-variable 'paredit-space-for-delimiter-predicates)
+       '((lambda (endp delimiter) nil)))
+  (paredit-mode 1))

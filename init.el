@@ -65,6 +65,13 @@
 
     ;; edit html tags like sexps
     tagedit
+    
+    ;; editing
+    expand-region
+    yasnippet
+    react-snippets
+    autopair
+    flycheck
 
     ;; git integration
     magit
@@ -83,18 +90,19 @@
 
     ;; Clojure etc
     ac-cider
-    ac-cider-compliment
-    cl-lib
+    slamhound
+    ; ac-cider-compliment
+    ; cl-lib
 
     ;; Haskell
-    haskell-mode
-    shm ; structured haskell mode
-    ghc
-    company-ghc
-    hindent
+    ; haskell-mode
+    ; shm ; structured haskell mode
+    ; ghc
+    ; company-ghc
+    ; hindent
     
     ;; Python
-    elpy
+    ; elpy
 
     ;; Elixir
     elixir-mode
@@ -111,6 +119,17 @@
 
     ;; Erlang
     edts
+
+    ;; Elm
+    elm-mode
+
+    ;; javascript
+    js2-mode
+    js2-refactor
+    web-beautify
+    tern
+    tern-auto-complete
+    web-mode
     ))
 
 ;; On OS X, an Emacs instance started from the graphical user
@@ -178,11 +197,11 @@
 ;; Langauage-specific
 (load "setup-clojure.el")
 (load "setup-js.el")
-(load "setup-haskell.el")
-(load "setup-python.el")
+; (load "setup-haskell.el")
+; (load "setup-python.el")
 (load "setup-elixir.el")
-(load "groovy-electric.el")
-(load "setup-groovy.el")
+; (load "groovy-electric.el")
+; (load "setup-groovy.el")
 (load "setup-erlang.el")
 
 
@@ -192,15 +211,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(coffee-tab-width 2)
- '(company-ghc-show-info t)
- '(edts-man-root "~/.emacs.d/edts/doc/17.5")
- '(haskell-process-auto-import-loaded-modules t)
- '(haskell-process-log t)
- '(haskell-process-suggest-remove-import-lines t)
- '(haskell-process-type (quote cabal-repl))
- '(haskell-tags-on-save t)
- '(org-agenda-files (quote ("~/Documents/org/chinese.org"))))
+ '(package-selected-packages
+   (quote
+    (flycheck web-mode web-beautify tern-auto-complete tagedit solarized-theme smex slamhound react-snippets rainbow-delimiters projectile paredit magit js2-refactor inf-groovy iedit ido-vertical-mode ido-ubiquitous groovy-mode grails-mode gradle-mode git-rebase-mode git-commit-mode expand-region elm-mode elixir-mode edts deferred clojure-mode-extra-font-locking autopair auctex alchemist ac-cider))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -1,3 +1,4 @@
+*.data
 .smex-items
 *~
 .recent*
