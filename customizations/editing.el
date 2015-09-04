@@ -11,6 +11,10 @@
 
 (add-hook 'after-init-hook 'global-company-mode)
 
+(require 'whitespace)
+
+(add-hook 'before-save-hook 'whitespace-cleanup)
+
 (require 'expand-region)
 
 (global-set-key (kbd "C-=") 'er/expand-region)
@@ -41,6 +45,9 @@
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
+
+;; speedbar
+(global-set-key (kbd "C-c C-s") 'speedbar-get-focus)
 
 ;; Don't use hard tabs
 (setq-default indent-tabs-mode nil)

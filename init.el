@@ -62,10 +62,11 @@
 
     ;; colorful parenthesis matching
     rainbow-delimiters
+    whitespace
 
     ;; edit html tags like sexps
     tagedit
-    
+
     ;; editing
     expand-region
     yasnippet
@@ -75,6 +76,7 @@
 
     ;; git integration
     magit
+    git-gutter
 
     ;; autocomplete
     auto-complete
@@ -82,7 +84,7 @@
 
     ;; themes
     solarized-theme
-    
+
     ;; misc
     deferred
     popup
@@ -100,7 +102,7 @@
     ; ghc
     ; company-ghc
     ; hindent
-    
+
     ;; Python
     ; elpy
 
@@ -156,7 +158,7 @@
 ;;
 ;; (require 'yaml-mode)
 ;; (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-;; 
+;;
 ;; Adding this code will make Emacs enter yaml mode whenever you open
 ;; a .yml file
 (add-to-list 'load-path "~/.emacs.d/vendor")
@@ -203,7 +205,8 @@
 ; (load "groovy-electric.el")
 ; (load "setup-groovy.el")
 (load "setup-erlang.el")
-
+(load "setup-bash.el")
+(load "setup-org.el")
 
 
 (custom-set-variables

@@ -17,3 +17,7 @@
 
 ;; Go straight to scratch buffer on startup
 (setq inhibit-startup-message t)
+
+(require 'git-gutter)
+(global-git-gutter-mode t)
+(git-gutter:linum-setup)
