@@ -29,7 +29,7 @@
 (load-theme 'solarized-dark t)
 
 ;; increase font size for better readability
-(set-face-attribute 'default nil :height 130)
+(set-face-attribute 'default nil :height 110)
 
 ;; Uncomment the lines below by removing semicolons and play with the
 ;; values in order to set the width (in characters wide) and height

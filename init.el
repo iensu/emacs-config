@@ -81,6 +81,7 @@
     ;; autocomplete
     auto-complete
     company
+    company-quickhelp
 
     ;; themes
     solarized-theme
