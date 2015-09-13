@@ -26,15 +26,15 @@
 ;; for a more technical explanation.
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (add-to-list 'load-path "~/.emacs.d/themes")
-(load-theme 'solarized-dark t)
+(load-theme 'solarized-light t)
 
 ;; increase font size for better readability
-(set-face-attribute 'default nil :height 110)
+(set-face-attribute 'default nil :height 130)
 
 ;; Uncomment the lines below by removing semicolons and play with the
 ;; values in order to set the width (in characters wide) and height
 ;; (in lines high) Emacs will have whenever you start it
-(setq initial-frame-alist '((top . 0) (left . 0) (width . 120) (height . 40)))
+(setq initial-frame-alist '((top . 50) (left . 50) (width . 160) (height . 50)))
 
       ;; These settings relate to how emacs interacts with your operating system
       (setq ;; makes killing/yanking interact with the clipboard
@@ -73,7 +73,7 @@
     (set-default-font "DejaVu Sans Mono 11"))
 
 ;; Window size modification
-(global-set-key (kbd "C-s-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "C-s-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "C-s-<down>") 'shrink-window)
-(global-set-key (kbd "C-s-<up>") 'enlarge-window)
+(global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "C-S-<up>") 'shrink-window)
+(global-set-key (kbd "C-S-<down>") 'enlarge-window)

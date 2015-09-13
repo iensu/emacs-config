@@ -97,15 +97,19 @@
     ; ac-cider-compliment
     ; cl-lib
 
+    ;; Scheme
+    ; racket-mode
+    geiser
+
     ;; Haskell
-    ; haskell-mode
+    haskell-mode
     ; shm ; structured haskell mode
-    ; ghc
-    ; company-ghc
-    ; hindent
+    ghc
+    company-ghc
+    hindent
 
     ;; Python
-    ; elpy
+    elpy
 
     ;; Elixir
     elixir-mode
@@ -200,15 +204,15 @@
 ;; Langauage-specific
 (load "setup-clojure.el")
 (load "setup-js.el")
-; (load "setup-haskell.el")
-; (load "setup-python.el")
+(load "setup-haskell.el")
+(load "setup-python.el")
 (load "setup-elixir.el")
 ; (load "groovy-electric.el")
 ; (load "setup-groovy.el")
 (load "setup-erlang.el")
 (load "setup-bash.el")
 (load "setup-org.el")
-
+(load "setup-scheme.el")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

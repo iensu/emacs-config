@@ -13,3 +13,12 @@
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+
+
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (add-to-list 'company-backends 'company-elisp)
+            (setq geiser-mode nil)))
+
+; (setq tab-always-indent 'complete)
+; (add-to-list 'completion-styles 'initials t)
