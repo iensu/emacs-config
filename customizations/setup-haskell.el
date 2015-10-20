@@ -21,6 +21,8 @@
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 (add-hook 'haskell-mode-hook #'hindent-mode)
 
+(add-to-list 'company-backends 'company-ghc)
+
 ;; Import navigation
 (eval-after-load 'haskell-mode
           '(define-key haskell-mode-map [f8] 'haskell-navigate-imports))
