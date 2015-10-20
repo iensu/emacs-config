@@ -220,7 +220,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flycheck web-mode web-beautify tern-auto-complete tagedit solarized-theme smex slamhound react-snippets rainbow-delimiters projectile paredit magit js2-refactor inf-groovy iedit ido-vertical-mode ido-ubiquitous groovy-mode grails-mode gradle-mode git-rebase-mode git-commit-mode expand-region elm-mode elixir-mode edts deferred clojure-mode-extra-font-locking autopair auctex alchemist ac-cider))))
+    (flycheck web-mode web-beautify tern-auto-complete tagedit solarized-theme smex slamhound rainbow-delimiters projectile paredit magit js2-refactor inf-groovy iedit ido-vertical-mode ido-ubiquitous groovy-mode grails-mode gradle-mode git-rebase-mode git-commit-mode expand-region elm-mode elixir-mode edts deferred clojure-mode-extra-font-locking autopair auctex alchemist ac-cider))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
