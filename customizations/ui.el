@@ -26,10 +26,10 @@
 ;; for a more technical explanation.
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (add-to-list 'load-path "~/.emacs.d/themes")
-(load-theme 'solarized-light t)
+(load-theme 'smyx t)
 
 ;; increase font size for better readability
-(set-face-attribute 'default nil :height 130)
+(set-face-attribute 'default nil :height 120 :weight 'light)
 
 ;; Uncomment the lines below by removing semicolons and play with the
 ;; values in order to set the width (in characters wide) and height

@@ -21,3 +21,11 @@
 (require 'git-gutter)
 (global-git-gutter-mode t)
 (git-gutter:linum-setup)
+
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
+
+(require 'markdown-mode)
+(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))

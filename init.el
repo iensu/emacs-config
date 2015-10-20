@@ -4,16 +4,10 @@
 
 ;; Define package repositories
 (require 'package)
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/") t)
-(add-to-list 'package-archives
-             '("tromey" . "http://tromey.com/elpa/") t)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
-;; (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-;;                          ("marmalade" . "http://marmalade-repo.org/packages/")
-;;                          ("melpa" . "http://melpa-stable.milkbox.net/packages/")))
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.org/packages/")))
 
 
 ;; Load and activate emacs packages. Do this first so that the
@@ -57,6 +51,8 @@
     ;; http://www.emacswiki.org/emacs/Smex
     smex
 
+    neotree
+
     ;; project navigation
     projectile
 
@@ -85,6 +81,7 @@
 
     ;; themes
     solarized-theme
+    smyx-theme
 
     ;; misc
     deferred
@@ -137,6 +134,8 @@
     tern
     tern-auto-complete
     web-mode
+
+    markdown-mode
     ))
 
 ;; On OS X, an Emacs instance started from the graphical user
