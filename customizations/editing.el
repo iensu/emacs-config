@@ -101,3 +101,5 @@
   (set (make-local-variable 'paredit-space-for-delimiter-predicates)
        '((lambda (endp delimiter) nil)))
   (paredit-mode 1))
+
+(global-auto-revert-mode 1)

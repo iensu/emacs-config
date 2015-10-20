@@ -57,7 +57,7 @@
        mouse-yank-at-point t)
 
 ;; No cursor blinking, it's distracting
-(blink-cursor-mode 0)
+;(blink-cursor-mode 0)
 
 ;; full path in title bar
 (setq-default frame-title-format "%b (%f)")
@@ -77,3 +77,5 @@
 (global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "C-S-<up>") 'shrink-window)
 (global-set-key (kbd "C-S-<down>") 'enlarge-window)
+
+(column-number-mode 1)
