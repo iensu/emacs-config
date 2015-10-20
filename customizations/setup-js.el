@@ -8,6 +8,8 @@
 (add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.dust$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.handlebars$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.styl$" . css-mode))
 
 (defun js-autoinsert-semicolons ()
   (interactive)

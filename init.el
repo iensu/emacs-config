@@ -66,7 +66,7 @@
     ;; editing
     expand-region
     yasnippet
-    react-snippets
+    ; react-snippets
     autopair
     flycheck
 
