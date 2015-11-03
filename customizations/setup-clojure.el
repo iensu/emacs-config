@@ -93,6 +93,8 @@
   (with-current-buffer (cider-current-repl-buffer)
     (goto-char (point-max))
     (insert "(require 'figwheel-sidecar.repl-api)
+             (figwheel-sidecar.repl-api/start-figwheel!
+               {:all-builds (figwheel-sidecar.repl/get-project-cljs-builds)})
              (figwheel-sidecar.repl-api/cljs-repl)")
     (cider-repl-return)))
 
