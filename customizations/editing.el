@@ -4,6 +4,10 @@
 ;; http://www.emacswiki.org/emacs/HippieExpand
 (global-set-key (kbd "M-/") 'hippie-expand)
 
+(add-to-list 'auto-mode-alist (cons "\\.txt\\'" 'adoc-mode))
+(add-to-list 'auto-mode-alist (cons "\\.asciidoc\\'" 'adoc-mode))
+
+
 (require 'auto-complete)
 (require 'auto-complete-config)
 
@@ -38,6 +42,7 @@
 
 ;; Highlight current line
 (global-hl-line-mode 1)
+(set-face-background hl-line-face "#DDDDDD")
 
 ;; Interactive search key bindings. By default, C-s runs
 ;; isearch-forward, so this swaps the bindings.

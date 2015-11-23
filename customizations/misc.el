@@ -32,3 +32,5 @@
 
 (require 'magit)
 (global-set-key (kbd "C-x g") 'magit-status)
+
+(global-prettify-symbols-mode 1)

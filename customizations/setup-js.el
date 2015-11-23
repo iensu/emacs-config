@@ -28,14 +28,15 @@
 
 ;; js-mode
 (add-hook 'js-mode-hook (lambda ()
-                          (progn 
+                          (progn
                             (js2-minor-mode t)
                             (subword-mode t)
                             (tern-mode t)
                             (electric-indent-mode +1)
-                            (local-set-key (kbd "C-c ;") 'js-autoinsert-semicolons))))
+                            (local-set-key (kbd "C-c ;") 'js-autoinsert-semicolons)
+                            (push '("function" . ?λ) prettify-symbols-alist))))
 
-(eval-after-load 'js 
+(eval-after-load 'js
   '(progn
      (electric-pair-mode t)))
 
@@ -43,7 +44,7 @@
 
 ;; js2-mode
 (add-hook 'js2-mode-hook (lambda ()
-                           (progn 
+                           (progn
                              (ac-js2-mode t))))
 
 (add-hook 'js2-mode-hook #'js2-reactor-mode)
@@ -82,7 +83,7 @@
 
 ;; Tern
 (eval-after-load 'tern
-  '(progn 
+  '(progn
      (require 'tern-auto-complete)
      (tern-ac-setup)))
 
