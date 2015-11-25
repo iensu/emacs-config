@@ -27,7 +27,8 @@
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (add-to-list 'load-path "~/.emacs.d/themes")
 ;(load-theme 'smyx t)
-(load-theme 'pastelmac t)
+;(load-theme 'pastelmac t)
+(load-theme 'cyberpunk t)
 
 ;; increase font size for better readability
 (set-face-attribute 'default nil :height 140 :weight 'light)

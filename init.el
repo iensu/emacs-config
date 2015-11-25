@@ -85,6 +85,7 @@
     meacupla-theme
     paper-theme
     pastelmac-theme
+    cyberpunk-theme
 
     ;; misc
     deferred

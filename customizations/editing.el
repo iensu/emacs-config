@@ -42,7 +42,7 @@
 
 ;; Highlight current line
 (global-hl-line-mode 1)
-(set-face-background hl-line-face "#DDDDDD")
+(set-face-background hl-line-face "#333333")
 
 ;; Interactive search key bindings. By default, C-s runs
 ;; isearch-forward, so this swaps the bindings.
