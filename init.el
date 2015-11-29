@@ -138,6 +138,7 @@
     tern
     tern-auto-complete
     web-mode
+    js-comint
 
     markdown-mode
     ; editorconfig

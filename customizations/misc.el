@@ -34,3 +34,7 @@
 (global-set-key (kbd "C-x g") 'magit-status)
 
 (global-prettify-symbols-mode 1)
+
+;; Useful for debugging
+; (setq max-specpdl-size 5)
+; (setq debug-on-error t)
