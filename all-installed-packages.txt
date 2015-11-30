@@ -1,1 +1,0 @@
-(ac-cider ac-cider-compliment auto-complete cider clojure-mode-extra-font-locking clojure-mode exec-path-from-shell ido-ubiquitous magit git-rebase-mode git-commit-mode paredit popup projectile pkg-info epl cl-lib f queue rainbow-delimiters smex solarized-theme tagedit dash s)
