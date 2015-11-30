@@ -144,6 +144,8 @@
     ; editorconfig
 
     adoc-mode
+
+    ag
     ))
 
 (if (eq system-type 'darwin)
