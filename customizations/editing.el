@@ -7,7 +7,6 @@
 (add-to-list 'auto-mode-alist (cons "\\.txt\\'" 'adoc-mode))
 (add-to-list 'auto-mode-alist (cons "\\.asciidoc\\'" 'adoc-mode))
 
-
 (require 'auto-complete)
 (require 'auto-complete-config)
 
@@ -108,3 +107,10 @@
   (paredit-mode 1))
 
 (global-auto-revert-mode 1)
+
+;; Multiple cursors
+(require 'multiple-cursors)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)

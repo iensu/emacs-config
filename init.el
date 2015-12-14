@@ -148,6 +148,8 @@
     adoc-mode
 
     ag
+
+    multiple-cursors
     ))
 
 (if (eq system-type 'darwin)
