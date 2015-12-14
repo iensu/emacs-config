@@ -1,4 +1,5 @@
-(add-hook 'elixir-mode-hook
-          'alchemist-mode)
+(require 'elixir-mode)
 
-(setq alchemist-project-compile-when-needed nil)
+;; disabling alchemist for now, since it freezes on autocomplete
+(require 'alchemist)
+;(setq alchemist-project-compile-when-needed nil)

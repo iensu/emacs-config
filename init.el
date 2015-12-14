@@ -2,6 +2,8 @@
 ;; Packages
 ;;;;
 
+(setq exec-path-from-shell-check-startup-files nil)
+
 ;; Define package repositories
 (require 'package)
 
@@ -77,7 +79,7 @@
     ;; autocomplete
     auto-complete
     company
-    company-quickhelp
+    ; company-quickhelp
 
     ;; themes
     solarized-theme
@@ -118,9 +120,9 @@
 
     ;; Groovy
     groovy-mode
-    inf-groovy
-    grails-mode
-    gradle-mode
+    ; inf-groovy
+    ; grails-mode
+    ; gradle-mode
 
     ;; Latex
     auctex
@@ -138,7 +140,7 @@
     tern
     tern-auto-complete
     web-mode
-    js-comint
+;    js-comint
 
     markdown-mode
     ; editorconfig

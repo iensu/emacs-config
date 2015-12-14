@@ -22,7 +22,8 @@
 
 ;; (setq global-auto-complete-mode t)
 
+(require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
-(company-quickhelp-mode 1)
+; (company-quickhelp-mode 1)
 ; (setq ac-auto-show-menu 0.1)
 ; (setq ac-show-menu-immediately-on-auto-complete t)

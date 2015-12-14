@@ -27,11 +27,11 @@
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (add-to-list 'load-path "~/.emacs.d/themes")
 ;(load-theme 'smyx t)
-;(load-theme 'pastelmac t)
-(load-theme 'cyberpunk t)
+(load-theme 'pastelmac t)
+;(load-theme 'cyberpunk t)
 
 ;; increase font size for better readability
-(set-face-attribute 'default nil :height 140 :weight 'light)
+(set-face-attribute 'default nil :height 150 :weight 'light)
 
 ;; Uncomment the lines below by removing semicolons and play with the
 ;; values in order to set the width (in characters wide) and height

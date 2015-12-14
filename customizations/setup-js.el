@@ -1,6 +1,5 @@
 (require 'web-mode)
 (require 'cl)
-(require 'js-comint)
 
 ;; javascript / html
 (add-to-list 'auto-mode-alist '("\\.json$" . js-mode ))
@@ -32,7 +31,6 @@
 (add-hook 'js-mode-hook 'tern-mode)
 (add-hook 'js-mode-hook 'electric-indent-mode)
 (add-hook 'js-mode-hook (lambda ()
-                          (message "HALLOJSAN")
                           (local-set-key (kbd "C-c ;") 'js-autoinsert-semicolons)
                           (push '("function" . ?λ) prettify-symbols-alist)))
 
@@ -66,17 +64,3 @@
 (defun delete-tern-process ()
   (interactive)
   (delete-process "Tern"))
-
-;;;;;;;;;;;;;;;;;;;;
-;; js-comint setup
-;;;;;;;;;;;;;;;;;;;;
-
-(js-do-use-nvm)
-
-(add-hook 'js-mode-hook (lambda ()
-                          (message "HEJSAN")
-                          (local-set-key (kbd "C-x C-e") 'js-send-last-sexp)
-                          (local-set-key (kbd "C-M-x") 'js-send-last-sexp-and-go)
-                          (local-set-key (kbd "C-c b") 'js-send-buffer)
-                          (local-set-key (kbd "C-c C-b") 'js-send-buffer-and-go)
-                          (local-set-key (kbd "C-c l") 'js-load-file-and-go)))
