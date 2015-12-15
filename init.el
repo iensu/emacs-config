@@ -150,6 +150,8 @@
     ag
 
     multiple-cursors
+
+    json-mode
     ))
 
 (if (eq system-type 'darwin)

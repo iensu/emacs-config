@@ -1,9 +1,22 @@
 (require 'web-mode)
 (require 'cl)
+(require 'json-mode)
+(require 'flycheck)
+
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; disable jshint since we prefer eslint checking
+(setq-default flycheck-disabled-checkers
+  (append flycheck-disabled-checkers
+    '(javascript-jshint)))
+
+;; use eslint with web-mode for jsx files, requires global eslint!!!
+(flycheck-add-mode 'javascript-eslint 'web-mode)
+(flycheck-add-mode 'javascript-eslint 'js2-mode)
 
 ;; javascript / html
-(add-to-list 'auto-mode-alist '("\\.json$" . js-mode ))
-(add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
+(add-to-list 'auto-mode-alist '("\\.json$" . json-mode ))
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.dust$" . web-mode))
@@ -25,29 +38,21 @@
      (insert ";"))
     (goto-char cur-pos)))
 
-;; js-mode
-(add-hook 'js-mode-hook 'js2-minor-mode)
-(add-hook 'js-mode-hook 'subword-mode)
-(add-hook 'js-mode-hook 'tern-mode)
-(add-hook 'js-mode-hook 'electric-indent-mode)
-(add-hook 'js-mode-hook (lambda ()
-                          (local-set-key (kbd "C-c ;") 'js-autoinsert-semicolons)
-                          (push '("function" . ?λ) prettify-symbols-alist)))
+(add-hook 'js2-mode-hook 'subword-mode)
+(add-hook 'js2-mode-hook 'tern-mode)
+(add-hook 'js2-mode-hook 'electric-indent-mode)
+(add-hook 'js2-mode-hook (lambda ()
+                           (local-set-key (kbd "C-c ;") 'js-autoinsert-semicolons)
+                           (push '("function" . ?λ) prettify-symbols-alist)))
 
 (eval-after-load 'js
   '(progn
      (electric-pair-mode t)))
 
-(setq js-indent-level 2)
-
-;; js2-mode
-;; (add-hook 'js2-mode-hook (lambda ()
-;;                            (progn
-;;                              (ac-js2-mode t))))
-
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
-
+(setq js2-basic-offset 2)
 (setq js2-highlight-level 3)
+(setq js2-indent-switch-body t)
 
 ;; html-mode
 (add-hook 'html-mode-hook 'subword-mode)
