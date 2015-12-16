@@ -1,5 +1,3 @@
-;; Automatically load paredit when editing a lisp file
-;; More at http://www.emacswiki.org/emacs/ParEdit
 (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
 (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
 (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
@@ -19,6 +17,3 @@
           (lambda ()
             (add-to-list 'company-backends 'company-elisp)
             (setq geiser-mode nil)))
-
-; (setq tab-always-indent 'complete)
-; (add-to-list 'completion-styles 'initials t)

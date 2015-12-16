@@ -5,25 +5,16 @@
 (require 'yasnippet)
 (yas-global-mode 1)
 
+;; auto-complete
+(require 'auto-complete)
+(require 'auto-complete-config)
+(add-hook 'after-init-hook 'global-auto-complete-mode)
+(add-hook 'after-init-hook 'global-company-mode)
 
-;; (require 'auto-complete)
-;; (require 'auto-complete-config)
-
-;; (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-;; (ac-config-default)
-
-;; (ac-set-trigger-key "TAB")
-;; (ac-set-trigger-key "<tab>")
-
-;; (defun auto-complete-mode-maybe ()
-;;   "No maybe for you. Only AC!"
-;;   (unless (minibufferp (current-buffer))
-;;     (auto-complete-mode 1)))
-
-;; (setq global-auto-complete-mode t)
-
+;; company-mode
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
+
 ; (company-quickhelp-mode 1)
 ; (setq ac-auto-show-menu 0.1)
 ; (setq ac-show-menu-immediately-on-auto-complete t)

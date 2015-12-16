@@ -1,4 +1,3 @@
-;; enables acute and grave symbols
 ;(require 'iso-transl)
 (define-key key-translation-map [dead-grave] (lookup-key key-translation-map "\C-x8`"))
 (define-key key-translation-map [dead-acute] (lookup-key key-translation-map "\C-x8'"))
@@ -7,10 +6,6 @@
 
 ;; Changes all yes/no questions to y/n type
 (fset 'yes-or-no-p 'y-or-n-p)
-
-;; shell scripts
-(setq-default sh-basic-offset 2)
-(setq-default sh-indentation 2)
 
 ;; No need for ~ files when editing
 (setq create-lockfiles nil)
@@ -34,7 +29,6 @@
 (global-set-key (kbd "C-x g") 'magit-status)
 
 (global-prettify-symbols-mode 1)
-
 ;; Useful for debugging
 ; (setq max-specpdl-size 5)
 ; (setq debug-on-error t)
