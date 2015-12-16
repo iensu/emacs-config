@@ -114,3 +114,7 @@
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+
+;; Global flycheck
+(require 'flycheck)
+(add-hook 'after-init-hook #'global-flycheck-mode)

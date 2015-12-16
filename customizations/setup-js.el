@@ -1,9 +1,6 @@
 (require 'web-mode)
 (require 'cl)
 (require 'json-mode)
-(require 'flycheck)
-
-(add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; disable jshint since we prefer eslint checking
 (setq-default flycheck-disabled-checkers
