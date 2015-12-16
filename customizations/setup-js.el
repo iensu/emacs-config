@@ -38,10 +38,10 @@
      (insert ";"))
     (goto-char cur-pos)))
 
-(add-hook 'js2-mode-hook 'subword-mode)
-(add-hook 'js2-mode-hook 'tern-mode)
-(add-hook 'js2-mode-hook 'electric-indent-mode)
 (add-hook 'js2-mode-hook (lambda ()
+                           (subword-mode)
+                           (tern-mode)
+                           (setq electric-indent-mode t)
                            (local-set-key (kbd "C-c ;") 'js-autoinsert-semicolons)
                            (push '("function" . ?λ) prettify-symbols-alist)))
 
@@ -58,6 +58,8 @@
 (add-hook 'html-mode-hook 'subword-mode)
 
 (add-hook 'web-mode-hook (lambda ()
+                           (setq web-mode-css-indent-offset 2)
+                           (setq web-mode-code-indent-offset 2)
                            (setq web-mode-markup-indent-offset 2)))
 
 ;; Tern
