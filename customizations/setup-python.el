@@ -1,9 +1,5 @@
-;;;;;;;;;;
-;; Python
-;;;;;;;;;;
-
 ;; Run the following globally:
-;;  pip install elpy jedi rope flake8 magicimport 
+;;  pip install elpy jedi rope flake8 magicimport
 
 ;; M-x pyenv-activate <RET> choose your venv
 

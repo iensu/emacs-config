@@ -1,25 +1,16 @@
 ;; Customizations relating to editing a buffer.
 
-;; Key binding to use "hippie expand" for text autocompletion
-;; http://www.emacswiki.org/emacs/HippieExpand
+;; hippe expand
 (global-set-key (kbd "M-/") 'hippie-expand)
 
+;; adoc
 (add-to-list 'auto-mode-alist (cons "\\.txt\\'" 'adoc-mode))
 (add-to-list 'auto-mode-alist (cons "\\.asciidoc\\'" 'adoc-mode))
 
-(require 'auto-complete)
-(require 'auto-complete-config)
-
-(add-hook 'after-init-hook 'global-auto-complete-mode)
-
-(add-hook 'after-init-hook 'global-company-mode)
-
 (require 'whitespace)
-
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
 (require 'expand-region)
-
 (global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "C-M-=") 'er/contract-region)
 
@@ -41,7 +32,7 @@
 
 ;; Highlight current line
 (global-hl-line-mode 1)
-(set-face-background hl-line-face "#dddddd")
+(set-face-background hl-line-face "#111111")
 
 ;; Interactive search key bindings. By default, C-s runs
 ;; isearch-forward, so this swaps the bindings.
@@ -56,17 +47,10 @@
 ;; Don't use hard tabs
 (setq-default indent-tabs-mode nil)
 
-;; When you visit a file, point goes to the last place where it
-;; was when you previously visited the same file.
-;; http://www.emacswiki.org/emacs/SavePlace
 (require 'saveplace)
 (setq-default save-place t)
-;; keep track of saved places in ~/.emacs.d/places
 (setq save-place-file (concat user-emacs-directory "places"))
 
-;; Emacs can automatically create backup files. This tells Emacs to
-;; put all backups in ~/.emacs.d/backups. More info:
-;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Backup-Files.html
 (setq backup-directory-alist `(("." . ,(concat user-emacs-directory
                                                "backups"))))
 (setq auto-save-default nil)
@@ -78,14 +62,13 @@
   (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
 (global-set-key (kbd "C-;") 'toggle-comment-on-line)
 
-;; yay rainbows!
-;; (global-rainbow-delimiters-mode t)
+;; Rainbow parens
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
-;; use 2 spaces for tabs
+;; tabs -> spaces
 (defun die-tabs ()
   (interactive)
-  (set-variable 'tab-width 4)
+  (set-variable 'tab-width 2)
   (mark-whole-buffer)
   (untabify (region-beginning) (region-end))
   (keyboard-quit))
@@ -97,15 +80,10 @@
       (ns-get-selection-internal 'CLIPBOARD)
     (quit nil)))
 
+;; avoid automatic indentation
 (setq electric-indent-mode nil)
 
-(defun my-paredit-nonlisp ()
-  "Turn on paredit mode for non-lisps."
-  (interactive)
-  (set (make-local-variable 'paredit-space-for-delimiter-predicates)
-       '((lambda (endp delimiter) nil)))
-  (paredit-mode 1))
-
+;; update file on external modification
 (global-auto-revert-mode 1)
 
 ;; Multiple cursors
