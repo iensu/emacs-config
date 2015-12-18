@@ -3,9 +3,10 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        kill-region
+        markdown-exdent-or-delete
         org-delete-char
         org-self-insert-command
-        markdown-exdent-or-delete
         ))
 
 (setq mc/cmds-to-run-once

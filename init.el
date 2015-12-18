@@ -89,6 +89,8 @@
     tern-auto-complete
     web-mode
     json-mode
+    restclient
+    mocha-snippets
 
     markdown-mode
 
