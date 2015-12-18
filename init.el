@@ -13,6 +13,8 @@
   '(magit
     git-gutter
 
+    projectile
+
     paredit
     ))
 
@@ -45,6 +47,8 @@
 
 (global-auto-revert-mode 1)
 
+(add-hook 'before-save-hook 'whitespace-cleanup)
+
 ;;;;;;;;;;;;;;;;;;;;;
 ;; UI
 ;;;;;;;;;;;;;;;;;;;;;
@@ -52,6 +56,8 @@
 
 (global-hl-line-mode 1)
 ;(set-face-background hl-line-face "#111111")
+
+(global-prettify-symbols-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; GIT
