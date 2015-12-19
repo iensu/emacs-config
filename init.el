@@ -1,5 +1,3 @@
-(setq exec-path-from-shell-check-startup-files nil)
-
 ;;;;;;;;;;;;;;;;;;;;;
 ;; PACKAGE INIT
 ;;;;;;;;;;;;;;;;;;;;;
@@ -61,16 +59,20 @@
 ;;;;;;;;;;;;;;;;;;;;;
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; OSX Meta remap
+;; OSX related stuff
 (setq mac-option-modifier nil
       mac-command-modifier 'meta
       x-select-enable-clipboard t)
-
+(when (package-installed 'exec-path-from-shell)
+  (setq exec-path-from-shell-check-startup-files nil))
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-envs
    '("PATH")))
 
+;;;;;;;;;;;;;;;;;;;;;;
+;; PROJECT RELATED
+;;;;;;;;;;;;;;;;;;;;;;
 (require 'helm)
 (require 'helm-config)
 (global-unset-key (kbd "C-x c"))
