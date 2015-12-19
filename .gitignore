@@ -21,3 +21,4 @@ external
 **/.tern-port
 customizations/local-overrides.el
 recentf
+flycheck_*

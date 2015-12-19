@@ -1,3 +1,5 @@
+(setq exec-path-from-shell-check-startup-files nil)
+
 ;;;;;;;;;;;;;;;;;;;;;
 ;; PACKAGE INIT
 ;;;;;;;;;;;;;;;;;;;;;
@@ -118,7 +120,13 @@
 (define-key isearch-mode-map [dead-grave] nil)
 (define-key isearch-mode-map [dead-acute] nil)
 
-(setq create-lockfiles nil)
+(setq create-lockfiles nil
+      auto-save-default nil
+      x-select-enable-clipboard t
+      x-select-enable-primary t
+      save-interprogram-paste-before-kill t
+      apropos-do-all t
+      mouse-yank-at-point t)
 
 (global-auto-revert-mode 1)
 
@@ -275,5 +283,10 @@
 (require 'elixir-mode)
 (require 'alchemist)
 
-(provide 'init)
-;;; init.el ends here
+;;;;;;;;;;;;;;;;;;;;;;
+;; LOCAL OVERRIDES
+;;;;;;;;;;;;;;;;;;;;;;
+(when (file-exists-p "~/.emacs.d/local-overrides.el")
+  (progn
+    (message "Applying local overrides...")
+    (load "local-overrides.el")))
