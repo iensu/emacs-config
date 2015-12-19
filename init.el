@@ -205,7 +205,7 @@
 ;; elisp
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda ()
-	    (turn-on-eldoc-mode)
+	    (eldoc-mode)
 	    (enable-paredit-mode)
 	    (add-to-list 'company-backends 'company-elisp)))
 
