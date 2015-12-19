@@ -133,14 +133,7 @@
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
 (require 'company)
-(add-hook 'after-init-hook
-	  (lambda ()
-	    (global-company-mode)
-	    (setq company-idle-delay 0.2
-		  company-minimum-prefix-length) 2))
-(eval-after-load 'company
-  (lambda ()
-    (add-to-list 'company-backends 'company-yasnippet)))
+(add-hook 'after-init-hook 'global-company-mode)
 
 (require 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
