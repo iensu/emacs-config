@@ -36,6 +36,7 @@
       confirm-kill-emacs 'y-or-n-p
       global-auto-revert-mode t
       ring-bell-function 'ignore
+      initial-scratch-message nil
 
       create-lockfiles nil
       auto-save-default nil
@@ -53,6 +54,8 @@
       require-final-newline t
       tab-width 2
       indent-tabs-mode nil)
+
+(fset 'yes-or-no-p 'y-or-n-p)
 
 (when (memq window-system '(max ns))
   (setq exec-path-from-shell-check-startup-files nil)
@@ -74,12 +77,25 @@
 (setq uniquify-buffer-name-style 'post-forward
       uniquify-separator ":")
 
+(global-set-key (kbd "C-c d") 'iensu/duplicate-line)
+(global-set-key (kbd "C-j") 'newline-and-indent)
+(global-set-key (kbd "C-a") 'back-to-indentation)
+(global-set-key (kbd "C-<return>") 'open-line)
+
+(display-time-mode t)
+(setq display-time-24hr-format t
+      display-time-day-and-date nil)
+
+
 ;;;
 ;; Packages
 ;;;
 
+(use-package abbrev :diminish abbrev-mode)
+
 (use-package company
   :ensure t
+  :diminish company-mode
   :init (global-company-mode)
   :config
   (setq company-idle-delay 0
@@ -109,9 +125,18 @@
   (setq css-indent-offset 2)
   (iensu/add-auto-mode 'css-mode "\\.styl$"))
 
+(use-package diminish
+  :ensure t
+  :init
+  (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "ελ")))
+  (add-hook 'lisp-interaction-mode (lambda () (setq mode-name "λ")))
+  (add-hook 'js2-mode-hook (lambda () (setq mode-name "js2"))))
+
 (use-package dracula-theme
   :ensure t
   :init (load-theme 'dracula t))
+
+(use-package eldoc :diminish eldoc-mode)
 
 (use-package expand-region
   :ensure t
@@ -126,15 +151,18 @@
 
 (use-package git-gutter
   :ensure t
+  :diminish git-gutter-mode
   :init
   (global-git-gutter-mode +1)
   (git-gutter:linum-setup))
 
 (use-package helm
   :ensure t
+  :diminish helm-mode
   :bind (("M-y" . helm-show-kill-ring)
 	 ("C-x b" . helm-mini)
 	 ("C-h SPC" . helm-all-mark-rings)
+	 ("C-x C-f" . helm-find-files)
 	 ("M-x" . helm-M-x))
   :config
   (setq helm-mode-fuzzy-match t
@@ -142,7 +170,8 @@
 	helm-split-window-in-side-p t
 	helm-move-to-line-cycle-in-source t
 	elm-ff-file-name-history-use-recentf t)
-  (helm-autoresize-mode 1))
+  (helm-autoresize-mode 1)
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action))
 
 (use-package helm-ag :ensure t)
 
@@ -152,9 +181,9 @@
   :ensure t
   :mode "\\.js$"
   :config
-  (add-hook 'js2-mode-hook '(setq js2-basic-offset 2
-				  js2-indent-switch-body t
-				  js2-highlight-level 3))
+  (add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 2
+				       js2-indent-switch-body t
+				       js2-highlight-level 3)))
   (add-hook 'js2-mode-hook 'js2-mode-hide-warnings-and-errors)
   (add-hook 'js2-mode-hook 'electric-pair-mode)
   (add-hook 'js2-mode-hook (lambda () (electric-indent-mode t)))
@@ -197,6 +226,7 @@
 (use-package org
   :ensure t
   :config
+  (iensu/add-auto-mode 'org-mode "\\.trello$")
   (add-hook 'org-mode-hook '(setq org-src-fontify-natively t
 				  org-default-notes-file "~/Documents/notes/notes.org"
 				  org-agenda-files '("~/Documents/notes/notes.org"
@@ -207,8 +237,11 @@
   (add-hook 'org-mode-hook (lambda () (linum-mode -1)))
   (add-hook 'org-mode-hook (lambda () (global-set-key (kbd "C-c c") 'org-capture))))
 
+(use-package org-trello :ensure t)
+
 (use-package paredit
   :ensure t
+  :diminish paredit-mode " π"
   :config
   (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode))
 
@@ -219,15 +252,24 @@
   (add-hook 'projectile-after-switch-project-hook 'iensu/use-local-eslint)
   (when (package-installed-p 'helm)
     (setq projectile-completion-system 'helm)
-    (helm-projectile-on)))
+    (helm-projectile-on))
+  (setq projectile-mode-line
+        '(:eval
+          (if (file-remote-p default-directory)
+              " P[]"
+            (format " P[%s]" (projectile-project-name))))))
 
 (use-package rainbow-delimiters
   :ensure t
   :config
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'js2-mode-hook 'rainbow-delimiters-mode))
+
+(use-package subword :diminish subword-mode)
 
 (use-package tern
   :ensure t
+  :diminish tern-mode " †"
   :config
   (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
   (iensu/add-auto-mode 'json-mode "\\.tern-project$"))
@@ -252,8 +294,11 @@
             (unless tern-mode (tern-mode))
           (if tern-mode (tern-mode -1)))))))
 
+(use-package undo-tree :diminish undo-tree-mode)
+
 (use-package yasnippet
   :ensure t
+  :diminish yas-minor-mode
   :init
   (yas-global-mode 1)
   :config
@@ -268,7 +313,14 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" default))))
+    ("a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" default)))
+ '(org-trello-current-prefix-keybinding "C-c o" nil (org-trello))
+ '(safe-local-variable-values
+   (quote
+    ((mocha-project-test-directory . "test")
+     (mocha-options . "--recursive --reporter dot -t 1000")
+     (mocha-environment-variables . "NODE_ENV=test")
+     (mocha-which-node . "/Users/jens.ostlund/.nvm/versions/node/v6.2.0/bin/node")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

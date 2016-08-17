@@ -5,6 +5,17 @@
     (dolist (pattern patterns)
       (add-to-list 'auto-mode-alist (cons pattern mode))))
 
+(defun iensu/duplicate-line ()
+  "Copy the current line and insert it below"
+  (interactive)
+  (let ((cur-pos (point)))
+    (move-beginning-of-line 1)
+    (kill-line)
+    (yank)
+    (newline)
+    (yank)
+    (goto-char cur-pos)))
+
 (defun iensu/pick-nodejs-version ()
     (let ((most-recent (car (last (sort (nvm--installed-versions)
                                         (lambda (a b) (string-lessp (car a) (car b)))))))

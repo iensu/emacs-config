@@ -1,3 +1,5 @@
 .cask/
 /projectile-bookmarks.eld
 flycheck_init.el
+.trello/
+/recentf
