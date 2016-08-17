@@ -17,6 +17,7 @@
 (depends-on "idle-highlight-mode")
 (depends-on "magit")
 (depends-on "multiple-cursors")
+(depends-on "neotree")
 (depends-on "nyan-mode")
 (depends-on "pallet")
 (depends-on "paredit")
