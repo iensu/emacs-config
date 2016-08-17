@@ -69,7 +69,6 @@
 
 (delete-selection-mode t)
 (global-font-lock-mode t)
-(global-hl-line-mode 1)
 
 (setq-default frame-title-format "%b (%f)")
 (setq uniquify-buffer-name-style 'post-forward
