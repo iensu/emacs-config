@@ -117,5 +117,15 @@
 			    (kbd "M-h")
 			    #'company-quickhelp-manual-begin))))))
 
+(use-package paredit
+  :ensure t
+  :config (progn
+	    (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)))
+
+(use-package rainbow-delimiters
+  :ensure t
+  :config (progn
+	    (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)))
+
 (provide 'init)
 ;;; init.el ends here
