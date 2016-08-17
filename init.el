@@ -82,11 +82,6 @@
 (global-set-key (kbd "C-a") 'back-to-indentation)
 (global-set-key (kbd "C-<return>") 'open-line)
 
-(display-time-mode t)
-(setq display-time-24hr-format t
-      display-time-day-and-date nil)
-
-
 ;;;
 ;; Packages
 ;;;
@@ -227,11 +222,12 @@
   :ensure t
   :config
   (iensu/add-auto-mode 'org-mode "\\.trello$")
-  (add-hook 'org-mode-hook '(setq org-src-fontify-natively t
-				  org-default-notes-file "~/Documents/notes/notes.org"
-				  org-agenda-files '("~/Documents/notes/notes.org"
-						     "~/Documents/notes/private"
-						     "~/Documents/notes/work")))
+  (add-hook 'org-mode-hook (lambda ()
+			     (setq org-src-fontify-natively t
+				   org-default-notes-file "~/Documents/notes/notes.org"
+				   org-agenda-files '("~/Documents/notes/notes.org"
+						      "~/Documents/notes/private"
+						      "~/Documents/notes/work"))))
   (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("javascript" . js2))))
   (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("es" . es))))
   (add-hook 'org-mode-hook (lambda () (linum-mode -1)))
@@ -247,17 +243,13 @@
 
 (use-package projectile
   :ensure t
+  :diminish projectile-mode
   :config
   (projectile-global-mode)
   (add-hook 'projectile-after-switch-project-hook 'iensu/use-local-eslint)
   (when (package-installed-p 'helm)
     (setq projectile-completion-system 'helm)
-    (helm-projectile-on))
-  (setq projectile-mode-line
-        '(:eval
-          (if (file-remote-p default-directory)
-              " P[]"
-            (format " P[%s]" (projectile-project-name))))))
+    (helm-projectile-on)))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -265,7 +257,20 @@
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'js2-mode-hook 'rainbow-delimiters-mode))
 
-(use-package subword :diminish subword-mode)
+(use-package smart-mode-line
+  :ensure t
+  :init
+  (setq sml/no-confirm-load-theme t)
+  (sml/setup)
+  :config
+  (setq sml/theme 'dark))
+
+(use-package subword
+  :diminish subword-mode
+  :init
+  (defadvice subword-transpose (before subword-transpose)
+    (when (looking-at "$")
+      (backward-word 1))))
 
 (use-package tern
   :ensure t
@@ -273,6 +278,13 @@
   :config
   (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
   (iensu/add-auto-mode 'json-mode "\\.tern-project$"))
+
+(use-package time
+  :init
+  (display-time-mode t)
+  (setq display-time-24hr-format t)
+  :config
+  (setq display-time-day-and-date nil))
 
 (use-package web-mode
   :ensure t
@@ -306,6 +318,7 @@
 
 (provide 'init)
 ;;; init.el ends here
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -313,7 +326,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" default)))
+    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
  '(org-trello-current-prefix-keybinding "C-c o" nil (org-trello))
  '(safe-local-variable-values
    (quote
