@@ -105,7 +105,7 @@
 		  company-minimum-prefix-length 2
 		  company-selection-wrap-around t
 		  company-auto-complete t
-		  company-tooltyp-align-annotations t
+		  company-tooltip-align-annotations t
 		  company-auto-complete-chars nil)
 	    (eval-after-load 'company
 	      (use-package company-quickhelp
