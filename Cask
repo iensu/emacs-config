@@ -3,6 +3,8 @@
 
 (depends-on "bind-key")
 (depends-on "cask")
+(depends-on "company")
+(depends-on "company-quickhelp")
 (depends-on "dash")
 (depends-on "drag-stuff")
 (depends-on "exec-path-from-shell")

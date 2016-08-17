@@ -97,5 +97,25 @@
   :ensure t
   :init (global-flycheck-mode t))
 
+(use-package company
+  :ensure t
+  :init (global-company-mode)
+  :config (progn
+	    (setq company-idle-delay 0
+		  company-minimum-prefix-length 2
+		  company-selection-wrap-around t
+		  company-auto-complete t
+		  company-tooltyp-align-annotations t
+		  company-auto-complete-chars nil)
+	    (eval-after-load 'company
+	      (use-package company-quickhelp
+		:ensure t
+		:init (company-quickhelp-mode 1)
+		:config (progn
+			  (setq company-quickhelp-delay 1)
+			  (define-key company-active-map
+			    (kbd "M-h")
+			    #'company-quickhelp-manual-begin))))))
+
 (provide 'init)
 ;;; init.el ends here
