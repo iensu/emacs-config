@@ -10,6 +10,7 @@
 (depends-on "f")
 (depends-on "flycheck")
 (depends-on "flycheck-cask")
+(depends-on "git-gutter")
 (depends-on "htmlize")
 (depends-on "idle-highlight-mode")
 (depends-on "magit")

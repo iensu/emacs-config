@@ -1,3 +1,9 @@
+;;; init.el --- My configuration file
+
+;;; Commentary:
+
+;;; Code:
+
 (setq user-full-name "Jens Östlund"
       user-mail-address "jostlund@gmail.com")
 
@@ -54,10 +60,12 @@
   (exec-path-from-shell-copy-envs '("PATH")))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-(add-hook 'prog-mode-hook '(lambda ()
-			     (subword-mode)
-			     (prettify-symbols-mode)
-			     (iensu/setup-line-numbers)))
+(add-hook 'prog-mode-hook
+	  '(lambda ()
+	     (subword-mode)
+	     (prettify-symbols-mode)
+	     (iensu/setup-line-numbers)
+	     (eldoc-mode)))
 
 (delete-selection-mode t)
 (global-font-lock-mode t)
@@ -74,3 +82,20 @@
 (use-package magit
   :ensure t
   :bind (("C-x g" . magit-status)))
+
+(use-package git-gutter
+  :ensure t
+  :init (progn
+	  (global-git-gutter-mode +1)
+	  (git-gutter:linum-setup)))
+
+(use-package projectile
+  :ensure t
+  :config (projectile-global-mode))
+
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode t))
+
+(provide 'init)
+;;; init.el ends here
