@@ -97,7 +97,8 @@
 			  (setq company-quickhelp-delay 1)
 			  (define-key company-active-map
 			    (kbd "M-h")
-			    #'company-quickhelp-manual-begin))))))
+			    #'company-quickhelp-manual-begin))))
+	    (add-hook 'emacs-lisp-mode-hook '(add-to-list 'company-backends 'company-elisp))))
 
 (use-package flycheck
   :ensure t
@@ -112,6 +113,25 @@
 (use-package magit
   :ensure t
   :bind (("C-x g" . magit-status)))
+
+(use-package neotree
+  :ensure t
+  :config (global-set-key [f8] 'neotree-toggle))
+
+(use-package org
+  :ensure t
+  :config (progn
+	    (add-hook 'org-mode-hook
+		      (progn
+			(setq org-src-fontify-natively t
+			      org-default-notes-file "~/Documents/notes/notes.org"
+			      org-agenda-files '("~/Documents/notes/notes.org"
+						 "~/Documents/notes/private"
+						 "~/Documents/notes/work"))
+			(add-to-list 'org-src-lang-modes '("javascript" . js2))
+			(add-to-list 'org-src-lang-modes '("es" . es))
+			(linum-mode -1)
+			(global-set-key (kbd "C-c c") 'org-capture)))))
 
 (use-package paredit
   :ensure t
