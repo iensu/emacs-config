@@ -5,6 +5,14 @@
     (dolist (pattern patterns)
       (add-to-list 'auto-mode-alist (cons pattern mode))))
 
+(defun iensu/pick-nodejs-version ()
+    (let ((most-recent (car (last (sort (nvm--installed-versions)
+                                        (lambda (a b) (string-lessp (car a) (car b)))))))
+          (nvmrc? (lambda () (file-exists-p (concat (projectile-project-root) ".nvmrc")))))
+      (cond ((not (projectile-project-p)) (nvm-use most-recent))
+            ((not (funcall nvmrc?)) (nvm-use most-recent))
+            (t (nvm-use-for (projectile-project-root))))))
+
 (defun iensu/prettify-javascript ()
   "Prettify some common JS reserved words."
   (utils/add-to-list 'prettify-symbols-alist
@@ -21,6 +29,11 @@
   "Restart the tern server."
   (interactive)
   (delete-process "Tern"))
+
+(defun iensu/use-local-eslint ()
+    (let ((eslint-path (concat (projectile-project-root) "node_modules/.bin/eslint")))
+      (when (file-exists-p eslint-path)
+        (setq flycheck-javascript-eslint-executable eslint-path))))
 
 (provide 'iensu)
 ;;; iensu.el ends here
