@@ -81,33 +81,45 @@
 (use-package company
   :ensure t
   :init (global-company-mode)
-  :config (progn
-	    (setq company-idle-delay 0
-		  company-minimum-prefix-length 2
-		  company-selection-wrap-around t
-		  company-auto-complete t
-		  company-tooltip-align-annotations t
-		  company-auto-complete-chars nil)
-	    (eval-after-load 'company
-	      (use-package company-quickhelp
-		:ensure t
-		:init (company-quickhelp-mode 1)
-		:config (progn
-			  (setq company-quickhelp-delay 1)
-			  (define-key company-active-map
-			    (kbd "M-h")
-			    #'company-quickhelp-manual-begin))))
-	    (add-hook 'emacs-lisp-mode-hook '(add-to-list 'company-backends 'company-elisp))))
+  :config
+  (setq company-idle-delay 0
+	company-minimum-prefix-length 2
+	company-selection-wrap-around t
+	company-auto-complete t
+	company-tooltip-align-annotations t
+	company-auto-complete-chars nil)
+  (add-hook 'emacs-lisp-mode-hook (lambda ()
+				    (add-to-list 'company-backends 'company-elisp)))
+  (eval-after-load 'company
+    (use-package company-quickhelp
+      :ensure t
+      :init
+      (company-quickhelp-mode 1)
+      :config
+      (setq company-quickhelp-delay 1)
+      (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin))))
 
 (use-package flycheck
   :ensure t
-  :init (global-flycheck-mode t))
+  :init
+  (global-flycheck-mode t))
 
 (use-package git-gutter
   :ensure t
-  :init (progn
-	  (global-git-gutter-mode +1)
-	  (git-gutter:linum-setup)))
+  :init
+  (global-git-gutter-mode +1)
+  (git-gutter:linum-setup))
+
+(use-package js2-mode
+  :ensure t
+  :mode "\\.js$"
+  :config
+  (add-hook 'js2-mode-hook '(setq js2-basic-offset 2
+				  js2-indent-switch-body t
+				  js2-highlight-level 3))
+  (add-hook 'js2-mode-hook 'js2-mode-hide-warnings-and-errors)
+  (add-hook 'js2-mode-hook 'electric-pair-mode)
+  (add-hook 'js2-mode-hook (lambda () (electric-indent-mode t))))
 
 (use-package magit
   :ensure t
@@ -117,34 +129,36 @@
   :ensure t
   :config (global-set-key [f8] 'neotree-toggle))
 
+(use-package nvm
+  :ensure t)
+
 (use-package org
   :ensure t
-  :config (progn
-	    (add-hook 'org-mode-hook
-		      (progn
-			(setq org-src-fontify-natively t
-			      org-default-notes-file "~/Documents/notes/notes.org"
-			      org-agenda-files '("~/Documents/notes/notes.org"
-						 "~/Documents/notes/private"
-						 "~/Documents/notes/work"))
-			(add-to-list 'org-src-lang-modes '("javascript" . js2))
-			(add-to-list 'org-src-lang-modes '("es" . es))
-			(linum-mode -1)
-			(global-set-key (kbd "C-c c") 'org-capture)))))
+  :config
+  (add-hook 'org-mode-hook '(setq org-src-fontify-natively t
+				  org-default-notes-file "~/Documents/notes/notes.org"
+				  org-agenda-files '("~/Documents/notes/notes.org"
+						     "~/Documents/notes/private"
+						     "~/Documents/notes/work")))
+  (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("javascript" . js2))))
+  (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("es" . es))))
+  (add-hook 'org-mode-hook (lambda () (linum-mode -1)))
+  (add-hook 'org-mode-hook (lambda () (global-set-key (kbd "C-c c") 'org-capture))))
 
 (use-package paredit
   :ensure t
-  :config (progn
-	    (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)))
+  :config
+  (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode))
 
 (use-package projectile
   :ensure t
-  :config (projectile-global-mode))
+  :config
+  (projectile-global-mode))
 
 (use-package rainbow-delimiters
   :ensure t
-  :config (progn
-	    (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)))
+  :config
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
 
 (provide 'init)
 ;;; init.el ends here
