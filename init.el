@@ -79,24 +79,6 @@
 ;; Packages
 ;;;
 
-(use-package magit
-  :ensure t
-  :bind (("C-x g" . magit-status)))
-
-(use-package git-gutter
-  :ensure t
-  :init (progn
-	  (global-git-gutter-mode +1)
-	  (git-gutter:linum-setup)))
-
-(use-package projectile
-  :ensure t
-  :config (projectile-global-mode))
-
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode t))
-
 (use-package company
   :ensure t
   :init (global-company-mode)
@@ -117,10 +99,28 @@
 			    (kbd "M-h")
 			    #'company-quickhelp-manual-begin))))))
 
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode t))
+
+(use-package git-gutter
+  :ensure t
+  :init (progn
+	  (global-git-gutter-mode +1)
+	  (git-gutter:linum-setup)))
+
+(use-package magit
+  :ensure t
+  :bind (("C-x g" . magit-status)))
+
 (use-package paredit
   :ensure t
   :config (progn
 	    (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)))
+
+(use-package projectile
+  :ensure t
+  :config (projectile-global-mode))
 
 (use-package rainbow-delimiters
   :ensure t
