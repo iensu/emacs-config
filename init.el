@@ -51,9 +51,10 @@
       mac-option-modifier nil
       mac-command-modifier 'meta
 
-      require-final-newline t
-      tab-width 2
-      indent-tabs-mode nil)
+      require-final-newline t)
+
+(setq-default indent-tabs-mode nil
+	      tab-width 2)
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -132,6 +133,12 @@
 (use-package dracula-theme
   :ensure t
   :init (load-theme 'dracula t))
+
+(use-package editorconfig
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook (editorconfig-mode 1))
+  (add-hook 'text-mode-hook (editorconfig-mode 1)))
 
 (use-package eldoc :diminish eldoc-mode)
 

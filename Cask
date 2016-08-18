@@ -9,6 +9,7 @@
 (depends-on "dash")
 (depends-on "dracula-theme")
 (depends-on "drag-stuff")
+(depends-on "editorconfig")
 (depends-on "exec-path-from-shell")
 (depends-on "expand-region")
 (depends-on "f")
