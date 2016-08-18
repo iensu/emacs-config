@@ -81,6 +81,8 @@
 (global-set-key (kbd "C-j") 'newline-and-indent)
 (global-set-key (kbd "C-a") 'back-to-indentation)
 (global-set-key (kbd "C-<return>") 'open-line)
+(global-set-key (kbd "C-+") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
 
 ;;;
 ;; Packages
