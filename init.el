@@ -307,11 +307,17 @@
   (iensu/add-auto-mode 'web-mode "\\.html$" "\\.jsx$" "\\.hbs$" "\\.handlebars$")
   :config
   (setq web-mode-css-indent-offset 2
-	web-mode-code-indent-offset 2
-	web-mode-markup-indent-offset 2)
+        web-mode-code-indent-offset 2
+        web-mode-markup-indent-offset 2
+        web-mode-enable-css-colorization t
+        web-mode-enable-current-element-highlight t
+        web-mode-enable-current-column-highlight t)
   (add-hook 'web-mode-hook 'er/add-web-mode-expansions)
   (add-hook 'web-mode-hook (lambda () (add-to-list 'company-backends 'company-tern)))
   (add-hook 'web-mode-hook 'iensu/pick-nodejs-version)
+  (setq-default flychqeck-disabled-checkers
+		(append flycheck-disabled-checkers '(javascript-jshint)))
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
   (defadvice company-tern (before web-mode-set-up-ac-sources activate)
     (when (equal major-mode 'web-mode)
       (let* ((cur-language (web-mode-language-at-pos))
