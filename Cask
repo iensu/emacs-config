@@ -24,6 +24,7 @@
 (depends-on "js2-refactor")
 (depends-on "json-mode")
 (depends-on "magit")
+(depends-on "markdown-mode")
 (depends-on "multiple-cursors")
 (depends-on "neotree")
 (depends-on "nvm")

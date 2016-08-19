@@ -227,6 +227,14 @@
    ("C-S-<right>" . mc/mark-next-like-this)
    ("C-S-<left>" . mc/mark-previous-like-this)))
 
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
 (use-package neotree
   :ensure t
   :config (global-set-key [f8] 'neotree-toggle))
