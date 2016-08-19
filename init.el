@@ -259,6 +259,12 @@
 
 (use-package org-trello :ensure t)
 
+(use-package origami
+  :ensure t
+  :init (global-origami-mode)
+  :bind (("<f6>" . origami-recursively-toggle-node)
+         ("<f7>" . origami-toggle-all-nodes)))
+
 (use-package paredit
   :ensure t
   :diminish paredit-mode " π"

@@ -30,6 +30,7 @@
 (depends-on "nvm")
 (depends-on "nyan-mode")
 (depends-on "org-trello")
+(depends-on "origami")
 (depends-on "pallet")
 (depends-on "paredit")
 (depends-on "popwin")
