@@ -31,6 +31,7 @@
  '(menu-bar-mode tool-bar-mode scroll-bar-mode))
 
 (setq default-directory "~/"
+      custom-file "~/.emacs.d/custom.el"
       vc-follow-symlinks t
       inhibit-startup-message t
       confirm-kill-emacs 'y-or-n-p
@@ -337,27 +338,7 @@
   :config
   (setq yas-snippet-dirs '("~/.emacs.d/snippets")))
 
+(load custom-file 'noerror)
+
 (provide 'init)
 ;;; init.el ends here
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
- '(org-trello-current-prefix-keybinding "C-c o" nil (org-trello))
- '(safe-local-variable-values
-   (quote
-    ((mocha-project-test-directory . "test")
-     (mocha-options . "--recursive --reporter dot -t 1000")
-     (mocha-environment-variables . "NODE_ENV=test")
-     (mocha-which-node . "/Users/jens.ostlund/.nvm/versions/node/v6.2.0/bin/node")))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
