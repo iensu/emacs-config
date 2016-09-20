@@ -336,6 +336,8 @@
   (setq web-mode-css-indent-offset 2
         web-mode-code-indent-offset 2
         web-mode-markup-indent-offset 2
+        web-mode-attr-indent-offset 2
+        web-mode-attr-value-indent-offset 2
         web-mode-enable-css-colorization t
         web-mode-enable-current-element-highlight t
         web-mode-enable-current-column-highlight t)
