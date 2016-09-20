@@ -230,6 +230,8 @@
   :ensure t
   :bind (("C-x g" . magit-status)))
 
+(use-package mocha :ensure t)
+
 (use-package multiple-cursors
   :ensure t
   :bind
