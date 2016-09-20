@@ -18,6 +18,9 @@
 
 (require 'use-package)
 
+(add-to-list 'package-archives
+             '("elpy" . "https://jorgenschaefer.github.io/packages/"))
+
 (load-file "~/.emacs.d/iensu.el")
 
 ;;;
@@ -148,6 +151,11 @@
   (add-hook 'text-mode-hook (editorconfig-mode 1)))
 
 (use-package eldoc :diminish eldoc-mode)
+
+(use-package elpy
+  :ensure t
+  :init
+  (elpy-enable))
 
 (use-package expand-region
   :ensure t

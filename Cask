@@ -1,3 +1,4 @@
+(source "elpy" "https://jorgenschaefer.github.io/packages/")
 (source gnu)
 (source melpa)
 
@@ -10,6 +11,7 @@
 (depends-on "dracula-theme")
 (depends-on "drag-stuff")
 (depends-on "editorconfig")
+(depends-on "elpy")
 (depends-on "exec-path-from-shell")
 (depends-on "expand-region")
 (depends-on "f")
