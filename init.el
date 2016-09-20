@@ -142,7 +142,9 @@
 
 (use-package dracula-theme
   :ensure t
-  :init (load-theme 'dracula t))
+  :init
+  (when (display-graphic-p)
+    (load-theme 'dracula t)))
 
 (use-package editorconfig
   :ensure t
