@@ -25,6 +25,7 @@
 (depends-on "json-mode")
 (depends-on "magit")
 (depends-on "markdown-mode")
+(depends-on "mocha")
 (depends-on "multiple-cursors")
 (depends-on "neotree")
 (depends-on "nvm")
