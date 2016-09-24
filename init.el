@@ -154,6 +154,12 @@
 
 (use-package eldoc :diminish eldoc-mode)
 
+(use-package elm-mode
+  :ensure t
+  :init
+  (add-hook 'elm-mode-hook #'elm-oracle-setup-completion)
+  (add-hook 'elm-mode-hook (setq company-backends '(company-elm))))
+
 (use-package elpy
   :ensure t
   :init
@@ -169,6 +175,12 @@
   :ensure t
   :init
   (global-flycheck-mode t))
+
+(use-package flycheck-elm
+  :ensure t
+  :init
+  (eval-after-load 'flycheck
+    '(add-hook 'flycheck-mode-hook #'flycheck-elm-setup)))
 
 (use-package git-gutter
   :ensure t
