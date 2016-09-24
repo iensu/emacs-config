@@ -77,6 +77,7 @@
 
 (delete-selection-mode t)
 (global-font-lock-mode t)
+(windmove-default-keybindings)
 
 (setq-default frame-title-format "%b (%f)")
 (setq uniquify-buffer-name-style 'post-forward
