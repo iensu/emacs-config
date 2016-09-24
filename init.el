@@ -158,6 +158,7 @@
   :ensure t
   :init
   (add-hook 'elm-mode-hook #'elm-oracle-setup-completion)
+  (add-hook 'elm-mode-hook 'electric-pair-mode)
   (add-hook 'elm-mode-hook
             (lambda ()
               (setq company-backends '(company-elm))))
