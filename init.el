@@ -158,7 +158,9 @@
   :ensure t
   :init
   (add-hook 'elm-mode-hook #'elm-oracle-setup-completion)
-  (add-hook 'elm-mode-hook (setq company-backends '(company-elm)))
+  (add-hook 'elm-mode-hook
+            (lambda ()
+              (setq company-backends '(company-elm))))
   :config
   (setq elm-indent-offset 2))
 
