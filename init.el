@@ -162,7 +162,8 @@
             (lambda ()
               (setq company-backends '(company-elm))))
   :config
-  (setq elm-indent-offset 2))
+  (setq elm-indent-offset 2
+        elm-tags-exclude-elm-stuff nil))
 
 (use-package elpy
   :ensure t
