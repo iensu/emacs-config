@@ -4,3 +4,4 @@ flycheck_init.el
 .trello/
 /recentf
 /custom.el
+.mc-lists.el
