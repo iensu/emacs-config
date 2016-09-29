@@ -362,6 +362,7 @@
         web-mode-enable-css-colorization t
         web-mode-enable-current-element-highlight t
         web-mode-enable-current-column-highlight t)
+  (add-hook 'web-mode-hook #'(lambda () (yas-activate-extra-mode 'js-mode)))
   (add-hook 'web-mode-hook (lambda () (add-to-list 'company-backends 'company-tern)))
   (add-hook 'web-mode-hook 'iensu/pick-nodejs-version)
   (setq-default flychqeck-disabled-checkers
