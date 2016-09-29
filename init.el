@@ -278,15 +278,16 @@
   :config
   (iensu/add-auto-mode 'org-mode "\\.trello$")
   (add-hook 'org-mode-hook (lambda ()
-			     (setq org-src-fontify-natively t
-				   org-default-notes-file "~/Documents/notes/notes.org"
-				   org-agenda-files '("~/Documents/notes/notes.org"
-						      "~/Documents/notes/private"
-						      "~/Documents/notes/work"))))
+                             (setq org-src-fontify-natively t
+                                   org-default-notes-file "~/Documents/notes/notes.org"
+                                   org-agenda-files '("~/Documents/notes/notes.org"
+                                                      "~/Documents/notes/private"
+                                                      "~/Documents/notes/work"))))
   (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("javascript" . js2))))
   (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("es" . es))))
   (add-hook 'org-mode-hook (lambda () (linum-mode -1)))
-  (add-hook 'org-mode-hook (lambda () (global-set-key (kbd "C-c c") 'org-capture))))
+  (add-hook 'org-mode-hook (lambda () (global-set-key (kbd "C-c c") 'org-capture)))
+  (add-to-list 'org-src-lang-modes '("javascript" . js2)))
 
 (use-package org-trello :ensure t)
 
