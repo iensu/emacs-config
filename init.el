@@ -112,6 +112,7 @@
         company-selection-wrap-around t
         company-auto-complete t
         company-tooltip-align-annotations t
+        company-dabbrev-downcase nil
         company-auto-complete-chars nil)
   (add-hook 'emacs-lisp-mode-hook (lambda ()
                                     (add-to-list 'company-backends 'company-elisp)))
