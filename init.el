@@ -108,13 +108,13 @@
   :init (global-company-mode)
   :config
   (setq company-idle-delay 0
-	company-minimum-prefix-length 2
-	company-selection-wrap-around t
-	company-auto-complete t
-	company-tooltip-align-annotations t
-	company-auto-complete-chars nil)
+        company-minimum-prefix-length 2
+        company-selection-wrap-around t
+        company-auto-complete t
+        company-tooltip-align-annotations t
+        company-auto-complete-chars nil)
   (add-hook 'emacs-lisp-mode-hook (lambda ()
-				    (add-to-list 'company-backends 'company-elisp)))
+                                    (add-to-list 'company-backends 'company-elisp)))
   (eval-after-load 'company (company-quickhelp-mode 1)))
 
 (use-package company-quickhelp
