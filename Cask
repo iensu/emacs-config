@@ -4,6 +4,7 @@
 
 (depends-on "bind-key")
 (depends-on "cask")
+(depends-on "cider")
 (depends-on "company")
 (depends-on "company-quickhelp")
 (depends-on "company-tern")
