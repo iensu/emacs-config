@@ -47,6 +47,7 @@
 (depends-on "smart-mode-line")
 (depends-on "smartparens")
 (depends-on "smex")
+(depends-on "tuareg")
 (depends-on "use-package")
 (depends-on "web-mode")
 (depends-on "yasnippet")

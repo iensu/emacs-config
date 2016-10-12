@@ -361,6 +361,8 @@
   :config
   (setq display-time-day-and-date nil))
 
+(use-package tuareg :ensure t)
+
 (use-package web-mode
   :ensure t
   :init
