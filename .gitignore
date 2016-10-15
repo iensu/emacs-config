@@ -5,3 +5,4 @@ flycheck_init.el
 /recentf
 /custom.el
 .mc-lists.el
+elpa/

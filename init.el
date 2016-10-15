@@ -4,6 +4,8 @@
 
 ;;; Code:
 
+(package-initialize)
+
 (setq user-full-name "Jens Östlund"
       user-mail-address "jostlund@gmail.com")
 
