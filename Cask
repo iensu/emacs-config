@@ -9,6 +9,7 @@
 (depends-on "company-quickhelp")
 (depends-on "company-tern")
 (depends-on "dash")
+(depends-on "dired+")
 (depends-on "dracula-theme")
 (depends-on "drag-stuff")
 (depends-on "editorconfig")

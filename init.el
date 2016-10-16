@@ -158,6 +158,12 @@
   (add-hook 'lisp-interaction-mode (lambda () (setq mode-name "λ")))
   (add-hook 'js2-mode-hook (lambda () (setq mode-name "js2"))))
 
+(use-package dired+
+  :ensure t
+  :config
+  (setq insert-directory-program "/usr/local/bin/gls"
+        dired-listing-switches "-alGh --group-directories-first"))
+
 (use-package dracula-theme
   :ensure t
   :init
