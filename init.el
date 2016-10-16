@@ -98,6 +98,9 @@
 (global-unset-key (kbd "<up>"))
 (global-unset-key (kbd "<down>"))
 
+;; Start Emacs server
+(server-start)
+
 ;;;
 ;; Packages
 ;;;
