@@ -304,6 +304,11 @@
 (use-package nvm
   :ensure t)
 
+(use-package nyan-mode
+  :ensure t
+  :config
+  (nyan-mode))
+
 (use-package org
   :ensure t
   :config
