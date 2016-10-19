@@ -2,6 +2,7 @@
 (source gnu)
 (source melpa)
 
+(depends-on "avy")
 (depends-on "bind-key")
 (depends-on "cask")
 (depends-on "cider")

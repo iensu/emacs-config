@@ -109,6 +109,11 @@
 
 (use-package abbrev :diminish abbrev-mode)
 
+(use-package avy
+  :ensure t
+  :config
+  (global-set-key (kbd "C-:") 'avy-goto-char-timer))
+
 (use-package cider
   :ensure t
   :config
