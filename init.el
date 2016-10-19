@@ -99,7 +99,7 @@
 (global-unset-key (kbd "<up>"))
 (global-unset-key (kbd "<down>"))
 
-;; Start Emacs server
+;; Start Emacs server, which enables quick emacsclient access
 (server-start)
 
 ;;;
