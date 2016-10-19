@@ -40,5 +40,13 @@
       (when (file-exists-p eslint-path)
         (setq flycheck-javascript-eslint-executable eslint-path))))
 
+(defun iensu/toggle-scratch-buffer ()
+  "Based on a great idea from Eric Skoglund (https://github.com/EricIO/emacs-configuration/)."
+  (interactive)
+  (if (string-equal (buffer-name (current-buffer))
+                    "*scratch*")
+      (switch-to-buffer (other-buffer))
+    (switch-to-buffer "*scratch*")))
+
 (provide 'iensu)
 ;;; iensu.el ends here

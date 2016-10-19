@@ -91,6 +91,7 @@
 (global-set-key (kbd "C-<return>") 'open-line)
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "C-h C-s") 'iensu/toggle-scratch-buffer)
 
 ;; practice proper navigation
 (global-unset-key (kbd "<left>"))
