@@ -162,8 +162,9 @@
 (use-package dired+
   :ensure t
   :config
-  (setq insert-directory-program "/usr/local/bin/gls"
-        dired-listing-switches "-alGh --group-directories-first"))
+  (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
+    (setq insert-directory-program "/usr/local/bin/gls"))
+  (setq dired-listing-switches "-alGh --group-directories-first"))
 
 (use-package dracula-theme
   :ensure t
