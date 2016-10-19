@@ -24,12 +24,6 @@
             ((not (funcall nvmrc?)) (nvm-use most-recent))
             (t (nvm-use-for (projectile-project-root))))))
 
-(defun iensu/prettify-javascript ()
-  "Prettify some common JS reserved words."
-  (utils/add-to-list 'prettify-symbols-alist
-		     '("function" . ?λ)
-		     '("return " . "\u2906 ")))
-
 (defun iensu/setup-line-numbers ()
   (linum-mode 1)
   (setq linum-format "%3d ")
