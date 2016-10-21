@@ -36,9 +36,9 @@
   (delete-process "Tern"))
 
 (defun iensu/use-local-eslint ()
-    (let ((eslint-path (concat (projectile-project-root) "node_modules/.bin/eslint")))
-      (when (file-exists-p eslint-path)
-        (setq flycheck-javascript-eslint-executable eslint-path))))
+  (let ((eslint-path (concat (projectile-project-root) "node_modules/.bin/eslint")))
+    (when (file-exists-p eslint-path)
+      (setq flycheck-javascript-eslint-executable eslint-path))))
 
 (defun iensu/toggle-scratch-buffer ()
   "Based on a great idea from Eric Skoglund (https://github.com/EricIO/emacs-configuration/)."
