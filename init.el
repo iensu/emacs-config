@@ -93,6 +93,7 @@
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-h C-s") 'iensu/toggle-scratch-buffer)
 (global-set-key (kbd "C-c c") 'org-capture)
+(global-set-key (kbd "C-M-<backspace>") 'just-one-space)
 
 ;; practice proper navigation
 (global-unset-key (kbd "<left>"))
