@@ -416,7 +416,11 @@
             (unless tern-mode (tern-mode))
           (if tern-mode (tern-mode -1)))))))
 
-(use-package undo-tree :diminish undo-tree-mode)
+(use-package undo-tree
+  :ensure t
+  :diminish undo-tree-mode
+  :init
+  (global-undo-tree-mode))
 
 (use-package yasnippet
   :ensure t
