@@ -326,6 +326,11 @@
   (add-hook 'org-mode-hook (lambda () (global-set-key (kbd "C-c c") 'org-capture)))
   (add-to-list 'org-src-lang-modes '("javascript" . js2)))
 
+(use-package org-bullets
+  :ensure t
+  :init
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
 (use-package org-trello :ensure t)
 
 (use-package origami

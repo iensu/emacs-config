@@ -37,6 +37,7 @@
 (depends-on "neotree")
 (depends-on "nvm")
 (depends-on "nyan-mode")
+(depends-on "org-bullets")
 (depends-on "org-trello")
 (depends-on "origami")
 (depends-on "pallet")
