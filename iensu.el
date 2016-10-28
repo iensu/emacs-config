@@ -1,9 +1,9 @@
 ;;; iensu --- Some utility and other functions
 
 (defun iensu/add-auto-mode (mode &rest patterns)
-    "Add entries to `auto-mode-alist' to use `MODE' for all given file `PATTERNS'. Taken from `hrs/add-auto-mode'."
-    (dolist (pattern patterns)
-      (add-to-list 'auto-mode-alist (cons pattern mode))))
+  "Add entries to `auto-mode-alist' to use `MODE' for all given file `PATTERNS'. Taken from `hrs/add-auto-mode'."
+  (dolist (pattern patterns)
+    (add-to-list 'auto-mode-alist (cons pattern mode))))
 
 (defun iensu/duplicate-line ()
   "Copy the current line and insert it below"
@@ -17,12 +17,12 @@
     (goto-char cur-pos)))
 
 (defun iensu/pick-nodejs-version ()
-    (let ((most-recent (car (last (sort (nvm--installed-versions)
-                                        (lambda (a b) (string-lessp (car a) (car b)))))))
-          (nvmrc? (lambda () (file-exists-p (concat (projectile-project-root) ".nvmrc")))))
-      (cond ((not (projectile-project-p)) (nvm-use most-recent))
-            ((not (funcall nvmrc?)) (nvm-use most-recent))
-            (t (nvm-use-for (projectile-project-root))))))
+  (let ((most-recent (car (last (sort (nvm--installed-versions)
+                                      (lambda (a b) (string-lessp (car a) (car b)))))))
+        (nvmrc? (lambda () (file-exists-p (concat (projectile-project-root) ".nvmrc")))))
+    (cond ((not (projectile-project-p)) (nvm-use most-recent))
+          ((not (funcall nvmrc?)) (nvm-use most-recent))
+          (t (nvm-use-for (projectile-project-root))))))
 
 (defun iensu/setup-line-numbers ()
   (linum-mode 1)

@@ -60,7 +60,7 @@
       require-final-newline t)
 
 (setq-default indent-tabs-mode nil
-	      tab-width 2)
+              tab-width 2)
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -71,11 +71,11 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook
-	  '(lambda ()
-	     (subword-mode)
-	     (prettify-symbols-mode)
-	     (iensu/setup-line-numbers)
-	     (eldoc-mode)))
+          '(lambda ()
+             (subword-mode)
+             (prettify-symbols-mode)
+             (iensu/setup-line-numbers)
+             (eldoc-mode)))
 
 (delete-selection-mode t)
 (global-font-lock-mode t)
@@ -235,16 +235,16 @@
   :ensure t
   :diminish helm-mode
   :bind (("M-y" . helm-show-kill-ring)
-	 ("C-x b" . helm-mini)
-	 ("C-h SPC" . helm-all-mark-rings)
-	 ("C-x C-f" . helm-find-files)
-	 ("M-x" . helm-M-x))
+         ("C-x b" . helm-mini)
+         ("C-h SPC" . helm-all-mark-rings)
+         ("C-x C-f" . helm-find-files)
+         ("M-x" . helm-M-x))
   :config
   (setq helm-mode-fuzzy-match t
-	helm-completion-in-region-fuzzy-match t
-	helm-split-window-in-side-p t
-	helm-move-to-line-cycle-in-source t
-	elm-ff-file-name-history-use-recentf t)
+        helm-completion-in-region-fuzzy-match t
+        helm-split-window-in-side-p t
+        helm-move-to-line-cycle-in-source t
+        elm-ff-file-name-history-use-recentf t)
   (helm-autoresize-mode 1)
   (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action))
 
@@ -266,7 +266,7 @@
   (add-hook 'js2-mode-hook 'iensu/pick-nodejs-version)
   (add-hook 'js2-mode-hook 'iensu/use-local-eslint)
   (setq-default flycheck-disabled-checkers
-		(append flycheck-disabled-checkers '(javascript-jshint)))
+                (append flycheck-disabled-checkers '(javascript-jshint)))
   (flycheck-add-mode 'javascript-eslint 'js2-mode))
 
 (use-package js2-refactor
@@ -274,7 +274,7 @@
   :config
   (add-hook 'js2-mode-hook 'js2-refactor-mode)
   (add-hook 'js2-mode-hook (lambda ()
-			     (js2r-add-keybindings-with-prefix "C-c C-m"))))
+                             (js2r-add-keybindings-with-prefix "C-c C-m"))))
 
 (use-package json-mode
   :ensure t
@@ -416,7 +416,7 @@
   (add-hook 'web-mode-hook 'iensu/pick-nodejs-version)
   (add-hook 'web-mode-hook 'iensu/use-local-eslint)
   (setq-default flychqeck-disabled-checkers
-		(append flycheck-disabled-checkers '(javascript-jshint)))
+                (append flycheck-disabled-checkers '(javascript-jshint)))
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   (defadvice company-tern (before web-mode-set-up-ac-sources activate)
     (when (equal major-mode 'web-mode)
