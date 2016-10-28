@@ -178,7 +178,9 @@
   :ensure t
   :init
   (when (display-graphic-p)
-    (load-theme 'dracula t)))
+    (load-theme 'dracula t))
+  :config
+  (set-face-attribute 'region nil :background "#454500" :foreground "#fff"))
 
 (use-package editorconfig
   :ensure t
