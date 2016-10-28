@@ -36,9 +36,18 @@
   (delete-process "Tern"))
 
 (defun iensu/use-local-eslint ()
-  (let ((eslint-path (concat (projectile-project-root) "node_modules/.bin/eslint")))
-    (when (file-exists-p eslint-path)
-      (setq flycheck-javascript-eslint-executable eslint-path))))
+  "Try to use local eslint executable from node_modules."
+  (interactive)
+  (let* ((root (locate-dominating-file
+                (or (buffer-file-name) default-directory)
+                "node_modules"))
+         (global-eslint (executable-find "eslint"))
+         (local-eslint (expand-file-name "node_modules/.bin/eslint"
+                                         root))
+         (eslint (if (file-executable-p local-eslint)
+                     local-eslint
+                   global-eslint)))
+    (setq-local flycheck-javascript-eslint-executable eslint)))
 
 (defun iensu/toggle-scratch-buffer ()
   "Based on a great idea from Eric Skoglund (https://github.com/EricIO/emacs-configuration/)."

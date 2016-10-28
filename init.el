@@ -256,13 +256,15 @@
   :ensure t
   :mode "\\.js$"
   :config
-  (add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 2
-				       js2-indent-switch-body t
-				       js2-highlight-level 3)))
+  (add-hook 'js2-mode-hook (lambda ()
+                             (setq js2-basic-offset 2
+                                   js2-indent-switch-body t
+                                   js2-highlight-level 3)))
   (add-hook 'js2-mode-hook 'js2-mode-hide-warnings-and-errors)
   (add-hook 'js2-mode-hook 'electric-pair-mode)
   (add-hook 'js2-mode-hook (lambda () (electric-indent-mode t)))
   (add-hook 'js2-mode-hook 'iensu/pick-nodejs-version)
+  (add-hook 'js2-mode-hook 'iensu/use-local-eslint)
   (setq-default flycheck-disabled-checkers
 		(append flycheck-disabled-checkers '(javascript-jshint)))
   (flycheck-add-mode 'javascript-eslint 'js2-mode))
@@ -412,6 +414,7 @@
   (add-hook 'web-mode-hook #'(lambda () (yas-activate-extra-mode 'js-mode)))
   (add-hook 'web-mode-hook (lambda () (add-to-list 'company-backends 'company-tern)))
   (add-hook 'web-mode-hook 'iensu/pick-nodejs-version)
+  (add-hook 'web-mode-hook 'iensu/use-local-eslint)
   (setq-default flychqeck-disabled-checkers
 		(append flycheck-disabled-checkers '(javascript-jshint)))
   (flycheck-add-mode 'javascript-eslint 'web-mode)
