@@ -180,7 +180,7 @@
   (when (display-graphic-p)
     (load-theme 'dracula t))
   :config
-  (set-face-attribute 'region nil :background "#454500" :foreground "#fff"))
+  (set-face-attribute 'region nil :background "#454500" :foreground nil))
 
 (use-package editorconfig
   :ensure t
