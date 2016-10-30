@@ -321,6 +321,9 @@
   :config
   (nyan-mode))
 
+(use-package ob-elixir
+  :ensure t)
+
 (use-package org
   :ensure t
   :config
@@ -335,7 +338,13 @@
   (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("es" . es))))
   (add-hook 'org-mode-hook (lambda () (linum-mode -1)))
   (add-hook 'org-mode-hook (lambda () (global-set-key (kbd "C-c c") 'org-capture)))
-  (add-to-list 'org-src-lang-modes '("javascript" . js2)))
+  (org-babel-do-load-languages
+   'org-babel-load-languages '((emacs-lisp . t)
+                               (sh . t)
+                               (js . t)
+                               (python . t)
+                               (clojure . t)
+                               (elixir . t))))
 
 (use-package org-bullets
   :ensure t
