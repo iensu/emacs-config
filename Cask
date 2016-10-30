@@ -2,6 +2,7 @@
 (source gnu)
 (source melpa)
 
+(depends-on "alchemist")
 (depends-on "avy")
 (depends-on "bind-key")
 (depends-on "cask")
@@ -14,6 +15,7 @@
 (depends-on "dracula-theme")
 (depends-on "drag-stuff")
 (depends-on "editorconfig")
+(depends-on "elixir-mode")
 (depends-on "elm-mode")
 (depends-on "elpy")
 (depends-on "exec-path-from-shell")

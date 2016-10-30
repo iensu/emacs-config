@@ -111,6 +111,9 @@
 
 (use-package abbrev :diminish abbrev-mode)
 
+(use-package alchemist
+  :ensure t)
+
 (use-package avy
   :ensure t
   :config
@@ -189,6 +192,9 @@
   (add-hook 'text-mode-hook (editorconfig-mode 1)))
 
 (use-package eldoc :diminish eldoc-mode)
+
+(use-package elixir-mode
+  :ensure t)
 
 (use-package elm-mode
   :ensure t
