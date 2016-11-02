@@ -7,3 +7,4 @@ flycheck_init.el
 .mc-lists.el
 elpa/
 bookmarks
+.org-id-locations
