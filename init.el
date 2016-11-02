@@ -333,7 +333,8 @@
                                    org-default-notes-file "~/Documents/notes/notes.org"
                                    org-agenda-files '("~/Documents/notes/notes.org"
                                                       "~/Documents/notes/private"
-                                                      "~/Documents/notes/work"))))
+                                                      "~/Documents/notes/work")
+                                   org-format-latex-options (plist-put org-format-latex-options :scale 1.5))))
   (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("javascript" . js2))))
   (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("es" . es))))
   (add-hook 'org-mode-hook (lambda () (linum-mode -1)))
