@@ -383,6 +383,11 @@
   (add-hook 'js2-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'elm-mode-hook 'rainbow-delimiters-mode))
 
+(use-package restclient
+  :ensure t
+  :config
+  (iensu/add-auto-mode 'restclient-mode "\\.rest$"))
+
 (use-package smart-mode-line
   :ensure t
   :init

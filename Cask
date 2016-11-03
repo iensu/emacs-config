@@ -49,6 +49,7 @@
 (depends-on "prodigy")
 (depends-on "projectile")
 (depends-on "rainbow-delimiters")
+(depends-on "restclient")
 (depends-on "s")
 (depends-on "smart-mode-line")
 (depends-on "smex")
