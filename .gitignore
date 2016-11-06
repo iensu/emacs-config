@@ -8,3 +8,4 @@ flycheck_init.el
 elpa/
 bookmarks
 .org-id-locations
+.saves/
