@@ -1,12 +1,16 @@
-;;; iensu --- Some utility and other functions
+;;; iensu --- Some utility functions
+
+;;; Commentary:
+
+;;; Code:
 
 (defun iensu/add-auto-mode (mode &rest patterns)
-  "Add entries to `auto-mode-alist' to use `MODE' for all given file `PATTERNS'. Taken from `hrs/add-auto-mode'."
+  "Add entries to `auto-mode-alist' to use `MODE' for all given file `PATTERNS'.  Taken from `hrs/add-auto-mode'."
   (dolist (pattern patterns)
     (add-to-list 'auto-mode-alist (cons pattern mode))))
 
 (defun iensu/duplicate-line ()
-  "Copy the current line and insert it below"
+  "Copy the current line and insert it below."
   (interactive)
   (let ((cur-pos (point)))
     (move-beginning-of-line 1)
