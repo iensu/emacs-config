@@ -74,18 +74,19 @@
              (node-debugger-url (shell-output)
                                 (cl-flet ()
                                   (car (remove-if-not 'is-debugger-url
-                                                      (mapcar 'string-trim (split-string shell-output "\n"))))))))
-  (let ((opts '("--inspect" "--debug-brk"))
-        (file-path (buffer-file-name))
-        (mocha (concat (projectile-project-root) "node_modules/.bin/mocha"))
-        (buffer-name "*Async Shell Command*"))
-    (if (not (file-exists-p mocha))
-        (message (concat "Cannot find mocha file " mocha))
-      (progn
-        (when (not (get-buffer buffer-name))
-          (async-shell-command (concat mocha (string-join opts " ") file-path))
-          (sleep-for 1))
-        (kill-new (node-debugger-url (buffer-content-string (get-buffer buffer-name))))))))
+                                                      (mapcar 'string-trim (split-string shell-output "\n")))))))
+    (let* ((opts '("--inspect" "--debug-brk"))
+           (file-path (buffer-file-name))
+           (project-root (projectile-project-root))
+           (mocha (concat project-root "node_modules/.bin/mocha"))
+           (buffer-name "*Async Shell Command*"))
+      (if (not (file-exists-p mocha))
+          (message (concat "Cannot find mocha file " mocha))
+        (progn
+          (when (not (get-buffer buffer-name))
+            (async-shell-command (string-join  (list "cd" project-root "&&" mocha (string-join opts " ") file-path) " "))
+            (sleep-for 1))
+          (kill-new (node-debugger-url (buffer-content-string (get-buffer buffer-name)))))))))
 
 (defun iensu/mocha-kill-debugger ()
   "Kill running mocha debugger process."
