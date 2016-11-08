@@ -57,5 +57,36 @@
       (switch-to-buffer (other-buffer))
     (switch-to-buffer "*scratch*")))
 
+(defun iensu/mocha-debug-file ()
+  "Start a mocha debugging session and copy debugger url to clipboard."
+  (interactive)
+  (cl-flet* ((buffer-content-string (b)
+                                    (with-current-buffer b
+                                      (save-restriction
+                                        (widen)
+                                        (buffer-substring-no-properties (point-min) (point-max)))))
+             (is-debugger-url (s)
+                              (string-match "^chrome-devtools:.*" s))
+             (node-debugger-url (shell-output)
+                                (cl-flet ()
+                                  (car (remove-if-not 'is-debugger-url
+                                                      (mapcar 'string-trim (split-string shell-output "\n"))))))))
+  (let ((opts '("--inspect" "--debug-brk"))
+        (file-path (buffer-file-name))
+        (mocha (concat (projectile-project-root) "node_modules/.bin/mocha"))
+        (buffer-name "*Async Shell Command*"))
+    (if (not (file-exists-p mocha))
+        (message (concat "Cannot find mocha file " mocha))
+      (progn
+        (when (not (get-buffer buffer-name))
+          (async-shell-command (concat mocha (string-join opts " ") file-path))
+          (sleep-for 1))
+        (kill-new (node-debugger-url (buffer-content-string (get-buffer buffer-name))))))))
+
+(defun iensu/mocha-kill-debugger ()
+  "Kill running mocha debugger process."
+  (interactive)
+  (kill-buffer "*Async Shell Command*"))
+
 (provide 'iensu)
 ;;; iensu.el ends here
