@@ -61,35 +61,47 @@
       (switch-to-buffer (other-buffer))
     (switch-to-buffer "*scratch*")))
 
+(defun iensu/buffer-content-string (buffer)
+  "Return `BUFFER' content as a string."
+  (with-current-buffer buffer
+    (save-restriction
+      (widen)
+      (buffer-substring-no-properties (point-min) (point-max)))))
+
+(defun iensu/--node-debugger-url (shell-output)
+  "Return the Node.js debugger url contained in `SHELL-OUTPUT' if any."
+  (car (remove-if-not (lambda (s) (string-match "^chrome-devtools:.*" s))
+                      (mapcar 'string-trim (split-string shell-output "\n")))))
+
 (defun iensu/mocha-debug-file ()
-  "Start a mocha debugging session and copy debugger url to clipboard."
+  "Start a Mocha debugging session and copy debugger url to clipboard."
   (interactive)
-  (cl-flet* ((buffer-content-string (b)
-                                    (with-current-buffer b
-                                      (save-restriction
-                                        (widen)
-                                        (buffer-substring-no-properties (point-min) (point-max)))))
-             (is-debugger-url (s)
-                              (string-match "^chrome-devtools:.*" s))
-             (node-debugger-url (shell-output)
-                                (cl-flet ()
-                                  (car (remove-if-not 'is-debugger-url
-                                                      (mapcar 'string-trim (split-string shell-output "\n")))))))
-    (let* ((opts '("--inspect" "--debug-brk"))
-           (file-path (buffer-file-name))
-           (project-root (projectile-project-root))
-           (mocha (concat project-root "node_modules/.bin/mocha"))
-           (buffer-name "*Async Shell Command*"))
-      (if (not (file-exists-p mocha))
-          (message (concat "Cannot find mocha file " mocha))
-        (progn
-          (when (not (get-buffer buffer-name))
-            (async-shell-command (string-join  (list "cd" project-root "&&" mocha (string-join opts " ") file-path) " "))
-            (sleep-for 1))
-          (kill-new (node-debugger-url (buffer-content-string (get-buffer buffer-name)))))))))
+  (let* ((options '("--inspect" "--debug-brk"))
+         (file-path (buffer-file-name))
+         (project-root (projectile-project-root))
+         (mocha-executable (concat project-root "node_modules/.bin/mocha"))
+         (buffer-name "*<Mocha Test Debugger>*")
+         (cd-cmd (string-join (list "cd" project-root) " "))
+         (mocha-cmd (string-join (list mocha-executable
+                                       (string-join options " ")
+                                       file-path)
+                                 " ")))
+    (if (not (file-exists-p mocha-executable))
+        (message (concat "Cannot find Mocha executable at " mocha-executable))
+      (progn
+        (pop-to-buffer (get-buffer-create buffer-name))
+        (start-process-shell-command "*Mocha Debugger*"
+                                     (get-buffer buffer-name)
+                                     (concat cd-cmd " && " mocha-cmd))
+        (sleep-for 2)
+        (kill-new (iensu/--node-debugger-url (iensu/buffer-content-string (get-buffer buffer-name))))
+        (with-current-buffer buffer-name
+          (save-excursion
+            (goto-char (point-max))
+            (insert "\n\nDebugger URL copied to clipboard, please paste in your browser.\n\n")))))))
 
 (defun iensu/mocha-kill-debugger ()
-  "Kill running mocha debugger process."
+  "Kill running mocha-executable debugger process."
   (interactive)
   (kill-buffer "*Async Shell Command*"))
 
