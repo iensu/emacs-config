@@ -262,6 +262,9 @@
 
 (use-package helm-projectile :ensure t)
 
+(use-package iedit
+  :ensure t)
+
 (use-package js2-mode
   :ensure t
   :mode "\\.js$"
