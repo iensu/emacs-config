@@ -93,7 +93,7 @@
         (start-process-shell-command "*Mocha Debugger*"
                                      (get-buffer buffer-name)
                                      (concat cd-cmd " && " mocha-cmd))
-        (sleep-for 2)
+        (sleep-for 1)
         (kill-new (iensu/--node-debugger-url (iensu/buffer-content-string (get-buffer buffer-name))))
         (with-current-buffer buffer-name
           (save-excursion
