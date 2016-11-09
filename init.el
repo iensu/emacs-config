@@ -373,6 +373,18 @@
   :config
   (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode))
 
+(use-package paren
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook (lambda () (show-paren-mode t)))
+  :config
+  (setq show-paren-delay 0
+        show-paren-when-point-inside-paren t)
+  (set-face-attribute 'show-paren-match nil
+                      :background nil
+                      :foreground "#fc851e"
+                      :weight 'extra-bold))
+
 (use-package projectile
   :ensure t
   :diminish projectile-mode
