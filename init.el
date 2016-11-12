@@ -157,6 +157,29 @@
   :config
   (add-hook 'js2-mode-hook (lambda () (add-to-list 'company-backends 'company-tern))))
 
+(use-package counsel
+  :ensure t
+  :bind (("M-x" . counsel-M-x)
+         ("M-y" . counsel-yank-pop)
+         ("C-x C-f" . counsel-find-file)
+         ("<f1> f" . counsel-describe-function)
+         ("<f1> v" . counsel-describe-variable)
+         ("<f1> l" . counsel-load-library)
+         ("<f2> i" . counsel-info-lookup-symbol)
+         ("<f2> u" . counsel-unicode-char)
+         ("C-c g" . counsel-git)
+         ("C-c j" . counsel-git-grep)
+         ("C-c k" . counsel-ag)
+         ("C-x l" . counsel-locate)
+         ("C-S-o" . counsel-rythmbox)
+         :map read-expression-map
+         ("C-r" . counsel-expression-history)))
+
+(use-package counsel-projectile
+  :ensure t
+  :config
+  (counsel-projectile-on))
+
 (use-package css-mode
   :ensure t
   :config
@@ -241,29 +264,18 @@
   (global-git-gutter-mode +1)
   (git-gutter:linum-setup))
 
-(use-package helm
-  :ensure t
-  :diminish helm-mode
-  :bind (("M-y" . helm-show-kill-ring)
-         ("C-x b" . helm-mini)
-         ("C-h SPC" . helm-all-mark-rings)
-         ("C-x C-f" . helm-find-files)
-         ("M-x" . helm-M-x))
-  :config
-  (setq helm-mode-fuzzy-match t
-        helm-completion-in-region-fuzzy-match t
-        helm-split-window-in-side-p t
-        helm-move-to-line-cycle-in-source t
-        elm-ff-file-name-history-use-recentf t)
-  (helm-autoresize-mode 1)
-  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action))
-
-(use-package helm-ag :ensure t)
-
-(use-package helm-projectile :ensure t)
-
 (use-package iedit
   :ensure t)
+
+(use-package ivy
+  :ensure t
+  :bind (("C-c C-r" . ivy-resume)
+         ("<f6>" . ivy-resume))
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t
+        ivy-height 10
+        ivy-initial-inputs-alist nil))
 
 (use-package js2-mode
   :ensure t
@@ -390,10 +402,7 @@
   :diminish projectile-mode
   :config
   (projectile-global-mode)
-  (add-hook 'projectile-after-switch-project-hook 'iensu/use-local-eslint)
-  (when (package-installed-p 'helm)
-    (setq projectile-completion-system 'helm)
-    (helm-projectile-on)))
+  (add-hook 'projectile-after-switch-project-hook 'iensu/use-local-eslint))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -421,6 +430,10 @@
   (defadvice subword-transpose (before subword-transpose)
     (when (looking-at "$")
       (backward-word 1))))
+
+(use-package swiper
+  :ensure t
+  :bind (("C-s" . swiper)))
 
 (use-package tern
   :ensure t
