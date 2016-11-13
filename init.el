@@ -57,7 +57,9 @@
       mac-option-modifier nil
       mac-command-modifier 'meta
 
-      require-final-newline t)
+      require-final-newline t
+
+      calendar-week-start-day 1)
 
 (setq-default indent-tabs-mode nil
               tab-width 2)
@@ -94,6 +96,7 @@
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-h C-s") 'iensu/toggle-scratch-buffer)
 (global-set-key (kbd "C-c c") 'org-capture)
+(global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-M-<backspace>") 'just-one-space)
 
 ;; practice proper navigation
@@ -353,11 +356,11 @@
                                    org-agenda-files '("~/Documents/notes/notes.org"
                                                       "~/Documents/notes/private"
                                                       "~/Documents/notes/work")
-                                   org-format-latex-options (plist-put org-format-latex-options :scale 1.5))))
+                                   org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
+                                   truncate-lines t)))
   (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("javascript" . js2))))
   (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("es" . es))))
   (add-hook 'org-mode-hook (lambda () (linum-mode -1)))
-  (add-hook 'org-mode-hook (lambda () (global-set-key (kbd "C-c c") 'org-capture)))
   (org-babel-do-load-languages
    'org-babel-load-languages '((emacs-lisp . t)
                                (sh . t)
