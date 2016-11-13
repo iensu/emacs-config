@@ -99,12 +99,6 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-M-<backspace>") 'just-one-space)
 
-;; practice proper navigation
-(global-unset-key (kbd "<left>"))
-(global-unset-key (kbd "<right>"))
-(global-unset-key (kbd "<up>"))
-(global-unset-key (kbd "<down>"))
-
 ;; Start Emacs server, which enables quick emacsclient access
 (server-start)
 
