@@ -170,7 +170,10 @@
          ("C-x l" . counsel-locate)
          ("C-S-o" . counsel-rythmbox)
          :map read-expression-map
-         ("C-r" . counsel-expression-history)))
+         ("C-r" . counsel-expression-history)
+         :map ivy-minibuffer-map
+         ("M-y" . ivy-next-line-and-call)
+         ("M-Y" . ivy-previous-line-and-call)))
 
 (use-package counsel-projectile
   :ensure t
