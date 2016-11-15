@@ -105,5 +105,12 @@
   (interactive)
   (kill-buffer "*Async Shell Command*"))
 
+(defun iensu/open-calendar-buffer ()
+  "Opens a calendar buffer."
+  (interactive)
+  (cfw:open-calendar-buffer
+   :contents-sources
+   (list (cfw:org-create-source "Green"))))
+
 (provide 'iensu)
 ;;; iensu.el ends here

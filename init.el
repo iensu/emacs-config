@@ -101,6 +101,7 @@
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-h C-s") 'iensu/toggle-scratch-buffer)
+(global-set-key (kbd "C-h C-c") 'iensu/open-calendar-buffer)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-M-<backspace>") 'just-one-space)
@@ -121,6 +122,11 @@
   :ensure t
   :config
   (global-set-key (kbd "C-:") 'avy-goto-char-timer))
+
+(use-package calfw
+  :ensure t
+  :init
+  (require 'calfw-org))
 
 (use-package cider
   :ensure t

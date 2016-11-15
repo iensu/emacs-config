@@ -5,6 +5,7 @@
 (depends-on "alchemist")
 (depends-on "avy")
 (depends-on "bind-key")
+(depends-on "calfw")
 (depends-on "cask")
 (depends-on "cider")
 (depends-on "company")
