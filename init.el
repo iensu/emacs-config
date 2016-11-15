@@ -88,6 +88,12 @@
 (setq uniquify-buffer-name-style 'post-forward
       uniquify-separator ":")
 
+(setq org-agenda-files (list "~/Documents/notes/notes.org"
+                             "~/Documents/notes/private.org"
+                             "~/Documents/notes/work.org")
+      org-default-notes-file "~/Documents/notes/notes.org")
+
+
 (global-set-key (kbd "C-c d") 'iensu/duplicate-line)
 (global-set-key (kbd "C-j") 'newline-and-indent)
 (global-set-key (kbd "C-a") 'back-to-indentation)
@@ -349,12 +355,8 @@
   (iensu/add-auto-mode 'org-mode "\\.trello$")
   (add-hook 'org-mode-hook (lambda ()
                              (setq org-src-fontify-natively t
-                                   org-default-notes-file "~/Documents/notes/notes.org"
-                                   org-agenda-files '("~/Documents/notes/notes.org"
-                                                      "~/Documents/notes/private"
-                                                      "~/Documents/notes/work")
                                    org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
-                                   truncate-lines t)))
+                                   truncate-lines nil)))
   (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("javascript" . js2))))
   (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("es" . es))))
   (add-hook 'org-mode-hook (lambda () (linum-mode -1)))
