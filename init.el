@@ -275,6 +275,7 @@
 
 (use-package ivy
   :ensure t
+  :diminish ivy-mode
   :bind (("C-c C-r" . ivy-resume)
          ("<f6>" . ivy-resume))
   :config
