@@ -91,7 +91,11 @@
 (setq org-agenda-files (list "~/Documents/notes/notes.org"
                              "~/Documents/notes/private.org"
                              "~/Documents/notes/work.org")
-      org-default-notes-file "~/Documents/notes/notes.org")
+      org-default-notes-file "~/Documents/notes/notes.org"
+      org-capture-templates '(("t" "todo" entry (file "~/Documents/notes/refile.org")
+                               "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+                              ("j" "Journal" entry (file+datetree "~/Documents/notes/journal.org")
+                               "* %?\n%U\n" :clock-in t :clock-resume t)))
 
 
 (global-set-key (kbd "C-c d") 'iensu/duplicate-line)
