@@ -28,6 +28,7 @@
 (depends-on "flycheck-cask")
 (depends-on "flycheck-elm")
 (depends-on "git-gutter")
+(depends-on "git-timemachine")
 (depends-on "htmlize")
 (depends-on "idle-highlight-mode")
 (depends-on "iedit")

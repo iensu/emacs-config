@@ -280,6 +280,9 @@
   (global-git-gutter-mode +1)
   (git-gutter:linum-setup))
 
+(use-package git-timemachine
+  :ensure t)
+
 (use-package iedit
   :ensure t)
 
