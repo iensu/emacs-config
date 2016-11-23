@@ -165,6 +165,11 @@
   (setq company-quickhelp-delay 1)
   (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin))
 
+(use-package company-restclient
+  :ensure t
+  :config
+  (add-hook 'restclient-mode-hook (lambda () (add-to-list 'company-backends 'company-restclient))))
+
 (use-package company-tern
   :ensure t
   :config
@@ -375,6 +380,12 @@
 (use-package ob-elixir
   :ensure t)
 
+(use-package ob-restclient
+  :ensure t
+  :init
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               '((restclient . t))))
+
 (use-package org
   :ensure t
   :config
@@ -442,7 +453,9 @@
 (use-package restclient
   :ensure t
   :config
-  (iensu/add-auto-mode 'restclient-mode "\\.rest$"))
+  (iensu/add-auto-mode 'restclient-mode "\\.rest$")
+  (add-hook 'restclient-mode-hook 'electric-pair-mode)
+  (add-hook 'restclient-mode-hook 'electric-indent-mode))
 
 (use-package smart-mode-line
   :ensure t
