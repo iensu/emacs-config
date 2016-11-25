@@ -88,16 +88,24 @@
 (setq uniquify-buffer-name-style 'post-forward
       uniquify-separator ":")
 
-(setq org-agenda-files (list "~/Documents/notes/notes.org"
-                             "~/Documents/notes/private.org"
-                             "~/Documents/notes/work.org")
-      org-default-notes-file "~/Documents/notes/notes.org"
-      org-capture-templates '(("t" "todo" entry (file "~/Documents/notes/refile.org")
-                               "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
-                              ("j" "Journal" entry (file+datetree "~/Documents/notes/journal.org")
-                               "* %?\n%U\n" :clock-in t :clock-resume t)))
-
-
+;; Setup org-related files and registers
+(let ((private ("~/Documents/notes/private.org"))
+      (work    ("~/Documents/notes/work.org"))
+      (notes   ("~/Documents/notes/notes.org"))
+      (refile  ("~/Documents/notes/refile.org"))
+      (journal ("~/Documents/notes/journal.org")))
+  (progn
+    (setq org-agenda-files (list private work notes refile journal)
+          org-default-notes-file notes
+          org-capture-templates '(("t" "todo" entry (file refile)
+                                   "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+                                  ("j" "Journal" entry (file+datetree journal)
+                                   "* %?\n%U\n" :clock-in t :clock-resume t)))
+    (set-register ?p `(file . ,private))
+    (set-register ?w `(file . ,work))
+    (set-register ?n `(file . ,notes))
+    (set-register ?j `(file . ,journal))
+    (set-register ?r `(file . ,refile))))
 
 ;; Global key bindings
 (global-set-key (kbd "C-c d") 'iensu/duplicate-line)
