@@ -98,6 +98,8 @@
                                "* %?\n%U\n" :clock-in t :clock-resume t)))
 
 
+
+;; Global key bindings
 (global-set-key (kbd "C-c d") 'iensu/duplicate-line)
 (global-set-key (kbd "C-j") 'newline-and-indent)
 (global-set-key (kbd "C-a") 'back-to-indentation)
