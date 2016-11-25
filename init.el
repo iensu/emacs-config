@@ -284,7 +284,7 @@
   :init
   (global-git-gutter-mode +1)
   (git-gutter:linum-setup)
-  (defhydra hydra-git-gutter (global-map "C-h C-g")
+  (defhydra hydra-git-gutter ()
     "git-gutter"
     ("n" git-gutter:next-hunk "next")
     ("p" git-gutter:previous-hunk "prev")
@@ -292,7 +292,8 @@
     ("s" git-gutter:stage-hunk "stage")
     ("m" magit-status "magit-status" :exit t)
     ("g" git-gutter "refresh")
-    ("q" nil "quit" :exit t)))
+    ("q" nil "quit" :exit t))
+  (global-set-key (kbd "C-h C-g") 'hydra-git-gutter/body))
 
 (use-package git-timemachine
   :ensure t)
