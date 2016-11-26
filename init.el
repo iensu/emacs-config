@@ -23,7 +23,11 @@
 (add-to-list 'package-archives
              '("elpy" . "https://jorgenschaefer.github.io/packages/"))
 
-(load-file "~/.emacs.d/iensu.el")
+(defun iensu/emacs-config-file (filename)
+  "Return FILENAME expanded to the Emacs configuration directory."
+  (expand-file-name filename user-emacs-directory))
+
+(load-file (iensu/emacs-config-file "iensu.el"))
 
 ;;;
 ;; Sane Defaults
@@ -36,7 +40,7 @@
  '(menu-bar-mode tool-bar-mode scroll-bar-mode))
 
 (setq default-directory "~/"
-      custom-file "~/.emacs.d/custom.el"
+      custom-file (iensu/emacs-config-file "custom.el")
       vc-follow-symlinks t
       inhibit-startup-message t
       confirm-kill-emacs 'y-or-n-p
@@ -46,7 +50,7 @@
 
       create-lockfiles nil
       auto-save-default nil
-      backup-directory-alist '(("." . "~/.emacs.d/.saves"))
+      backup-directory-alist `(("." . ,(iensu/emacs-config-file ".saves")))
       backup-by-copying t
       delete-old-versions t
       kept-new-versions 6
@@ -308,6 +312,11 @@
 (use-package git-timemachine
   :ensure t)
 
+(use-package gnus
+  :ensure t
+  :init
+  (setq gnus-init-file (iensu/emacs-config-file ".gnus.el")))
+
 (use-package ghc
   :ensure t
   :config
@@ -565,9 +574,7 @@
   :ensure t
   :diminish yas-minor-mode
   :init
-  (yas-global-mode 1)
-  :config
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets")))
+  (yas-global-mode 1))
 
 (load custom-file 'noerror)
 
