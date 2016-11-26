@@ -523,6 +523,9 @@
 
 (use-package tuareg :ensure t)
 
+(use-package w3m
+  :ensure t)
+
 (use-package web-mode
   :ensure t
   :init
