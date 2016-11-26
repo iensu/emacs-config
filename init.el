@@ -89,11 +89,11 @@
       uniquify-separator ":")
 
 ;; Setup org-related files and registers
-(let ((private ("~/Documents/notes/private.org"))
-      (work    ("~/Documents/notes/work.org"))
-      (notes   ("~/Documents/notes/notes.org"))
-      (refile  ("~/Documents/notes/refile.org"))
-      (journal ("~/Documents/notes/journal.org")))
+(let ((private "~/Documents/notes/private.org")
+      (work    "~/Documents/notes/work.org")
+      (notes   "~/Documents/notes/notes.org")
+      (refile  "~/Documents/notes/refile.org")
+      (journal "~/Documents/notes/journal.org"))
   (progn
     (setq org-agenda-files (list private work notes refile journal)
           org-default-notes-file notes
