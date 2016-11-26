@@ -1,6 +1,3 @@
-(setq user-mail-address "jostlund@gmail.com"
-      user-full-name "Jens Östlund")
-
 ;; General settings
 (setq gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\”]\”[#’()]"
 
