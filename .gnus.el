@@ -10,17 +10,18 @@
                                    (not gnus-thread-sort-by-number)))
 
 ;; Fetching email
-(setq gnus-select-method
-      '(nnimap "gmail"
-               (nnimap-address "imap.gmail.com")
-               (nnimap-server-port 993)
-               (nnimap-stream ssl)))
+(setq gnus-select-method '(nnimap "gmail"
+                                  (nnimap-address "imap.gmail.com")
+                                  (nnimap-server-port 993)
+                                  (nnimap-stream ssl)))
 
 ;; Sending email
 (setq message-send-mail-function 'smtpmail-send-it
       smtpmail-default-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 587
       smtpmail-local-domain "homepc")
+
+(add-to-list 'gnus-secondary-select-methods '(nntp "news.gwene.org"))
 
 ;; Enable topic mode
 (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
@@ -30,16 +31,17 @@
     (setq gnus-message-archive-group '((format-time-string "sent.%Y"))
           gnus-topic-topology '(("Gnus" visible)
                                 (("misc" visible))
-                                (("gmail" visible nil nil)))
+                                (("gmail" visible nil nil))
+                                (("news.gwene.org" visible)))
           gnus-topic-alist '(("gmail" ; the key of topic
-                                   "INBOX"
-                                   "[Gmail]/Sent Mail"
-                                   "Drafts")
-                                  ("misc" ; the key of topic
-                                   "nnfolder+archive:sent.2015-12"
-                                   "nnfolder+archive:sent.2016"
-                                   "nndraft:drafts")
-                                  ("Gnus")))))
+                              "INBOX"
+                              "[Gmail]/Sent Mail"
+                              "Drafts")
+                             ("misc" ; the key of topic
+                              "nnfolder+archive:sent.2015-12"
+                              "nnfolder+archive:sent.2016"
+                              "nndraft:drafts")
+                             ("Gnus")))))
 
 ;; All them hydras
 
