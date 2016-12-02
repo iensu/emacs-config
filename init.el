@@ -268,7 +268,9 @@
               (setq company-backends '(company-elm))))
   :config
   (setq elm-indent-offset 2
-        elm-tags-exclude-elm-stuff nil))
+        elm-tags-exclude-elm-stuff nil)
+  (when (executable-find "elm-format")
+    (setq elm-format-on-save t)))
 
 (use-package elpy
   :ensure t
