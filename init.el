@@ -609,7 +609,8 @@
   :ensure t
   :diminish yas-minor-mode
   :init
-  (yas-global-mode 1))
+  (yas-global-mode 1)
+  (setq yas-snippet-dirs (add-to-list 'yas-snippet-dirs (iensu/emacs-config-file "snippets"))))
 
 (load custom-file 'noerror)
 
