@@ -133,35 +133,18 @@
 ;; Start Emacs server, which enables quick emacsclient access
 (server-start)
 
-;;;
+;;;;;;;;;;;;;;;;;;;;;
 ;; Packages
-;;;
+;;;;;;;;;;;;;;;;;;;;;
+
+;;; General packages
 
 (use-package abbrev :diminish abbrev-mode)
-
-(use-package alchemist
-  :ensure t)
 
 (use-package avy
   :ensure t
   :config
   (global-set-key (kbd "C-:") 'avy-goto-char-timer))
-
-(use-package calfw
-  :ensure t
-  :init
-  (require 'calfw-org))
-
-(use-package cider
-  :ensure t
-  :config
-  (add-hook 'cider-mode-hook (lambda () (paredit-mode t)))
-  (add-hook 'cider-repl-mode-hook (lambda () (paredit-mode t))))
-
-(use-package clojure-mode
-  :ensure t
-  :config
-  (add-hook 'clojure-mode-hook (lambda () (paredit-mode t))))
 
 (use-package company
   :ensure t
@@ -184,51 +167,6 @@
   :config
   (setq company-quickhelp-delay 1)
   (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin))
-
-(use-package company-restclient
-  :ensure t
-  :config
-  (add-hook 'restclient-mode-hook (lambda () (add-to-list 'company-backends 'company-restclient))))
-
-(use-package company-tern
-  :ensure t
-  :config
-  (add-hook 'js2-mode-hook (lambda () (add-to-list 'company-backends 'company-tern))))
-
-(use-package counsel
-  :ensure t
-  :bind (("M-x" . counsel-M-x)
-         ("M-y" . counsel-yank-pop)
-         ("C-x C-f" . counsel-find-file)
-         ("<f1> f" . counsel-describe-function)
-         ("<f1> v" . counsel-describe-variable)
-         ("<f1> l" . counsel-load-library)
-         ("<f2> i" . counsel-info-lookup-symbol)
-         ("<f2> u" . counsel-unicode-char)
-         ("C-c g" . counsel-git)
-         ("C-c j" . counsel-git-grep)
-         ("C-c k" . counsel-ag)
-         ("C-x l" . counsel-locate)
-         ("C-S-o" . counsel-rythmbox)
-         :map read-expression-map
-         ("C-r" . counsel-expression-history)
-         :map ivy-minibuffer-map
-         ("M-y" . ivy-next-line-and-call)
-         ("M-Y" . ivy-previous-line-and-call)))
-
-(use-package counsel-projectile
-  :ensure t
-  :config
-  (counsel-projectile-on))
-
-(use-package css-mode
-  :ensure t
-  :config
-  (setq css-indent-offset 2)
-  (iensu/add-auto-mode 'css-mode "\\.styl$")
-  (add-hook 'css-mode-hook (lambda ()
-                             (rainbow-delimiters-mode)
-                             (show-paren-mode))))
 
 (use-package diminish
   :ensure t
@@ -261,28 +199,6 @@
 
 (use-package eldoc :diminish eldoc-mode)
 
-(use-package elixir-mode
-  :ensure t)
-
-(use-package elm-mode
-  :ensure t
-  :init
-  (add-hook 'elm-mode-hook #'elm-oracle-setup-completion)
-  (add-hook 'elm-mode-hook 'electric-pair-mode)
-  (add-hook 'elm-mode-hook
-            (lambda ()
-              (setq company-backends '(company-elm))))
-  :config
-  (setq elm-indent-offset 2
-        elm-tags-exclude-elm-stuff nil)
-  (when (executable-find "elm-format")
-    (setq elm-format-on-save t)))
-
-(use-package elpy
-  :ensure t
-  :init
-  (elpy-enable))
-
 (use-package expand-region
   :ensure t
   :bind
@@ -294,109 +210,14 @@
   :init
   (global-flycheck-mode t))
 
-(use-package flycheck-elm
-  :ensure t
-  :init
-  (eval-after-load 'flycheck
-    '(add-hook 'flycheck-mode-hook #'flycheck-elm-setup)))
-
-(use-package git-gutter
-  :ensure t
-  :diminish git-gutter-mode
-  :init
-  (global-git-gutter-mode +1)
-  (git-gutter:linum-setup)
-  (defhydra hydra-git-gutter ()
-    "git-gutter"
-    ("n" git-gutter:next-hunk "next")
-    ("p" git-gutter:previous-hunk "prev")
-    ("k" git-gutter:revert-hunk "revert")
-    ("s" git-gutter:stage-hunk "stage")
-    ("m" magit-status "magit-status" :exit t)
-    ("g" git-gutter "refresh")
-    ("q" nil "quit" :exit t))
-  (global-set-key (kbd "C-h C-g") 'hydra-git-gutter/body))
-
-(use-package git-timemachine
-  :ensure t)
-
 (use-package gnus
   :ensure t
   :init
   (setq gnus-init-file (iensu/emacs-config-file ".gnus.el")))
 
-(use-package ghc
-  :ensure t
-  :config
-  (let ((my-cabal-path (expand-file-name "~/.cabal/bin")))
-    (setenv "PATH" (concat my-cabal-path ":" (getenv "PATH")))
-    (add-to-list 'exec-path my-cabal-path))
-  (custom-set-variables '(haskell-tags-on-save nil)))
+(use-package hydra :ensure t)
 
-(use-package haskell-mode
-  :ensure t
-  :config
-  (autoload 'ghc-init "ghc" nil t)
-  (autoload 'ghc-debug "ghc" nil nil)
-  (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
-
-(use-package hindent
-  :ensure t
-  :config
-  (add-hook 'haskell-mode-hook #'hindent-mode))
-
-(use-package hydra
-  :ensure t)
-
-(use-package iedit
-  :ensure t)
-
-(use-package ivy
-  :ensure t
-  :diminish ivy-mode
-  :bind (("C-c C-r" . ivy-resume)
-         ("<f6>" . ivy-resume))
-  :config
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t
-        ivy-height 10
-        ivy-initial-inputs-alist nil))
-
-(use-package js2-mode
-  :ensure t
-  :mode "\\.js$"
-  :config
-  (add-hook 'js2-mode-hook (lambda ()
-                             (setq js2-basic-offset 2
-                                   js2-indent-switch-body t
-                                   js2-highlight-level 3)))
-  (add-hook 'js2-mode-hook 'js2-mode-hide-warnings-and-errors)
-  (add-hook 'js2-mode-hook 'electric-pair-mode)
-  (add-hook 'js2-mode-hook (lambda () (electric-indent-mode t)))
-  (add-hook 'js2-mode-hook 'iensu/pick-nodejs-version)
-  (add-hook 'js2-mode-hook 'iensu/use-local-eslint)
-  (setq-default flycheck-disabled-checkers
-                (append flycheck-disabled-checkers '(javascript-jshint)))
-  (flycheck-add-mode 'javascript-eslint 'js2-mode))
-
-(use-package js2-refactor
-  :ensure t
-  :config
-  (add-hook 'js2-mode-hook 'js2-refactor-mode)
-  (add-hook 'js2-mode-hook (lambda ()
-                             (js2r-add-keybindings-with-prefix "C-c C-m"))))
-
-(use-package json-mode
-  :ensure t
-  :config
-  (iensu/add-auto-mode 'json-mode "\\.json$")
-  (setq js-indent-level 2))
-
-(use-package magit
-  :ensure t
-  :bind (("C-x g" . magit-status)))
-
-(use-package mocha :ensure t)
+(use-package iedit :ensure t)
 
 (use-package multiple-cursors
   :ensure t
@@ -417,48 +238,10 @@
   :ensure t
   :config (global-set-key [f8] 'neotree-toggle))
 
-(use-package nvm
-  :ensure t)
-
 (use-package nyan-mode
   :ensure t
   :config
   (nyan-mode))
-
-(use-package ob-elixir
-  :ensure t)
-
-(use-package ob-restclient
-  :ensure t
-  :init
-  (org-babel-do-load-languages 'org-babel-load-languages
-                               '((restclient . t))))
-
-(use-package org
-  :ensure t
-  :config
-  (iensu/add-auto-mode 'org-mode "\\.trello$")
-  (add-hook 'org-mode-hook (lambda ()
-                             (setq org-src-fontify-natively t
-                                   org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
-                                   truncate-lines nil)))
-  (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("javascript" . js2))))
-  (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("es" . es))))
-  (add-hook 'org-mode-hook (lambda () (linum-mode -1)))
-  (org-babel-do-load-languages
-   'org-babel-load-languages '((emacs-lisp . t)
-                               (sh . t)
-                               (js . t)
-                               (python . t)
-                               (clojure . t)
-                               (elixir . t))))
-
-(use-package org-bullets
-  :ensure t
-  :init
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-
-(use-package org-trello :ensure t)
 
 (use-package origami
   :ensure t
@@ -498,12 +281,329 @@
   (add-hook 'js2-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'elm-mode-hook 'rainbow-delimiters-mode))
 
+(use-package smart-mode-line
+  :ensure t
+  :init
+  (setq sml/no-confirm-load-theme t)
+  (sml/setup)
+  :config
+  (setq sml/theme 'dark))
+
+(use-package subword
+  :diminish subword-mode
+  :init
+  (defadvice subword-transpose (before subword-transpose)
+    (when (looking-at "$")
+      (backward-word 1))))
+
+(use-package time
+  :init
+  (display-time-mode t)
+  (setq display-time-24hr-format t)
+  :config
+  (setq display-time-day-and-date nil))
+
+(use-package undo-tree
+  :ensure t
+  :diminish undo-tree-mode
+  :init
+  (global-undo-tree-mode))
+
+(use-package w3m :ensure t)
+
+(use-package yasnippet
+  :ensure t
+  :diminish yas-minor-mode
+  :init
+  (yas-global-mode 1)
+  (setq yas-snippet-dirs (add-to-list 'yas-snippet-dirs (iensu/emacs-config-file "snippets"))))
+
+;;; Git
+
+(use-package magit
+  :ensure t
+  :bind (("C-x g" . magit-status)))
+
+(use-package git-gutter
+  :ensure t
+  :diminish git-gutter-mode
+  :init
+  (global-git-gutter-mode +1)
+  (git-gutter:linum-setup)
+  (defhydra hydra-git-gutter ()
+    "git-gutter"
+    ("n" git-gutter:next-hunk "next")
+    ("p" git-gutter:previous-hunk "prev")
+    ("k" git-gutter:revert-hunk "revert")
+    ("s" git-gutter:stage-hunk "stage")
+    ("m" magit-status "magit-status" :exit t)
+    ("g" git-gutter "refresh")
+    ("q" nil "quit" :exit t))
+  (global-set-key (kbd "C-h C-g") 'hydra-git-gutter/body))
+
+(use-package git-timemachine :ensure t)
+
+;;; Ivy
+
+(use-package ivy
+  :ensure t
+  :diminish ivy-mode
+  :bind (("C-c C-r" . ivy-resume)
+         ("<f6>" . ivy-resume))
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t
+        ivy-height 10
+        ivy-initial-inputs-alist nil))
+
+(use-package counsel
+  :ensure t
+  :bind (("M-x" . counsel-M-x)
+         ("M-y" . counsel-yank-pop)
+         ("C-x C-f" . counsel-find-file)
+         ("<f1> f" . counsel-describe-function)
+         ("<f1> v" . counsel-describe-variable)
+         ("<f1> l" . counsel-load-library)
+         ("<f2> i" . counsel-info-lookup-symbol)
+         ("<f2> u" . counsel-unicode-char)
+         ("C-c g" . counsel-git)
+         ("C-c j" . counsel-git-grep)
+         ("C-c k" . counsel-ag)
+         ("C-x l" . counsel-locate)
+         ("C-S-o" . counsel-rythmbox)
+         :map read-expression-map
+         ("C-r" . counsel-expression-history)
+         :map ivy-minibuffer-map
+         ("M-y" . ivy-next-line-and-call)
+         ("M-Y" . ivy-previous-line-and-call)))
+
+(use-package counsel-projectile
+  :ensure t
+  :config
+  (counsel-projectile-on))
+
+(use-package swiper
+  :ensure t
+  :bind (("C-s" . swiper)))
+
+;;; Org-mode
+
+(use-package org
+  :ensure t
+  :config
+  (iensu/add-auto-mode 'org-mode "\\.trello$")
+  (add-hook 'org-mode-hook (lambda ()
+                             (setq org-src-fontify-natively t
+                                   org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
+                                   truncate-lines nil)))
+  (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("javascript" . js2))))
+  (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("es" . es))))
+  (add-hook 'org-mode-hook (lambda () (linum-mode -1)))
+  (org-babel-do-load-languages
+   'org-babel-load-languages '((emacs-lisp . t)
+                               (sh . t)
+                               (js . t)
+                               (python . t)
+                               (clojure . t)
+                               (elixir . t))))
+
+(use-package org-bullets
+  :ensure t
+  :init
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+(use-package calfw
+  :ensure t
+  :init
+  (require 'calfw-org))
+
+;;; Restclient
+
 (use-package restclient
   :ensure t
   :config
   (iensu/add-auto-mode 'restclient-mode "\\.rest$")
   (add-hook 'restclient-mode-hook 'electric-pair-mode)
   (add-hook 'restclient-mode-hook 'electric-indent-mode))
+
+(use-package company-restclient
+  :ensure t
+  :config
+  (add-hook 'restclient-mode-hook (lambda () (add-to-list 'company-backends 'company-restclient))))
+
+(use-package ob-restclient
+  :ensure t
+  :init
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               '((restclient . t))))
+
+;;;;;;;;;;;
+;; Programming languages
+;;;;;;;;;;;
+
+;;; Clojure
+
+(use-package clojure-mode
+  :ensure t
+  :config
+  (add-hook 'clojure-mode-hook (lambda () (paredit-mode t))))
+
+(use-package cider
+  :ensure t
+  :config
+  (add-hook 'cider-mode-hook (lambda () (paredit-mode t)))
+  (add-hook 'cider-repl-mode-hook (lambda () (paredit-mode t))))
+
+;;; Elixir
+
+(use-package elixir-mode :ensure t)
+
+(use-package alchemist :ensure t)
+
+(use-package ob-elixir :ensure t)
+
+;;; Elm
+
+(use-package elm-mode
+  :ensure t
+  :init
+  (add-hook 'elm-mode-hook #'elm-oracle-setup-completion)
+  (add-hook 'elm-mode-hook 'electric-pair-mode)
+  (add-hook 'elm-mode-hook
+            (lambda ()
+              (setq company-backends '(company-elm))))
+  :config
+  (setq elm-indent-offset 2
+        elm-tags-exclude-elm-stuff nil)
+  (when (executable-find "elm-format")
+    (setq elm-format-on-save t)))
+
+(use-package flycheck-elm
+  :ensure t
+  :init
+  (eval-after-load 'flycheck
+    '(add-hook 'flycheck-mode-hook #'flycheck-elm-setup)))
+
+;;; Haskell
+
+(use-package haskell-mode
+  :ensure t
+  :config
+  (autoload 'ghc-init "ghc" nil t)
+  (autoload 'ghc-debug "ghc" nil nil)
+  (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
+
+(use-package ghc
+  :ensure t
+  :config
+  (let ((my-cabal-path (expand-file-name "~/.cabal/bin")))
+    (setenv "PATH" (concat my-cabal-path ":" (getenv "PATH")))
+    (add-to-list 'exec-path my-cabal-path))
+  (custom-set-variables '(haskell-tags-on-save nil)))
+
+(use-package hindent
+  :ensure t
+  :config
+  (add-hook 'haskell-mode-hook #'hindent-mode))
+
+;;; Javascript / Web
+
+(use-package js2-mode
+  :ensure t
+  :mode "\\.js$"
+  :config
+  (add-hook 'js2-mode-hook (lambda ()
+                             (setq js2-basic-offset 2
+                                   js2-indent-switch-body t
+                                   js2-highlight-level 3)))
+  (add-hook 'js2-mode-hook 'js2-mode-hide-warnings-and-errors)
+  (add-hook 'js2-mode-hook 'electric-pair-mode)
+  (add-hook 'js2-mode-hook (lambda () (electric-indent-mode t)))
+  (add-hook 'js2-mode-hook 'iensu/pick-nodejs-version)
+  (add-hook 'js2-mode-hook 'iensu/use-local-eslint)
+  (setq-default flycheck-disabled-checkers
+                (append flycheck-disabled-checkers '(javascript-jshint)))
+  (flycheck-add-mode 'javascript-eslint 'js2-mode))
+
+(use-package js2-refactor
+  :ensure t
+  :config
+  (add-hook 'js2-mode-hook 'js2-refactor-mode)
+  (add-hook 'js2-mode-hook (lambda ()
+                             (js2r-add-keybindings-with-prefix "C-c C-m"))))
+
+(use-package company-tern
+  :ensure t
+  :config
+  (add-hook 'js2-mode-hook (lambda () (add-to-list 'company-backends 'company-tern))))
+
+(use-package css-mode
+  :ensure t
+  :config
+  (setq css-indent-offset 2)
+  (iensu/add-auto-mode 'css-mode "\\.styl$")
+  (add-hook 'css-mode-hook (lambda ()
+                             (rainbow-delimiters-mode)
+                             (show-paren-mode))))
+
+(use-package json-mode
+  :ensure t
+  :config
+  (iensu/add-auto-mode 'json-mode "\\.json$")
+  (setq js-indent-level 2))
+
+(use-package mocha :ensure t)
+
+(use-package nvm :ensure t)
+
+(use-package tern
+  :ensure t
+  :diminish tern-mode " †"
+  :config
+  (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+  (iensu/add-auto-mode 'json-mode "\\.tern-project$"))
+
+(use-package web-mode
+  :ensure t
+  :init
+  (iensu/add-auto-mode 'web-mode "\\.html$" "\\.jsx$" "\\.hbs$" "\\.handlebars$")
+  :config
+  (setq web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2
+        web-mode-markup-indent-offset 2
+        web-mode-attr-indent-offset 2
+        web-mode-attr-value-indent-offset 2
+        web-mode-enable-css-colorization t
+        web-mode-enable-current-element-highlight t
+        web-mode-enable-current-column-highlight t)
+  (add-hook 'web-mode-hook #'(lambda () (yas-activate-extra-mode 'js-mode)))
+  (add-hook 'web-mode-hook (lambda () (add-to-list 'company-backends 'company-tern)))
+  (add-hook 'web-mode-hook 'iensu/pick-nodejs-version)
+  (add-hook 'web-mode-hook 'iensu/use-local-eslint)
+  (setq-default flychqeck-disabled-checkers
+                (append flycheck-disabled-checkers '(javascript-jshint)))
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
+  (defadvice company-tern (before web-mode-set-up-ac-sources activate)
+    (when (equal major-mode 'web-mode)
+      (let* ((cur-language (web-mode-language-at-pos))
+             (js? (or (string= cur-language "javascript")
+                      (string= cur-language "jsx"))))
+        (if js?
+            (unless tern-mode (tern-mode))
+          (if tern-mode (tern-mode -1)))))))
+
+;;; OCaml
+
+(use-package tuareg :ensure t)
+
+;;; Python
+
+(use-package elpy
+  :ensure t
+  :init
+  (elpy-enable))
+
+;;; Rust
 
 (use-package rust-mode
   :ensure t
@@ -538,85 +638,8 @@
   (setq company-tooltip-align-annotations t
         company-racer-rust-src "/usr/local/src/rustc-1.8.0/src"))
 
-(use-package smart-mode-line
-  :ensure t
-  :init
-  (setq sml/no-confirm-load-theme t)
-  (sml/setup)
-  :config
-  (setq sml/theme 'dark))
 
-(use-package subword
-  :diminish subword-mode
-  :init
-  (defadvice subword-transpose (before subword-transpose)
-    (when (looking-at "$")
-      (backward-word 1))))
-
-(use-package swiper
-  :ensure t
-  :bind (("C-s" . swiper)))
-
-(use-package tern
-  :ensure t
-  :diminish tern-mode " †"
-  :config
-  (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-  (iensu/add-auto-mode 'json-mode "\\.tern-project$"))
-
-(use-package time
-  :init
-  (display-time-mode t)
-  (setq display-time-24hr-format t)
-  :config
-  (setq display-time-day-and-date nil))
-
-(use-package tuareg :ensure t)
-
-(use-package w3m
-  :ensure t)
-
-(use-package web-mode
-  :ensure t
-  :init
-  (iensu/add-auto-mode 'web-mode "\\.html$" "\\.jsx$" "\\.hbs$" "\\.handlebars$")
-  :config
-  (setq web-mode-css-indent-offset 2
-        web-mode-code-indent-offset 2
-        web-mode-markup-indent-offset 2
-        web-mode-attr-indent-offset 2
-        web-mode-attr-value-indent-offset 2
-        web-mode-enable-css-colorization t
-        web-mode-enable-current-element-highlight t
-        web-mode-enable-current-column-highlight t)
-  (add-hook 'web-mode-hook #'(lambda () (yas-activate-extra-mode 'js-mode)))
-  (add-hook 'web-mode-hook (lambda () (add-to-list 'company-backends 'company-tern)))
-  (add-hook 'web-mode-hook 'iensu/pick-nodejs-version)
-  (add-hook 'web-mode-hook 'iensu/use-local-eslint)
-  (setq-default flychqeck-disabled-checkers
-                (append flycheck-disabled-checkers '(javascript-jshint)))
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
-  (defadvice company-tern (before web-mode-set-up-ac-sources activate)
-    (when (equal major-mode 'web-mode)
-      (let* ((cur-language (web-mode-language-at-pos))
-             (js? (or (string= cur-language "javascript")
-                      (string= cur-language "jsx"))))
-        (if js?
-            (unless tern-mode (tern-mode))
-          (if tern-mode (tern-mode -1)))))))
-
-(use-package undo-tree
-  :ensure t
-  :diminish undo-tree-mode
-  :init
-  (global-undo-tree-mode))
-
-(use-package yasnippet
-  :ensure t
-  :diminish yas-minor-mode
-  :init
-  (yas-global-mode 1)
-  (setq yas-snippet-dirs (add-to-list 'yas-snippet-dirs (iensu/emacs-config-file "snippets"))))
+;;; End packages
 
 (load custom-file 'noerror)
 

@@ -52,7 +52,6 @@
 (depends-on "ob-elixir")
 (depends-on "ob-restclient")
 (depends-on "org-bullets")
-(depends-on "org-trello")
 (depends-on "origami")
 (depends-on "pallet")
 (depends-on "paredit")
