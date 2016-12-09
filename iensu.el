@@ -9,16 +9,16 @@
   (dolist (pattern patterns)
     (add-to-list 'auto-mode-alist (cons pattern mode))))
 
-(defun iensu/duplicate-line ()
-  "Copy the current line and insert it below."
-  (interactive)
-  (let ((cur-pos (point)))
-    (move-beginning-of-line 1)
-    (kill-line)
-    (yank)
-    (newline)
-    (yank)
-    (goto-char cur-pos)))
+(defun iensu/duplicate-line (n)
+  "Copy the current line N times and insert it below."
+  (interactive "P")
+  (save-excursion
+    (dotimes (i (prefix-numeric-value n))
+      (move-beginning-of-line 1)
+      (kill-line)
+      (yank)
+      (newline)
+      (yank))))
 
 (defun iensu/pick-nodejs-version ()
   (let ((most-recent (car (last (sort (nvm--installed-versions)
