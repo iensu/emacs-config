@@ -381,7 +381,9 @@
          ("C-r" . counsel-expression-history)
          :map ivy-minibuffer-map
          ("M-y" . ivy-next-line-and-call)
-         ("M-Y" . ivy-previous-line-and-call)))
+         ("M-Y" . ivy-previous-line-and-call))
+  :config
+  (setq counsel-find-file-at-point t))
 
 (use-package counsel-projectile
   :ensure t
