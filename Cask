@@ -42,6 +42,7 @@
 (depends-on "iedit")
 (depends-on "js2-refactor")
 (depends-on "json-mode")
+(depends-on "linum-relative")
 (depends-on "magit")
 (depends-on "markdown-mode")
 (depends-on "mocha")

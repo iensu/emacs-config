@@ -283,6 +283,10 @@
   (add-hook 'js2-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'elm-mode-hook 'rainbow-delimiters-mode))
 
+(use-package linum-relative
+  :ensure t
+  :bind (("H-l" . linum-relative-toggle)))
+
 (use-package smart-mode-line
   :ensure t
   :init
