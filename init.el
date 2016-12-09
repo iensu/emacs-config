@@ -119,7 +119,6 @@
     (set-register ?a `(file . ,appointments))))
 
 ;; Global key bindings
-(global-set-key (kbd "C-c d") 'iensu/duplicate-line)
 (global-set-key (kbd "C-j") 'newline-and-indent)
 (global-set-key (kbd "C-a") 'back-to-indentation)
 (global-set-key (kbd "C-<return>") 'open-line)
@@ -130,6 +129,8 @@
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-M-<backspace>") 'just-one-space)
+(global-set-key (kbd "H-m") 'iensu/move-file)
+(global-set-key (kbd "H-d") 'iensu/duplicate-line)
 
 ;; Start Emacs server, which enables quick emacsclient access
 (server-start)
