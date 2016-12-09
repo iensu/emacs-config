@@ -189,7 +189,7 @@
     (load-theme 'dracula t))
   :config
   (set-face-attribute 'default nil :font "Anonymous Pro for Powerline" :height 140)
-  (set-face-attribute 'region nil :background "#454500" :foreground nil))
+  (set-face-attribute 'region nil :background "#57145D" :foreground nil))
 
 (use-package editorconfig
   :ensure t
