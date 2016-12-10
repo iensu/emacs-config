@@ -36,6 +36,7 @@
 (depends-on "git-timemachine")
 (depends-on "haskell-mode")
 (depends-on "hindent")
+(depends-on "hlinum")
 (depends-on "htmlize")
 (depends-on "hydra")
 (depends-on "idle-highlight-mode")
