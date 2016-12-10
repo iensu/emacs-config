@@ -132,6 +132,7 @@
 (global-set-key (kbd "C-M-<backspace>") 'just-one-space)
 (global-set-key (kbd "H-m") 'iensu/move-file)
 (global-set-key (kbd "H-d") 'iensu/duplicate-line)
+(global-set-key (kbd "H-t") 'toggle-truncate-lines)
 
 ;; Start Emacs server, which enables quick emacsclient access
 (server-start)
