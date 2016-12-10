@@ -66,7 +66,9 @@
 
       calendar-week-start-day 1)
 
-(setq-default indent-tabs-mode nil
+(setq-default cursor-type '(bar . 2)
+
+              indent-tabs-mode nil
               tab-width 2)
 
 (fset 'yes-or-no-p 'y-or-n-p)
