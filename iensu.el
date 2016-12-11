@@ -18,7 +18,7 @@
       (kill-line)
       (yank)
       (newline)
-      (insert (s-trim (car kill-ring)))
+      (insert (s-trim-right (car kill-ring)))
       (goto-char cur-pos))))
 
 (defun iensu/pick-nodejs-version ()
