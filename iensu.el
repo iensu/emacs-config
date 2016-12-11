@@ -12,13 +12,14 @@
 (defun iensu/duplicate-line (n)
   "Copy the current line N times and insert it below."
   (interactive "P")
-  (save-excursion
+  (let ((cur-pos (point)))
     (dotimes (i (prefix-numeric-value n))
-      (move-beginning-of-line 1)
+      (move-beginning-of-line nil)
       (kill-line)
       (yank)
       (newline)
-      (yank))))
+      (insert (s-trim (car kill-ring)))
+      (goto-char cur-pos))))
 
 (defun iensu/pick-nodejs-version ()
   (let ((most-recent (car (last (sort (nvm--installed-versions)
