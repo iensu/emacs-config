@@ -662,6 +662,21 @@
   (setq company-tooltip-align-annotations t
         company-racer-rust-src "/usr/local/src/rustc-1.8.0/src"))
 
+;;; Scala
+
+(use-package scala-mode
+  :ensure t
+  :config
+  (add-hook 'scala-mode-hook 'electric-pair-mode))
+
+(use-package sbt-mode
+  :ensure t)
+
+(use-package ensime
+  :ensure t
+  :config
+  (add-hook 'ensime-mode-hook (lambda ()
+                                (add-to-list 'company-backends 'ensime-company))))
 
 ;;; End packages
 
