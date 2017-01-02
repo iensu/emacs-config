@@ -110,8 +110,13 @@
                                    "* %?\n%U\n" :clock-in t :clock-resume t)
                                   ("l" "Link" entry (file+headline ,refile "Links")
                                    "* %? %^L %^g \n%T" :prepend t)
+                                  ("L" "Link" entry (file+headline ,refile "Links")
+                                   "*  %c\n%T" :prepend t :immediate-finish t)
                                   ("a" "Appointment" entry (file ,appointments)
-                                   "* %? %^G \nSCHEDULED: %^T")))
+                                   "* %? %^G \nSCHEDULED: %^T")
+                                  ("p" "Chrome Note" entry (file+headline ,refile "Chrome Notes")
+                                   "* %^{Title}\n%T\n\n  Source: %u, %c\n\n  %i"
+                                   :prepend t :immediate-finish t)))
     (set-register ?p `(file . ,private))
     (set-register ?w `(file . ,work))
     (set-register ?n `(file . ,notes))
@@ -421,7 +426,10 @@
                                (js . t)
                                (python . t)
                                (clojure . t)
-                               (elixir . t))))
+                               (elixir . t)))
+  (add-to-list 'org-modules 'org-protocol)
+  (org-load-modules-maybe t)
+  (require 'org-protocol))
 
 (use-package org-bullets
   :ensure t
