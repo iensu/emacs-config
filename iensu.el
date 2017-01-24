@@ -22,7 +22,7 @@
       (goto-char cur-pos))))
 
 (defun iensu/pick-nodejs-version ()
-  (let ((most-recent (car (last (sort (nvm--installed-versions)
+  (let ((most-recent (caar (last (sort (nvm--installed-versions)
                                       (lambda (a b) (string-lessp (car a) (car b)))))))
         (nvmrc? (lambda () (file-exists-p (concat (projectile-project-root) ".nvmrc")))))
     (cond ((not (projectile-project-p)) (nvm-use most-recent))
