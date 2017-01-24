@@ -538,7 +538,7 @@
   :config
   (add-hook 'js2-mode-hook (lambda ()
                              (setq js2-basic-offset 2
-                                   js2-indent-switch-body t
+                                   js-switch-indent-offset 2
                                    js2-highlight-level 3)))
   (add-hook 'js2-mode-hook 'js2-mode-hide-warnings-and-errors)
   (add-hook 'js2-mode-hook 'electric-pair-mode)
