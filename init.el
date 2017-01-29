@@ -265,12 +265,6 @@
   :bind (("<f6>" . origami-recursively-toggle-node)
          ("<f7>" . origami-toggle-all-nodes)))
 
-(use-package paredit
-  :ensure t
-  :diminish paredit-mode " π"
-  :config
-  (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode))
-
 (use-package paren
   :ensure t
   :init
@@ -309,6 +303,22 @@
   :config
   (setq sml/theme 'dark))
 
+(use-package smartparens
+  :ensure t
+  :init
+  (smartparens-global-mode t)
+  (require 'smartparens-config)
+  :bind
+  (:map smartparens-mode-map
+        ("M-s" . sp-unwrap-sexp)
+        ("C-<down>" . sp-down-sexp)
+        ("C-<up>"   . sp-up-sexp)
+        ("M-<down>" . sp-backward-down-sexp)
+        ("M-<up>"   . sp-backward-up-sexp)
+        ("C-<right>" . sp-forward-slurp-sexp)
+        ("M-<right>" . sp-forward-barf-sexp)
+        ("C-<left>"  . sp-backward-slurp-sexp)
+        ("M-<left>"  . sp-backward-barf-sexp)))
 (use-package subword
   :diminish subword-mode
   :init
