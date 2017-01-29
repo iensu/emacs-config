@@ -335,7 +335,11 @@
   :diminish yas-minor-mode
   :init
   (yas-global-mode 1)
-  (setq yas-snippet-dirs (add-to-list 'yas-snippet-dirs (iensu/emacs-config-file "snippets"))))
+  (setq yas-snippet-dirs (add-to-list 'yas-snippet-dirs (iensu/emacs-config-file "snippets")))
+  :config
+  (add-hook 'snippet-mode-hook (lambda ()
+                                 (setq mode-require-final-newline nil
+                                       require-final-newline nil))))
 
 ;;; Git
 

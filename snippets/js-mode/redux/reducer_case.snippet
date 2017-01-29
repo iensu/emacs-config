@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil  -*-
+# name: Redux reducer case
+# key: rdrc
+# binding:
+# --
+case ${3:ACTION$(upcase (s-replace "-" "_" yas-text))}:
+return ${0:state};
