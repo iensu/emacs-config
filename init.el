@@ -138,6 +138,7 @@
 (global-set-key (kbd "H-m") 'iensu/move-file)
 (global-set-key (kbd "H-d") 'iensu/duplicate-line)
 (global-set-key (kbd "H-t") 'toggle-truncate-lines)
+(global-set-key (kbd "H-o") 'iensu/switch-to-minibuffer)
 
 ;; Start Emacs server, which enables quick emacsclient access
 (server-start)

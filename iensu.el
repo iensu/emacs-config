@@ -130,5 +130,12 @@
                (not (string-equal old-location new-location)))
       (delete-file old-location))))
 
+(defun iensu/switch-to-minibuffer ()
+  "Switch to minibuffer window (if active)."
+  (interactive)
+  (when (active-minibuffer-window)
+    (select-frame-set-input-focus (window-frame (active-minibuffer-window)))
+    (select-window (active-minibuffer-window))))
+
 (provide 'iensu)
 ;;; iensu.el ends here
