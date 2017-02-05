@@ -147,6 +147,8 @@
     (split-window-vertically (- height))
     (other-window 1)
     (eshell "new")
+    (insert (concat "cd " parent))
+    (eshell-send-input)
     (rename-buffer (concat "*eshell: " name "*"))))
 
 (defun iensu/close-eshell ()
