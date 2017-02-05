@@ -319,6 +319,13 @@
         ("M-<right>" . sp-forward-barf-sexp)
         ("C-<left>"  . sp-backward-slurp-sexp)
         ("M-<left>"  . sp-backward-barf-sexp)))
+
+(use-package sr-speedbar
+  :ensure t
+  :bind (("H-s" . sr-speedbar-toggle))
+  :config
+  (setq sr-speedbar-default-width 60))
+
 (use-package subword
   :diminish subword-mode
   :init

@@ -70,6 +70,7 @@
 (depends-on "smart-mode-line")
 (depends-on "smartparens")
 (depends-on "smex")
+(depends-on "sr-speedbar")
 (depends-on "swiper")
 (depends-on "tuareg")
 (depends-on "undo-tree")
