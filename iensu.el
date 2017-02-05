@@ -137,5 +137,24 @@
     (select-frame-set-input-focus (window-frame (active-minibuffer-window)))
     (select-window (active-minibuffer-window))))
 
+(defun iensu/open-eshell-here ()
+  "Open an eShell prompt in the project directory.  Inspired by this example: http://www.howardism.org/Technical/Emacs/eshell-fun.html."
+  (interactive)
+  (let* ((parent (or (ignore-errors (projectile-project-root))
+                     default-directory))
+         (height (/ (window-total-height) 3))
+         (name (car (last (split-string parent "/" t)))))
+    (split-window-vertically (- height))
+    (other-window 1)
+    (eshell "new")
+    (rename-buffer (concat "*eshell: " name "*"))))
+
+(defun iensu/close-eshell ()
+  "Close an eShell prompt.  Taken from here: http://www.howardism.org/Technical/Emacs/eshell-fun.html."
+  (interactive)
+  (insert "exit")
+  (eshell-send-input)
+  (delete-window))
+
 (provide 'iensu)
 ;;; iensu.el ends here

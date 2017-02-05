@@ -139,6 +139,9 @@
 (global-set-key (kbd "H-d") 'iensu/duplicate-line)
 (global-set-key (kbd "H-t") 'toggle-truncate-lines)
 (global-set-key (kbd "H-o") 'iensu/switch-to-minibuffer)
+(global-set-key (kbd "H-x") 'yas-expand)
+(global-set-key (kbd "H-e H-e") 'iensu/open-eshell-here)
+(global-set-key (kbd "H-e H-x") 'iensu/close-eshell)
 
 ;; Start Emacs server, which enables quick emacsclient access
 (server-start)
