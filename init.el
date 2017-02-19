@@ -473,7 +473,6 @@
   :ensure t
   :config
   (iensu/add-auto-mode 'restclient-mode "\\.rest$")
-  (add-hook 'restclient-mode-hook 'electric-pair-mode)
   (add-hook 'restclient-mode-hook 'electric-indent-mode))
 
 (use-package company-restclient
@@ -518,7 +517,6 @@
   :ensure t
   :init
   (add-hook 'elm-mode-hook #'elm-oracle-setup-completion)
-  (add-hook 'elm-mode-hook 'electric-pair-mode)
   (add-hook 'elm-mode-hook
             (lambda ()
               (setq company-backends '(company-elm))))
@@ -567,7 +565,6 @@
                                    js-switch-indent-offset 2
                                    js2-highlight-level 3)))
   (add-hook 'js2-mode-hook 'js2-mode-hide-warnings-and-errors)
-  (add-hook 'js2-mode-hook 'electric-pair-mode)
   (add-hook 'js2-mode-hook (lambda () (electric-indent-mode t)))
   (add-hook 'js2-mode-hook 'iensu/pick-nodejs-version)
   (add-hook 'js2-mode-hook 'iensu/use-local-eslint)
@@ -691,9 +688,7 @@
 ;;; Scala
 
 (use-package scala-mode
-  :ensure t
-  :config
-  (add-hook 'scala-mode-hook 'electric-pair-mode))
+  :ensure t)
 
 (use-package sbt-mode
   :ensure t)
