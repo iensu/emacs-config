@@ -95,15 +95,16 @@
       uniquify-separator ":")
 
 ;; Setup org-related files and registers
-(let ((private      "~/Documents/notes/private.org")
-      (work         "~/Documents/notes/work.org")
-      (notes        "~/Documents/notes/notes.org")
-      (refile       "~/Documents/notes/refile.org")
-      (journal      "~/Documents/notes/journal.org")
-      (appointments "~/Documents/notes/appointments.org"))
+(let ((private      "~/Dropbox/org/private.org")
+      (work         "~/Dropbox/org/work.org")
+      (notes        "~/Dropbox/org/notes.org")
+      (refile       "~/Dropbox/org/refile.org")
+      (journal      "~/Dropbox/org/journal.org")
+      (appointments "~/Dropbox/org/appointments.org"))
   (progn
     (setq org-agenda-files (list private work notes refile journal appointments)
           org-default-notes-file notes
+          org-directory "~/Dropbox/org/"
           org-capture-templates `(("t" "todo" entry (file ,refile)
                                    "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
                                   ("j" "Journal" entry (file+datetree ,journal)
