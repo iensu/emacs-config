@@ -114,7 +114,7 @@
                                   ("L" "Link" entry (file+headline ,refile "Links")
                                    "*  %c\n%T" :prepend t :immediate-finish t)
                                   ("a" "Appointment" entry (file ,appointments)
-                                   "* %? %^G \nSCHEDULED: %^T")
+                                   "* %^{title} %^G \nSCHEDULED: %^T\n\n%?")
                                   ("p" "Chrome Note" entry (file+headline ,refile "Chrome Notes")
                                    "* %^{Title}\n%T\n\n  Source: %u, %c\n\n  %i"
                                    :prepend t :immediate-finish t)))
