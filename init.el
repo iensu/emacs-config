@@ -62,6 +62,7 @@
       mac-option-modifier nil
       mac-command-modifier 'meta
       mac-function-modifier 'hyper
+      mac-right-option-modifier 'hyper
 
       require-final-newline t
 
