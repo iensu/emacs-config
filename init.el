@@ -92,6 +92,8 @@
 (global-font-lock-mode t)
 (windmove-default-keybindings)
 
+(global-hl-line-mode 1)
+
 (setq-default frame-title-format "%b (%f)")
 (setq uniquify-buffer-name-style 'post-forward
       uniquify-separator ":")
