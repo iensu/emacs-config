@@ -45,6 +45,7 @@
       inhibit-startup-message t
       confirm-kill-emacs 'y-or-n-p
       global-auto-revert-mode t
+      transient-mark-mode nil
       ring-bell-function 'ignore
       initial-scratch-message nil
 
