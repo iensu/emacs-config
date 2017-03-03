@@ -287,6 +287,9 @@
 (use-package projectile
   :ensure t
   :diminish projectile-mode
+  :bind (:map projectile-mode-map
+              ("H-f" . counsel-projectile-find-file)
+              ("H-g" . counsel-projectile-ag))
   :config
   (projectile-global-mode)
   (add-hook 'projectile-after-switch-project-hook 'iensu/use-local-eslint))
