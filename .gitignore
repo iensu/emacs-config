@@ -14,3 +14,4 @@ smex-items
 /var
 eshell/
 flycheck_*
+projectile.cache
