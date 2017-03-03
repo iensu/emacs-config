@@ -4,6 +4,7 @@
 
 (depends-on "alchemist")
 (depends-on "avy")
+(depends-on "beacon")
 (depends-on "bind-key")
 (depends-on "calfw")
 (depends-on "cargo")

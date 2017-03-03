@@ -164,6 +164,11 @@
   :config
   (global-set-key (kbd "C-:") 'avy-goto-char-timer))
 
+(use-package beacon
+  :ensure t
+  :config
+  (beacon-mode 1))
+
 (use-package company
   :ensure t
   :diminish company-mode
@@ -232,12 +237,6 @@
   :ensure t
   :init
   (setq gnus-init-file (iensu/emacs-config-file ".gnus.el")))
-
-(use-package hlinum
-  :ensure t
-  :config
-  (hlinum-activate)
-  (set-face-attribute 'linum-highlight-face nil :foreground "yellow" :background nil :height 120))
 
 (use-package hydra :ensure t)
 
