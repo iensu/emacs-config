@@ -121,7 +121,8 @@
                                    "* %^{title} %^G \nSCHEDULED: %^T\n\n%?")
                                   ("p" "Chrome Note" entry (file+headline ,refile "Chrome Notes")
                                    "* %^{Title}\n%T\n\n  Source: %u, %c\n\n  %i"
-                                   :prepend t :immediate-finish t)))
+                                   :prepend t :immediate-finish t))
+          org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE")))
     (set-register ?p `(file . ,private))
     (set-register ?w `(file . ,work))
     (set-register ?n `(file . ,notes))
