@@ -589,7 +589,8 @@
 (use-package company-tern
   :ensure t
   :config
-  (add-hook 'js2-mode-hook (lambda () (add-to-list 'company-backends 'company-tern))))
+  ;(add-hook 'js2-mode-hook (lambda () (add-to-list 'company-backends 'company-tern)))
+  )
 
 (use-package css-mode
   :ensure t
@@ -614,7 +615,7 @@
   :ensure t
   :diminish tern-mode " †"
   :config
-  (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+  ;; (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
   (iensu/add-auto-mode 'json-mode "\\.tern-project$"))
 
 (use-package web-mode
