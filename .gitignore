@@ -15,3 +15,4 @@ smex-items
 eshell/
 flycheck_*
 projectile.cache
+tramp
