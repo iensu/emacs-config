@@ -26,6 +26,8 @@
 (depends-on "elm-mode")
 (depends-on "elpy")
 (depends-on "ensime")
+(depends-on "evil")
+(depends-on "evil-magit")
 (depends-on "exec-path-from-shell")
 (depends-on "expand-region")
 (depends-on "f")
