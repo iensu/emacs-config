@@ -43,6 +43,7 @@
 (depends-on "hydra")
 (depends-on "idle-highlight-mode")
 (depends-on "iedit")
+(depends-on "ivy-hydra")
 (depends-on "js2-refactor")
 (depends-on "json-mode")
 (depends-on "linum-relative")
