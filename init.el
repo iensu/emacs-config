@@ -256,7 +256,9 @@
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+  :config
+  (when (executable-find "macdown")
+    (setq  markdown-open-command "macdown")))
 
 (use-package neotree
   :ensure t
