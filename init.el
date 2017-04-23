@@ -476,6 +476,7 @@
                                (clojure . t)
                                (elixir . t)))
   (add-to-list 'org-modules 'org-protocol)
+  (add-to-list 'org-modules 'ox-md)
   (org-load-modules-maybe t)
   (require 'org-protocol))
 
@@ -483,6 +484,13 @@
   :ensure t
   :init
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+(use-package ox-reveal
+  :ensure t
+  :init
+  (add-to-list 'org-modules 'org-reveal)
+  :config
+  (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/"))
 
 (use-package calfw
   :ensure t
