@@ -84,9 +84,10 @@
 (add-hook 'prog-mode-hook
           '(lambda ()
              (subword-mode)
-             (prettify-symbols-mode)
              (iensu/setup-line-numbers)
              (eldoc-mode)))
+
+(global-prettify-symbols-mode t)
 
 (delete-selection-mode t)
 (global-font-lock-mode t)
@@ -533,6 +534,10 @@
 
 ;;; Elm
 
+(setq-default elm--prettify-symbols-alist '(("->" . ?→)
+                                            ("|>" . ?▷)
+                                            ("<|" . ?◁)))
+
 (use-package elm-mode
   :ensure t
   :init
@@ -540,6 +545,9 @@
   (add-hook 'elm-mode-hook
             (lambda ()
               (setq company-backends '(company-elm))))
+  (add-hook 'elm-mode-hook
+            (lambda ()
+              (setq prettify-symbols-alist elm--prettify-symbols-alist)))
   :config
   (setq elm-indent-offset 2
         elm-tags-exclude-elm-stuff nil)
