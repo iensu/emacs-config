@@ -316,6 +316,14 @@
   :config
   (setq sml/theme 'dark))
 
+(use-package smart-hungry-delete
+  :ensure t
+  :bind (("<backspace>" . smart-hungry-delete-backward-char)
+         ("C-d" . smart-hungry-delete-forward-char))
+  :defer nil
+  :config
+  (smart-hungry-delete-add-default-hooks))
+
 (use-package smartparens
   :ensure t
   :init

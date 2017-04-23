@@ -68,6 +68,7 @@
 (depends-on "s")
 (depends-on "sbt-mode")
 (depends-on "scala-mode")
+(depends-on "smart-hungry-delete")
 (depends-on "smart-mode-line")
 (depends-on "smartparens")
 (depends-on "smex")
