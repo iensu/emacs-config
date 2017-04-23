@@ -346,7 +346,8 @@
   :ensure t
   :bind (("H-s" . sr-speedbar-toggle))
   :config
-  (setq sr-speedbar-default-width 60))
+  (setq sr-speedbar-default-width 60)
+  (speedbar-add-supported-extension ".elm"))
 
 (use-package subword
   :diminish subword-mode
@@ -550,7 +551,8 @@
               (setq prettify-symbols-alist elm--prettify-symbols-alist)))
   :config
   (setq elm-indent-offset 2
-        elm-tags-exclude-elm-stuff nil)
+        elm-tags-exclude-elm-stuff nil
+        elm-tags-on-save t)
   (when (executable-find "elm-format")
     (setq elm-format-on-save t)))
 
