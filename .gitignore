@@ -16,3 +16,4 @@ eshell/
 flycheck_*
 projectile.cache
 tramp
+url/

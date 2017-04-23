@@ -3,6 +3,8 @@
 (source melpa)
 
 (depends-on "alchemist")
+(depends-on "all-the-icons")
+(depends-on "all-the-icons-dired")
 (depends-on "avy")
 (depends-on "beacon")
 (depends-on "bind-key")

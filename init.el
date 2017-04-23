@@ -161,6 +161,15 @@
 
 (use-package abbrev :diminish abbrev-mode)
 
+(use-package all-the-icons
+  :ensure t
+  :defer nil)
+
+(use-package all-the-icons-dired
+  :ensure t
+  :config
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+
 (use-package avy
   :ensure t
   :config
@@ -263,7 +272,9 @@
 
 (use-package neotree
   :ensure t
-  :config (global-set-key [f8] 'neotree-toggle))
+  :config
+  (global-set-key [f8] 'neotree-toggle)
+  (setq neo-theme 'icons))
 
 (use-package nyan-mode
   :ensure t
