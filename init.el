@@ -617,16 +617,26 @@
   (add-hook 'js2-mode-hook (lambda () (electric-indent-mode t)))
   (add-hook 'js2-mode-hook 'iensu/pick-nodejs-version)
   (add-hook 'js2-mode-hook 'iensu/use-local-eslint)
+  (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
   (setq-default flycheck-disabled-checkers
                 (append flycheck-disabled-checkers '(javascript-jshint)))
   (flycheck-add-mode 'javascript-eslint 'js2-mode))
 
 (use-package js2-refactor
   :ensure t
+  :bind (:map js2-mode-map
+              (("C-k" . js2r-kill)))
   :config
   (add-hook 'js2-mode-hook 'js2-refactor-mode)
   (add-hook 'js2-mode-hook (lambda ()
                              (js2r-add-keybindings-with-prefix "C-c C-m"))))
+
+(use-package xref-js2
+  :ensure t
+  :config
+  (define-key js-mode-map (kbd "M-.") nil)
+  (add-hook 'js2-mode-hook (lambda ()
+                             (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
 
 (use-package company-tern
   :ensure t

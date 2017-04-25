@@ -83,4 +83,5 @@
 (depends-on "use-package")
 (depends-on "w3m")
 (depends-on "web-mode")
+(depends-on "xref-js2")
 (depends-on "yasnippet")
