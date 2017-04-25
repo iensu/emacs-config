@@ -632,8 +632,9 @@
 (use-package company-tern
   :ensure t
   :config
-  ;(add-hook 'js2-mode-hook (lambda () (add-to-list 'company-backends 'company-tern)))
-  )
+  (add-hook 'js2-mode-hook (lambda ()
+                             (when (executable-find "tern")
+                               (add-to-list 'company-backends 'company-tern)))))
 
 (use-package css-mode
   :ensure t
@@ -658,7 +659,8 @@
   :ensure t
   :diminish tern-mode " †"
   :config
-  ;; (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+  (when (executable-find "tern")
+    (add-hook 'js2-mode-hook (lambda () (tern-mode t))))
   (iensu/add-auto-mode 'json-mode "\\.tern-project$"))
 
 (use-package web-mode
@@ -675,20 +677,22 @@
         web-mode-enable-current-element-highlight t
         web-mode-enable-current-column-highlight t)
   (add-hook 'web-mode-hook #'(lambda () (yas-activate-extra-mode 'js-mode)))
-  (add-hook 'web-mode-hook (lambda () (add-to-list 'company-backends 'company-tern)))
   (add-hook 'web-mode-hook 'iensu/pick-nodejs-version)
   (add-hook 'web-mode-hook 'iensu/use-local-eslint)
   (setq-default flychqeck-disabled-checkers
                 (append flycheck-disabled-checkers '(javascript-jshint)))
   (flycheck-add-mode 'javascript-eslint 'web-mode)
-  (defadvice company-tern (before web-mode-set-up-ac-sources activate)
-    (when (equal major-mode 'web-mode)
-      (let* ((cur-language (web-mode-language-at-pos))
-             (js? (or (string= cur-language "javascript")
-                      (string= cur-language "jsx"))))
-        (if js?
-            (unless tern-mode (tern-mode))
-          (if tern-mode (tern-mode -1)))))))
+  (when (executable-find "tern")
+    (add-hook 'web-mode-hook (lambda ()
+                               (add-to-list 'company-backends 'company-tern)))
+    (defadvice company-tern (before web-mode-set-up-ac-sources activate)
+      (when (equal major-mode 'web-mode)
+        (let* ((cur-language (web-mode-language-at-pos))
+               (js? (or (string= cur-language "javascript")
+                        (string= cur-language "jsx"))))
+          (if js?
+              (unless tern-mode (tern-mode))
+            (if tern-mode (tern-mode -1))))))))
 
 ;;; OCaml
 
