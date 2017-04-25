@@ -158,5 +158,13 @@
   (eshell-send-input)
   (delete-window))
 
+(defun iensu/company-private-last-transformer (candidates)
+  "Resort CANDIDATES putting private-ish properties last."
+  (cl-letf* ((is-private #'(lambda (c) (or (string-prefix-p "_" c)
+                                      (string-prefix-p "._" c))))
+             (private (cl-remove-if-not 'is-private candidates))
+             (not-private (cl-remove-if 'is-private candidates)))
+    (append not-private private)))
+
 (provide 'iensu)
 ;;; iensu.el ends here

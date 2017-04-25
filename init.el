@@ -193,6 +193,7 @@
         company-auto-complete-chars nil)
   (add-hook 'emacs-lisp-mode-hook (lambda ()
                                     (add-to-list 'company-backends 'company-elisp)))
+  (add-to-list 'company-transformers 'iensu/company-private-last-transformer)
   (eval-after-load 'company (company-quickhelp-mode 1)))
 
 (use-package company-quickhelp
