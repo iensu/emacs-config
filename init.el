@@ -330,10 +330,11 @@
 
 (use-package smart-hungry-delete
   :ensure t
-  :bind (("<backspace>" . smart-hungry-delete-backward-char)
-         ("C-d" . smart-hungry-delete-forward-char))
   :defer nil
-  :config
+  :bind (:map prog-mode-map
+              ("<backspace>" . smart-hungry-delete-backward-char)
+              ("C-d" . smart-hungry-delete-forward-char))
+  :init
   (smart-hungry-delete-add-default-hooks))
 
 (use-package smartparens
