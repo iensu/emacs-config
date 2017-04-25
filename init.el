@@ -77,8 +77,7 @@
 
 (when (memq window-system '(max ns))
   (setq exec-path-from-shell-check-startup-files nil)
-  (exec-path-from-shell-initialize)
-  (exec-path-from-shell-copy-envs '("PATH")))
+  (exec-path-from-shell-initialize))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook
