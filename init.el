@@ -397,7 +397,8 @@
   :bind (("M-y" . helm-show-kill-ring)
          ("C-x b" . helm-mini)
          ("C-h SPC" . helm-all-mark-rings)
-         ("M-x" . helm-M-x))
+         ("M-x" . helm-M-x)
+         ("C-x r b" . helm-filtered-bookmarks))
   :config
   (setq helm-mode-fuzzy-match t
         helm-completion-in-region-fuzzy-match t
