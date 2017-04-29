@@ -59,7 +59,6 @@
 (depends-on "ob-elixir")
 (depends-on "ob-restclient")
 (depends-on "org-bullets")
-(depends-on "origami")
 (depends-on "ox-reveal")
 (depends-on "pallet")
 (depends-on "popwin")

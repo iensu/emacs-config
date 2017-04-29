@@ -281,12 +281,6 @@
   :config
   (nyan-mode))
 
-(use-package origami
-  :ensure t
-  :init (global-origami-mode)
-  :bind (("<f6>" . origami-recursively-toggle-node)
-         ("<f7>" . origami-toggle-all-nodes)))
-
 (use-package paren
   :ensure t
   :init
