@@ -398,7 +398,6 @@
   :bind (("M-y" . helm-show-kill-ring)
          ("C-x b" . helm-mini)
          ("C-h SPC" . helm-all-mark-rings)
-         ("C-x C-f" . helm-find-files)
          ("M-x" . helm-M-x))
   :config
   (setq helm-mode-fuzzy-match t
@@ -415,6 +414,17 @@
   :config
   (setq projectile-completion-system 'helm)
   (helm-projectile-on))
+
+;; ido
+
+(use-package ido
+  :init
+  (ido-mode t)
+  :config
+  (setq ido-everywhere t
+        ido-enable-flex-matching t
+        ido-use-filename-at-point 'guess
+        ido-create-new-buffer 'always))
 
 ;;; Git
 
