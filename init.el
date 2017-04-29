@@ -376,8 +376,7 @@
 (use-package which-key
   :ensure t
   :config
-  (which-key-mode)
-  (setq which-key-popup-type 'minibuffer))
+  (which-key-mode))
 
 (use-package yasnippet
   :ensure t
