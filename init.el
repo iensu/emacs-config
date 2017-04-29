@@ -172,10 +172,6 @@
   :config
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
-(use-package avy
-  :ensure t
-  :config
-  (global-set-key (kbd "C-:") 'avy-goto-char-timer))
 
 (use-package beacon
   :ensure t
@@ -299,9 +295,6 @@
 (use-package projectile
   :ensure t
   :diminish projectile-mode
-  :bind (:map projectile-mode-map
-              ("H-f" . counsel-projectile-find-file)
-              ("H-g" . counsel-projectile-ag))
   :config
   (projectile-global-mode)
   (add-hook 'projectile-after-switch-project-hook 'iensu/use-local-eslint))
@@ -397,6 +390,32 @@
                                  (setq mode-require-final-newline nil
                                        require-final-newline nil))))
 
+;; Helm
+
+(use-package helm
+  :ensure t
+  :diminish helm-mode
+  :bind (("M-y" . helm-show-kill-ring)
+         ("C-x b" . helm-mini)
+         ("C-h SPC" . helm-all-mark-rings)
+         ("C-x C-f" . helm-find-files)
+         ("M-x" . helm-M-x))
+  :config
+  (setq helm-mode-fuzzy-match t
+        helm-completion-in-region-fuzzy-match t
+        helm-split-window-in-side-p t
+        helm-move-to-line-cycle-in-source t
+        helm-ff-file-name-history-use-recentf t)
+  (helm-autoresize-mode 1)
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action))
+
+(use-package helm-ag :ensure t)
+
+(use-package helm-projectile :ensure t
+  :config
+  (setq projectile-completion-system 'helm)
+  (helm-projectile-on))
+
 ;;; Git
 
 (use-package magit
@@ -421,54 +440,6 @@
   (global-set-key (kbd "C-h C-g") 'hydra-git-gutter/body))
 
 (use-package git-timemachine :ensure t)
-
-;;; Ivy
-
-(use-package ivy
-  :ensure t
-  :diminish ivy-mode
-  :bind (("C-c C-r" . ivy-resume)
-         ("<f6>" . ivy-resume))
-  :config
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t
-        ivy-height 10
-        ivy-initial-inputs-alist nil))
-
-(use-package ivy-hydra
-  :ensure t)
-
-(use-package counsel
-  :ensure t
-  :bind (("M-x" . counsel-M-x)
-         ("M-y" . counsel-yank-pop)
-         ("C-x C-f" . counsel-find-file)
-         ("<f1> f" . counsel-describe-function)
-         ("<f1> v" . counsel-describe-variable)
-         ("<f1> l" . counsel-load-library)
-         ("<f2> i" . counsel-info-lookup-symbol)
-         ("<f2> u" . counsel-unicode-char)
-         ("C-c g" . counsel-git)
-         ("C-c j" . counsel-git-grep)
-         ("C-c k" . counsel-ag)
-         ("C-x l" . counsel-locate)
-         ("C-S-o" . counsel-rythmbox)
-         :map read-expression-map
-         ("C-r" . counsel-expression-history)
-         :map ivy-minibuffer-map
-         ("M-y" . ivy-next-line-and-call)
-         ("M-Y" . ivy-previous-line-and-call))
-  :config
-  (setq counsel-find-file-at-point t))
-
-(use-package counsel-projectile
-  :ensure t
-  :config
-  (counsel-projectile-on))
-
-(use-package swiper
-  :ensure t
-  :bind (("C-s" . swiper)))
 
 ;;; Org-mode
 
