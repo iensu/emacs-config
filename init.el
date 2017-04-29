@@ -380,6 +380,12 @@
 
 (use-package w3m :ensure t)
 
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode)
+  (setq which-key-popup-type 'minibuffer))
+
 (use-package yasnippet
   :ensure t
   :diminish yas-minor-mode
