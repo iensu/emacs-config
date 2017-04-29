@@ -160,10 +160,10 @@
 
 (defun iensu/company-private-last-transformer (candidates)
   "Resort CANDIDATES putting private-ish properties last."
-  (cl-letf* ((is-private #'(lambda (c) (or (string-prefix-p "_" c)
+  (let* ((is-private #'(lambda (c) (or (string-prefix-p "_" c)
                                       (string-prefix-p "._" c))))
-             (private (cl-remove-if-not 'is-private candidates))
-             (not-private (cl-remove-if 'is-private candidates)))
+         (private (cl-remove-if-not '(lambda (c) (funcall is-private c)) candidates))
+         (not-private (cl-remove-if '(lambda (c) (funcall is-private c)) candidates)))
     (append not-private private)))
 
 (provide 'iensu)
