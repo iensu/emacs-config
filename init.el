@@ -45,7 +45,6 @@
       inhibit-startup-message t
       confirm-kill-emacs 'y-or-n-p
       global-auto-revert-mode t
-      transient-mark-mode nil
       ring-bell-function 'ignore
       initial-scratch-message nil
 
@@ -151,6 +150,10 @@
 
 ;; Start Emacs server, which enables quick emacsclient access
 (server-start)
+
+;; On MacOS/OSX remember to disable the built in dictionary lookup command
+;; by running the following command followed by a restart
+;; defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 70 '<dict><key>enabled</key><false/></dict>'
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Packages
