@@ -252,15 +252,15 @@
 (use-package multiple-cursors
   :ensure t
   :bind
-  (("M-=" . mc/edit-lines)
+  (("M-="         . mc/edit-lines)
    ("C-S-<right>" . mc/mark-next-like-this)
-   ("C-S-<left>" . mc/mark-previous-like-this)))
+   ("C-S-<left>"  . mc/mark-previous-like-this)))
 
 (use-package markdown-mode
   :ensure t
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
+         ("\\.md\\'"       . gfm-mode)
          ("\\.markdown\\'" . markdown-mode))
   :config
   (when (executable-find "macdown")
