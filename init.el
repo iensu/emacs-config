@@ -133,8 +133,6 @@
 (global-set-key (kbd "C-j") 'newline-and-indent)
 (global-set-key (kbd "C-a") 'back-to-indentation)
 (global-set-key (kbd "C-<return>") 'open-line)
-(global-set-key (kbd "C-+") 'text-scale-increase)
-(global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-h C-s") 'iensu/toggle-scratch-buffer)
 (global-set-key (kbd "C-h C-c") 'iensu/open-calendar-buffer)
 (global-set-key (kbd "C-c c") 'org-capture)
@@ -147,6 +145,9 @@
 (global-set-key (kbd "H-x") 'yas-expand)
 (global-set-key (kbd "H-e H-e") 'iensu/open-eshell-here)
 (global-set-key (kbd "H-e H-x") 'iensu/close-eshell)
+(global-set-key (kbd "M-i") 'imenu)
+(global-set-key (kbd "M-o") 'occur)
+(global-set-key [remap dabbrev-expand] 'hippie-expand)
 
 ;; Start Emacs server, which enables quick emacsclient access
 (server-start)
@@ -306,6 +307,11 @@
   (add-hook 'js2-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'elm-mode-hook 'rainbow-delimiters-mode))
 
+(use-package recentf
+  :config
+  (recentf-mode 1)
+  (setq recentf-max-menu-items 20))
+
 (use-package linum-relative
   :ensure t
   :bind (("H-l" . linum-relative-toggle)))
@@ -317,15 +323,6 @@
   (sml/setup)
   :config
   (setq sml/theme 'dark))
-
-(use-package smart-hungry-delete
-  :ensure t
-  :defer nil
-  :bind (:map prog-mode-map
-              ("<backspace>" . smart-hungry-delete-backward-char)
-              ("C-d" . smart-hungry-delete-forward-char))
-  :init
-  (smart-hungry-delete-add-default-hooks))
 
 (use-package smartparens
   :ensure t
@@ -397,7 +394,6 @@
   :bind (("M-y" . helm-show-kill-ring)
          ("C-x b" . helm-mini)
          ("C-h SPC" . helm-all-mark-rings)
-         ("M-x" . helm-M-x)
          ("C-x r b" . helm-filtered-bookmarks))
   :config
   (setq helm-mode-fuzzy-match t
@@ -415,6 +411,11 @@
   (setq projectile-completion-system 'helm)
   (helm-projectile-on))
 
+(use-package helm-smex
+  :ensure t
+  :bind (("M-x" . helm-smex)
+         ("M-X" . helm-smex-major-mode-commands)))
+
 ;; ido
 
 (use-package ido
@@ -425,6 +426,9 @@
         ido-enable-flex-matching t
         ido-use-filename-at-point 'guess
         ido-create-new-buffer 'always))
+
+(use-package smex
+  :ensure t)
 
 ;;; Git
 
