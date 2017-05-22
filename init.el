@@ -174,6 +174,7 @@
 
 (use-package beacon
   :ensure t
+  :diminish beacon-mode
   :config
   (beacon-mode 1))
 
@@ -225,6 +226,7 @@
 
 (use-package editorconfig
   :ensure t
+  :diminish editorconfig-mode
   :init
   (add-hook 'prog-mode-hook (editorconfig-mode 1))
   (add-hook 'text-mode-hook (editorconfig-mode 1)))
@@ -278,11 +280,6 @@
   :config
   (global-set-key [f8] 'neotree-toggle)
   (setq neo-theme 'icons))
-
-(use-package nyan-mode
-  :ensure t
-  :config
-  (nyan-mode))
 
 (use-package paren
   :ensure t
@@ -375,6 +372,7 @@
 
 (use-package which-key
   :ensure t
+  :diminish which-key-mode
   :config
   (which-key-mode))
 
@@ -393,6 +391,7 @@
 
 (use-package counsel
   :ensure t
+  :diminish ivy-mode
   :init
   (ivy-mode 1)
   :bind

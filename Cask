@@ -52,7 +52,6 @@
 (depends-on "multiple-cursors")
 (depends-on "neotree")
 (depends-on "nvm")
-(depends-on "nyan-mode")
 (depends-on "ob-elixir")
 (depends-on "ob-restclient")
 (depends-on "org-bullets")
