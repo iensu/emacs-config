@@ -389,35 +389,31 @@
                                  (setq mode-require-final-newline nil
                                        require-final-newline nil))))
 
-;; Helm
+;; ivy / counsel / swiper
 
-(use-package helm
+(use-package counsel
   :ensure t
-  :diminish helm-mode
-  :bind (("M-y" . helm-show-kill-ring)
-         ("C-x b" . helm-mini)
-         ("C-h SPC" . helm-all-mark-rings)
-         ("C-x r b" . helm-filtered-bookmarks))
+  :init
+  (ivy-mode 1)
+  :bind
+  (("C-s" . swiper)
+   ("M-x" . counsel-M-x)
+   ("C-x C-f" . counsel-find-file)
+   ("<f1> f" . counsel-describe-function)
+   ("<f1> v" . counsel-describe-variable)
+   ("<f1> l" . counsel-find-library)
+   ("<f2> i" . counsel-info-lookup-symbol)
+   ("<f2> u" . counsel-unicode-char)
+   ("C-c k" . counsel-ag)
+   ("C-x l" . counsel-locate)
+   ("M-y" . counsel-yank-pop)
+   :map ivy-minibuffer-map
+   ("M-y" . ivy-next-line))
   :config
-  (setq helm-mode-fuzzy-match t
-        helm-completion-in-region-fuzzy-match t
-        helm-split-window-in-side-p t
-        helm-move-to-line-cycle-in-source t
-        helm-ff-file-name-history-use-recentf t)
-  (helm-autoresize-mode 1)
-  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action))
+  (setq ivy-use-virtual-buffers t
+        ivy-count-format "(%d/%d) "))
 
-(use-package helm-ag :ensure t)
-
-(use-package helm-projectile :ensure t
-  :config
-  (setq projectile-completion-system 'helm)
-  (helm-projectile-on))
-
-(use-package helm-smex
-  :ensure t
-  :bind (("M-x" . helm-smex)
-         ("M-X" . helm-smex-major-mode-commands)))
+(use-package counsel-projectile :ensure t :init (counsel-projectile-on))
 
 ;; ido
 
