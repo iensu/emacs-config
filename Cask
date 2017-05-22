@@ -24,6 +24,7 @@
 (depends-on "elixir-mode")
 (depends-on "elm-mode")
 (depends-on "elpy")
+(depends-on "emojify")
 (depends-on "ensime")
 (depends-on "exec-path-from-shell")
 (depends-on "expand-region")

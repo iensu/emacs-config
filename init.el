@@ -229,6 +229,11 @@
 
 (use-package eldoc :diminish eldoc-mode)
 
+(use-package emojify
+  :ensure t
+  :init
+  (add-hook 'after-init-hook #'global-emojify-mode))
+
 (use-package expand-region
   :ensure t
   :bind
