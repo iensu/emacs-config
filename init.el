@@ -616,16 +616,15 @@
                 (js2-imenu-extras-mode)
                 (js2-refactor-mode)
                 (js2r-add-keybindings-with-prefix "C-c C-m")
-                (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
+                (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)
+                (define-key js-mode-map (kbd "M-.") nil))))
   (flycheck-add-mode 'javascript-eslint 'js2-mode))
 
 (use-package js2-refactor :ensure t)
 
 (use-package xref-js2
   :ensure t
-  :defer nil
-  :config
-  (define-key js-mode-map (kbd "M-.") nil))
+  :defer nil)
 
 (use-package company-tern
   :ensure t
@@ -659,6 +658,8 @@
   :config
   (when (executable-find "tern")
     (add-hook 'js2-mode-hook (lambda () (tern-mode t))))
+  (define-key tern-mode-keymap (kbd "M-.") nil)
+  (define-key tern-mode-keymap (kbd "M-,") nil)
   (iensu/add-auto-mode 'json-mode "\\.tern-project$"))
 
 (use-package web-mode
