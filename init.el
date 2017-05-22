@@ -406,6 +406,7 @@
    ("<f2> u" . counsel-unicode-char)
    ("C-c k" . counsel-ag)
    ("C-x l" . counsel-locate)
+   ("C-x b" . ivy-switch-buffer)
    ("M-y" . counsel-yank-pop)
    :map ivy-minibuffer-map
    ("M-y" . ivy-next-line))
