@@ -90,6 +90,7 @@
 (delete-selection-mode t)
 (global-font-lock-mode t)
 (windmove-default-keybindings)
+(winner-mode 1)
 
 (global-hl-line-mode 1)
 
