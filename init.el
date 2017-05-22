@@ -135,6 +135,7 @@
 (global-set-key (kbd "C-h C-c") 'iensu/open-calendar-buffer)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "H-m") 'iensu/move-file)
 (global-set-key (kbd "H-d") 'iensu/duplicate-line)
 (global-set-key (kbd "H-t") 'toggle-truncate-lines)
