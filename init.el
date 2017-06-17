@@ -691,6 +691,17 @@
               (unless tern-mode (tern-mode))
             (if tern-mode (tern-mode -1))))))))
 
+(use-package emmet-mode
+  :ensure t
+  :config
+  (add-hook 'web-mode-hook 'emmet-mode)
+  (add-hook 'css-mode 'emmet-mode)
+  (add-hook 'emmet-mode-hook (lambda ()
+                               (when (string-suffix-p ".jsx" (buffer-name))
+                                 (message "heeeeej")
+                                 (setq emmet-expand-jsx-className? t))))
+  (add-hook 'js2-jsx-mode (lambda () (setq emmet-expand-jsx-className? t))))
+
 ;;; OCaml
 
 (use-package tuareg :ensure t)
