@@ -534,17 +534,23 @@
 
 ;;; Elixir
 
-(use-package elixir-mode :ensure t)
+(setq-default my-prettify-symbols-alist '(("->" . ?→)
+                                          ("<-" . ?←)
+                                          ("|>" . ?▶)
+                                          ("<|" . ?◀)))
+
+(use-package elixir-mode
+  :ensure t
+  :config
+  (add-hook 'elixir-mode-hook
+            (lambda ()
+              (setq prettify-symbols-alist my-prettify-symbols-alist))))
 
 (use-package alchemist :ensure t)
 
 (use-package ob-elixir :ensure t)
 
 ;;; Elm
-
-(setq-default elm--prettify-symbols-alist '(("->" . ?→)
-                                            ("|>" . ?▷)
-                                            ("<|" . ?◁)))
 
 (use-package elm-mode
   :ensure t
@@ -555,7 +561,7 @@
               (setq company-backends '(company-elm))))
   (add-hook 'elm-mode-hook
             (lambda ()
-              (setq prettify-symbols-alist elm--prettify-symbols-alist)))
+              (setq prettify-symbols-alist my-prettify-symbols-alist)))
   :config
   (setq elm-indent-offset 2
         elm-tags-exclude-elm-stuff nil
