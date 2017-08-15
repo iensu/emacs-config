@@ -18,6 +18,8 @@
 (depends-on "company-tern")
 (depends-on "dash")
 (depends-on "dired+")
+(depends-on "docker-compose-mode")
+(depends-on "dockerfile-mode")
 (depends-on "dracula-theme")
 (depends-on "drag-stuff")
 (depends-on "editorconfig")

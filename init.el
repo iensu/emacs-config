@@ -515,6 +515,9 @@
   (org-babel-do-load-languages 'org-babel-load-languages
                                '((restclient . t))))
 
+(use-package docker-compose-mode :ensure t)
+(use-package dockerfile-mode :ensure t)
+
 ;;;;;;;;;;;
 ;; Programming languages
 ;;;;;;;;;;;
