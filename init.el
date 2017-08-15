@@ -368,8 +368,6 @@
   :init
   (global-undo-tree-mode))
 
-(use-package w3m :ensure t)
-
 (use-package which-key
   :ensure t
   :diminish which-key-mode

@@ -77,7 +77,6 @@
 (depends-on "tuareg")
 (depends-on "undo-tree")
 (depends-on "use-package")
-(depends-on "w3m")
 (depends-on "web-mode")
 (depends-on "which-key")
 (depends-on "xref-js2")
