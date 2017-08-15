@@ -17,6 +17,8 @@
 (depends-on "company-racer")
 (depends-on "company-restclient")
 (depends-on "company-tern")
+(depends-on "counsel")
+(depends-on "counsel-projectile")
 (depends-on "dash")
 (depends-on "dired+")
 (depends-on "docker-compose-mode")
