@@ -8,6 +8,7 @@
 (depends-on "beacon")
 (depends-on "bind-key")
 (depends-on "calfw")
+(depends-on "calfw-org")
 (depends-on "cargo")
 (depends-on "cask")
 (depends-on "cider")

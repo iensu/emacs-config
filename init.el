@@ -489,10 +489,8 @@
   :config
   (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/"))
 
-(use-package calfw
-  :ensure t
-  :init
-  (require 'calfw-org))
+(use-package calfw :ensure t)
+(use-package calfw-org :ensure t)
 
 ;;; Restclient
 
