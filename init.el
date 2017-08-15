@@ -600,9 +600,10 @@
 
 ;;; Javascript / Web
 
-(use-package js2-mode
-  :ensure t
-  :mode "\\.js$"
+(use-package js2-mode :ensure t)
+
+(use-package js2-jsx-mode
+  :mode ("\\.js$" "\\.jsx$")
   :bind (:map js2-mode-map
               (("C-k" . js2r-kill)))
   :config
@@ -623,9 +624,24 @@
                 (js2r-add-keybindings-with-prefix "C-c C-m")
                 (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)
                 (define-key js-mode-map (kbd "M-.") nil))))
-  (flycheck-add-mode 'javascript-eslint 'js2-mode))
+  (flycheck-add-mode 'javascript-eslint 'js2-jsx-mode)
+  (flycheck-add-mode 'javascript-flow 'js2-jsx-mode)
+  (flycheck-add-next-checker 'javascript-eslint 'javascript-flow))
 
 (use-package js2-refactor :ensure t)
+
+(use-package flycheck-flow :ensure t)
+
+(use-package rjsx-mode
+  :ensure t
+  :config
+  (js2-mode-hide-warnings-and-errors)
+  (iensu/add-auto-mode 'rjsx-mode "\\.js$")
+  (add-hook 'rjsx-mode-hook 'iensu/use-local-eslint)
+  (add-hook 'rjsx-mode-hook 'iensu/use-local-flow)
+  (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
+  (flycheck-add-mode 'javascript-flow 'rjsx-mode)
+  (flycheck-add-next-checker 'javascript-eslint 'javascript-flow))
 
 (use-package xref-js2
   :ensure t
@@ -670,7 +686,7 @@
 (use-package web-mode
   :ensure t
   :init
-  (iensu/add-auto-mode 'web-mode "\\.html$" "\\.jsx$" "\\.hbs$" "\\.handlebars$")
+  (iensu/add-auto-mode 'web-mode "\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$" "\\.tsx$")
   :config
   (setq web-mode-css-indent-offset 2
         web-mode-code-indent-offset 2
@@ -683,29 +699,23 @@
   (add-hook 'web-mode-hook #'(lambda () (yas-activate-extra-mode 'js-mode)))
   (add-hook 'web-mode-hook 'iensu/pick-nodejs-version)
   (add-hook 'web-mode-hook 'iensu/use-local-eslint)
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (when (string-equal "tsx" (file-name-extension buffer-file-name))
+                (setup-tide-mode))))
   (setq-default flychqeck-disabled-checkers
                 (append flycheck-disabled-checkers '(javascript-jshint)))
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
-  (when (executable-find "tern")
-    (add-hook 'web-mode-hook (lambda ()
-                               (add-to-list 'company-backends 'company-tern)))
-    (defadvice company-tern (before web-mode-set-up-ac-sources activate)
-      (when (equal major-mode 'web-mode)
-        (let* ((cur-language (web-mode-language-at-pos))
-               (js? (or (string= cur-language "javascript")
-                        (string= cur-language "jsx"))))
-          (if js?
-              (unless tern-mode (tern-mode))
-            (if tern-mode (tern-mode -1))))))))
+  (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (use-package emmet-mode
   :ensure t
   :config
   (add-hook 'web-mode-hook 'emmet-mode)
+  (add-hook 'js2-jsx-mode 'emmet-mode)
   (add-hook 'css-mode 'emmet-mode)
   (add-hook 'emmet-mode-hook (lambda ()
-                               (when (string-suffix-p ".jsx" (buffer-name))
-                                 (message "heeeeej")
+                               (when (or (string-suffix-p ".jsx" (buffer-name))
+                                         (string-suffix-p ".tsx" (buffer-name)))
                                  (setq emmet-expand-jsx-className? t))))
   (add-hook 'js2-jsx-mode (lambda () (setq emmet-expand-jsx-className? t))))
 
