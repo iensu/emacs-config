@@ -75,6 +75,7 @@
 (depends-on "smartparens")
 (depends-on "smex")
 (depends-on "sr-speedbar")
+(depends-on "tide")
 (depends-on "tuareg")
 (depends-on "undo-tree")
 (depends-on "use-package")

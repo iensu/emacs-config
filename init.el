@@ -709,6 +709,27 @@
                                  (setq emmet-expand-jsx-className? t))))
   (add-hook 'js2-jsx-mode (lambda () (setq emmet-expand-jsx-className? t))))
 
+;;; Typescript
+
+(defun setup-tide-mode ()
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled)
+        typescript-indent-level 2)
+  (eldoc-mode +1)
+  (company-mode +1))
+
+(use-package typescript-mode
+  :ensure t
+  :config
+  (iensu/add-auto-mode 'typescript-mode "\\.ts$"))
+
+(use-package tide
+  :ensure t
+  :config
+  (add-hook 'before-save-hook 'tide-format-before-save)
+  (add-hook 'typescript-mode-hook #'setup-tide-mode))
+
 ;;; OCaml
 
 (use-package tuareg :ensure t)
