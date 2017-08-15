@@ -236,7 +236,8 @@
 (use-package emojify
   :ensure t
   :init
-  (add-hook 'after-init-hook #'global-emojify-mode))
+  (add-hook 'text-mode-hook 'emojify-mode)
+  (add-hook 'org-mode-hook 'emojify-mode))
 
 (use-package expand-region
   :ensure t
