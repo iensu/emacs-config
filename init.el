@@ -462,7 +462,8 @@
   (add-hook 'org-mode-hook (lambda ()
                              (setq org-src-fontify-natively t
                                    org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
-                                   truncate-lines nil)))
+                                   truncate-lines nil
+                                   org-image-actual-width nil)))
   (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("javascript" . js2))))
   (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("es" . es))))
   (add-hook 'org-mode-hook (lambda () (linum-mode -1)))
