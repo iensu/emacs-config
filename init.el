@@ -65,12 +65,19 @@
 
       require-final-newline t
 
-      calendar-week-start-day 1)
+      calendar-week-start-day 1
+
+      sentence-end-double-space nil
+      word-wrap t
+
+      truncate-lines t)
 
 (setq-default cursor-type '(bar . 2)
 
               indent-tabs-mode nil
-              tab-width 2)
+              tab-width 2
+
+              fill-column 80)
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -221,8 +228,14 @@
   (when (display-graphic-p)
     (load-theme 'dracula t))
   :config
-  (set-face-attribute 'default nil :font "Anonymous Pro for Powerline" :height 190)
+  (set-face-attribute 'default nil :font "Fira Mono" :height 160)
   (set-face-attribute 'region nil :background "#57145D" :foreground nil))
+
+(use-package linum
+  :ensure t
+  :init
+  (eval-after-load "linum"
+    '(set-face-attribute 'linum nil :height 160 :italic nil :weight 'light)))
 
 (use-package editorconfig
   :ensure t
@@ -249,6 +262,12 @@
   :ensure t
   :init
   (global-flycheck-mode t))
+
+(use-package flycheck-popup-tip
+  :ensure t
+  :init
+  (eval-after-load 'flycheck
+    '(add-hook 'flycheck-mode-hook 'flycheck-popup-tip-mode)))
 
 (use-package gnus
   :ensure t
@@ -462,11 +481,22 @@
   (add-hook 'org-mode-hook (lambda ()
                              (setq org-src-fontify-natively t
                                    org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
-                                   truncate-lines nil
-                                   org-image-actual-width nil)))
+                                   truncate-lines t
+                                   org-image-actual-width nil
+                                   line-spacing 1
+                                   org-adapt-indentation nil
+                                   org-fontify-quote-and-verse-blocks t
+                                   org-fontify-done-headline t
+                                   org-fontify-whole-heading-line t
+                                   org-hide-leading-stars t
+                                   org-indent-indentation-per-level 2
+                                   outline-blank-line t)))
   (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("javascript" . js2))))
   (add-hook 'org-mode-hook (lambda () (add-to-list 'org-src-lang-modes '("es" . es))))
   (add-hook 'org-mode-hook (lambda () (linum-mode -1)))
+  (add-hook 'org-mode-hook (lambda () (auto-fill-mode 1)))
+  (when (executable-find "ispell")
+    (flyspell-mode 1))
   (org-babel-do-load-languages
    'org-babel-load-languages '((emacs-lisp . t)
                                (sh . t)
@@ -482,7 +512,9 @@
 (use-package org-bullets
   :ensure t
   :init
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  :config
+  (setq org-bullets-bullet-list '("#")))
 
 (use-package ox-reveal
   :ensure t
@@ -635,6 +667,7 @@
 (use-package rjsx-mode
   :ensure t
   :config
+  (setq js-switch-indent-offset 2)
   (js2-mode-hide-warnings-and-errors)
   (iensu/add-auto-mode 'rjsx-mode "\\.js$")
   (add-hook 'rjsx-mode-hook 'iensu/use-local-eslint)

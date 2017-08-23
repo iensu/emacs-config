@@ -39,6 +39,7 @@
 (depends-on "flycheck-cask")
 (depends-on "flycheck-elm")
 (depends-on "flycheck-flow")
+(depends-on "flycheck-popup-tip")
 (depends-on "flycheck-rust")
 (depends-on "ghc")
 (depends-on "git-gutter")
