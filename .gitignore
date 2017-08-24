@@ -6,11 +6,13 @@ url/
 auto-save-list/
 elpa/
 emojis/
+.local/
 
 /projectile-bookmarks.eld
 flycheck_init.el
 /recentf
 /custom.el
+user.el
 .mc-lists.el
 bookmarks
 .org-id-locations
