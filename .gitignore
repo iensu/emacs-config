@@ -22,3 +22,4 @@ flycheck_*
 projectile.cache
 tramp
 ido.last
+network-security.data

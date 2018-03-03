@@ -1,4 +1,6 @@
-;;; lang/typescript.el --- TypeScript setup
+;;; modules/lang/typescript.el --- TypeScript setup
+
+;;; Code:
 
 (defun setup-tide-mode ()
   (tide-setup)
@@ -9,14 +11,13 @@
   (company-mode +1))
 
 (use-package typescript-mode
-  :defer t
-  :ensure t
+  :delight
+  (typescript-mode "TS" :major)
   :config
-  (iensu/add-auto-mode 'typescript-mode "\\.ts$"))
+  (iensu-add-auto-mode 'typescript-mode "\\.ts$"))
 
 (use-package tide
-  :defer t
-  :ensure t
+  :delight " 潮"
   :config
   (add-hook 'before-save-hook 'tide-format-before-save)
   (add-hook 'typescript-mode-hook #'setup-tide-mode))

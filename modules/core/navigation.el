@@ -3,27 +3,31 @@
 ;;; Code:
 
 (use-package dired+
-  :ensure t
   :config
   (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
     (setq insert-directory-program "/usr/local/bin/gls"))
   (setq dired-listing-switches "-alGh --group-directories-first"))
 
 (use-package neotree
-  :ensure t
   :config
   (global-set-key [f8] 'neotree-toggle)
   (setq neo-theme 'icons))
 
 (use-package projectile
-  :ensure t
-  :delight '(:eval (concat " [" (projectile-project-name) "]"))
+  :delight '(:eval (let ((project-name (projectile-project-name)))
+                     (if (string-equal project-name "-")
+                         ""
+                       (concat " <" project-name ">"))))
   :init
-  (setq projectile-cache-file (iensu/-config-file ".local/projectile.cache")
-        projectile-known-projects-file (iensu/-config-file ".local/projectile-bookmarks.eld"))
+  (setq projectile-cache-file (iensu--config-file ".local/projectile.cache")
+        projectile-known-projects-file (iensu--config-file ".local/projectile-bookmarks.eld"))
   :config
   (projectile-global-mode)
-  (add-hook 'projectile-after-switch-project-hook 'iensu/use-local-eslint))
+  (add-hook 'projectile-after-switch-project-hook 'iensu/use-local-eslint)
+  (setq projectile-sort-order 'access-time)
+  (let ((ignored-files '(".DS_Store" ".projectile")))
+    (dolist (file ignored-files)
+      (add-to-list 'projectile-globally-ignored-files file))))
 
 (use-package recentf
   :config
@@ -31,21 +35,18 @@
   (setq recentf-max-menu-items 20))
 
 (use-package sr-speedbar
-  :ensure t
   :bind (("H-s" . sr-speedbar-toggle))
   :config
   (setq sr-speedbar-default-width 60)
   (speedbar-add-supported-extension ".elm"))
 
 (use-package which-key
-  :ensure t
-  :diminish which-key-mode
+  :delight
   :config
   (which-key-mode))
 
 (use-package counsel
-  :ensure t
-  :diminish ivy-mode
+  :delight ivy-mode
   :init
   (ivy-mode 1)
   :bind
@@ -67,7 +68,7 @@
   (setq ivy-use-virtual-buffers t
         ivy-count-format "(%d/%d) "))
 
-(use-package counsel-projectile :ensure t :init (counsel-projectile-on))
+(use-package counsel-projectile :init (counsel-projectile-mode 1))
 
 (use-package ido
   :init
@@ -77,9 +78,8 @@
         ido-enable-flex-matching t
         ido-use-filename-at-point 'guess
         ido-create-new-buffer 'always
-        ido-save-directory-list-file (iensu/-config-file ".local/ido.last")))
+        ido-save-directory-list-file (iensu--config-file ".local/ido.last")))
 
 (use-package smex
-  :ensure t
   :init
-  (setq smex-save-file (iensu/-config-file ".local/smex-items")))
+  (setq smex-save-file (iensu--config-file ".local/smex-items")))

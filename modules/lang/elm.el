@@ -1,18 +1,20 @@
 ;;; lang/elm.el --- Elm
 
+
+(defun iensu/-elm-mode-hook ()
+  (elm-oracle-setup-completion)
+  (setq company-backends '(company-elm)
+        prettify-symbols-alist '(("->" . ?→)
+                                 ("<-" . ?←)
+                                 ("|>" . ?▶)
+                                 ("<|" . ?◀))))
+
 (use-package elm-mode
-  :ensure t
+  :delight
+  (elm "榆" :major)
+  (elm-indent-mode "")
   :init
-  (add-hook 'elm-mode-hook #'elm-oracle-setup-completion)
-  (add-hook 'elm-mode-hook
-            (lambda ()
-              (setq company-backends '(company-elm))))
-  (add-hook 'elm-mode-hook
-            (lambda ()
-              (setq prettify-symbols-alist '(("->" . ?→)
-                                             ("<-" . ?←)
-                                             ("|>" . ?▶)
-                                             ("<|" . ?◀)))))
+  (add-hook 'elm-mode-hook 'iensu/-elm-mode-hook)
   :config
   (setq elm-indent-offset 2
         elm-tags-exclude-elm-stuff nil
@@ -21,7 +23,6 @@
     (setq elm-format-on-save t)))
 
 (use-package flycheck-elm
-  :ensure t
   :init
   (eval-after-load 'flycheck
     '(add-hook 'flycheck-mode-hook #'flycheck-elm-setup)))

@@ -9,6 +9,8 @@
 (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
 (cask-initialize)
 
+(setq gc-cons-threshold 100000000)
+
 (unless (package-installed-p 'pallet)
   (package-install 'pallet))
 
@@ -16,30 +18,34 @@
 (pallet-mode t)
 
 (eval-when-compile
-  (require 'use-package))
-(require 'diminish)
+  (require 'use-package)
+  (setq use-package-always-defer nil
+	use-package-always-ensure nil))
+
 (require 'bind-key)
 
 (add-hook 'after-init-hook
           (lambda ()
             (message (format "Emacs started up in %s seconds!" (emacs-init-time)))))
 
-(defun iensu/-config-file (file) (expand-file-name file user-emacs-directory))
+(defun iensu--config-file (file) (expand-file-name file user-emacs-directory))
 
-(defun iensu/-load-config (&rest files)
+(defun iensu--load-config (&rest files)
   (dolist (fname files)
-    (let ((file (iensu/-config-file fname)))
+    (let ((file (iensu--config-file fname)))
       (if (file-directory-p file)
           (dolist (conf (directory-files-recursively file "\\.el$"))
             (load-file conf))
         (load-file file)))))
 
-(iensu/-load-config
+(iensu--load-config
  "user.el"
  "modules/core"
  "modules/org"
  "modules/lang/css.el"
  "modules/lang/elisp.el"
+ "modules/lang/elixir.el"
+ "modules/lang/elm.el"
  "modules/lang/javascript.el"
  "modules/lang/json.el"
  "modules/lang/markdown.el"

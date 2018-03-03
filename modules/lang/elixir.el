@@ -1,13 +1,20 @@
-;;; lang/elixir.el --- Elixir
+;;; modules/lang/elixir.el --- Elixir
+
+;;; Code:
+
+(defun iensu/-elixir-mode-hook ()
+  (setq prettify-symbols-alist '(("->" . ?→)
+                                 ("<-" . ?←)
+                                 ("|>" . ?▶)
+                                 ("<|" . ?◀))))
 
 (use-package elixir-mode
-  :ensure t
+  :delight
+  (elixir-mode "仙薬" :major)
   :config
-  (add-hook 'elixir-mode-hook
-            (lambda ()
-              (setq prettify-symbols-alist (("->" . ?→)
-                                            ("<-" . ?←)
-                                            ("|>" . ?▶)
-                                            ("<|" . ?◀))))))
+  (add-hook 'elixir-mode-hook 'iensu/-elixir-mode-hook))
 
-(use-package alchemist :ensure t)
+(use-package alchemist
+  :delight
+  (alchemist-mode " 錬")
+  (alchemist-phoenix-mode " 鳳"))

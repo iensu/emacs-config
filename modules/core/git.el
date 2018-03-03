@@ -1,14 +1,16 @@
 ;;; modules/core/git.el --- Git
 
+;;; Code:
+
 (use-package magit
-  :ensure t
+  :delight
+  (magit-status-mode "魔" :major)
   :bind (("C-x g" . magit-status)))
 
 (use-package git-gutter
-  :ensure t
-  :diminish git-gutter-mode
+  :delight
   :init
   (global-git-gutter-mode +1)
   (git-gutter:linum-setup))
 
-(use-package git-timemachine :ensure t)
+(use-package git-timemachine)

@@ -54,7 +54,6 @@
             :caller 'iensu/counsel-nvm-use))
 
 (defun iensu/-setup-javascript ()
-  (message "Setting up javascript")
   (electric-indent-mode t)
   (rainbow-delimiters-mode 1)
   (smartparens-mode 1)
@@ -76,7 +75,7 @@
                 (append flycheck-disabled-checkers '(javascript-jshint)))
   (define-key js-mode-map (kbd "M-.") nil))
 
-(use-package js2-mode :ensure t)
+(use-package js2-mode)
 
 (use-package js2-jsx-mode
   :mode ("\\.js$" "\\.jsx$")
@@ -91,41 +90,38 @@
   (flycheck-add-mode 'javascript-flow 'js2-jsx-mode)
   (flycheck-add-next-checker 'javascript-eslint 'javascript-flow))
 
-(use-package js2-refactor :ensure t)
+(use-package js2-refactor
+  :delight js2-refactor-mode)
 
-(use-package flycheck-flow :ensure t)
+(use-package flycheck-flow)
 
 (use-package rjsx-mode
-  :ensure t
   :config
-  (iensu/add-auto-mode 'rjsx-mode "\\.jsx?$")
+  (iensu-add-auto-mode 'rjsx-mode "\\.jsx?$")
   (add-hook 'rjsx-mode-hook 'iensu/-setup-javascript)
   (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
   (flycheck-add-mode 'javascript-flow 'rjsx-mode)
   (flycheck-add-next-checker 'javascript-eslint 'javascript-flow))
 
 (use-package xref-js2
-  :ensure t
   :defer nil)
 
-(use-package company-tern :ensure t)
+(use-package company-tern)
 
-(use-package mocha :ensure t)
+(use-package mocha)
 
-(use-package nvm :ensure t)
+(use-package nvm)
 
 (use-package tern
-  :ensure t
-  :diminish tern-mode " †"
+  :delight " 鰺刺"
   :config
   (define-key tern-mode-keymap (kbd "M-.") nil)
   (define-key tern-mode-keymap (kbd "M-,") nil)
-  (iensu/add-auto-mode 'json-mode "\\.tern-project$"))
+  (iensu-add-auto-mode 'json-mode "\\.tern-project$"))
 
 (use-package web-mode
-  :ensure t
   :init
-  (iensu/add-auto-mode 'web-mode "\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$" "\\.tsx$")
+  (iensu-add-auto-mode 'web-mode "\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$" "\\.tsx$")
   :config
   (setq web-mode-css-indent-offset 2
         web-mode-code-indent-offset 2
@@ -148,7 +144,6 @@
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (use-package emmet-mode
-  :ensure t
   :config
   (add-hook 'emmet-mode-hook (lambda ()
                                (when (or (string-suffix-p ".jsx" (buffer-name))

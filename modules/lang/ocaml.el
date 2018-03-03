@@ -1,5 +1,5 @@
-;;; lang/ocaml.el --- OCaml setup
+;;; modules/lang/ocaml.el --- OCaml setup
 
-(use-package tuareg
-  :ensure t
-  :defer t)
+;;; Code:
+
+(use-package tuareg)

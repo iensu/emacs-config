@@ -1,28 +1,22 @@
-;;; lang/rust.el --- Rust setup
+;;; modules/lang/rust.el --- Rust setup
+
+;;; Code:
 
 (use-package rust-mode
-  :defer t
-  :ensure t
   :bind (:map rust-mode-map
          ("C-c <tab>" . rust-format-buffer))
   :config
-  (iensu/add-auto-mode 'rust-mode "\\.rs$"))
+  (iensu-add-auto-mode 'rust-mode "\\.rs$"))
 
 (use-package cargo
-  :defer t
-  :ensure t
   :config
   (add-hook 'rust-mode-hook #'cargo-minor-mode))
 
 (use-package flycheck-rust
-  :defer t
-  :ensure t
   :config
   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 (use-package racer
-  :defer t
-  :ensure t
   :config
   (add-hook 'rust-mode-hook #'racer-mode)
   (add-hook 'rust-mode-hook #'eldoc-mode)
@@ -30,8 +24,6 @@
         racer-rust-src-path "/usr/local/src/rustc-1.8.0/src"))
 
 (use-package company-racer
-  :defer t
-  :ensure t
   :config
   (add-hook 'rust-mode-hook (lambda ()
                               (add-to-list 'company-backends 'company-racer)))

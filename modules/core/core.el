@@ -5,7 +5,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (setq default-directory "~/"
-      custom-file (iensu/-config-file "custom.el")
+      custom-file (iensu--config-file "custom.el")
 
       inhibit-startup-message t
       ring-bell-function 'ignore
@@ -15,7 +15,7 @@
       create-lockfiles nil
       auto-save-default nil
 
-      backup-directory-alist `(("." . ,(iensu/-config-file ".local/.saves")))
+      backup-directory-alist `(("." . ,(iensu--config-file ".local/.saves")))
       backup-by-copying t
       delete-old-versions t
       kept-new-versions 6
@@ -32,15 +32,22 @@
 
       vc-follow-symlinks t
 
-      url-configuration-directory (iensu/-config-file ".local/url")
-      recentf-save-file (iensu/-config-file ".local/recentf")
-      image-dired-dir (iensu/-config-file ".local/image-dired")
-      bookmark-default-file (iensu/-config-file ".local/bookmarks")
-      tramp-auto-save-directory (iensu/-config-file ".local/tramp"))
+      url-configuration-directory (iensu--config-file ".local/url")
+      recentf-save-file (iensu--config-file ".local/recentf")
+      image-dired-dir (iensu--config-file ".local/image-dired")
+      bookmark-default-file (iensu--config-file ".local/bookmarks")
+      tramp-auto-save-directory (iensu--config-file ".local/tramp"))
+
+(setq-default apropos-do-all t)
 
 (use-package recentf
   :config
-  (add-to-list 'recentf-exclude (iensu/-config-file ".local/\.*")))
+  (add-to-list 'recentf-exclude (iensu--config-file ".local/\.*")))
+
+(use-package saveplace
+  :init
+  (save-place-mode 1)
+  (setq save-place-file (iensu--config-file ".local/.emacs-places")))
 
 (when (memq window-system '(max ns))
   (setq exec-path-from-shell-check-startup-files nil)
