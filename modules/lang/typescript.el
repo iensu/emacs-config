@@ -28,6 +28,13 @@
 
 (use-package tide
   :delight " 潮"
+  :bind (:map tide-mode-map
+              ("C-." . company-complete)
+              ("C-c l d" . tide-documentation-at-point)
+              ("C-c l l" . tide-references)
+              ("C-c l e" . tide-project-errors)
+              ("C-c l n" . tide-rename-symbol)
+              ("C-c l r" . tide-refactor))
   :config
   (add-hook 'before-save-hook 'tide-format-before-save)
   (add-hook 'typescript-mode-hook #'setup-tide-mode))
