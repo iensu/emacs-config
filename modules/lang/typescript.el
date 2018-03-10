@@ -17,7 +17,8 @@
   (iensu/use-local-tslint)
   (flycheck-add-next-checker 'typescript-tide '(t . typescript-tslint) 'append)
   (eldoc-mode +1)
-  (company-mode +1))
+  (company-mode +1)
+  (tide-hl-identifier-mode 1))
 
 (use-package typescript-mode
   :delight
