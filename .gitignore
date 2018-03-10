@@ -6,11 +6,13 @@ url/
 auto-save-list/
 elpa/
 emojis/
+.local/
 
 /projectile-bookmarks.eld
 flycheck_init.el
 /recentf
 /custom.el
+user.el
 .mc-lists.el
 bookmarks
 .org-id-locations
@@ -20,3 +22,6 @@ flycheck_*
 projectile.cache
 tramp
 ido.last
+network-security.data
+.DS_Store
+.yas-compiled-snippets.el
