@@ -49,17 +49,7 @@
                          :weight 'light)))
 
 (use-package rainbow-delimiters
-  :delight
-  :config
-  ;; (set-face-attribute 'rainbow-delimiters-depth-1-face nil :foreground "dark orange")
-  ;; (set-face-attribute 'rainbow-delimiters-depth-2-face nil :foreground "deep pink")
-  ;; (set-face-attribute 'rainbow-delimiters-depth-3-face nil :foreground "chartreuse")
-  ;; (set-face-attribute 'rainbow-delimiters-depth-4-face nil :foreground "deep sky blue")
-  ;; (set-face-attribute 'rainbow-delimiters-depth-5-face nil :foreground "yellow")
-  ;; (set-face-attribute 'rainbow-delimiters-depth-6-face nil :foreground "orchid")
-  ;; (set-face-attribute 'rainbow-delimiters-depth-7-face nil :foreground "spring green")
-  ;; (set-face-attribute 'rainbow-delimiters-depth-8-face nil :foreground "sienna1")
-  )
+  :delight)
 
 (use-package linum
   :config
