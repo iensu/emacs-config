@@ -23,3 +23,5 @@ projectile.cache
 tramp
 ido.last
 network-security.data
+.DS_Store
+.yas-compiled-snippets.el

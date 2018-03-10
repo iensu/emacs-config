@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: export-class
+# key: excls
+# --
+export class $1 {
+       $2
+};
