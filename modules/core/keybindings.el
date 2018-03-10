@@ -57,6 +57,7 @@
 (global-set-key (kbd "H-o") 'iensu/switch-to-minibuffer)
 (global-set-key (kbd "H-p") 'counsel-projectile-ag)
 (global-set-key (kbd "H-t") 'toggle-truncate-lines)
+(global-set-key (kbd "H-u") 'revert-buffer)
 (global-set-key (kbd "H-x") 'yas-expand)
 (global-set-key (kbd "M-i") 'imenu)
 (global-set-key (kbd "M-o") 'occur)
