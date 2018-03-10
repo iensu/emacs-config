@@ -4,7 +4,6 @@
 
 (depends-on "alchemist")
 (depends-on "all-the-icons")
-(depends-on "beacon")
 (depends-on "bind-key")
 (depends-on "calfw")
 (depends-on "calfw-org")

@@ -76,11 +76,6 @@
   (add-hook 'org-mode-hook 'emojify-mode)
   (setq emojify-emojis-dir (iensu--config-file ".local/emojis")))
 
-(use-package beacon
-  :delight
-  :config
-  (beacon-mode 1))
-
 (use-package diminish
   :init
   (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "Eλ")))
