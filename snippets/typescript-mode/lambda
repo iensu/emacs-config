@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: lambda
-# key: lam
-# --
-($1) => {
-     $2
-}

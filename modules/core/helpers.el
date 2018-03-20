@@ -13,3 +13,11 @@
   "Add VALUES to LST."
   (dolist (v (reverse values))
     (add-to-list lst v)))
+
+(defun iensu/node-project-root ()
+  (locate-dominating-file (or (buffer-file-name) default-directory)
+                          "node_modules"))
+
+(defun iensu/node-find-local-executable (executable-name)
+  (expand-file-name (concat "node_modules/.bin/" executable-name)
+                    (iensu/node-project-root)))

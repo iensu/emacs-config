@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: export-function
-# key: exfn
-# --
-export function $1($2) {
-       $3
-};

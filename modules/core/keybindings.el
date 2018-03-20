@@ -48,15 +48,22 @@
     (select-frame-set-input-focus (window-frame (active-minibuffer-window)))
     (select-window (active-minibuffer-window))))
 
+;; unbind numeric argument combinations
+(dotimes (n 10)
+  (global-unset-key (kbd (format "C-%d" n)))
+  (global-unset-key (kbd (format "M-%d" n))))
+
+(global-set-key (kbd "C-1") 'iensu-map)
+
+(define-key 'iensu-map (kbd "t") 'toggle-truncate-lines)
+
 (global-set-key (kbd "C-h C-s") 'iensu/toggle-scratch-buffer)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-<backspace>") 'delete-indentation)
 (global-set-key (kbd "H-d") 'iensu/duplicate-line)
-(global-set-key (kbd "H-f") 'counsel-projectile-find-file)
 (global-set-key (kbd "H-m") 'iensu/move-file)
-(global-set-key (kbd "H-o") 'iensu/switch-to-minibuffer)
 (global-set-key (kbd "H-p") 'counsel-projectile-ag)
-(global-set-key (kbd "H-t") 'toggle-truncate-lines)
+(global-set-key (kbd "H-t") 'org-todo-list)
 (global-set-key (kbd "H-u") 'revert-buffer)
 (global-set-key (kbd "H-x") 'yas-expand)
 (global-set-key (kbd "M-i") 'imenu)

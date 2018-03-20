@@ -14,14 +14,6 @@
   (interactive)
   (delete-process "Tern"))
 
-(defun iensu/node-project-root ()
-  (locate-dominating-file (or (buffer-file-name) default-directory)
-                          "node_modules"))
-
-(defun iensu/node-find-local-executable (executable-name)
-  (expand-file-name (concat "node_modules/.bin/" executable-name)
-                    (iensu/node-project-root)))
-
 (defun iensu/use-local-flow ()
   "Try to use local flow executable from node_modules."
   (interactive)
@@ -137,7 +129,7 @@
   (add-hook 'web-mode-hook
             (lambda ()
               (when (string-equal "tsx" (file-name-extension buffer-file-name))
-                (setup-tide-mode))))
+                (iensu/setup-tide-mode))))
   (setq-default flychqeck-disabled-checkers
                 (append flycheck-disabled-checkers '(javascript-jshint)))
   (add-hook 'web-mode-hook 'emmet-mode)

@@ -20,6 +20,9 @@
 
 (use-package flycheck
   :delight
+  :bind
+  (:map iensu-map
+        ("e" . flycheck-list-errors))
   :init
   (global-flycheck-mode t))
 

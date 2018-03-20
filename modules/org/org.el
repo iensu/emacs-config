@@ -21,14 +21,21 @@
     (journal          ,(concat iensu-org-dir "/journal.org")           ?j)
     (notes            ,(concat iensu-org-dir "/notes.org")             ?n)
     (private          ,(concat iensu-org-dir "/private.org")           ?p)
+    (projects         ,(concat iensu-org-dir "/projects.org")          ?P)
     (refile           ,(concat iensu-org-dir "/refile.org")            ?r)
-    (work             ,(concat iensu-org-dir "/work.org")              ?w)))
+    (work             ,(concat iensu-org-dir "/work.org")              ?w)
+    (books            ,(concat iensu-org-dir "/books.org")             ?b)))
 
 (defvar iensu-org-refile-targets
   (let ((filepaths (mapcar 'cadr iensu-org-files-alist)))
     (cl-remove-if (lambda (fp)
-                    (string-match "calendars" fp))
+                    (or (string-match "calendars" fp)
+                        (string-match "appointments" fp)
+                        (string-match "refile" fp)
+                        (string-match "notes" fp)))
                   filepaths)))
+
+(setq org-outline-path-complete-in-steps t)
 
 ;; Add register shortcuts for all org files
 (dolist (file-props iensu-org-files-alist)
@@ -55,7 +62,7 @@
               "%U\n")
      :prepend t)
 
-    ("b" "Browser Link" entry (file ,(iensu-org-file 'refile))
+    ("L" "Browser Link" entry (file ,(iensu-org-file 'refile))
      ,(concat "*  %a\n"
               "%U\n")
      :prepend t :immediate-finish t)
@@ -68,7 +75,9 @@
     ("n" "Notes" entry (file+headline ,(iensu-org-file 'notes) "Notes")
      ,(concat "* %^{Title} %^G\n"
               "%U\n\n"
-              "%?\n"))))
+              "%?\n"))
+    ("b" "Book" entry (file+headline ,(iensu-org-file 'books) "Läslista")
+     ,(concat "* %^{STATE|TO_READ|FINISHED} %^{} <%^{}> %^g\n\n"))))
 
 (defun iensu--org-mode-hook ()
   (define-key org-mode-map (kbd "H-.") 'org-time-stamp-inactive)
@@ -87,10 +96,14 @@
         org-fontify-whole-heading-line t
         org-hide-leading-stars t
         org-indent-indentation-per-level 2
-        outline-blank-line t)
+        outline-blank-line t
+        org-log-done 'time)
   (when (or (executable-find "ispell")
             (executable-find "aspell"))
-    (flyspell-mode 1)))
+    (flyspell-mode 1)
+    (when (executable-find "aspell")
+      (setq ispell-program-name "aspell"
+            ispell-extra-args '("--sug-mode=ultra")))))
 
 (use-package org
   :delight
@@ -115,13 +128,13 @@
         org-directory iensu-org-dir
         org-capture-templates iensu-org-capture-templates-alist
         org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE"))
-        org-refile-targets '((iensu-org-refile-targets :maxlevel . 3))))
+        org-refile-targets '((iensu-org-refile-targets :maxlevel . 9))))
 
 (use-package org-bullets
   :init
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
   :config
-  (setq org-bullets-bullet-list '("#")))
+  (setq org-bullets-bullet-list '("*")))
 
 (use-package ox-reveal
   :config

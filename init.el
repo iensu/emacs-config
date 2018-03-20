@@ -28,6 +28,9 @@
           (lambda ()
             (message (format "Emacs started up in %s seconds!" (emacs-init-time)))))
 
+;; define here so all packages can access
+(define-prefix-command 'iensu-map)
+
 (defun iensu--config-file (file) (expand-file-name file user-emacs-directory))
 
 (defun iensu--load-config (&rest files)
@@ -44,14 +47,17 @@
  "modules/org"
  "modules/lang/css.el"
  "modules/lang/elisp.el"
- "modules/lang/elixir.el"
- "modules/lang/elm.el"
+;; "modules/lang/elixir.el"
+;; "modules/lang/elm.el"
  "modules/lang/javascript.el"
  "modules/lang/json.el"
  "modules/lang/markdown.el"
+ "modules/lang/rust.el"
  "modules/lang/typescript.el"
  "modules/misc"
  )
+
+(load-file "~/Projects/private/org-github-issues/org-github-issues.el")
 
 ;;; End packages
 

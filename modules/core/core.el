@@ -49,6 +49,9 @@
   (save-place-mode 1)
   (setq save-place-file (iensu--config-file ".local/.emacs-places")))
 
+(use-package try
+  :ensure t)
+
 (when (memq window-system '(max ns))
   (setq exec-path-from-shell-check-startup-files nil)
   (exec-path-from-shell-initialize))
