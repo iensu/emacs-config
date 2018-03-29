@@ -31,8 +31,7 @@
     (cl-remove-if (lambda (fp)
                     (or (string-match "calendars" fp)
                         (string-match "appointments" fp)
-                        (string-match "refile" fp)
-                        (string-match "notes" fp)))
+                        (string-match "refile" fp)))
                   filepaths)))
 
 (setq org-outline-path-complete-in-steps t)
@@ -128,7 +127,7 @@
         org-directory iensu-org-dir
         org-capture-templates iensu-org-capture-templates-alist
         org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE"))
-        org-refile-targets '((iensu-org-refile-targets :maxlevel . 9))))
+        org-refile-targets '((iensu-org-refile-targets :maxlevel . 3))))
 
 (use-package org-bullets
   :init
