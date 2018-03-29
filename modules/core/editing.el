@@ -72,7 +72,6 @@
   (auto-fill-function " \u2630"))
 
 (use-package smartparens
-  :delight " {}"
   :init
   (require 'smartparens-config)
   :bind
