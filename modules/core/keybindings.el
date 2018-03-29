@@ -48,6 +48,17 @@
     (select-frame-set-input-focus (window-frame (active-minibuffer-window)))
     (select-window (active-minibuffer-window))))
 
+(defun iensu/backward-kill-word ()
+  "Kill word backward and trim whitespace until previous word."
+  (interactive)
+  (flet ((char-before-is-blank ()
+           (string-match-p "\\s-" (char-to-string (char-before)))))
+    (if (char-before-is-blank)
+        (delete-char -1)
+      (paredit-backward-kill-word))
+    (while (char-before-is-blank)
+      (delete-char -1))))
+
 ;; unbind numeric argument combinations
 (dotimes (n 10)
   (global-unset-key (kbd (format "C-%d" n)))
@@ -61,6 +72,7 @@
 
 (global-set-key (kbd "C-h C-s") 'iensu/toggle-scratch-buffer)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "M-<backspace>") 'iensu/backward-kill-word)
 (global-set-key (kbd "C-<backspace>") 'delete-indentation)
 (global-set-key (kbd "H-d") 'iensu/duplicate-line)
 (global-set-key (kbd "H-m") 'iensu/move-file)
