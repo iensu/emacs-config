@@ -40,6 +40,10 @@
 
 (setq-default apropos-do-all t)
 
+(use-package conf-mode
+  :init
+  (iensu-add-auto-mode 'conf-mode "\\.env$"))
+
 (use-package recentf
   :config
   (add-to-list 'recentf-exclude (iensu--config-file ".local/\.*")))
