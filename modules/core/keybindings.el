@@ -53,6 +53,8 @@
   (global-unset-key (kbd (format "C-%d" n)))
   (global-unset-key (kbd (format "M-%d" n))))
 
+(setq smerge-command-prefix "\C-c'")
+
 (global-set-key (kbd "C-1") 'iensu-map)
 
 (define-key 'iensu-map (kbd "t") 'toggle-truncate-lines)
