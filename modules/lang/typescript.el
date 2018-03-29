@@ -25,7 +25,8 @@
   :delight
   (typescript-mode "TS" :major)
   :config
-  (iensu-add-auto-mode 'typescript-mode "\\.ts$"))
+  (iensu-add-auto-mode 'typescript-mode "\\.ts$")
+  (add-hook 'typescript-mode-hook (lambda () (smartparens-strict-mode 1))))
 
 (use-package tide
   :delight " 潮"
