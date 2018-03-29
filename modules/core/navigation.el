@@ -66,7 +66,9 @@
    ("M-y" . ivy-next-line))
   :config
   (setq ivy-use-virtual-buffers t
-        ivy-count-format "(%d/%d) "))
+        ivy-use-selectable-prompt t
+        ivy-count-format "(%d/%d) "
+        ivy-magic-slash-non-match-action 'ivy-magic-non-match-create))
 
 (use-package counsel-projectile :init (counsel-projectile-mode 1))
 
