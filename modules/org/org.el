@@ -119,7 +119,6 @@
                                (python . t)
                                (clojure . t)
                                (elixir . t)))
-  (iensu-add-to-list 'org-modules '(org-protocol ox-md org-reveal))
   (org-load-modules-maybe t)
   (require 'org-protocol)
   (setq org-agenda-files (mapcar (lambda (fprops) (cadr fprops)) iensu-org-files-alist)
@@ -134,10 +133,6 @@
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
   :config
   (setq org-bullets-bullet-list '("*")))
-
-(use-package ox-reveal
-  :config
-  (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/"))
 
 (use-package calfw
   :init

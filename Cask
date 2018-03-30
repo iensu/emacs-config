@@ -62,7 +62,6 @@
 (depends-on "org-bullets")
 (depends-on "org-dp")
 (depends-on "org-gcal")
-(depends-on "ox-reveal")
 (depends-on "pallet")
 (depends-on "paredit")
 (depends-on "popwin")
