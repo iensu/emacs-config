@@ -18,7 +18,6 @@
 (depends-on "counsel-projectile")
 (depends-on "dash")
 (depends-on "delight")
-(depends-on "dired+")
 (depends-on "docker-compose-mode")
 (depends-on "dockerfile-mode")
 (depends-on "drag-stuff")

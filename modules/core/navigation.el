@@ -3,6 +3,7 @@
 ;;; Code:
 
 (use-package dired+
+    :load-path (lambda () (iensu--config-file "packages"))
   :config
   (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
     (setq insert-directory-program "/usr/local/bin/gls"))
