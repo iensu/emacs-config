@@ -38,6 +38,13 @@
       bookmark-default-file (iensu--config-file ".local/bookmarks")
       tramp-auto-save-directory (iensu--config-file ".local/tramp"))
 
+;; Need to setup identity using `gpg --gen-key` before using gpg
+;; on Mac install pinentry-mac from homebrew
+;; https://www.gnupg.org/software/pinentry/index.html
+(setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc")
+      epa-pinentry-mode 'loopback)
+(pinentry-start)
+
 (setq-default apropos-do-all t)
 
 (use-package conf-mode
