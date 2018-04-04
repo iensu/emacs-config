@@ -5,11 +5,17 @@
   (add-hook 'css-mode-hook (lambda ()
                              (rainbow-mode))))
 
-(use-package css-mode
-  :config
+(defun iensu--setup-css ()
   (setq css-indent-offset 2)
-  (iensu-add-auto-mode 'css-mode "\\.styl$")
-  (add-hook 'css-mode-hook 'emmet-mode)
-  (add-hook 'css-mode-hook (lambda ()
-                             (rainbow-delimiters-mode)
-                             (show-paren-mode))))
+  (emmet-mode 1)
+  (rainbow-delimiters-mode 1)
+  (show-paren-mode 1)
+  (xah-css))
+
+(use-package css-mode
+  :bind (:map css-mode-map
+              ("C-." . company-complete-common-or-cycle))
+  :config
+  (setq company-backends '(company-capf company-css company-files))
+  (add-hook 'css-mode-hook 'iensu--setup-css))
+
