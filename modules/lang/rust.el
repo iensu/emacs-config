@@ -8,7 +8,6 @@
   (setq rust-format-on-save t))
 
 (use-package cargo
-  :ensure t
   :config
   (add-hook 'rust-mode-hook #'cargo-minor-mode))
 
