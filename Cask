@@ -48,6 +48,7 @@
 (depends-on "htmlize")
 (depends-on "idle-highlight-mode")
 (depends-on "iedit")
+(depends-on "impatient-mode")
 (depends-on "js2-refactor")
 (depends-on "json-mode")
 (depends-on "linum-relative")

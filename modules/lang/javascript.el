@@ -141,3 +141,14 @@
                                (when (or (string-suffix-p ".jsx" (buffer-name))
                                          (string-suffix-p ".tsx" (buffer-name)))
                                  (setq emmet-expand-jsx-className? t)))))
+
+;; Live updates as you type using `simple-httpd' and `impatient-mode'
+;; 1. Go to index.html
+;; 2. M-x `httpd-start'
+;; 3. M-x `impatient-mode'
+;; 4. M-x `imp-visit-buffer'
+;;
+;; Enable `impatient-mode' in any referenced buffer to enable live reloading
+;; of updates there as well
+(use-package simple-httpd)
+(use-package impatient-mode)
