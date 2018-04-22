@@ -16,6 +16,4 @@
   :bind (:map css-mode-map
               ("C-." . company-complete-common-or-cycle))
   :config
-  (setq company-backends '(company-capf company-css company-files))
   (add-hook 'css-mode-hook 'iensu--setup-css))
-
