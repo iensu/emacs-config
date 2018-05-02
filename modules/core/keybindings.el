@@ -51,12 +51,12 @@
 (defun iensu/backward-kill-word ()
   "Kill word backward and trim whitespace until previous word."
   (interactive)
-  (flet ((char-before-is-blank ()
-           (string-match-p "\\s-" (char-to-string (char-before)))))
-    (if (char-before-is-blank)
+  (flet ((multiple-preceding-blanks ()
+           (string-match-p "\\s-\\s-" (char-to-string (char-before)))))
+    (if (multiple-preceding-blanks)
         (delete-char -1)
       (paredit-backward-kill-word))
-    (while (char-before-is-blank)
+    (while (multiple-preceding-blanks)
       (delete-char -1))))
 
 ;; unbind numeric argument combinations
