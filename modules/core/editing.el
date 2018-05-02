@@ -58,7 +58,8 @@
 
 (use-package paren
   :init
-  (add-hook 'prog-mode-hook (lambda () (show-paren-mode t)))
+  (add-hook 'prog-mode-hook (lambda ()
+                              (show-paren-mode t)))
   :config
   (setq show-paren-delay 0
         show-paren-when-point-inside-paren t
