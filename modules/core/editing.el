@@ -61,11 +61,8 @@
   (add-hook 'prog-mode-hook (lambda () (show-paren-mode t)))
   :config
   (setq show-paren-delay 0
-        show-paren-when-point-inside-paren t)
-  (set-face-attribute 'show-paren-match nil
-                      :background nil
-                      :foreground "#fc851e"
-                      :weight 'extra-bold))
+        show-paren-when-point-inside-paren t
+        show-paren-style 'parenthesis))
 
 (use-package emacs
   :delight

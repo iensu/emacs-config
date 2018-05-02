@@ -21,6 +21,7 @@
 (depends-on "dired-subtree")
 (depends-on "docker-compose-mode")
 (depends-on "dockerfile-mode")
+(depends-on "dracula-theme")
 (depends-on "drag-stuff")
 (depends-on "editorconfig")
 (depends-on "elixir-mode")

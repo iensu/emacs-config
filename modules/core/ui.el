@@ -31,22 +31,32 @@
             (column-number-mode 1)
             (eldoc-mode 1)))
 
-(use-package zerodark-theme
+(use-package dracula-theme
+  :ensure t
+  :init
+  (load-theme 'dracula t)
   :config
-  (zerodark-setup-modeline-format)
-  (set-face-attribute 'default nil
-                      :font "Fira Mono"
-                      :height 140)
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (set-face-attribute 'org-hide nil
-                                  :foreground (face-attribute 'default :background))))
-  (eval-after-load "linum"
-    '(set-face-attribute 'linum nil
-                         :font "Fira Mono"
-                         :height 140
-                         :italic nil
-                         :weight 'light)))
+  (set-face-attribute 'show-paren-match nil
+                      :background (face-background 'default)
+                      :foreground "mediumspringgreen"
+                      :weight 'extra-bold))
+
+;; (use-package zerodark-theme
+;;   :config
+;;   (zerodark-setup-modeline-format)
+;;   (set-face-attribute 'default nil
+;;                       :font "Fira Mono"
+;;                       :height 140)
+;;   (add-hook 'org-mode-hook
+;;             (lambda ()
+;;               (set-face-attribute 'org-hide nil
+;;                                   :foreground (face-attribute 'default :background))))
+;;   (eval-after-load "linum"
+;;     '(set-face-attribute 'linum nil
+;;                          :font "Fira Mono"
+;;                          :height 140
+;;                          :italic nil
+;;                          :weight 'light)))
 
 (use-package rainbow-delimiters
   :delight)
