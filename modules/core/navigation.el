@@ -9,6 +9,13 @@
     (setq insert-directory-program "/usr/local/bin/gls"))
   (setq dired-listing-switches "-alGh --group-directories-first"))
 
+(use-package dired-subtree
+  :ensure t
+  :config
+  (bind-keys :map dired-mode-map
+             ("i" . dired-subtree-insert)
+             (";" . dired-subtree-remove)))
+
 (use-package neotree
   :config
   (global-set-key [f8] 'neotree-toggle)
