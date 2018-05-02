@@ -41,9 +41,10 @@
 
 (use-package multiple-cursors
   :bind
-  (("M-="         . mc/edit-lines)
-   ("C-S-<right>" . mc/mark-next-like-this)
-   ("C-S-<left>"  . mc/mark-previous-like-this))
+  (("M-="           . mc/edit-lines)
+   ("C-S-<right>"   . mc/mark-next-like-this)
+   ("C-S-<left>"    . mc/mark-previous-like-this)
+   ("C-S-<mouse-1>" . mc/add-cursor-on-click))
   :init
   (setq mc/list-file (iensu--config-file ".local/.mc-lists.el")))
 
