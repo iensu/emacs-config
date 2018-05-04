@@ -75,7 +75,14 @@
                     (smtpmail-smtp-user . "jostlund")))))
 
   (add-to-list 'mu4e-view-actions '("EWW" . iensu--mu4e-view-in-eww) t)
-  (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t))
+  (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t)
+
+  ;; message viewing settings
+  (add-hook 'mu4e-view-mode-hook
+            (lambda ()
+              (local-set-key (kbd "<tab>") 'shr-next-link)
+              (local-set-key (kbd "<backtab>") 'shr-previous-link)))
+  (setq shr-color-visible-luminance-min 80))
 
 (defun iensu--send-email-setup ()
   (setq message-send-mail-function 'smtpmail-send-it
