@@ -69,12 +69,12 @@
      :prepend t)
 
     ("L" "Browser Link" entry (file ,(iensu-org-file 'refile))
-     ,(concat "*  %a\n"
+     ,(concat "* TO_READ %a\n"
               "%U\n")
      :prepend t :immediate-finish t)
 
     ("p" "Browser Link and Selection" entry (file ,(iensu-org-file 'refile))
-     ,(concat "* %^{Title}\n"
+     ,(concat "* TO_READ %^{Title}\n"
               "Source: %u, %c\n"
               "#+BEGIN_QUOTE\n"
               "%i\n"
