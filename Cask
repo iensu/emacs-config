@@ -24,6 +24,7 @@
 (depends-on "dracula-theme")
 (depends-on "drag-stuff")
 (depends-on "editorconfig")
+(depends-on "elfeed")
 (depends-on "elixir-mode")
 (depends-on "elm-mode")
 (depends-on "elpy")
