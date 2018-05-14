@@ -36,7 +36,19 @@
       recentf-save-file (iensu--config-file ".local/recentf")
       image-dired-dir (iensu--config-file ".local/image-dired")
       bookmark-default-file (iensu--config-file ".local/bookmarks")
-      tramp-auto-save-directory (iensu--config-file ".local/tramp"))
+      tramp-auto-save-directory (iensu--config-file ".local/tramp")
+
+      next-screen-context-lines 20
+      browse-url-browser-function 'eww-browse-url)
+
+(defun iensu--eww-open-new-window (url &optional new-window)
+  (when (not (string= "*eww*" (buffer-name)))
+                         (cond
+                          ((>= (window-width) 130) (progn (split-window-horizontally)
+                                                          (other-window 1)))
+                          ((>= (count-windows) 2) (other-window 1)))))
+
+(advice-add 'eww-browse-url :before 'iensu--eww-open-new-window)
 
 ;; Need to setup identity using `gpg --gen-key` before using gpg
 ;; on Mac install pinentry-mac from homebrew
