@@ -18,13 +18,14 @@
     (books            ,(concat iensu-org-dir "/books.org")             ?b)
     (work-calendar    ,(concat iensu-org-dir "/calendars/work.org")    ?c)
     (private-calendar ,(concat iensu-org-dir "/calendars/private.org") ?C)
-    (finances         ,(concat iensu-org-dir "/finances.org")          ?f)
+    (ekonomi          ,(concat iensu-org-dir "/ekonomi.org")           ?e)
     (journal          ,(concat iensu-org-dir "/journal.org.gpg")       ?j)
     (notes            ,(concat iensu-org-dir "/notes.org")             ?n)
     (private          ,(concat iensu-org-dir "/private.org")           ?p)
     (projects         ,(concat iensu-org-dir "/projects.org")          ?P)
     (refile           ,(concat iensu-org-dir "/refile.org")            ?r)
     (beorg-refile     ,(concat iensu-org-dir "/refile-beorg.org")      ?R)
+    (richard          ,(concat iensu-org-dir "/richard.org")           ?Y)
     (work             ,(concat iensu-org-dir "/work.org")              ?w)))
 
 (defun iensu--org-remove-file-if-match (&rest regexes)
@@ -41,7 +42,7 @@
 (defvar iensu-org-agenda-files
   (iensu--org-remove-file-if-match "\.org\.gpg"))
 
-(setq org-outline-path-complete-in-steps t)
+(setq org-outline-path-complete-in-steps nil)
 
 ;; Add register shortcuts for all org files
 (dolist (file-props iensu-org-files-alist)
@@ -126,6 +127,7 @@
   :init
   (global-set-key (kbd "C-c c") 'org-capture)
   (global-set-key (kbd "C-c a") 'org-agenda)
+  (global-set-key (kbd "C-c l") 'org-store-link)
   (require 'ox-md)
   :config
   (add-hook 'org-mode-hook 'iensu--org-mode-hook)
@@ -142,8 +144,9 @@
         org-default-notes-file (iensu-org-file 'notes)
         org-directory iensu-org-dir
         org-capture-templates iensu-org-capture-templates-alist
-        org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE"))
+        org-todo-keywords '((sequence "TODO(t)" "DOING(d)" "|" "DONE(D)"))
         org-refile-targets '((iensu-org-refile-targets :maxlevel . 3))
+        org-refile-allow-creating-parent-nodes 'confirm
         org-deadline-warning-days -7
         ;; org-agenda optimizations
         org-agenda-dim-blocked-tasks nil))
@@ -169,3 +172,6 @@
         org-gcal-client-secret *user-gcal-client-secret*
         org-gcal-file-alist `(("jens.ostlund@futurice.com" . ,(iensu-org-file 'work-calendar))
                               ("jostlund@gmail.com" . ,(iensu-org-file 'private-calendar)))))
+
+(use-package auctex
+  :defer t)

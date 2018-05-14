@@ -4,6 +4,7 @@
 
 (depends-on "alchemist")
 (depends-on "all-the-icons")
+(depends-on "auctex")
 (depends-on "bind-key")
 (depends-on "calfw")
 (depends-on "calfw-org")
