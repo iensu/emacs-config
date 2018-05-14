@@ -38,7 +38,8 @@
   (set-face-attribute 'show-paren-match nil
                       :background (face-background 'default)
                       :foreground "mediumspringgreen"
-                      :weight 'extra-bold))
+                      :weight 'extra-bold)
+  (set-face-attribute 'default nil :height 140))
 
 (use-package rainbow-delimiters
   :delight)
