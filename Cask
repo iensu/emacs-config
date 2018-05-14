@@ -68,6 +68,7 @@
 (depends-on "org-gcal")
 (depends-on "pallet")
 (depends-on "paredit")
+(depends-on "pdf-tools")
 (depends-on "popwin")
 (depends-on "prodigy")
 (depends-on "projectile")
