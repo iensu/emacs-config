@@ -42,4 +42,4 @@
               ("C-c l r" . tide-refactor))
   :config
   (add-hook 'before-save-hook 'tide-format-before-save)
-  (add-hook 'typescript-mode-hook #'iensu/setup-tide-mode))
+  (add-hook 'typescript-mode-hook 'iensu/setup-tide-mode))
