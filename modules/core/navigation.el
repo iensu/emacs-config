@@ -7,7 +7,8 @@
   :config
   (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
     (setq insert-directory-program "/usr/local/bin/gls"))
-  (setq dired-listing-switches "-alGh --group-directories-first"))
+  (setq dired-listing-switches "-alGh --group-directories-first"
+        dired-dwim-target t))
 
 (use-package dired-subtree
   :ensure t
