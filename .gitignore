@@ -26,4 +26,4 @@ network-security.data
 .DS_Store
 .yas-compiled-snippets.el
 /games
-local-settings.el
+private.el

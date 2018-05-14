@@ -63,9 +63,9 @@
 
 (load custom-file 'noerror)
 
-(let ((local-settings (expand-file-name "local-settings.el" user-emacs-directory)))
-  (when (file-exists-p local-settings)
-    (load local-settings)))
+(let ((private-settings (expand-file-name "private.el" user-emacs-directory)))
+  (when (file-exists-p private-settings)
+    (load private-settings)))
 
 (provide 'init)
 ;;; init.el ends here
