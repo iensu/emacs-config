@@ -59,21 +59,13 @@
     (while (multiple-preceding-blanks)
       (delete-char -1))))
 
-;; unbind numeric argument combinations
-(dotimes (n 10)
-  (global-unset-key (kbd (format "C-%d" n)))
-  (global-unset-key (kbd (format "M-%d" n))))
-
 (setq smerge-command-prefix "\C-c'")
 
-(global-set-key (kbd "C-1") 'iensu-map)
+(global-set-key (kbd "H-1") 'iensu-map)
 
 (define-key 'iensu-map (kbd "t") 'toggle-truncate-lines)
 (define-key 'iensu-map (kbd "c") 'mu4e-compose-new)
 (define-key 'iensu-map (kbd "m") 'mu4e-headers-search)
-
-;; (eval-after-load "mu4e"
-;;   (define-key mu4e-compose-mode-map (kbd "C-1 c") 'message-goto-cc))
 
 (global-set-key (kbd "C-h C-s") 'iensu/toggle-scratch-buffer)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -87,5 +79,5 @@
 (global-set-key (kbd "H-x") 'yas-expand)
 (global-set-key (kbd "M-i") 'imenu)
 (global-set-key (kbd "M-o") 'occur)
-(global-set-key (kbd "C-2") 'mu4e)
+(global-set-key (kbd "H-2") 'mu4e)
 (global-set-key [remap dabbrev-expand] 'hippie-expand)
