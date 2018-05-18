@@ -7,7 +7,7 @@
   :group 'tools)
 
 (defcustom npm-test-default-command "npm test"
-  "Default command to be run by `iensu/npm-test'."
+  "Default command to be run by `npm-test-run-tests'."
   :type '(string)
   :group 'npm-test)
 
