@@ -28,6 +28,9 @@
   (iensu-add-auto-mode 'typescript-mode "\\.ts$")
   (add-hook 'typescript-mode-hook (lambda () (smartparens-strict-mode 1))))
 
+(use-package npm-test
+  :load-path (lambda () (iensu--config-file "packages")))
+
 (use-package tide
   :delight " 潮"
   :bind (:map tide-mode-map
@@ -39,7 +42,8 @@
               ("C-c l e" . tide-project-errors)
               ("C-c l f" . tide-fix)
               ("C-c l n" . tide-rename-symbol)
-              ("C-c l r" . tide-refactor))
+              ("C-c l r" . tide-refactor)
+              ("C-c t" . npm-test-run-tests))
   :config
   (add-hook 'before-save-hook 'tide-format-before-save)
   (add-hook 'typescript-mode-hook 'iensu/setup-tide-mode))

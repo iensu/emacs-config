@@ -72,7 +72,8 @@
 (use-package js2-jsx-mode
   :mode ("\\.js$" "\\.jsx$")
   :bind (:map js2-mode-map
-              (("C-k" . js2r-kill)))
+              (("C-k" . js2r-kill)
+               ("C-c t" . npm-test-run-tests)))
   :config
   (add-hook 'js2-mode-hook 'iensu/-setup-javascript)
   (add-hook 'js2-jsx-mode (lambda ()
