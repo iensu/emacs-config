@@ -43,7 +43,8 @@
   :type '(string)
   :group 'npm-test)
 
-(defvar npm-test--previously-selected-script)
+(defvar npm-test--previously-selected-script nil
+  "Stores the previously selected script command.")
 
 (defun npm-test--node-project-root ()
   "Return the project root directory for a node.js project."
@@ -91,10 +92,14 @@ For a script to be considered a test script it needs to match the regexp
 in the customizable variable `npm-test-test-script-regexp'."
   (interactive
    (list (if current-prefix-arg
-             (completing-read "Command: "
+             (completing-read (if npm-test--previously-selected-script
+                                  (format "Command (%s): " npm-test--previously-selected-script)
+                                "Command: ")
                               (npm-test--test-scripts-list)
-                              nil nil)
+                              nil nil nil nil npm-test--previously-selected-script)
            nil)))
+  (when command
+    (setq npm-test--previously-selected-script command))
   (let* ((cmd (or command npm-test-default-command))
          (default-directory (npm-test--node-project-root))
          (project-name (car (last (split-string (npm-test--node-project-root) "/")
