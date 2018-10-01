@@ -1,4 +1,4 @@
 (require 'org)
 (org-babel-load-file
- (expand-file-name "README.org"
+ (expand-file-name "configuration.org"
                    user-emacs-directory))
