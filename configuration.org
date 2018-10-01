@@ -1,22 +1,20 @@
+* Emacs configuration
+** Helper functions
+
+Define helper functions needed for the rest of the configuration
+
 #+BEGIN_SRC emacs-lisp
-  ;;; init.el --- Emacs Configuration
-
-  ;;; Commentary:
-
-  ;;; Code:
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; --- Helper functions
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (defun iensu--config-file (file)
-    "Takes a configuration file name and returns the full file path"
-    (expand-file-name file user-emacs-directory))
+      "Takes a configuration file name and returns the full file path"
+      (expand-file-name file user-emacs-directory))
+#+END_SRC
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; --- Generic setup
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+** Baseline setup
 
-  ;;  Maximize screen real estate by disabling menu-bar, tool-bar and scroll-bar
+Basic configuration which does not depend on any external packages.
+
+#+BEGIN_SRC emacs-lisp
+;;  Maximize screen real estate by disabling menu-bar, tool-bar and scroll-bar
   (mapc
    (lambda (mode)
      (when (fboundp mode)
@@ -79,11 +77,13 @@
         ;; https://www.gnupg.org/software/pinentry/index.html
         auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc")
         epa-pinentry-mode 'loopback)
+#+END_SRC
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; --- Default editor settings
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+** Sane editor defaults
 
+Set actual editor defaults to be more in line with expectations.
+
+#+BEGIN_SRC emacs-lisp
   (setq-default indent-tabs-mode nil
                 tab-width 2
 
@@ -114,13 +114,11 @@
               (display-line-numbers-mode 1)
               (eldoc-mode 1)
               (show-paren-mode 1)))
+#+END_SRC
 
-  ;; Switch buffer window by pressing Shift + <direction>
-  (windmove-default-keybindings)
+** Global keybindings
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; --- Global keybindings
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#+BEGIN_SRC emacs-lisp
   (define-prefix-command 'iensu-map)
   (global-set-key (kbd "H-1") 'iensu-map)
 
@@ -138,16 +136,21 @@
                     ("M-o"           . occur)))
     (global-set-key (kbd (car keymap)) (cdr keymap)))
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; --- Additional packages
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;; Switch buffer window by pressing Shift + <direction>
+    (windmove-default-keybindings)
+#+END_SRC
 
+** External package installation
+
+Setup =package.el= and =use-package= for clean package installation.
+
+#+BEGIN_SRC emacs-lisp
   ;; --- Setting up package.el
   (require 'package)
 
   (setq package-archives
         '(("gnu"   . "https://elpa.gnu.org/packages/")
-    ("melpa" . "https://melpa.org/packages/")))
+          ("melpa" . "https://melpa.org/packages/")))
 
   (package-initialize)
 
@@ -158,32 +161,68 @@
   (eval-when-compile
     (require 'use-package)
     (setq use-package-always-ensure t))
+#+END_SRC
 
-  ;; --- Load exec paths for access to shell executables
+** Make it pretty
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dracula-theme
+    :ensure t
+    :init
+    (load-theme 'dracula t)
+    :config
+    (set-face-attribute 'default nil :height 130)
+
+    (set-face-foreground 'mode-line "black")
+    (set-face-background 'mode-line "#dbffdb")
+
+    (set-face-attribute 'show-paren-match nil
+                        :background (face-background 'default)
+                        :foreground "mediumspringgreen"
+                        :weight 'extra-bold))
+
+  ;; --- Modeline cleanup
+  (use-package delight
+    :config
+    (delight 'global-auto-revert-mode nil t)
+    (delight 'auto-revert-mode nil t))
+
+  (use-package diminish
+    :init
+    (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "Eλ")))
+    (add-hook 'lisp-interaction-mode (lambda () (setq mode-name "λ")))
+    (add-hook 'js2-mode-hook (lambda () (setq mode-name "js2"))))
+
+  (use-package rainbow-delimiters :delight)
+
+  (use-package all-the-icons)
+
+  (use-package emojify
+    :init
+    (add-hook 'text-mode-hook 'emojify-mode)
+    (add-hook 'org-mode-hook 'emojify-mode)
+    (setq emojify-emojis-dir (iensu--config-file ".local/emojis")))
+
+  (global-prettify-symbols-mode 1)
+  (global-font-lock-mode 1)
+
+  (setq-default cursor-type '(bar . 2))
+#+END_SRC
+
+** Utility packages
+
+Make binaries on the =PATH= accessible in Emacs.
+
+#+BEGIN_SRC emacs-lisp
   (use-package exec-path-from-shell
     :init
     (setq exec-path-from-shell-check-startup-files nil)
     (exec-path-from-shell-initialize))
+#+END_SRC
 
-  ;; --- Improving dired for directory browsing
-  (use-package dired+
-    :load-path (lambda () (iensu--config-file "packages"))
-    :config
-    (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
-      (setq insert-directory-program "/usr/local/bin/gls"))
-    (setq dired-listing-switches "-alGh --group-directories-first"
-          dired-dwim-target t))
+Remember recent files.
 
-  (use-package dired-subtree
-    :config
-    (bind-keys :map dired-mode-map
-               ("i" . dired-subtree-insert)
-               (";" . dired-subtree-remove)))
-
-  ;; --- Password entry dialog
-  (use-package pinentry :init (pinentry-start))
-
-  ;; --- Remember recent files
+#+BEGIN_SRC emacs-lisp
   (use-package recentf
     :init
     (recentf-mode 1)
@@ -193,114 +232,17 @@
     (setq recentf-save-file (iensu--config-file ".local/recentf")
           recentf-max-menu-items 40)
     (add-to-list 'recentf-exclude (iensu--config-file ".local/.emacs-places")))
+#+END_SRC
 
-  ;; --- Git
-  (use-package magit
-    :bind (("C-x g" . magit-status)))
+Password entry in minibuffer
 
-  ;; --- Project management
-  (use-package projectile
-    :delight '(:eval (let ((project-name (projectile-project-name)))
-                       (if (string-equal project-name "-")
-                           ""
-                         (concat " <" project-name ">"))))
-    :init
-    (setq projectile-cache-file (iensu--config-file ".local/projectile.cache")
-          projectile-known-projects-file (iensu--config-file ".local/projectile-bookmarks.eld"))
-    :config
-    (projectile-global-mode)
-    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-    (setq projectile-sort-order 'access-time)
-    (let ((ignored-files '(".DS_Store" ".projectile")))
-      (dolist (file ignored-files)
-        (add-to-list 'projectile-globally-ignored-files file))))
+#+BEGIN_SRC emacs-lisp
+  (use-package pinentry :init (pinentry-start))
+#+END_SRC
 
-  ;; --- Autocompletion
-  (use-package company
-    :delight
-    :init (global-company-mode)
-    :config
-    (setq company-idle-delay 0.3
-          company-minimum-prefix-length 2
-          company-selection-wrap-around t
-          company-auto-complete t
-          company-tooltip-align-annotations t
-          company-dabbrev-downcase nil
-          company-auto-complete-chars nil)
-    (add-hook 'emacs-lisp-mode-hook
-        (lambda ()
-                (add-to-list 'company-backends 'company-elisp)))
-    (eval-after-load 'company (company-quickhelp-mode 1)))
+*** Editor functionality
 
-  (use-package company-quickhelp
-    :config
-    (setq company-quickhelp-delay 1)
-    (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin))
-
-  (use-package yasnippet
-    :delight yas-minor-mode
-    :init
-    (yas-global-mode 1)
-    (setq yas-snippet-dirs (add-to-list 'yas-snippet-dirs (iensu--config-file "snippets")))
-    :config
-    (add-hook 'snippet-mode-hook (lambda ()
-                                   (setq mode-require-final-newline nil
-                                         require-final-newline nil))))
-
-  ;; --- Counsel for searching and lookup (+ swiper ivy)
-  (use-package counsel
-    :delight ivy-mode
-    :init
-    (ivy-mode 1)
-    :bind (("C-s"     . swiper)
-           ("M-x"     . counsel-M-x)
-           ("C-x C-f"	. counsel-find-file)
-           ("C-x C-r" . counsel-recentf)
-           ("<f1> f"	. counsel-describe-function)
-           ("<f1> v"	. counsel-describe-variable)
-           ("<f1> l"	. counsel-find-library)
-           ("<f2> i"	. counsel-info-lookup-symbol)
-           ("<f2> u"	. acounsel-unicode-char)
-           ("C-c k"   . counsel-ag)
-           ("C-x l"   . counsel-locate)
-           ("C-x b"   . ivy-switch-buffer)
-           ("M-y"     . counsel-yank-pop)
-           :map ivy-minibuffer-map
-           ("M-y"     . ivy-next-line))
-    :config
-    (setq ivy-use-virtual-buffers t
-          ivy-use-selectable-prompt t
-          ivy-count-format "(%d/%d) "
-          ivy-magic-slash-non-match-action 'ivy-magic-non-match-create))
-
-  (use-package counsel-projectile :init (counsel-projectile-mode 1))
-
-  ;; --- Flycheck for on the fly linting
-  (use-package flycheck
-    :init
-    (global-flycheck-mode t))
-
-  (use-package flycheck-popup-tip
-    :init
-    (eval-after-load 'flycheck
-      '(add-hook 'flycheck-mode-hook 'flycheck-popup-tip-mode)))
-
-  ;; --- Flyspell for spell checking
-  (use-package flyspell
-    :delight
-    :config
-    (when (executable-find "aspell")
-      (setq ispell-program-name "aspell"
-            ispell-extra-args '("--sug-mode=ultra")
-            ispell-list-command "--list")))
-
-  (use-package flyspell-popup
-    :delight
-    :bind
-    (:map flyspell-mode-map
-          ("C-;" . flyspell-popup-correct)))
-
-  ;; --- Improve editor behavior
+#+BEGIN_SRC emacs-lisp
   (use-package editorconfig
     :delight
     :init
@@ -344,53 +286,101 @@
   (use-package undo-tree
     :delight
     :init (global-undo-tree-mode))
+#+END_SRC
 
-  ;; --- Modeline cleanup
-  (use-package delight
+*** Searching and finding stuff
+
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :delight ivy-mode
+    :init
+    (ivy-mode 1)
+    :bind (("C-s"     . swiper)
+           ("M-x"     . counsel-M-x)
+           ("C-x C-f"	. counsel-find-file)
+           ("C-x C-r" . counsel-recentf)
+           ("<f1> f"	. counsel-describe-function)
+           ("<f1> v"	. counsel-describe-variable)
+           ("<f1> l"	. counsel-find-library)
+           ("<f2> i"	. counsel-info-lookup-symbol)
+           ("<f2> u"	. acounsel-unicode-char)
+           ("C-c k"   . counsel-ag)
+           ("C-x l"   . counsel-locate)
+           ("C-x b"   . ivy-switch-buffer)
+           ("M-y"     . counsel-yank-pop)
+           :map ivy-minibuffer-map
+           ("M-y"     . ivy-next-line))
     :config
-    (delight 'global-auto-revert-mode nil t)
-    (delight 'auto-revert-mode nil t))
+    (setq ivy-use-virtual-buffers t
+          ivy-use-selectable-prompt t
+          ivy-count-format "(%d/%d) "
+          ivy-magic-slash-non-match-action 'ivy-magic-non-match-create))
+#+END_SRC
 
-  (use-package diminish
-    :init
-    (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "Eλ")))
-    (add-hook 'lisp-interaction-mode (lambda () (setq mode-name "λ")))
-    (add-hook 'js2-mode-hook (lambda () (setq mode-name "js2"))))
+*** Project management
 
-  ;; --- Make things pretty
-  (use-package dracula-theme
-    :ensure t
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :bind (("C-x g" . magit-status)))
+
+  (use-package projectile
+    :delight '(:eval (let ((project-name (projectile-project-name)))
+                       (if (string-equal project-name "-")
+                           ""
+                         (concat " <" project-name ">"))))
     :init
-    (load-theme 'dracula t)
+    (setq projectile-cache-file (iensu--config-file ".local/projectile.cache")
+          projectile-known-projects-file (iensu--config-file ".local/projectile-bookmarks.eld"))
     :config
-    (set-face-attribute 'default nil :height 130)
+    (projectile-global-mode)
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    (setq projectile-sort-order 'access-time)
+    (let ((ignored-files '(".DS_Store" ".projectile")))
+      (dolist (file ignored-files)
+        (add-to-list 'projectile-globally-ignored-files file))))
 
-    (set-face-foreground 'mode-line "black")
-    (set-face-background 'mode-line "#dbffdb")
+  (use-package counsel-projectile :init (counsel-projectile-mode 1))
+#+END_SRC
 
-    (set-face-attribute 'show-paren-match nil
-                        :background (face-background 'default)
-                        :foreground "mediumspringgreen"
-                        :weight 'extra-bold))
+*** File browsing
 
-  (use-package rainbow-delimiters :delight)
+#+BEGIN_SRC emacs-lisp
+  (use-package dired+
+    :load-path (lambda () (iensu--config-file "packages"))
+    :config
+    (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
+      (setq insert-directory-program "/usr/local/bin/gls"))
+    (setq dired-listing-switches "-alGh --group-directories-first"
+          dired-dwim-target t))
 
-  (use-package all-the-icons)
+  (use-package dired-subtree
+    :config
+    (bind-keys :map dired-mode-map
+               ("i" . dired-subtree-insert)
+               (";" . dired-subtree-remove)))
+#+END_SRC
 
-  (use-package emojify
-    :init
-    (add-hook 'text-mode-hook 'emojify-mode)
-    (add-hook 'org-mode-hook 'emojify-mode)
-    (setq emojify-emojis-dir (iensu--config-file ".local/emojis")))
+*** Spellchecking
 
-  (global-prettify-symbols-mode 1)
-  (global-font-lock-mode 1)
+#+BEGIN_SRC emacs-lisp
+  (use-package flyspell
+    :delight
+    :config
+    (when (executable-find "aspell")
+      (setq ispell-program-name "aspell"
+            ispell-extra-args '("--sug-mode=ultra")
+            ispell-list-command "--list")))
 
-  (setq-default cursor-type '(bar . 2))
+  (use-package flyspell-popup
+    :delight
+    :bind
+    (:map flyspell-mode-map
+          ("C-;" . flyspell-popup-correct)))
+#+END_SRC
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; --- Org mode
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+** Org-mode
+
+#+BEGIN_SRC emacs-lisp
   (defvar iensu-org-dir "~/Dropbox/org")
 
   (defvar iensu-org-files-alist
@@ -562,10 +552,11 @@
     (setq org-gcal-client-id *user-gcal-client-id*
           org-gcal-client-secret *user-gcal-client-secret*
           org-gcal-file-alist `(("jens.ostlund@futurice.com" . ,(iensu-org-file 'work-calendar)))))
+#+END_SRC
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; E-Mail
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+** Email configuration
+
+#+BEGIN_SRC emacs-lisp
   (defun iensu--render-html-message ()
     (let ((dom (libxml-parse-html-region (point-min) (point-max))))
       (erase-buffer)
@@ -683,12 +674,59 @@
     (add-hook 'after-init-hook #'mu4e-alert-enable-notifications))
 
   (use-package org-mu4e :ensure nil)
+#+END_SRC
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Web development
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+** Programming
 
-  ;; --- General
+#+BEGIN_SRC emacs-lisp
+  ;; --- Autocompletion
+  (use-package company
+    :delight
+    :init (global-company-mode)
+    :config
+    (setq company-idle-delay 0.3
+          company-minimum-prefix-length 2
+          company-selection-wrap-around t
+          company-auto-complete t
+          company-tooltip-align-annotations t
+          company-dabbrev-downcase nil
+          company-auto-complete-chars nil)
+    (add-hook 'emacs-lisp-mode-hook
+              (lambda ()
+                (add-to-list 'company-backends 'company-elisp)))
+    (eval-after-load 'company (company-quickhelp-mode 1)))
+
+  (use-package company-quickhelp
+    :config
+    (setq company-quickhelp-delay 1)
+    (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin))
+
+  (use-package yasnippet
+    :delight yas-minor-mode
+    :init
+    (yas-global-mode 1)
+    (setq yas-snippet-dirs (add-to-list 'yas-snippet-dirs (iensu--config-file "snippets")))
+    :config
+    (add-hook 'snippet-mode-hook (lambda ()
+                                   (setq mode-require-final-newline nil
+                                         require-final-newline nil))))
+
+  ;; --- Flycheck for on the fly linting
+  (use-package flycheck
+    :init
+    (global-flycheck-mode t))
+
+  (use-package flycheck-popup-tip
+    :init
+    (eval-after-load 'flycheck
+      '(add-hook 'flycheck-mode-hook 'flycheck-popup-tip-mode)))
+#+END_SRC
+
+*** Web development
+
+**** General
+
+#+BEGIN_SRC emacs-lisp
   (use-package emmet-mode
     :config
     (add-hook 'emmet-mode-hook
@@ -718,13 +756,19 @@
       (add-hook 'js2-mode-hook        #'maybe-use-prettier)
       (add-hook 'typescript-mode-hook #'maybe-use-prettier)))
 
-  ;; --- JSON
   (use-package json-mode
     :config
     (add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
     (setq js-indent-level 2))
 
-  ;; --- CSS
+  (use-package restclient
+    :init
+    (add-to-list 'auto-mode-alist '("\\.rest$" . restclient-mode)))
+#+END_SRC
+
+**** CSS
+
+#+BEGIN_SRC emacs-lisp
   (use-package rainbow-mode
     :config
     (add-hook 'css-mode-hook #'rainbow-mode))
@@ -740,8 +784,11 @@
                 ("C-." . company-complete-common-or-cycle))
     :config
     (add-hook 'css-mode-hook #'iensu--setup-css))
+#+END_SRC
 
-  ;; --- JavaScript
+**** JavaScript
+
+#+BEGIN_SRC emacs-lisp
   (defun iensu/-setup-javascript ()
     (electric-indent-mode t)
     (rainbow-delimiters-mode 1)
@@ -814,8 +861,11 @@
                   (append flycheck-disabled-checkers '(javascript-jshint)))
     (add-hook 'web-mode-hook 'emmet-mode)
     (flycheck-add-mode 'javascript-eslint 'web-mode))
+#+END_SRC
 
-  ;; --- TypeScript
+**** TypeScript
+
+#+BEGIN_SRC emacs-lisp
   (defun iensu/setup-tide-mode ()
     (interactive)
     (tide-setup)
@@ -857,15 +907,11 @@
                            (iensu/setup-tide-mode)))))
     :config (if (not (iensu/use-prettier))
                 (add-hook 'before-save-hook 'tide-format-before-save)))
+#+END_SRC
 
-  ;; --- Endpoint testing
-  (use-package restclient
-    :init
-    (add-to-list 'auto-mode-alist '("\\.rest$" . restclient-mode)))
+*** Markdown
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; --- Other packages
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#+BEGIN_SRC emacs-lisp
   (use-package markdown-mode
     :commands (markdown-mode gfm-mode)
     :mode (("\\.md\\'"       . gfm-mode)
@@ -876,15 +922,16 @@
     (when (or (executable-find "ispell")
               (executable-find "aspell"))
       (flyspell-mode 1)))
+#+END_SRC
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; --- Additional custom commands
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+** Custom commands
+
+#+BEGIN_SRC emacs-lisp
   (defun iensu/backward-kill-word ()
     "Kill word backward and trim whitespace until previous word."
     (interactive)
     (flet ((multiple-preceding-blanks ()
-             (string-match-p "\\s-\\s-" (char-to-string (char-before)))))
+                                      (string-match-p "\\s-\\s-" (char-to-string (char-before)))))
       (if (multiple-preceding-blanks)
           (delete-char -1)
         (paredit-backward-kill-word))
@@ -927,17 +974,14 @@
                  (file-exists-p new-location)
                  (not (string-equal old-location new-location)))
         (delete-file old-location))))
+#+END_SRC
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; --- Loading final configurations
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+** Loading private settings
 
+#+BEGIN_SRC emacs-lisp
   (load custom-file 'noerror)
 
   (let ((private-settings (expand-file-name "private.el" user-emacs-directory)))
     (when (file-exists-p private-settings)
       (load private-settings)))
-
-  (provide 'init)
-  ;;; init.el ends here
 #+END_SRC
