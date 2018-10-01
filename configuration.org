@@ -223,15 +223,16 @@ Make binaries on the =PATH= accessible in Emacs.
 Remember recent files.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package recentf
-    :init
-    (recentf-mode 1)
-    :init
-    (run-at-time nil (* 5 60) 'recentf-save-list)
-    :config
-    (setq recentf-save-file (iensu--config-file ".local/recentf")
-          recentf-max-menu-items 40)
-    (add-to-list 'recentf-exclude (iensu--config-file ".local/.emacs-places")))
+    (defun iensu--recentf-hook ()
+      (add-to-list 'recentf-exclude (iensu--config-file ".local/recentf"))
+      (setq recentf-save-file (iensu--config-file ".local/recentf")
+            recentf-max-menu-items 50)
+      (recentf-load-list))
+
+    (use-package recentf
+      :init
+      (recentf-mode 1)
+      (add-hook 'recentf-mode-hook #'iensu--recentf-hook))
 #+END_SRC
 
 Password entry in minibuffer
