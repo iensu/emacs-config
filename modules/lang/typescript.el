@@ -9,17 +9,31 @@
                (file-executable-p tslint))
       (setq-local flycheck-typescript-tslint-executable tslint))))
 
+(defun iensu/use-prettier ()
+  (and (file-exists-p (expand-file-name ".prettierrc" (iensu/node-project-root)))
+       (executable-find "prettier")))
+
+;; (defun iensu/setup-tide-mode ()
+;;   (interactive)
+;;   (tide-setup)
+;;   (flycheck-mode +1)
+;;   (setq flycheck-check-syntax-automatically '(save mode-enabled)
+;;         typescript-indent-level 2)
+;; ;  (iensu/use-local-tslint)
+;;   (flycheck-add-next-checker 'typescript-tide '(t . typescript-tslint) 'append)
+;;   (eldoc-mode +1)
+;;   (company-mode +1)
+;; ;  (tide-hl-identifier-mode nil) ; currently results in a error message if enabled
+;;   )
+
 (defun iensu/setup-tide-mode ()
   (interactive)
   (tide-setup)
   (flycheck-mode +1)
   (setq flycheck-check-syntax-automatically '(save mode-enabled)
         typescript-indent-level 2)
-  (iensu/use-local-tslint)
-  (flycheck-add-next-checker 'typescript-tide '(t . typescript-tslint) 'append)
   (eldoc-mode +1)
-  (company-mode +1)
-  (tide-hl-identifier-mode 1))
+  (company-mode +1))
 
 (use-package typescript-mode
   :delight
@@ -44,6 +58,29 @@
               ("C-c l n" . tide-rename-symbol)
               ("C-c l r" . tide-refactor)
               ("C-c t" . npm-test-run-tests))
+  :init
+  (flycheck-add-mode 'typescript-tslint 'web-mode)
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+  :after (typescript-mode company flycheck web-mode)
+  :hook ((typescript-mode . iensu/setup-tide-mode)
+         (typescript-mode . tide-hl-identifier-mode)
+         (web-mode . (lambda ()
+                       (when (and buffer-file-name
+                                  (string-equal "tsx" (file-name-extension buffer-file-name)))
+                         (iensu/setup-tide-mode)))))
+  :config (if (not (iensu/use-prettier))
+              (add-hook 'before-save-hook 'tide-format-before-save)))
+
+(use-package add-node-modules-path
+  :load-path (lambda () (iensu--config-file "packages")))
+
+(use-package prettier-js
+  :load-path (lambda () (iensu--config-file "packages"))
+  :requires add-node-modules-path
   :config
-  (add-hook 'before-save-hook 'tide-format-before-save)
-  (add-hook 'typescript-mode-hook 'iensu/setup-tide-mode))
+  (cl-flet ((maybe-use-prettier ()
+                                (add-node-modules-path)
+                                (when (iensu/use-prettier)
+                                  (prettier-js-mode 1))))
+    (iensu/add-hooks #'maybe-use-prettier
+                     'web-mode 'typescript-mode 'js2-mode)))

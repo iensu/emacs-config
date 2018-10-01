@@ -20,14 +20,6 @@
       delete-old-versions t
       kept-new-versions 6
 
-      ;; On MacOS/OSX remember to disable the built in dictionary lookup command
-      ;; by running the following command followed by a restart
-      ;; defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 70 '<dict><key>enabled</key><false/></dict>'
-      mac-option-modifier nil
-      mac-command-modifier 'meta
-      mac-function-modifier 'hyper
-      mac-right-option-modifier 'hyper
-
       calendar-week-start-day 1
 
       vc-follow-symlinks t
@@ -38,8 +30,17 @@
       bookmark-default-file (iensu--config-file ".local/bookmarks")
       tramp-auto-save-directory (iensu--config-file ".local/tramp")
 
-      next-screen-context-lines 20
-      browse-url-browser-function 'eww-browse-url)
+      next-screen-context-lines 20)
+
+;; On MacOS/OSX remember to disable the built in dictionary lookup command
+;; by running the following command followed by a restart
+;; defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 70 '<dict><key>enabled</key><false/></dict>'
+(setq mac-option-modifier 'none
+      mac-command-modifier 'meta
+      mac-function-modifier 'hyper
+      mac-right-option-modifier 'hyper)
+
+(setq-default browse-url-browser-function 'eww-browse-url)
 
 (defun iensu--eww-open-new-window (url &optional new-window)
   (when (not (string= "*eww*" (buffer-name)))
@@ -55,7 +56,10 @@
 ;; https://www.gnupg.org/software/pinentry/index.html
 (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc")
       epa-pinentry-mode 'loopback)
-(pinentry-start)
+
+(use-package pinentry
+  :init
+  (pinentry-start))
 
 (setq-default apropos-do-all t)
 
@@ -77,4 +81,6 @@
   (exec-path-from-shell-initialize))
 
 ;; Start Emacs server, which enables quick emacsclient access
-(server-start)
+
+(unless (server-running-p)
+  (server-start))

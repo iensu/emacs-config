@@ -14,7 +14,7 @@
   :delight
   :init (global-company-mode)
   :config
-  (setq company-idle-delay 0
+  (setq company-idle-delay 0.3
         company-minimum-prefix-length 2
         company-selection-wrap-around t
         company-auto-complete t

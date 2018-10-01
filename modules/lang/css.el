@@ -9,8 +9,7 @@
   (setq css-indent-offset 2)
   (emmet-mode 1)
   (rainbow-delimiters-mode 1)
-  (show-paren-mode 1)
-  (xah-css))
+  (show-paren-mode 1))
 
 (use-package css-mode
   :bind (:map css-mode-map

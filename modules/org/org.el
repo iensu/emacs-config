@@ -129,14 +129,15 @@
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c l") 'org-store-link)
   (require 'ox-md)
+  (require 'ox-beamer)
   :config
   (add-hook 'org-mode-hook 'iensu--org-mode-hook)
   (org-babel-do-load-languages
    'org-babel-load-languages '((emacs-lisp . t)
-                               (sh . t)
+                               ;(sh . t)
                                (js . t)
                                (python . t)
-                               (clojure . t)
+                               ;(clojure . t)
                                (elixir . t)))
   (org-load-modules-maybe t)
   (require 'org-protocol)
@@ -149,19 +150,16 @@
         org-refile-allow-creating-parent-nodes 'confirm
         org-deadline-warning-days -7
         ;; org-agenda optimizations
-        org-agenda-dim-blocked-tasks nil))
+        org-agenda-dim-blocked-tasks nil
+        org-latex-listings t
+        org-src-fontify-natively t
+        org-cycle-separator-lines 1))
 
 (use-package org-bullets
   :init
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
   :config
   (setq org-bullets-bullet-list '("*")))
-
-(use-package calfw
-  :init
-  (global-set-key (kbd "C-h C-c") 'iensu/open-calendar-buffer))
-
-(use-package calfw-org)
 
 (use-package org-gcal
   :init
@@ -170,8 +168,13 @@
   :config
   (setq org-gcal-client-id *user-gcal-client-id*
         org-gcal-client-secret *user-gcal-client-secret*
-        org-gcal-file-alist `(("jens.ostlund@futurice.com" . ,(iensu-org-file 'work-calendar))
-                              ("jostlund@gmail.com" . ,(iensu-org-file 'private-calendar)))))
+        org-gcal-file-alist `(("jens.ostlund@futurice.com" . ,(iensu-org-file 'work-calendar)))))
 
-(use-package auctex
+(use-package ox-reveal
+  :load-path (lambda () (iensu--config-file "packages"))
+  :config
+  (setq org-reveal-root "file:///Users/jost/Dev/reveal.js"))
+
+
+(use-package auctexz
   :defer t)

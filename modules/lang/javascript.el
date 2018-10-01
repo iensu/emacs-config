@@ -114,7 +114,7 @@
 
 (use-package web-mode
   :init
-  (iensu-add-auto-mode 'web-mode "\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$" "\\.tsx$")
+  (iensu-add-auto-mode 'web-mode "\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$")
   :config
   (setq web-mode-css-indent-offset 2
         web-mode-code-indent-offset 2
@@ -129,7 +129,7 @@
   (add-hook 'web-mode-hook 'iensu/use-local-eslint)
   (add-hook 'web-mode-hook
             (lambda ()
-              (when (string-equal "tsx" (file-name-extension buffer-file-name))
+              (when
                 (iensu/setup-tide-mode))))
   (setq-default flychqeck-disabled-checkers
                 (append flycheck-disabled-checkers '(javascript-jshint)))

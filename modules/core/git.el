@@ -8,9 +8,9 @@
   :bind (("C-x g" . magit-status)))
 
 (use-package git-gutter
-  :delight
+  :diminish
   :init
-  (global-git-gutter-mode +1)
-  (git-gutter:linum-setup))
+  (global-git-gutter-mode 1)
+  (git-gutter))
 
 (use-package git-timemachine)

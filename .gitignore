@@ -27,3 +27,4 @@ network-security.data
 .yas-compiled-snippets.el
 /games
 private.el
+credentials.el

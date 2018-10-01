@@ -84,9 +84,9 @@
         ("M-<right>" . sp-forward-barf-sexp)
         ("C-<left>"  . sp-backward-slurp-sexp)
         ("M-<left>"  . sp-backward-barf-sexp))
-  :config
-  (add-hook 'prog-mode-hook
-            (lambda () (smartparens-mode t))))
+  :hook ((prog-mode . smartparens-mode)
+         (repl-mode . smartparens-strict-mode)
+         (lisp-mode . smartparens-strict-mode)))
 
 (use-package subword
   :delight

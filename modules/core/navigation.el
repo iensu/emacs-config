@@ -33,6 +33,7 @@
   :config
   (projectile-global-mode)
   (add-hook 'projectile-after-switch-project-hook 'iensu/use-local-eslint)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (setq projectile-sort-order 'access-time)
   (let ((ignored-files '(".DS_Store" ".projectile")))
     (dolist (file ignored-files)

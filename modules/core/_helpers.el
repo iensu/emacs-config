@@ -16,8 +16,14 @@
 
 (defun iensu/node-project-root ()
   (locate-dominating-file (or (buffer-file-name) default-directory)
-                          "node_modules"))
+                          "package.json"))
 
 (defun iensu/node-find-local-executable (executable-name)
   (expand-file-name (concat "node_modules/.bin/" executable-name)
                     (iensu/node-project-root)))
+
+(defun iensu/add-hooks (hook &rest modes)
+  (cl-flet ((mode-to-hook (mode)
+                          (intern (format "%s-hook" mode))))
+    (dolist (mode modes)
+      (add-hook (mode-to-hook mode) hook))))

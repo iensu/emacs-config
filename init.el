@@ -42,13 +42,11 @@
         (load-file file)))))
 
 (iensu--load-config
- "user.el"
+ "credentials.el"
  "modules/core"
  "modules/org"
  "modules/lang/css.el"
- "modules/lang/elisp.el"
-;; "modules/lang/elixir.el"
-;; "modules/lang/elm.el"
+ "modules/lang/lisp.el"
  "modules/lang/javascript.el"
  "modules/lang/json.el"
  "modules/lang/markdown.el"

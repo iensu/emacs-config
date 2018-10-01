@@ -47,6 +47,7 @@
         `(,(make-mu4e-context
             :name "Futurice"
             :enter-func (lambda () (mu4e-message "Entering Futurice context"))
+            :leave-func (lambda () (setq mu4e-maildir-list nil)) ; forces refresh of address list when switching context
             :match-func (lambda (msg)
                           (when msg
                             (string-match-p "^/futurice" (mu4e-message-field msg :maildir))))
@@ -62,6 +63,7 @@
           ,(make-mu4e-context
             :name "Private"
             :enter-func (lambda () (mu4e-message "Entering Private context"))
+            :leave-func (lambda () (setq mu4e-maildir-list nil)) ; forces refresh of address list when switching context
             :match-func (lambda (msg)
                           (when msg
                             (string-match-p "^/private" (mu4e-message-field msg :maildir))))

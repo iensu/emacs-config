@@ -26,8 +26,8 @@
 
 (add-hook 'prog-mode-hook
           (lambda ()
-            (linum-mode 1)
             (column-number-mode 1)
+            (display-line-numbers-mode 1)
             (eldoc-mode 1)))
 
 (use-package dracula-theme
@@ -39,17 +39,15 @@
                       :background (face-background 'default)
                       :foreground "mediumspringgreen"
                       :weight 'extra-bold)
-  (set-face-attribute 'default nil :height 140))
+  (set-face-attribute 'default nil :height 140)
+
+  (set-face-foreground 'mode-line "black")
+  (set-face-background 'mode-line "#dbffdb"))
+
+;; (use-package leuven-theme :ensure t :init (load-theme 'leuven t))
 
 (use-package rainbow-delimiters
   :delight)
-
-(use-package linum
-  :config
-  (setq linum-format "%3d "))
-
-(use-package linum-relative
-  :bind (("H-l" . linum-relative-toggle)))
 
 (use-package all-the-icons)
 

@@ -24,7 +24,9 @@
   (:map iensu-map
         ("e" . flycheck-list-errors))
   :init
-  (global-flycheck-mode t))
+  (global-flycheck-mode t)
+  :config
+  (flycheck-add-mode 'typescript-tslint 'web-mode))
 
 (use-package flycheck-popup-tip
   :init

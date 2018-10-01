@@ -1,0 +1,23 @@
+{
+  "name": "test-project",
+  "version": "0.0.1",
+  "description": "...",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "pretest": "do something here",
+    "test": "npm run test:cli && npm run test:api",
+    "posttest": "do something here",
+    "test:cli": "MOCHA_INTERFACE=cli mocha ./test/**/*tests.js",
+    "test:api": "MOCHA_INTERFACE=api node ./test/run-api.js",
+    "test:watch": "mocha ./test/**/*tests.js --watch -R dot"
+  },
+  "peerDependencies": {
+    "mocha": ">= 4"
+  },
+  "devDependencies": {
+    "bluebird": "^3.5.1",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1"
+  }
+}
