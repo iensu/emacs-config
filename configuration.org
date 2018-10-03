@@ -133,6 +133,7 @@ Set actual editor defaults to be more in line with expectations.
                     ("H-d"           . iensu/duplicate-line)
                     ("H-f"           . other-frame)
                     ("H-F"           . make-frame)
+                    ("H-i"           . iensu/open-init-file)
                     ("H-k"           . delete-frame)
                     ("H-m"           . iensu/move-file)
                     ("H-u"           . revert-buffer)
@@ -982,6 +983,11 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
 ** Custom commands
 
 #+BEGIN_SRC emacs-lisp
+  (defun iensu/open-init-file ()
+    "Open my emacs configuration file."
+    (interactive)
+    (find-file (iensu--config-file "configuration.org")))
+
   (defun iensu/backward-kill-word ()
     "Kill word backward and trim whitespace until previous word."
     (interactive)
