@@ -7,6 +7,11 @@ Define helper functions needed for the rest of the configuration
   (defun iensu--config-file (file)
       "Takes a configuration file name and returns the full file path"
       (expand-file-name file user-emacs-directory))
+
+  (defun iensu--connected-to-internet-p ()
+    "Returns t if able to connect to the internet"
+      (= 0 (call-process "ping" nil nil nil "-c" "1" "-W" "1"
+                         "www.google.com")))
 #+END_SRC
 
 ** Baseline setup
@@ -596,6 +601,8 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (load-file (iensu--config-file "credentials.el"))
     (setq org-gcal-token-file (iensu--config-file ".local/org-gcal/org-gcal-token")
           org-gcal-dir (iensu--config-file ".local/org-gcal/"))
+    (when (iensu--connected-to-internet-p)
+      (run-at-time t (* 10 60) #'org-gcal-sync))
     :config
     (setq org-gcal-client-id *user-gcal-client-id*
           org-gcal-client-secret *user-gcal-client-secret*
