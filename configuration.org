@@ -423,6 +423,7 @@ Password entry in minibuffer
       (private-calendar ,(concat iensu-org-dir "/calendars/private.org"))
       (ekonomi          ,(concat iensu-org-dir "/ekonomi.org"))
       (journal          ,(concat iensu-org-dir "/journal.org.gpg"))
+      (music            ,(concat iensu-org-dir "/music.org"))
       (notes            ,(concat iensu-org-dir "/notes.org"))
       (private          ,(concat iensu-org-dir "/private.org"))
       (projects         ,(concat iensu-org-dir "/projects.org"))
