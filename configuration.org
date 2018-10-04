@@ -604,7 +604,7 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (setq org-gcal-token-file (iensu--config-file ".local/org-gcal/org-gcal-token")
           org-gcal-dir (iensu--config-file ".local/org-gcal/"))
     (when (iensu--connected-to-internet-p)
-      (run-at-time t (* 10 60) #'org-gcal-sync))
+      (run-at-time t (* 60 60) #'org-gcal-sync))
     :config
     (setq org-gcal-client-id *user-gcal-client-id*
           org-gcal-client-secret *user-gcal-client-secret*
