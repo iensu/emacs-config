@@ -591,6 +591,11 @@ Password entry in minibuffer
     (setq org-todo-keywords
           '((sequence "TODO(t)" "TO_READ(r)" "TO_WATCH(w)" "DOING(d)" "BLOCKED(b)" "|" "CANCELLED(C)" "POSTPONED(P)" "DONE(D)")))
     (require 'org-protocol))
+
+  (use-package ox-gfm
+    :init
+    (eval-after-load "org"
+      '(require 'ox-gfm nil t)))
 #+END_SRC
 
 *** Make it prettier
