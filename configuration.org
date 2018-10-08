@@ -68,15 +68,6 @@ Basic configuration which does not depend on any external packages.
         bookmark-default-file (iensu--config-file ".local/bookmarks")
         tramp-auto-save-directory (iensu--config-file ".local/tramp")
 
-        ;; On MacOS/OSX remember to disable the built in dictionary lookup command
-        ;; by running the following command followed by a restart
-        ;; defaults write
-        ;; com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 70 '<dict><key>enabled</key><false/></dict>'
-        mac-option-modifier 'none
-        mac-command-modifier 'meta
-        mac-function-modifier 'hyper
-        mac-right-option-modifier 'hyper
-
         ;; Need to setup identity using `gpg --gen-key` before using gpg
         ;; on Mac install pinentry-mac from homebrew
         ;; https://www.gnupg.org/software/pinentry/index.html
@@ -123,10 +114,48 @@ Set actual editor defaults to be more in line with expectations.
 
 ** Global keybindings
 
-#+BEGIN_SRC emacs-lisp
-  (define-prefix-command 'iensu-map)
-  (global-set-key (kbd "H-1") 'iensu-map)
+*** Setting up keys for macOS
 
+Set the command button to be =meta= (=M=).
+
+#+BEGIN_SRC emacs-lisp
+  (setq mac-command-modifier 'meta)
+#+END_SRC
+
+Unset the option key (=meta= by default) to allow it to be used for typing
+extra characters.
+
+#+BEGIN_SRC emacs-lisp
+  (setq mac-option-modifier 'none)
+#+END_SRC
+
+Set the right option modifier to =hyper= which gives us more keybindings to work with.
+
+#+BEGIN_SRC emacs-lisp
+  (setq mac-right-option-modifier 'hyper)
+#+END_SRC
+
+On macOS, remember to disable the built-in dictionary lookup command (=C-M-d=)
+by running the following command followed by a restart of the computer:
+
+#+BEGIN_SRC shell :eval never
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 70 '<dict><key>enabled</key><false/></dict>'
+#+END_SRC
+
+*** Setting up a custom keymap
+
+Create a custom =keymap= and assign it to =H-1=.
+
+#+BEGIN_SRC emacs-lisp
+    (define-prefix-command 'iensu-map)
+    (global-set-key (kbd "H-1") 'iensu-map)
+#+END_SRC
+
+*** Various global keybindings
+
+Add a bunch of globally applied keybindings.
+
+#+BEGIN_SRC emacs-lisp
   (dolist (keymap '(("C-<backspace>" . delete-indentation)
                     ("C-h C-s"       . iensu/toggle-scratch-buffer)
                     ("C-x C-b"       . ibuffer)
@@ -141,9 +170,12 @@ Set actual editor defaults to be more in line with expectations.
                     ("M-i"           . imenu)
                     ("M-o"           . occur)))
     (global-set-key (kbd (car keymap)) (cdr keymap)))
+#+END_SRC
 
-    ;; Switch buffer window by pressing Shift + <direction>
-    (windmove-default-keybindings)
+Enable window (visible buffer) navigation with =<shift>-<direction>=.
+
+#+BEGIN_SRC emacs-lisp
+  (windmove-default-keybindings)
 #+END_SRC
 
 ** External package installation
@@ -530,6 +562,13 @@ Password entry in minibuffer
     (require 'ox-beamer)
     :config
     (add-hook 'org-mode-hook 'iensu--org-mode-hook)
+
+    ;; Make windmove work in org-mode:
+    (add-hook 'org-shiftup-final-hook 'windmove-up)
+    (add-hook 'org-shiftleft-final-hook 'windmove-left)
+    (add-hook 'org-shiftdown-final-hook 'windmove-down)
+    (add-hook 'org-shiftright-final-hook 'windmove-right)
+
     (org-babel-do-load-languages
      'org-babel-load-languages '((emacs-lisp . t)
                                  (shell . t)
