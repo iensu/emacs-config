@@ -1093,6 +1093,17 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
                  (file-exists-p new-location)
                  (not (string-equal old-location new-location)))
         (delete-file old-location))))
+
+  (defun iensu/switch-left-and-right-option-keys ()
+    "Switch left and right option keys.
+
+     On some external keyboards the left and right option keys are swapped,
+     this command switches the keys so that they work as expected."
+    (interactive)
+    (let ((current-left  mac-option-modifier)
+          (current-right mac-right-option-modifier))
+      (setq mac-option-modifier       current-right
+            mac-right-option-modifier current-left)))
 #+END_SRC
 
 ** Loading private settings
