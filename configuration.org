@@ -541,7 +541,9 @@ Password entry in minibuffer
           org-indent-indentation-per-level 2
           org-checkbox-hierarchical-statistics nil
           org-log-done 'time
-          org-outline-path-complete-in-steps nil)
+          org-outline-path-complete-in-steps nil
+          org-html-htmlize-output-type 'css
+          org-export-initial-scope 'subtree)
     (when (or (executable-find "ispell")
               (executable-find "aspell"))
       (flyspell-mode 1)
