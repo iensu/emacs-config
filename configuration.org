@@ -770,6 +770,24 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (add-hook 'after-init-hook #'mu4e-alert-enable-notifications))
 
   (use-package org-mu4e :ensure nil)
+
+  ;; sending html emails
+  (use-package htmlize)
+  (use-package org-mime
+    :load-path (lambda () (iensu--config-file "packages"))
+    :init
+    (require 'org-mime)
+    (setq org-mime-library 'mml)
+    :config
+    (add-hook 'org-mime-html-hook
+            (lambda ()
+              (org-mime-change-element-style
+               "pre" (format "color: %s; background-color: %s; padding: 0.5em;"
+                             "#E6E1DC" "#232323"))))
+    (add-hook 'org-mime-html-hook
+            (lambda ()
+              (org-mime-change-element-style
+               "blockquote" "border-left: 2px solid gray; padding-left: 4px;"))))
 #+END_SRC
 
 ** Programming
