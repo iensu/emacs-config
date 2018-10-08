@@ -873,10 +873,11 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (cl-flet ((maybe-use-prettier ()
                                   (add-node-modules-path)
                                   (when (iensu/use-prettier)
-                                    (prettier-js-mode 1))))
-      (add-hook 'web-mode-hook        #'maybe-use-prettier)
-      (add-hook 'js2-mode-hook        #'maybe-use-prettier)
-      (add-hook 'typescript-mode-hook #'maybe-use-prettier)))
+                                    (prettier-js-mode 1)
+                                    (remove-hook 'before-save-hook #'tide-format-before-save t))))
+      (add-hook 'web-mode-hook  #'maybe-use-prettier)
+      (add-hook 'js2-mode-hook  #'maybe-use-prettier)
+      (add-hook 'tide-mode-hook #'maybe-use-prettier)))
 
   (use-package json-mode
     :config
@@ -1026,9 +1027,10 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
            (web-mode . (lambda ()
                          (when (and buffer-file-name
                                     (string-equal "tsx" (file-name-extension buffer-file-name)))
-                           (iensu/setup-tide-mode)))))
-    :config (if (not (iensu/use-prettier))
-                (add-hook 'before-save-hook 'tide-format-before-save)))
+                           (iensu/setup-tide-mode))))
+           (tide-mode . (lambda ()
+                          (when (not (iensu/use-prettier))
+                            (add-hook 'before-save-hook #'tide-format-before-save nil :local))))))
 #+END_SRC
 
 *** Markdown
