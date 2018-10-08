@@ -560,6 +560,7 @@ Password entry in minibuffer
     :init
     (require 'ox-md)
     (require 'ox-beamer)
+    (defun org-babel-execute:yaml (body params) body)
     :config
     (add-hook 'org-mode-hook 'iensu--org-mode-hook)
 
@@ -1036,6 +1037,12 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (when (or (executable-find "ispell")
               (executable-find "aspell"))
       (flyspell-mode 1)))
+#+END_SRC
+
+*** YAML
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yaml-mode)
 #+END_SRC
 
 ** Custom commands
