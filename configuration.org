@@ -665,13 +665,17 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
 =M-x org-gcal-sync=.
 
 #+BEGIN_SRC emacs-lisp
+  (defvar iensu--timer:work-calendar-updates nil
+    "Work calendar updates timer object. Can be used to cancel the recurring updates.")
+
   (use-package org-gcal
     :init
     (load-file (iensu--config-file "credentials.el"))
     (setq org-gcal-token-file (iensu--config-file ".local/org-gcal/org-gcal-token")
           org-gcal-dir (iensu--config-file ".local/org-gcal/"))
     (when (iensu--connected-to-internet-p)
-      (run-at-time t (* 60 60) #'iensu/refresh-work-calendar))
+      (setq iensu--timer:work-calendar-updates
+            (run-at-time t (* 30 60) #'iensu/refresh-work-calendar)))
     :config
     (setq org-gcal-client-id *user-gcal-client-id*
           org-gcal-client-secret *user-gcal-client-secret*
