@@ -5,13 +5,14 @@ Define helper functions needed for the rest of the configuration
 
 #+BEGIN_SRC emacs-lisp
   (defun iensu--config-file (file)
-      "Takes a configuration file name and returns the full file path"
+      "Take a configuration FILE name and return the full file path."
       (expand-file-name file user-emacs-directory))
 
   (defun iensu--connected-to-internet-p ()
-    "Returns t if able to connect to the internet"
+    "Return t if able to connect to the internet."
       (= 0 (call-process "ping" nil nil nil "-c" "1" "-W" "1"
                          "www.google.com")))
+
 #+END_SRC
 
 ** Baseline setup
