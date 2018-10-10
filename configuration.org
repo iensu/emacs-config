@@ -13,6 +13,12 @@ Define helper functions needed for the rest of the configuration
       (= 0 (call-process "ping" nil nil nil "-c" "1" "-W" "1"
                          "www.google.com")))
 
+  (defun iensu--assign-key-bindings (key-definitions &optional keymap)
+    "Assign a list of KEY-DEFINITIONS, optionally to a KEYMAP."
+    (dolist (key-def key-definitions)
+      (if keymap
+          (define-key keymap (kbd (car key-def)) (cdr key-def))
+        (global-set-key (kbd (car key-def)) (cdr key-def)))))
 #+END_SRC
 
 ** Baseline setup
@@ -157,20 +163,26 @@ Create a custom =keymap= and assign it to =H-1=.
 Add a bunch of globally applied keybindings.
 
 #+BEGIN_SRC emacs-lisp
-  (dolist (keymap '(("C-<backspace>" . delete-indentation)
-                    ("C-h C-s"       . iensu/toggle-scratch-buffer)
-                    ("C-x C-b"       . ibuffer)
-                    ("H-d"           . iensu/duplicate-line)
-                    ("H-f"           . other-frame)
-                    ("H-F"           . make-frame)
-                    ("H-i"           . iensu/open-init-file)
-                    ("H-k"           . delete-frame)
-                    ("H-m"           . iensu/move-file)
-                    ("H-u"           . revert-buffer)
-                    ("M-<backspace>" . iensu/backward-kill-word)
-                    ("M-i"           . imenu)
-                    ("M-o"           . occur)))
-    (global-set-key (kbd (car keymap)) (cdr keymap)))
+  (iensu--assign-key-bindings '(("C-<backspace>" . delete-indentation)
+                                ("C-h C-s"       . iensu/toggle-scratch-buffer)
+                                ("C-x C-b"       . ibuffer)
+                                ("H-d"           . iensu/duplicate-line)
+                                ("H-f"           . other-frame)
+                                ("H-F"           . make-frame)
+                                ("H-i"           . iensu/open-init-file)
+                                ("H-k"           . delete-frame)
+                                ("H-m"           . iensu/move-file)
+                                ("H-u"           . revert-buffer)
+                                ("H-0"           . iensu/update-mail-in-background)
+                                ("H-2"           . mu4e)
+                                ("M-<backspace>" . iensu/backward-kill-word)
+                                ("M-i"           . imenu)
+                                ("M-o"           . occur)))
+
+  (iensu--assign-key-bindings '(("c" . mu4e-compose-new)
+                                ("m" . mu4e-headers-search)
+                                ("t" . toggle-truncate-lines))
+                              'iensu-map)
 #+END_SRC
 
 Enable window (visible buffer) navigation with =<shift>-<direction>=.
