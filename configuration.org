@@ -824,29 +824,34 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
 
 ** Programming
 
+Setup autocompletion.
+
 #+BEGIN_SRC emacs-lisp
-  ;; --- Autocompletion
-  (use-package company
-    :delight
-    :init (global-company-mode)
-    :config
-    (setq company-idle-delay 0.3
-          company-minimum-prefix-length 2
-          company-selection-wrap-around t
-          company-auto-complete t
-          company-tooltip-align-annotations t
-          company-dabbrev-downcase nil
-          company-auto-complete-chars nil)
-    (add-hook 'emacs-lisp-mode-hook
-              (lambda ()
-                (add-to-list 'company-backends 'company-elisp)))
-    (eval-after-load 'company (company-quickhelp-mode 1)))
+    (use-package company
+      :delight
+      :init (global-company-mode)
+      :config
+      (setq company-idle-delay 0.3
+            company-minimum-prefix-length 2
+            company-selection-wrap-around t
+            company-auto-complete t
+            company-tooltip-align-annotations t
+            company-dabbrev-downcase nil
+            company-auto-complete-chars nil)
+      (add-hook 'emacs-lisp-mode-hook
+                (lambda ()
+                  (add-to-list 'company-backends 'company-elisp)))
+      (eval-after-load 'company (company-quickhelp-mode 1)))
 
-  (use-package company-quickhelp
-    :config
-    (setq company-quickhelp-delay 1)
-    (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin))
+    (use-package company-quickhelp
+      :config
+      (setq company-quickhelp-delay 1)
+      (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin))
+#+END_SRC
 
+Setup snippet expansions.
+
+#+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :delight yas-minor-mode
     :init
@@ -856,16 +861,21 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (add-hook 'snippet-mode-hook (lambda ()
                                    (setq mode-require-final-newline nil
                                          require-final-newline nil))))
+#+END_SRC
 
-  ;; --- Flycheck for on the fly linting
-  (use-package flycheck
-    :init
-    (global-flycheck-mode t))
+Setup flycheck for on the fly linting.
 
-  (use-package flycheck-popup-tip
-    :init
-    (eval-after-load 'flycheck
-      '(add-hook 'flycheck-mode-hook 'flycheck-popup-tip-mode)))
+#+BEGIN_SRC emacs-lisp
+    (use-package flycheck
+      :init
+      (global-flycheck-mode t)
+      :config
+      (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+
+    (use-package flycheck-popup-tip
+      :init
+      (eval-after-load 'flycheck
+        '(add-hook 'flycheck-mode-hook 'flycheck-popup-tip-mode)))
 #+END_SRC
 
 *** Web development
