@@ -685,6 +685,9 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
 ** Email configuration
 
 #+BEGIN_SRC emacs-lisp
+  (defvar iensu--timer:mail-updates nil
+    "Mail updates timer object. Can be used to cancel the recurring updates.")
+
   (defun iensu--render-html-message ()
     (let ((dom (libxml-parse-html-region (point-min) (point-max))))
       (erase-buffer)
@@ -787,7 +790,9 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
       (eval-after-load "mu4e"
         (progn
           (iensu--mu4e-setup)
-          (iensu--send-email-setup)))))
+          (iensu--send-email-setup)
+          (setq iensu--timer:mail-updates
+                (run-at-time t 180 #'iensu/update-mail-in-background))))))
 
   (use-package mu4e-alert
     :after mu4e
@@ -1154,6 +1159,11 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
                                          "\n"))
                          (insert-file-contents work-calendar)))
                      (message "Updated work calendar")))))
+
+  (defun iensu/update-mail-in-background ()
+    "Updates email in background without opening a status buffer."
+    (interactive)
+    (mu4e-update-mail-and-index :run-in-background))
 #+END_SRC
 
 ** Loading private settings
