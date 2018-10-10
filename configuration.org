@@ -644,6 +644,13 @@ Make custom todo keywords more distinct.
           ("POSTPONED" . (:foreground "#3388ff"))))
 #+END_SRC
 
+Style org blocks
+
+#+BEGIN_SRC emacs-lisp
+  (set-face-attribute 'org-block-begin-line nil :height 120)
+  (set-face-attribute 'org-meta-line        nil :height 120)
+#+END_SRC
+
 *** Swedish holidays
 
 Update the calendar to contain Swedish holidays etc.
