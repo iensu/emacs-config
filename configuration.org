@@ -692,10 +692,6 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
       (goto-char (point-min))))
 
   (defun iensu--mu4e-setup ()
-    (global-set-key (kbd "H-2") 'mu4e)
-    (define-key 'iensu-map (kbd "t") 'toggle-truncate-lines)
-    (define-key 'iensu-map (kbd "c") 'mu4e-compose-new)
-    (define-key 'iensu-map (kbd "m") 'mu4e-headers-search)
     (setq mail-user-agent 'mu4e-user-agent
           mu4e-mu-binary "/usr/local/bin/mu"
 
