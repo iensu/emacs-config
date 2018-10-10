@@ -701,7 +701,6 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
             ("/private/All mail" . ?P))
 
           mu4e-sent-messages-behavior 'delete
-          mu4e-update-interval 180
 
           mu4e-context-policy 'pick-first
           mu4e-confirm-quit nil
