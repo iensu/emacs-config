@@ -651,7 +651,7 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (setq org-gcal-token-file (iensu--config-file ".local/org-gcal/org-gcal-token")
           org-gcal-dir (iensu--config-file ".local/org-gcal/"))
     (when (iensu--connected-to-internet-p)
-      (run-at-time t (* 60 60) #'org-gcal-sync))
+      (run-at-time t (* 60 60) #'iensu/refresh-work-calendar))
     :config
     (setq org-gcal-client-id *user-gcal-client-id*
           org-gcal-client-secret *user-gcal-client-secret*
@@ -1120,6 +1120,21 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
           (current-right mac-right-option-modifier))
       (setq mac-option-modifier       current-right
             mac-right-option-modifier current-left)))
+
+  (defun iensu/refresh-work-calendar ()
+    "Fetch Google calendar events and add the proper file tag(s)."
+    (interactive)
+    (org-gcal-fetch)
+    (run-at-time "7 sec" nil
+                 (lambda ()
+                   (let ((work-calendar (iensu-org-file 'work-calendar)))
+                     (save-excursion
+                       (with-temp-file work-calendar
+                         (goto-char (point-min))
+                         (insert (concat "#+FILETAGS: :work:\n"
+                                         "\n"))
+                         (insert-file-contents work-calendar)))
+                     (message "Updated work calendar")))))
 #+END_SRC
 
 ** Loading private settings
