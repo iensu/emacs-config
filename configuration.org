@@ -343,6 +343,12 @@ Password entry in minibuffer
 *** Searching and finding stuff
 
 #+BEGIN_SRC emacs-lisp
+  (use-package smex
+    :init
+    (smex-initialize))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (use-package counsel
     :delight ivy-mode
     :init
