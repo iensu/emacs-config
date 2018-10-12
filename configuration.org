@@ -675,7 +675,7 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
           org-gcal-dir (iensu--config-file ".local/org-gcal/"))
     (when (iensu--connected-to-internet-p)
       (setq iensu--timer:work-calendar-updates
-            (run-at-time t (* 30 60) #'iensu/refresh-work-calendar)))
+            (run-at-time t (* 60 60) #'iensu/refresh-work-calendar)))
     :config
     (setq org-gcal-client-id *user-gcal-client-id*
           org-gcal-client-secret *user-gcal-client-secret*
@@ -792,7 +792,7 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
           (iensu--mu4e-setup)
           (iensu--send-email-setup)
           (setq iensu--timer:mail-updates
-                (run-at-time t 180 #'iensu/update-mail-in-background))))))
+                (run-at-time t (* 35 60) #'iensu/update-mail-in-background))))))
 
   (use-package mu4e-alert
     :after mu4e
