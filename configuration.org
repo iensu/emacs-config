@@ -619,6 +619,16 @@ Password entry in minibuffer
       '(require 'ox-gfm nil t)))
 #+END_SRC
 
+*** Add more easy templates
+
+#+BEGIN_SRC emacs-lisp
+    (let ((additional-org-templates '(("ssh" "#+BEGIN_SRC shell \n?\n#+END_SRC")
+                                      ("sel" "#+BEGIN_SRC emacs-lisp \n?\n#+END_SRC")
+                                      ("n" "#+NAME: ?"))))
+      (dolist (template additional-org-templates)
+        (add-to-list 'org-structure-template-alist template)))
+#+END_SRC
+
 *** Make it prettier
 
 Only display one bullet per headline for a cleaner look.
