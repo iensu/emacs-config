@@ -1131,6 +1131,14 @@ Setup flycheck for on the fly linting.
   (use-package yaml-mode)
 #+END_SRC
 
+*** Graphviz Dot Mode
+
+#+BEGIN_SRC emacs-lisp
+  (use-package graphviz-dot-mode)
+
+  (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot))
+#+END_SRC
+
 ** Custom commands
 
 #+BEGIN_SRC emacs-lisp
