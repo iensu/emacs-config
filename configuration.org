@@ -578,24 +578,9 @@ Password entry in minibuffer
            ("C-c l" . org-store-link)
            :map org-mode-map
            ("H-."   . org-time-stamp-inactive))
-    :init
-    (require 'ox-md)
-    (require 'ox-beamer)
-    (defun org-babel-execute:yaml (body params) body)
     :config
     (add-hook 'org-mode-hook 'iensu--org-mode-hook)
 
-    ;; Make windmove work in org-mode:
-    (add-hook 'org-shiftup-final-hook 'windmove-up)
-    (add-hook 'org-shiftleft-final-hook 'windmove-left)
-    (add-hook 'org-shiftdown-final-hook 'windmove-down)
-    (add-hook 'org-shiftright-final-hook 'windmove-right)
-
-    (org-babel-do-load-languages
-     'org-babel-load-languages '((emacs-lisp . t)
-                                 (shell . t)
-                                 (js . t)
-                                 (python . t)))
     (org-load-modules-maybe t)
     (setq org-agenda-files iensu-org-agenda-files
           org-default-notes-file (iensu-org-file 'notes)
@@ -608,15 +593,21 @@ Password entry in minibuffer
           org-agenda-dim-blocked-tasks nil
           org-latex-listings t
           org-src-fontify-natively t
-          org-cycle-separator-lines 1)
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "TO_READ(r)" "TO_WATCH(w)" "DOING(d)" "BLOCKED(b)" "|" "CANCELLED(C)" "POSTPONED(P)" "DONE(D)")))
-    (require 'org-protocol))
+          org-cycle-separator-lines 1))
+#+END_SRC
 
-  (use-package ox-gfm
-    :init
-    (eval-after-load "org"
-      '(require 'ox-gfm nil t)))
+*** Add extra language support in org source blocks
+
+#+BEGIN_SRC emacs-lisp
+  (org-babel-do-load-languages
+   'org-babel-load-languages '((emacs-lisp . t)
+                               (shell . t)
+                               (js . t)
+                               (python . t)
+                               (dot . t)))
+
+  ;; Add support for YAML files
+  (defun org-babel-execute:yaml (body params) body)
 #+END_SRC
 
 *** Add more easy templates
@@ -627,6 +618,34 @@ Password entry in minibuffer
                                       ("n" "#+NAME: ?"))))
       (dolist (template additional-org-templates)
         (add-to-list 'org-structure-template-alist template)))
+#+END_SRC
+
+*** Add extra exporting options
+
+#+BEGIN_SRC emacs-lisp
+  ;; presentations using LaTeX
+  (require 'ox-beamer)
+  ;; standard markdown
+  (require 'ox-md)
+  ;; Github-flavoured markdown
+  (use-package ox-gfm
+    :init
+    (eval-after-load "org"
+      '(require 'ox-gfm nil t)))
+#+END_SRC
+
+*** Customize TODO keyword sequence
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "TO_READ(r)" "TO_WATCH(w)" "DOING(d)" "BLOCKED(b)"
+                    "|"
+                    "CANCELLED(C)" "POSTPONED(P)" "DONE(D)")))
+
+  (setq org-todo-keyword-faces
+        '(("BLOCKED"   . (:foreground "#dd0066" :weight bold))
+          ("CANCELLED" . (:foreground "#6272a4"))
+          ("POSTPONED" . (:foreground "#3388ff"))))
 #+END_SRC
 
 *** Make it prettier
@@ -649,15 +668,6 @@ Make all headlines have the same size and weight.
                         nil
                         :height (face-attribute 'default :height)
                         :weight 'normal))
-#+END_SRC
-
-Make custom todo keywords more distinct.
-
-#+BEGIN_SRC emacs-lisp
-  (setq org-todo-keyword-faces
-        '(("BLOCKED"   . (:foreground "#dd0066" :weight bold))
-          ("CANCELLED" . (:foreground "#6272a4"))
-          ("POSTPONED" . (:foreground "#3388ff"))))
 #+END_SRC
 
 Style org blocks
@@ -696,6 +706,23 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (setq org-gcal-client-id *user-gcal-client-id*
           org-gcal-client-secret *user-gcal-client-secret*
           org-gcal-file-alist `(("jens.ostlund@futurice.com" . ,(iensu-org-file 'work-calendar)))))
+#+END_SRC
+
+*** Don't interfere with =windmove= keybindings
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-shiftup-final-hook 'windmove-up)
+  (add-hook 'org-shiftleft-final-hook 'windmove-left)
+  (add-hook 'org-shiftdown-final-hook 'windmove-down)
+  (add-hook 'org-shiftright-final-hook 'windmove-right)
+#+END_SRC
+
+*** =org-protocol=
+
+=org-protocol= enables capturing from outside of Emacs.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'org-protocol)
 #+END_SRC
 
 ** Email configuration
