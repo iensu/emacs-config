@@ -1225,6 +1225,16 @@ Setup flycheck for on the fly linting.
     "Updates email in background without opening a status buffer."
     (interactive)
     (mu4e-update-mail-and-index :run-in-background))
+
+  (defun iensu/unblock-offlineimap ()
+    "Unblocks offlineimap by deleting all lock files in ~/.offlineimap"
+    (interactive)
+    (let* ((offlineimap-dir "~/.offlineimap")
+           (lockfiles (remove-if-not (lambda (filename) (string-match-p "\\.lock$" filename))
+                                     (directory-files offlineimap-dir))))
+      (dolist (lockfile lockfiles)
+        (delete-file (expand-file-name lockfile offlineimap-dir)))
+      (message (format "Deleted %i lock files." (length lockfiles)))))
 #+END_SRC
 
 ** Loading private settings
