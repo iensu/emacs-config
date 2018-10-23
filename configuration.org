@@ -821,6 +821,7 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
 
   (add-hook 'message-mode-hook 'turn-on-orgtbl)
   (add-hook 'message-mode-hook 'turn-on-orgstruct++)
+  (add-hook 'mu4e-compose-mode-hook (lambda () (auto-fill-mode -1)))
 
   (setq user-mail-address "jens.ostlund@futurice.com"
         user-full-name "Jens Östlund")
