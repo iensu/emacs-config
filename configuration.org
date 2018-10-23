@@ -119,6 +119,12 @@ Set actual editor defaults to be more in line with expectations.
               (show-paren-mode 1)))
 #+END_SRC
 
+Start the emacsclient server.
+
+#+BEGIN_SRC emacs-lisp
+  (server-start)
+#+END_SRC
+
 ** Global keybindings
 
 *** Setting up keys for macOS
