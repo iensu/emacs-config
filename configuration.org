@@ -592,8 +592,9 @@ Password entry in minibuffer
           org-default-notes-file (iensu-org-file 'notes)
           org-directory iensu-org-dir
           org-capture-templates iensu-org-capture-templates-alist
-          org-refile-targets '((iensu-org-refile-targets :maxlevel . 3))
+          org-refile-targets '((iensu-org-refile-targets :maxlevel . 4))
           org-refile-allow-creating-parent-nodes 'confirm
+          org-refile-use-outline-path 'file
           org-deadline-warning-days -7
           ;; org-agenda optimizations
           org-agenda-dim-blocked-tasks nil
