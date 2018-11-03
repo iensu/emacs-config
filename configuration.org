@@ -378,7 +378,8 @@ Password entry in minibuffer
     (setq ivy-use-virtual-buffers t
           ivy-use-selectable-prompt t
           ivy-count-format "(%d/%d) "
-          ivy-magic-slash-non-match-action 'ivy-magic-non-match-create))
+          ivy-magic-slash-non-match-action 'ivy-magic-non-match-create
+          counsel-ag-base-command "ag --nocolor --nogroup --hidden %s"))
 #+END_SRC
 
 *** Project management
