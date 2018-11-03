@@ -1024,6 +1024,8 @@ Setup flycheck for on the fly linting.
 
   (use-package rjsx-mode
     :mode ("\\.jsx\\'")
+    :init
+    (add-to-list 'magic-mode-alist '("^import .* from [\"']react[\"']" . rjsx-mode))
     :config
     (add-hook 'rjsx-mode-hook (lambda ()
                                 (emmet-mode)
