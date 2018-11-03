@@ -1073,6 +1073,13 @@ Setup flycheck for on the fly linting.
     (flycheck-add-mode 'javascript-eslint 'web-mode))
 #+END_SRC
 
+Use =web-mode= if file is a choo template file.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'magic-mode-alist
+               '("^const html = require.*choo/html" . web-mode))
+#+END_SRC
+
 **** TypeScript
 
 #+BEGIN_SRC emacs-lisp
