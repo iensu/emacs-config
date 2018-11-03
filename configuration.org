@@ -1120,6 +1120,24 @@ Setup flycheck for on the fly linting.
                             (add-hook 'before-save-hook #'tide-format-before-save nil :local))))))
 #+END_SRC
 
+*** Elm
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elm-mode
+    :config
+    (setq elm-tags-on-save t
+          elm-sort-imports-on-save t
+          elm-format-on-save t)
+    (add-to-list 'company-backends 'company-elm))
+
+  (use-package flycheck-elm
+    :init
+    (eval-after-load 'flycheck
+      '(add-hook 'flycheck-mode-hook #'flycheck-elm-setup)))
+#+END_SRC
+
+You need to install [[https://github.com/ElmCast/elm-oracle][elm-oracle]] in order to get type hints.
+
 *** Markdown
 
 #+BEGIN_SRC emacs-lisp
