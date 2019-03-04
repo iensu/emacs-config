@@ -1,0 +1,7 @@
+#+BEGIN_SRC shell
+helm delete $(helm list -d | grep ebprofile | grep -v $(helm list -d | grep ebprofile | tail -1 | awk '{print $1}') | awk '{print $1}')
+#+END_SRC
+
+#+RESULTS:
+| release | stultified-aardvark | deleted |
+| release | invincible-dragon   | deleted |

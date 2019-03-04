@@ -105,6 +105,8 @@ Set actual editor defaults to be more in line with expectations.
 
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+  (delete-selection-mode 1)
+
   (global-auto-revert-mode 1)
   (setq global-auto-revert-non-file-buffers t
         auto-revert-verbose nil)
@@ -187,7 +189,8 @@ Add a bunch of globally applied keybindings.
 
   (iensu--assign-key-bindings '(("c" . mu4e-compose-new)
                                 ("m" . mu4e-headers-search)
-                                ("t" . toggle-truncate-lines))
+                                ("t" . toggle-truncate-lines)
+                                ("r" . iensu/open-refile-file))
                               'iensu-map)
 #+END_SRC
 
@@ -207,7 +210,8 @@ Setup =package.el= and =use-package= for clean package installation.
 
   (setq package-archives
         '(("gnu"   . "https://elpa.gnu.org/packages/")
-          ("melpa" . "https://melpa.org/packages/")))
+          ("melpa" . "https://melpa.org/packages/")
+          ("melpa-stable" . "https://stable.melpa.org/packages/")))
 
   (package-initialize)
 
@@ -226,7 +230,8 @@ Setup =package.el= and =use-package= for clean package installation.
   (use-package dracula-theme
     :ensure t
     :init
-    (load-theme 'dracula t)
+    (when (display-graphic-p)
+      (load-theme 'dracula t))
     :config
     (set-face-attribute 'default nil :height 130)
 
@@ -386,7 +391,9 @@ Password entry in minibuffer
 
 #+BEGIN_SRC emacs-lisp
   (use-package magit
-    :bind (("C-x g" . magit-status)))
+    :bind (("C-x g" . magit-status))
+    :config
+    (setq magit-bury-buffer-function 'quit-window))
 
   (use-package projectile
     :delight '(:eval (let ((project-name (projectile-project-name)))
@@ -552,7 +559,8 @@ Password entry in minibuffer
   (defun iensu--org-mode-hook ()
     (dolist (lang-mode '(("javascript" . js2) ("es" . es)))
       (add-to-list 'org-src-lang-modes lang-mode))
-    (auto-fill-mode 1)
+    (auto-fill-mode nil)
+    (visual-line-mode 1)
     (setq org-src-fontify-natively t
           org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
           truncate-lines t
@@ -707,13 +715,28 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (load-file (iensu--config-file "credentials.el"))
     (setq org-gcal-token-file (iensu--config-file ".local/org-gcal/org-gcal-token")
           org-gcal-dir (iensu--config-file ".local/org-gcal/"))
-    (when (iensu--connected-to-internet-p)
-      (setq iensu--timer:work-calendar-updates
-            (run-at-time t (* 60 60) #'iensu/refresh-work-calendar)))
     :config
     (setq org-gcal-client-id *user-gcal-client-id*
           org-gcal-client-secret *user-gcal-client-secret*
           org-gcal-file-alist `(("jens.ostlund@futurice.com" . ,(iensu-org-file 'work-calendar)))))
+#+END_SRC
+
+*** Trello integration
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-trello)
+
+  (defun iensu/org-trello-sync-buffer ()
+    (interactive)
+    (org-trello-sync-buffer 'from-trello))
+
+  (defun iensu/org-trello-sync-card ()
+    (interactive)
+    (org-trello-sync-card 'from-trello))
+
+  (defun iensu/org-trello-sync-comment ()
+    (interactive)
+    (org-trello-sync-comment 'from-trello))
 #+END_SRC
 
 *** Don't interfere with =windmove= keybindings
@@ -731,6 +754,20 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
 
 #+BEGIN_SRC emacs-lisp
   (require 'org-protocol)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (defadvice org-capture-finalize
+      (after delete-capture-frame activate)
+    "Advise capture-finalize to close the frame"
+    (if (equal "capture" (frame-parameter nil 'name))
+        (delete-frame)))
+
+  (defadvice org-capture-destroy
+      (after delete-capture-frame activate)
+    "Advise capture-destroy to close the frame"
+    (if (equal "capture" (frame-parameter nil 'name))
+        (delete-frame)))
 #+END_SRC
 
 ** Email configuration
@@ -1056,7 +1093,7 @@ Setup flycheck for on the fly linting.
 
   (use-package web-mode
     :init
-    (dolist (ext (list "\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$"))
+    (dolist (ext (list "\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$" "\\.vue$"))
       (add-to-list 'auto-mode-alist `(,ext . web-mode)))
     :config
     (setq web-mode-css-indent-offset 2
@@ -1080,6 +1117,7 @@ Use =web-mode= if file is a choo template file.
   (add-to-list 'magic-mode-alist
                '("^const html = require.*choo/html" . web-mode))
 #+END_SRC
+
 
 **** TypeScript
 
@@ -1128,6 +1166,12 @@ Use =web-mode= if file is a choo template file.
                             (add-hook 'before-save-hook #'tide-format-before-save nil :local))))))
 #+END_SRC
 
+**** GraphQL
+
+#+BEGIN_SRC emacs-lisp
+  (use-package graphql-mode :ensure t)
+#+END_SRC
+
 *** Elm
 
 #+BEGIN_SRC emacs-lisp
@@ -1167,12 +1211,43 @@ You need to install [[https://github.com/ElmCast/elm-oracle][elm-oracle]] in ord
   (use-package yaml-mode)
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (use-package highlight-indentation
+    :config
+    (add-hook 'yaml-mode-hook (lambda () (highlight-indentation-mode t))))
+#+END_SRC
+
+*** Python
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elpy
+    :init
+    (elpy-enable))
+#+END_SRC
+
+*** Terraform
+
+#+BEGIN_SRC emacs-lisp
+  (defun iensu--terraform-format ()
+    (when (executable-find "terraform")
+      (let ((fname (buffer-file-name)))
+        (when (file-exists-p fname)
+            (shell-command (format "terraform fmt %s" fname))
+            (revert-buffer nil t)))))
+
+  (use-package terraform-mode
+    :config
+    (add-hook 'terraform-mode-hook
+              (lambda ()
+                (add-hook 'after-save-hook #'iensu--terraform-format nil 'local))))
+#+END_SRC
 *** Graphviz Dot Mode
 
 #+BEGIN_SRC emacs-lisp
   (use-package graphviz-dot-mode)
 
   (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot))
+  (define-key graphviz-dot-mode-map (kbd "C-c C-c") 'graphviz-dot-preview)
 #+END_SRC
 
 ** Custom commands
@@ -1182,6 +1257,11 @@ You need to install [[https://github.com/ElmCast/elm-oracle][elm-oracle]] in ord
     "Open my emacs configuration file."
     (interactive)
     (find-file (iensu--config-file "configuration.org")))
+
+  (defun iensu/open-refile-file ()
+    "Open refile file."
+    (interactive)
+    (find-file (iensu-org-file 'refile)))
 
   (defun iensu/backward-kill-word ()
     "Kill word backward and trim whitespace until previous word."
@@ -1251,10 +1331,12 @@ You need to install [[https://github.com/ElmCast/elm-oracle][elm-oracle]] in ord
                    (let ((work-calendar (iensu-org-file 'work-calendar)))
                      (save-excursion
                        (with-temp-file work-calendar
-                         (goto-char (point-min))
-                         (insert (concat "#+FILETAGS: :work:\n"
-                                         "\n"))
-                         (insert-file-contents work-calendar)))
+                         (insert-file-contents work-calendar)
+                         (save-match-data
+                           (goto-char (point-min))
+                           (when (not (search-forward "#+FILETAGS:" nil t))
+                             (insert (concat "#+FILETAGS: :work:\n"
+                                             "\n"))))))
                      (message "Updated work calendar")))))
 
   (defun iensu/update-mail-in-background ()
