@@ -29,3 +29,6 @@ network-security.data
 private.el
 credentials.el
 configuration.el
+.lsp-session*
+request/
+transient/

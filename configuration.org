@@ -228,7 +228,6 @@ Setup =package.el= and =use-package= for clean package installation.
 
 #+BEGIN_SRC emacs-lisp
   (use-package dracula-theme
-    :ensure t
     :init
     (when (display-graphic-p)
       (load-theme 'dracula t))
@@ -402,7 +401,8 @@ Password entry in minibuffer
                          (concat " <" project-name ">"))))
     :init
     (setq projectile-cache-file (iensu--config-file ".local/projectile.cache")
-          projectile-known-projects-file (iensu--config-file ".local/projectile-bookmarks.eld"))
+          projectile-known-projects-file (iensu--config-file ".local/projectile-bookmarks.eld")
+          projectile-git-submodule-command nil)
     :config
     (projectile-global-mode)
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
@@ -428,8 +428,8 @@ Password entry in minibuffer
   (use-package dired-subtree
     :config
     (bind-keys :map dired-mode-map
-               ("i" . dired-subtree-insert)
-               (";" . dired-subtree-remove)))
+               ("<tab>" . dired-subtree-insert)
+               ("<backtab>" . dired-subtree-remove)))
 #+END_SRC
 
 *** Spellchecking
@@ -471,6 +471,16 @@ Password entry in minibuffer
       (cl-remove-if (lambda (file) (string-match regex file))
                     (mapcar 'cadr iensu-org-files-alist))))
 
+  (defun iensu/org-save-buffers ()
+    "Saves all org buffers."
+    (interactive)
+    (save-some-buffers 'no-confirm
+                       (lambda ()
+                         (string-match-p
+                          (expand-file-name org-directory)
+                          (buffer-file-name (current-buffer)))))
+    (message "Saved org buffers..."))
+
   (defun iensu-org-file (key)
         "Return file path for org file matching KEY. KEY must be in `iensu-org-files-alist'."
         (cadr (assoc key iensu-org-files-alist)))
@@ -489,6 +499,7 @@ Password entry in minibuffer
       (ekonomi          ,(concat iensu-org-dir "/ekonomi.org"))
       (journal          ,(concat iensu-org-dir "/journal.org.gpg"))
       (music            ,(concat iensu-org-dir "/music.org"))
+      (notes-dev        ,(concat iensu-org-dir "/notes.dev.org"))
       (notes            ,(concat iensu-org-dir "/notes.org"))
       (private          ,(concat iensu-org-dir "/private.org"))
       (projects         ,(concat iensu-org-dir "/projects.org"))
@@ -654,14 +665,22 @@ Password entry in minibuffer
 
 #+BEGIN_SRC emacs-lisp
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "TO_READ(r)" "TO_WATCH(w)" "DOING(d)" "BLOCKED(b)"
+        '((sequence "TODO(t)" "TO_READ(r)" "TO_WATCH(w)" "DOING(d!)" "BLOCKED(b@/!)"
                     "|"
-                    "CANCELLED(C)" "POSTPONED(P)" "DONE(D)")))
+                    "CANCELED(C@/!)" "POSTPONED(P@/!)" "DONE(D@/!)")))
 
   (setq org-todo-keyword-faces
         '(("BLOCKED"   . (:foreground "#dd0066" :weight bold))
-          ("CANCELLED" . (:foreground "#6272a4"))
+          ("CANCELED" . (:foreground "#6272a4"))
           ("POSTPONED" . (:foreground "#3388ff"))))
+#+END_SRC
+
+*** Customize PRIORITIES
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-highest-priority ?A
+        org-default-priority ?D
+        org-lowest-priority  ?E)
 #+END_SRC
 
 *** Make it prettier
@@ -739,6 +758,17 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (org-trello-sync-comment 'from-trello))
 #+END_SRC
 
+*** Pivotal integration
+
+#+BEGIN_SRC emacs-lisp
+  (use-package a)
+
+  (use-package org-pivotal
+    :load-path (lambda () (iensu--config-file "packages"))
+    :config
+    (setq org-pivotal-api-token *pivotal-api-token*))
+#+END_SRC
+
 *** Don't interfere with =windmove= keybindings
 
 #+BEGIN_SRC emacs-lisp
@@ -768,6 +798,16 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     "Advise capture-destroy to close the frame"
     (if (equal "capture" (frame-parameter nil 'name))
         (delete-frame)))
+#+END_SRC
+
+*** Save org buffers every 5 minutes
+
+#+BEGIN_SRC emacs-lisp
+  (defvar iensu--timer:org-save-buffers nil
+    "Org save buffers timer object. Can be used to cancel the timer.")
+
+  (setq iensu--timer:org-save-buffers
+        (run-at-time t (* 5 60) #'iensu/org-save-buffers))
 #+END_SRC
 
 ** Email configuration
@@ -1010,6 +1050,14 @@ Setup flycheck for on the fly linting.
   (use-package restclient
     :init
     (add-to-list 'auto-mode-alist '("\\.rest$" . restclient-mode)))
+
+  (use-package ob-restclient
+    :ensure t
+    :init
+    (eval-after-load "org"
+      (org-babel-do-load-languages
+       'org-babel-load-languages
+       '((restclient . t)))))
 #+END_SRC
 
 **** CSS
@@ -1044,9 +1092,10 @@ Setup flycheck for on the fly linting.
     (js2-refactor-mode)
     (js2r-add-keybindings-with-prefix "C-c C-m")
     (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)
-    (when (executable-find "tern")
-      (add-to-list 'company-backends 'company-tern)
-      (tern-mode t))
+    ;; (when (executable-find "tern")
+    ;;   (add-to-list 'company-backends 'company-tern)
+    ;;   (tern-mode t))
+    (lsp)
     (setq js-switch-indent-offset 2
           js2-basic-offset 2
           js2-highlight-level 3)
@@ -1077,19 +1126,19 @@ Setup flycheck for on the fly linting.
   (use-package xref-js2
     :defer nil)
 
-  (use-package company-tern)
+  ;(use-package company-tern)
 
   (use-package mocha)
 
   (use-package nvm)
 
-  (use-package tern
-    :delight " 鰺刺"
-    :init
-    (add-to-list 'auto-mode-alist '("\\.tern-project$" . json-mode))
-    :config
-    (define-key tern-mode-keymap (kbd "M-.") nil)
-    (define-key tern-mode-keymap (kbd "M-,") nil))
+  ;; (use-package tern
+  ;;   :delight " 鰺刺"
+  ;;   :init
+  ;;   (add-to-list 'auto-mode-alist '("\\.tern-project$" . json-mode))
+  ;;   :config
+  ;;   (define-key tern-mode-keymap (kbd "M-.") nil)
+  ;;   (define-key tern-mode-keymap (kbd "M-,") nil))
 
   (use-package web-mode
     :init
@@ -1169,7 +1218,7 @@ Use =web-mode= if file is a choo template file.
 **** GraphQL
 
 #+BEGIN_SRC emacs-lisp
-  (use-package graphql-mode :ensure t)
+  (use-package graphql-mode)
 #+END_SRC
 
 *** Elm
@@ -1223,6 +1272,34 @@ You need to install [[https://github.com/ElmCast/elm-oracle][elm-oracle]] in ord
   (use-package elpy
     :init
     (elpy-enable))
+#+END_SRC
+
+*** Rust
+
+#+BEGIN_SRC emacs-lisp
+  (use-package rust-mode
+    :bind (("C-c C-c" . rust-run))
+    :config
+    (add-hook 'rust-mode-hook #'lsp)
+    (setq rust-format-on-save t))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck-rust
+    :init
+    (with-eval-after-load 'rust-mode
+      (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-mode
+    :commands lsp)
+
+  ;; (use-package lsp-ui
+  ;;   :commands lsp-ui-mode)
+
+  (use-package company-lsp
+    :commands company-lsp)
 #+END_SRC
 
 *** Terraform
