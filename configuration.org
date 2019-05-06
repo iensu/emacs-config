@@ -712,6 +712,16 @@ Style org blocks
   (set-face-attribute 'org-meta-line        nil :height 120)
 #+END_SRC
 
+Clean-up agenda view
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-agenda-prefix-format
+        '((agenda . "   %?-12t    % s")
+          (todo . " %i %-12:c")
+          (tags . " %i %-12:c")
+          (search . " %i %-12:c")))
+#+END_SRC
+
 *** Swedish holidays
 
 Update the calendar to contain Swedish holidays etc.
@@ -808,6 +818,17 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
 
   (setq iensu--timer:org-save-buffers
         (run-at-time t (* 5 60) #'iensu/org-save-buffers))
+#+END_SRC
+
+*** Thesaurus
+
+#+BEGIN_SRC emacs-lisp
+    (use-package synosaurus
+      :config
+      (setq synosaurus-backend 'synosaurus-backend-wordnet
+            synosaurus-choose-method 'popup)
+      (add-hook 'org-mode-hook (lambda () (synosaurus-mode 1)))
+)
 #+END_SRC
 
 ** Email configuration
@@ -1021,10 +1042,11 @@ Setup flycheck for on the fly linting.
                   (setq emmet-expand-jsx-className? t)))))
 
   (defun iensu/use-prettier ()
-    (and (file-exists-p (expand-file-name ".prettierrc"
-                                          (locate-dominating-file (or (buffer-file-name) default-directory)
-                                                                  "package.json")))
-         (executable-find "prettier")))
+    (let ((project-root (locate-dominating-file (or (buffer-file-name) default-directory)
+                                                "package.json")))
+      (and (executable-find "prettier")
+           (or (file-exists-p (expand-file-name ".prettierrc" project-root))
+               (file-exists-p (expand-file-name ".prettierrc.json" project-root))))))
 
   (use-package add-node-modules-path
     :load-path (lambda () (iensu--config-file "packages")))
@@ -1049,7 +1071,8 @@ Setup flycheck for on the fly linting.
 
   (use-package restclient
     :init
-    (add-to-list 'auto-mode-alist '("\\.rest$" . restclient-mode)))
+    (add-to-list 'auto-mode-alist '("\\.rest$" . restclient-mode))
+    (add-to-list 'auto-mode-alist '("\\.restclient$" . restclient-mode)))
 
   (use-package ob-restclient
     :ensure t
@@ -1325,6 +1348,21 @@ You need to install [[https://github.com/ElmCast/elm-oracle][elm-oracle]] in ord
 
   (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot))
   (define-key graphviz-dot-mode-map (kbd "C-c C-c") 'graphviz-dot-preview)
+#+END_SRC
+*** Java
+
+#+BEGIN_SRC emacs-lisp
+    (use-package lsp-java :ensure t :after lsp
+      :config
+      (add-hook 'java-mode-hook 'lsp)
+      (add-hook 'java-mode-hook (lambda () (require 'dap-java))))
+
+    (use-package dap-mode
+      :ensure t :after lsp-mode
+      :config
+      (dap-mode t)
+      (dap-ui-mode t))
+  ;  (use-package dap-java :after (lsp-java))
 #+END_SRC
 
 ** Custom commands

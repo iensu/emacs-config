@@ -32,3 +32,6 @@ configuration.el
 .lsp-session*
 request/
 transient/
+
+eclipse.jdt.ls/
+workspace/
