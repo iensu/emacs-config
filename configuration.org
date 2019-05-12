@@ -588,7 +588,8 @@ Password entry in minibuffer
           org-log-done 'time
           org-outline-path-complete-in-steps nil
           org-html-htmlize-output-type 'css
-          org-export-initial-scope 'subtree)
+          org-export-initial-scope 'subtree
+          org-catch-invisible-edits 'show-and-error)
     (when (or (executable-find "ispell")
               (executable-find "aspell"))
       (flyspell-mode 1)
@@ -684,6 +685,12 @@ Password entry in minibuffer
 #+END_SRC
 
 *** Make it prettier
+
+Make view more compact
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-cycle-separator-lines 0)
+#+END_SRC
 
 Only display one bullet per headline for a cleaner look.
 
