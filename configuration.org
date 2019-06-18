@@ -174,12 +174,14 @@ Add a bunch of globally applied keybindings.
   (iensu--assign-key-bindings '(("C-<backspace>" . delete-indentation)
                                 ("C-h C-s"       . iensu/toggle-scratch-buffer)
                                 ("C-x C-b"       . ibuffer)
+                                ("H-a"           . ag-project)
                                 ("H-d"           . iensu/duplicate-line)
                                 ("H-f"           . other-frame)
                                 ("H-F"           . make-frame)
                                 ("H-i"           . iensu/open-init-file)
                                 ("H-k"           . delete-frame)
                                 ("H-m"           . iensu/move-file)
+                                ("H-s"           . ag)
                                 ("H-u"           . revert-buffer)
                                 ("H-0"           . iensu/update-mail-in-background)
                                 ("H-2"           . mu4e)
@@ -385,6 +387,7 @@ Password entry in minibuffer
           ivy-magic-slash-non-match-action 'ivy-magic-non-match-create
           counsel-ag-base-command "ag --nocolor --nogroup --hidden %s"))
 #+END_SRC
+
 
 *** Project management
 
