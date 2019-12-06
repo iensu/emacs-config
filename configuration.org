@@ -21,6 +21,16 @@ Define helper functions needed for the rest of the configuration
         (global-set-key (kbd (car key-def)) (cdr key-def)))))
 #+END_SRC
 
+** Custom hooks
+
+#+BEGIN_SRC emacs-lisp
+  (defvar after-load-theme-hook nil
+    "Hook run after a color theme is loaded using `load-theme'.")
+  (defadvice load-theme (after run-after-load-theme-hook activate)
+    "Run `after-load-theme-hook'."
+    (run-hooks 'after-load-theme-hook))
+#+END_SRC
+
 ** Baseline setup
 
 Basic configuration which does not depend on any external packages.
@@ -116,7 +126,7 @@ Set actual editor defaults to be more in line with expectations.
             (lambda ()
               (subword-mode 1)
               (column-number-mode 1)
-              (display-line-numbers-mode 1)
+              (display-line-numbers-mode)
               (eldoc-mode 1)
               (show-paren-mode 1)))
 #+END_SRC
@@ -162,8 +172,9 @@ by running the following command followed by a restart of the computer:
 Create a custom =keymap= and assign it to =H-1=.
 
 #+BEGIN_SRC emacs-lisp
-    (define-prefix-command 'iensu-map)
-    (global-set-key (kbd "H-1") 'iensu-map)
+  (define-prefix-command 'iensu-map)
+  (global-set-key (kbd "H-1") 'iensu-map)
+  (global-set-key (kbd "C-å") 'iensu-map)
 #+END_SRC
 
 *** Various global keybindings
@@ -174,25 +185,23 @@ Add a bunch of globally applied keybindings.
   (iensu--assign-key-bindings '(("C-<backspace>" . delete-indentation)
                                 ("C-h C-s"       . iensu/toggle-scratch-buffer)
                                 ("C-x C-b"       . ibuffer)
-                                ("H-a"           . ag-project)
-                                ("H-d"           . iensu/duplicate-line)
-                                ("H-f"           . other-frame)
-                                ("H-F"           . make-frame)
-                                ("H-i"           . iensu/open-init-file)
-                                ("H-k"           . delete-frame)
-                                ("H-m"           . iensu/move-file)
-                                ("H-s"           . ag)
-                                ("H-u"           . revert-buffer)
-                                ("H-0"           . iensu/update-mail-in-background)
-                                ("H-2"           . mu4e)
-                                ("M-<backspace>" . iensu/backward-kill-word)
+                                ("M-<backspace>" . fixup-whitespace)
                                 ("M-i"           . imenu)
                                 ("M-o"           . occur)))
 
-  (iensu--assign-key-bindings '(("c" . mu4e-compose-new)
+  (iensu--assign-key-bindings '(("0" . iensu/update-mail-in-background)
+                                ("2" . mu4e)
+                                ("9" . iensu/refresh-work-calendar)
+                                ("c" . mu4e-compose-new)
+                                ("d" . iensu/duplicate-line)
+                                ("f" . other-frame)
+                                ("F" . make-frame)
+                                ("i" . iensu/open-init-file)
+                                ("k" . delete-frame)
                                 ("m" . mu4e-headers-search)
+                                ("s" . deadgrep)
                                 ("t" . toggle-truncate-lines)
-                                ("r" . iensu/open-refile-file))
+                                ("u" . revert-buffer))
                               'iensu-map)
 #+END_SRC
 
@@ -215,7 +224,8 @@ Setup =package.el= and =use-package= for clean package installation.
           ("melpa" . "https://melpa.org/packages/")
           ("melpa-stable" . "https://stable.melpa.org/packages/")))
 
-  (package-initialize)
+  (when (not (string-prefix-p "27" emacs-version))
+    (package-initialize))
 
   ;; --- Setting up use-package.el
   (unless (package-installed-p 'use-package)
@@ -229,21 +239,6 @@ Setup =package.el= and =use-package= for clean package installation.
 ** Make it pretty
 
 #+BEGIN_SRC emacs-lisp
-  (use-package dracula-theme
-    :init
-    (when (display-graphic-p)
-      (load-theme 'dracula t))
-    :config
-    (set-face-attribute 'default nil :height 130)
-
-    (set-face-foreground 'mode-line "black")
-    (set-face-background 'mode-line "#dbffdb")
-
-    (set-face-attribute 'show-paren-match nil
-                        :background (face-background 'default)
-                        :foreground "mediumspringgreen"
-                        :weight 'extra-bold))
-
   ;; --- Modeline cleanup
   (use-package delight
     :config
@@ -361,6 +356,20 @@ Password entry in minibuffer
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+  (use-package deadgrep)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package wgrep
+    :init
+    (autoload 'wgrep-ag-setup "wgrep-ag")
+    (add-hook 'ag-mode-hook 'wgrep-ag-setup))
+
+  (use-package wgrep-ag)
+#+END_SRC
+
+**** Ivy|Counsel
+#+BEGIN_SRC emacs-lisp
   (use-package counsel
     :delight ivy-mode
     :init
@@ -386,8 +395,30 @@ Password entry in minibuffer
           ivy-count-format "(%d/%d) "
           ivy-magic-slash-non-match-action 'ivy-magic-non-match-create
           counsel-ag-base-command "ag --nocolor --nogroup --hidden %s"))
-#+END_SRC
 
+  ;; As of 2019-10-12 border colors on child frames is not working on macos...
+  (defun iensu--load-ivy-posframe ()
+    (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center))
+          ivy-posframe-width 70
+          ivy-posframe-parameters '((left-margin-width . 10)
+                                    (right-margin-width . 10)
+                                    (internal-border-width . 2)
+                                    (internal-border-color . "white")))
+    (ivy-posframe-mode 1)
+    (set-face-attribute 'ivy-posframe nil :background "grey16"))
+
+  (use-package ivy-posframe
+    :ensure t
+    :delight
+    :hook
+    (after-load-theme . iensu--load-ivy-posframe))
+
+  (use-package ivy-prescient
+    :ensure t
+    :delight
+    :config
+    (prescient-persist-mode))
+#+END_SRC
 
 *** Project management
 
@@ -413,6 +444,10 @@ Password entry in minibuffer
     (let ((ignored-files '(".DS_Store" ".projectile")))
       (dolist (file ignored-files)
         (add-to-list 'projectile-globally-ignored-files file))))
+
+  (use-package forge
+    :ensure t
+    :after magit)
 
   (use-package counsel-projectile :init (counsel-projectile-mode 1))
 #+END_SRC
@@ -451,6 +486,33 @@ Password entry in minibuffer
     :bind
     (:map flyspell-mode-map
           ("C-;" . flyspell-popup-correct)))
+#+END_SRC
+
+*** Treemacs
+
+#+BEGIN_SRC emacs-lisp
+  (use-package winum
+    :ensure t)
+
+  (use-package treemacs
+    :ensure t
+    :defer t
+    :init
+    (with-eval-after-load 'winum
+      (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+    :bind
+    (:map global-map
+          ("M-0"       . treemacs-select-window)
+          ("C-x t 1"   . treemacs-delete-other-windows)
+          ("C-x t t"   . treemacs)
+          ("C-x t B"   . treemacs-bookmark)
+          ("C-x t C-t" . treemacs-find-file)
+          ("C-x t M-t" . treemacs-find-tag)
+          ("C-x t w"   . treemacs-switch-workspace)))
+
+  (use-package treemacs-magit
+    :ensure t
+    :after treemacs magit)
 #+END_SRC
 
 ** Org-mode
@@ -495,33 +557,46 @@ Password entry in minibuffer
   (setq iensu-org-dir "~/Dropbox/org")
 
   (setq iensu-org-files-alist
-    `((appointments     ,(concat iensu-org-dir "/appointments.org"))
-      (books            ,(concat iensu-org-dir "/books.org"))
-      (work-calendar    ,(concat iensu-org-dir "/calendars/work.org"))
-      (private-calendar ,(concat iensu-org-dir "/calendars/private.org"))
-      (ekonomi          ,(concat iensu-org-dir "/ekonomi.org"))
-      (journal          ,(concat iensu-org-dir "/journal.org.gpg"))
-      (music            ,(concat iensu-org-dir "/music.org"))
-      (notes-dev        ,(concat iensu-org-dir "/notes.dev.org"))
-      (notes            ,(concat iensu-org-dir "/notes.org"))
-      (private          ,(concat iensu-org-dir "/private.org"))
-      (projects         ,(concat iensu-org-dir "/projects.org"))
-      (refile           ,(concat iensu-org-dir "/refile.org"))
-      (beorg-refile     ,(concat iensu-org-dir "/refile-beorg.org"))
-      (richard          ,(concat iensu-org-dir "/richard.org"))
-      (work             ,(concat iensu-org-dir "/work.org"))))
+        `((appointments     ,(concat iensu-org-dir "/appointments.org"))
+          (books            ,(concat iensu-org-dir "/books.org"))
+          (work-calendar    ,(concat iensu-org-dir "/calendars/work.org"))
+          (ekonomi          ,(concat iensu-org-dir "/ekonomi.org"))
+          (journal          ,(concat iensu-org-dir "/journal.org.gpg"))
+          (music            ,(concat iensu-org-dir "/music.org"))
+          (notes            ,(concat iensu-org-dir "/notes.org"))
+          (private          ,(concat iensu-org-dir "/private.org"))
+          (projects         ,(concat iensu-org-dir "/projects.org"))
+          (refile           ,(concat iensu-org-dir "/refile.org"))
+          (richard          ,(concat iensu-org-dir "/richard.org"))
+          (work             ,(concat iensu-org-dir "/work.org"))))
 
   (setq iensu-org-refile-targets
-    (iensu--org-remove-file-if-match "calendars"
-                                     "journal"
-                                     "appointments"
-                                     "refile"))
+        (iensu--org-remove-file-if-match "calendars"
+                                         "journal"
+                                         "appointments"
+                                         "refile"))
 
   (setq iensu-org-agenda-files
-    (iensu--org-remove-file-if-match "\.org\.gpg"))
+        (iensu--org-remove-file-if-match "\\.org\\.gpg"))
+
+  (setq org-archive-location "archive/%s_archive::")
 #+END_SRC
 
-*** Capture templates
+*** Org-Capture configuration
+
+Enables capturing to file in the project root =<PROJECT-ROOT>/.project-notes.org=.
+
+#+BEGIN_SRC emacs-lisp
+  (defvar iensu-org-capture-project-notes-file)
+
+  (defun iensu/set-org-capture-project-notes-file (&rest args)
+    (let ((root-dir (projectile-project-root)))
+      (setq iensu-org-capture-project-notes-file (concat root-dir ".project-notes.org"))))
+
+  (advice-add 'org-capture :before 'iensu/set-org-capture-project-notes-file)
+#+END_SRC
+
+Setup capture templates.
 
 #+BEGIN_SRC emacs-lisp
   (setq iensu-org-capture-templates-alist
@@ -542,29 +617,42 @@ Password entry in minibuffer
            :prepend t)
 
           ("L" "Browser Link" entry (file ,(iensu-org-file 'refile))
-           ,(concat "* TO_READ %a\n"
+           ,(concat "* TODO %a\n"
                     "%U\n")
            :prepend t :immediate-finish t)
 
           ("p" "Browser Link and Selection" entry (file ,(iensu-org-file 'refile))
-           ,(concat "* TO_READ %^{Title}\n"
+           ,(concat "* TODO %^{Title}\n"
                     "Source: %u, %c\n"
                     "#+BEGIN_QUOTE\n"
                     "%i\n"
                     "#+END_QUOTE\n\n\n%?")
            :prepend t)
 
+          ("n" "Project comment" entry (file+headline iensu-org-capture-project-notes-file "Notes")
+           ,(concat "* %^{Title}\n"
+                    "%U\n\n"
+                    "Link: %a\n\n"
+                    "%?\n\n"))
+
+          ("N" "Project comment with quote" entry (file+headline iensu-org-capture-project-notes-file "Notes")
+           ,(concat "* %^{Title}\n"
+                    "%U\n\n"
+                    "Link: %a\n"
+                    "#+BEGIN_QUOTE\n"
+                    "%i\n"
+                    "#+END_QUOTE\n\n"
+                    "%?\n\n"))
+
           ("a" "Appointment" entry (file ,(iensu-org-file 'appointments))
            ,(concat "* %^{title} %^G\n"
                     "SCHEDULED: %^T\n\n"
                     "%?\n"))
 
-          ("n" "Notes" entry (file+headline ,(iensu-org-file 'notes) "Notes")
-           ,(concat "* %^{Title} %^G\n"
-                    "%U\n\n"
-                    "%?\n"))
           ("b" "Book" entry (file+headline ,(iensu-org-file 'books) "Läslista")
-           ,(concat "* %^{STATE|TO_READ|DONE} %^{} <%^{}> %^g\n\n"))))
+           ,(concat "* %^{STATE|TODO|DONE} %^{} <%^{}> %^g\n\n"))))
+
+  (setq org-capture-templates iensu-org-capture-templates-alist)
 #+END_SRC
 
 *** Main org-mode configuration
@@ -615,7 +703,6 @@ Password entry in minibuffer
     (setq org-agenda-files iensu-org-agenda-files
           org-default-notes-file (iensu-org-file 'notes)
           org-directory iensu-org-dir
-          org-capture-templates iensu-org-capture-templates-alist
           org-refile-targets '((iensu-org-refile-targets :maxlevel . 4))
           org-refile-allow-creating-parent-nodes 'confirm
           org-refile-use-outline-path 'file
@@ -641,7 +728,7 @@ Password entry in minibuffer
   (defun org-babel-execute:yaml (body params) body)
 #+END_SRC
 
-*** Add more easy templates
+*** Add more block expansion templates
 
 #+BEGIN_SRC emacs-lisp
     (let ((additional-org-templates '(("ssh" "#+BEGIN_SRC shell \n?\n#+END_SRC")
@@ -669,7 +756,7 @@ Password entry in minibuffer
 
 #+BEGIN_SRC emacs-lisp
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "TO_READ(r)" "TO_WATCH(w)" "DOING(d!)" "BLOCKED(b@/!)"
+        '((sequence "TODO(t)" "DOING(d!)" "BLOCKED(b@/!)"
                     "|"
                     "CANCELED(C@/!)" "POSTPONED(P@/!)" "DONE(D@/!)")))
 
@@ -705,21 +792,21 @@ Only display one bullet per headline for a cleaner look.
     (setq org-bullets-bullet-list '("*")))
 #+END_SRC
 
-Make all headlines have the same size and weight.
-
 #+BEGIN_SRC emacs-lisp
-  (dolist (heading-num (number-sequence 1 8))
-    (set-face-attribute (intern (format "org-level-%d" heading-num))
-                        nil
-                        :height (face-attribute 'default :height)
-                        :weight 'normal))
-#+END_SRC
+  (defun iensu--org-mode-restyle ()
+    ; Make all headlines have the same size and weight
+    (dolist (heading-num (number-sequence 1 8))
+      (set-face-attribute (intern (format "org-level-%d" heading-num))
+                          nil
+                          :height 1.2
+                          :weight 'bold))
+    ; Style org blocks
+    (set-face-attribute 'org-block-begin-line nil :height 120)
+    (set-face-attribute 'org-meta-line        nil :height 120)
+    ; Other font styles
+    (set-face-attribute 'org-headline-done nil :strike-through nil :foreground "#cccccc"))
 
-Style org blocks
-
-#+BEGIN_SRC emacs-lisp
-  (set-face-attribute 'org-block-begin-line nil :height 120)
-  (set-face-attribute 'org-meta-line        nil :height 120)
+  (add-hook 'after-load-theme-hook #'iensu--org-mode-restyle)
 #+END_SRC
 
 Clean-up agenda view
@@ -740,56 +827,7 @@ Update the calendar to contain Swedish holidays etc.
   (load-file (iensu--config-file "packages/kalender.el"))
 #+END_SRC
 
-*** Google calendar integration
-
-Stores google calendar events to my org =work-calendar= file. Sync by running
-=M-x org-gcal-sync=.
-
-#+BEGIN_SRC emacs-lisp
-  (defvar iensu--timer:work-calendar-updates nil
-    "Work calendar updates timer object. Can be used to cancel the recurring updates.")
-
-  (use-package org-gcal
-    :init
-    (load-file (iensu--config-file "credentials.el"))
-    (setq org-gcal-token-file (iensu--config-file ".local/org-gcal/org-gcal-token")
-          org-gcal-dir (iensu--config-file ".local/org-gcal/"))
-    :config
-    (setq org-gcal-client-id *user-gcal-client-id*
-          org-gcal-client-secret *user-gcal-client-secret*
-          org-gcal-file-alist `(("jens.ostlund@futurice.com" . ,(iensu-org-file 'work-calendar)))))
-#+END_SRC
-
-*** Trello integration
-
-#+BEGIN_SRC emacs-lisp
-  (use-package org-trello)
-
-  (defun iensu/org-trello-sync-buffer ()
-    (interactive)
-    (org-trello-sync-buffer 'from-trello))
-
-  (defun iensu/org-trello-sync-card ()
-    (interactive)
-    (org-trello-sync-card 'from-trello))
-
-  (defun iensu/org-trello-sync-comment ()
-    (interactive)
-    (org-trello-sync-comment 'from-trello))
-#+END_SRC
-
-*** Pivotal integration
-
-#+BEGIN_SRC emacs-lisp
-  (use-package a)
-
-  (use-package org-pivotal
-    :load-path (lambda () (iensu--config-file "packages"))
-    :config
-    (setq org-pivotal-api-token *pivotal-api-token*))
-#+END_SRC
-
-*** Don't interfere with =windmove= keybindings
+*** Don't interfere with windmove keybindings
 
 #+BEGIN_SRC emacs-lisp
   (add-hook 'org-shiftup-final-hook 'windmove-up)
@@ -798,7 +836,7 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
   (add-hook 'org-shiftright-final-hook 'windmove-right)
 #+END_SRC
 
-*** =org-protocol=
+*** Capturing outside of emacs
 
 =org-protocol= enables capturing from outside of Emacs.
 
@@ -830,15 +868,60 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
         (run-at-time t (* 5 60) #'iensu/org-save-buffers))
 #+END_SRC
 
+*** Google calendar integration
+
+Stores google calendar events to my org =work-calendar= file. Sync by running
+=M-x org-gcal-sync=.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-gcal
+    :init
+    (load-file (iensu--config-file "credentials.el"))
+    (setq org-gcal-token-file (iensu--config-file ".local/org-gcal/org-gcal-token")
+          org-gcal-dir (iensu--config-file ".local/org-gcal/"))
+    :config
+    (setq org-gcal-client-id *user-gcal-client-id*
+          org-gcal-client-secret *user-gcal-client-secret*
+          org-gcal-file-alist `(("jens.ostlund@futurice.com" . ,(iensu-org-file 'work-calendar)))))
+#+END_SRC
+
 *** Thesaurus
 
 #+BEGIN_SRC emacs-lisp
-    (use-package synosaurus
-      :config
-      (setq synosaurus-backend 'synosaurus-backend-wordnet
-            synosaurus-choose-method 'popup)
-      (add-hook 'org-mode-hook (lambda () (synosaurus-mode 1)))
-)
+  (use-package synosaurus
+    :config
+    (setq synosaurus-backend 'synosaurus-backend-wordnet
+          synosaurus-choose-method 'popup)
+    (add-hook 'org-mode-hook (lambda () (synosaurus-mode 1))))
+#+END_SRC
+
+*** Trello integration
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-trello)
+
+  (defun iensu/org-trello-sync-buffer ()
+    (interactive)
+    (org-trello-sync-buffer 'from-trello))
+
+  (defun iensu/org-trello-sync-card ()
+    (interactive)
+    (org-trello-sync-card 'from-trello))
+
+  (defun iensu/org-trello-sync-comment ()
+    (interactive)
+    (org-trello-sync-comment 'from-trello))
+#+END_SRC
+
+*** Pivotal integration
+
+#+BEGIN_SRC emacs-lisp
+  (use-package a)
+
+  (use-package org-pivotal
+    :load-path (lambda () (iensu--config-file "packages"))
+    :config
+    (setq org-pivotal-api-token *pivotal-api-token*))
 #+END_SRC
 
 ** Email configuration
@@ -923,9 +1006,10 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     ;; message viewing settings
     (add-hook 'mu4e-view-mode-hook
               (lambda ()
+                (visual-line-mode)
                 (local-set-key (kbd "<tab>") 'shr-next-link)
                 (local-set-key (kbd "<backtab>") 'shr-previous-link)))
-    (setq shr-color-visible-luminance-min 80))
+    (setq shr-color-visible-luminance-min 20))
 
   (defun iensu--send-email-setup ()
     (setq message-send-mail-function 'smtpmail-send-it
@@ -982,6 +1066,12 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
                "blockquote" "border-left: 2px solid gray; padding-left: 4px;"))))
 #+END_SRC
 
+Unblock offlineimap before fetching email
+
+#+BEGIN_SRC emacs-lisp
+  (advice-add 'mu4e-update-mail-and-index :before 'iensu/unblock-offlineimap)
+#+END_SRC
+
 ** Programming
 
 Setup autocompletion.
@@ -1036,6 +1126,33 @@ Setup flycheck for on the fly linting.
       :init
       (eval-after-load 'flycheck
         '(add-hook 'flycheck-mode-hook 'flycheck-popup-tip-mode)))
+#+END_SRC
+
+*** LSP mode
+
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-mode
+    :commands lsp
+    :bind
+    :config
+    (setq lsp-prefer-flymake nil))
+
+  (use-package lsp-ui :ensure tq
+    :init
+    (setq lsp-ui-doc-delay 1
+          lsp-ui-doc-border "violet"
+          lsp-ui-doc-position 'top
+          lsp-ui-doc-use-webkit t
+          lsp-ui-doc-max-width 50
+          lsp-ui-sideline-delay 1
+          lsp-ui-flycheck-enable t))
+
+  (use-package company-lsp
+    :commands company-lsp)
+
+  (use-package lsp-treemacs)
+
+  (use-package lsp-ivy)
 #+END_SRC
 
 *** Web development
@@ -1125,9 +1242,6 @@ Setup flycheck for on the fly linting.
     (js2-refactor-mode)
     (js2r-add-keybindings-with-prefix "C-c C-m")
     (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)
-    ;; (when (executable-find "tern")
-    ;;   (add-to-list 'company-backends 'company-tern)
-    ;;   (tern-mode t))
     (lsp)
     (setq js-switch-indent-offset 2
           js2-basic-offset 2
@@ -1145,7 +1259,8 @@ Setup flycheck for on the fly linting.
   (use-package rjsx-mode
     :mode ("\\.jsx\\'")
     :init
-    (add-to-list 'magic-mode-alist '("^import .* from [\"']react[\"']" . rjsx-mode))
+    (add-to-list 'magic-mode-alist '((lambda () (and (string-equal "js" (file-name-extension buffer-file-name))
+                                                (string-match "^import .* from [\"']react[\"']" (buffer-string)))) . rjsx-mode))
     :config
     (add-hook 'rjsx-mode-hook (lambda ()
                                 (emmet-mode)
@@ -1159,23 +1274,13 @@ Setup flycheck for on the fly linting.
   (use-package xref-js2
     :defer nil)
 
-  ;(use-package company-tern)
-
   (use-package mocha)
 
   (use-package nvm)
 
-  ;; (use-package tern
-  ;;   :delight " 鰺刺"
-  ;;   :init
-  ;;   (add-to-list 'auto-mode-alist '("\\.tern-project$" . json-mode))
-  ;;   :config
-  ;;   (define-key tern-mode-keymap (kbd "M-.") nil)
-  ;;   (define-key tern-mode-keymap (kbd "M-,") nil))
-
   (use-package web-mode
     :init
-    (dolist (ext (list "\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$" "\\.vue$"))
+    (dolist (ext (list "\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$" "\\.vue$" "\\.tsx$"))
       (add-to-list 'auto-mode-alist `(,ext . web-mode)))
     :config
     (setq web-mode-css-indent-offset 2
@@ -1187,6 +1292,8 @@ Setup flycheck for on the fly linting.
           web-mode-enable-current-element-highlight t
           web-mode-enable-current-column-highlight t)
     (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
+    (add-hook 'web-mode-hook (lambda () (when (string-equal "tsx" (file-name-extension buffer-file-name))
+                                     (iensu/setup-tide-mode))))
     (setq-default flychqeck-disabled-checkers
                   (append flycheck-disabled-checkers '(javascript-jshint)))
     (add-hook 'web-mode-hook 'emmet-mode)
@@ -1199,7 +1306,6 @@ Use =web-mode= if file is a choo template file.
   (add-to-list 'magic-mode-alist
                '("^const html = require.*choo/html" . web-mode))
 #+END_SRC
-
 
 **** TypeScript
 
@@ -1235,7 +1341,6 @@ Use =web-mode= if file is a choo template file.
                 ("C-c t"   . npm-test-run-tests))
     :init
     (flycheck-add-mode 'typescript-tslint 'web-mode)
-    (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
     :after (typescript-mode company flycheck web-mode)
     :hook ((typescript-mode . iensu/setup-tide-mode)
            (typescript-mode . tide-hl-identifier-mode)
@@ -1311,7 +1416,8 @@ You need to install [[https://github.com/ElmCast/elm-oracle][elm-oracle]] in ord
 
 #+BEGIN_SRC emacs-lisp
   (use-package rust-mode
-    :bind (("C-c C-c" . rust-run))
+    :bind (:map rust-mode-map
+                ("C-c C-c" . rust-run))
     :config
     (add-hook 'rust-mode-hook #'lsp)
     (setq rust-format-on-save t))
@@ -1322,17 +1428,6 @@ You need to install [[https://github.com/ElmCast/elm-oracle][elm-oracle]] in ord
     :init
     (with-eval-after-load 'rust-mode
       (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (use-package lsp-mode
-    :commands lsp)
-
-  ;; (use-package lsp-ui
-  ;;   :commands lsp-ui-mode)
-
-  (use-package company-lsp
-    :commands company-lsp)
 #+END_SRC
 
 *** Terraform
@@ -1359,20 +1454,64 @@ You need to install [[https://github.com/ElmCast/elm-oracle][elm-oracle]] in ord
   (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot))
   (define-key graphviz-dot-mode-map (kbd "C-c C-c") 'graphviz-dot-preview)
 #+END_SRC
+
 *** Java
 
 #+BEGIN_SRC emacs-lisp
-    (use-package lsp-java :ensure t :after lsp
-      :config
-      (add-hook 'java-mode-hook 'lsp)
-      (add-hook 'java-mode-hook (lambda () (require 'dap-java))))
+  (add-to-list 'auto-mode-alist '("\\.java$" . java-mode))
+  (add-hook 'java-mode-hook (lambda ()
+                              (electric-pair-mode t)))
 
-    (use-package dap-mode
-      :ensure t :after lsp-mode
-      :config
-      (dap-mode t)
-      (dap-ui-mode t))
-  ;  (use-package dap-java :after (lsp-java))
+  (use-package lsp-java
+    :ensure t
+    :after lsp
+    :init
+    (add-hook 'java-mode-hook 'lsp)
+    (add-hook 'java-mode-hook (lambda () (require 'dap-java)))
+    :bind (:map java-mode-map
+                ("C-c l f" . lsp-execute-code-action)
+                ("C-c l n" . lsp-rename)
+                ("C-c l F" . lsp-format-buffer)
+                ("C-c l h" . lsp-symbol-highlight))
+                ("C-c l i" . lsp-java-add-import))
+
+  (use-package dap-mode
+    :ensure t
+    :after lsp-java
+    :config
+    (dap-mode 1)
+    (dap-ui-mode 1)
+    (dap-tooltip-mode 1)
+    (tooltip-mode 1))
+#+END_SRC
+*** SQL
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.psql$" . sql-mode))
+  (add-hook 'sql-mode-hook
+            (lambda ()
+              (when (string= (file-name-extension buffer-file-name) "psql")
+                (setq-local sql-product 'postgres))))
+#+END_SRC
+
+** Load theme
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dracula-theme :ensure t)
+
+  (when (display-graphic-p)
+    (load-theme 'dracula t)
+                                          ; (load-theme 'deeper-blue t)
+                                          ;    (load-theme 'wombat t)
+    )
+
+  (set-face-attribute 'default nil :height 130)
+  (set-face-foreground 'mode-line "black")
+  (set-face-background 'mode-line "#dbffdb")
+  (set-face-attribute 'show-paren-match nil
+                      :background (face-background 'default)
+                      :foreground "mediumspringgreen"
+                      :weight 'extra-bold)
 #+END_SRC
 
 ** Custom commands
@@ -1387,17 +1526,6 @@ You need to install [[https://github.com/ElmCast/elm-oracle][elm-oracle]] in ord
     "Open refile file."
     (interactive)
     (find-file (iensu-org-file 'refile)))
-
-  (defun iensu/backward-kill-word ()
-    "Kill word backward and trim whitespace until previous word."
-    (interactive)
-    (flet ((multiple-preceding-blanks ()
-                                      (string-match-p "\\s-\\s-" (char-to-string (char-before)))))
-      (if (multiple-preceding-blanks)
-          (delete-char -1)
-        (paredit-backward-kill-word))
-      (while (multiple-preceding-blanks)
-        (delete-char -1))))
 
   (defun iensu/duplicate-line (n)
     "Copy the current line N times and insert it below."
@@ -1469,7 +1597,7 @@ You need to install [[https://github.com/ElmCast/elm-oracle][elm-oracle]] in ord
     (interactive)
     (mu4e-update-mail-and-index :run-in-background))
 
-  (defun iensu/unblock-offlineimap ()
+  (defun iensu/unblock-offlineimap (&rest args)
     "Unblocks offlineimap by deleting all lock files in ~/.offlineimap"
     (interactive)
     (let* ((offlineimap-dir "~/.offlineimap")

@@ -7,6 +7,10 @@ auto-save-list/
 elpa/
 emojis/
 .local/
+.cache/
+.dap-breakpoints
+test.org
+transient/
 
 /projectile-bookmarks.eld
 flycheck_init.el
