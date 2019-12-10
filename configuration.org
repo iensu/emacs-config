@@ -1337,9 +1337,8 @@ Setup flycheck for on the fly linting.
           web-mode-enable-css-colorization t
           web-mode-enable-current-element-highlight t
           web-mode-enable-current-column-highlight t)
-    (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
-    (add-hook 'web-mode-hook (lambda () (when (string-equal "tsx" (file-name-extension buffer-file-name))
-                                     (iensu/setup-tide-mode))))
+    (add-hook 'web-mode-hook
+              (lambda () (yas-activate-extra-mode 'js-mode)))
     (setq-default flychqeck-disabled-checkers
                   (append flycheck-disabled-checkers '(javascript-jshint)))
     (add-hook 'web-mode-hook 'emmet-mode)
@@ -1356,21 +1355,31 @@ Use =web-mode= if file is a choo template file.
 **** TypeScript
 
 #+BEGIN_SRC emacs-lisp
-  (defun iensu/setup-tide-mode ()
+  (defun iensu/setup-typescript ()
     (interactive)
     (tide-setup)
+    (tide-hl-identifier-mode 1)
+    (lsp)
     (flycheck-mode +1)
-    (setq flycheck-check-syntax-automatically '(save mode-enabled)
-          typescript-indent-level 2)
     (eldoc-mode +1)
-    (company-mode +1))
+    (company-mode +1)
+    (smartparens-strict-mode 1)
+    (setq flycheck-check-syntax-automatically '(save mode-enabled)
+          typescript-indent-level 2))
 
   (use-package typescript-mode
     :delight
     (typescript-mode "TS" :major)
-    :config
+    :init
     (add-to-list 'auto-mode-alist '("\\.ts$" . typescript-mode))
-    (add-hook 'typescript-mode-hook (lambda () (smartparens-strict-mode 1))))
+    (flycheck-add-mode 'typescript-tslint 'web-mode)
+    :config
+    (add-hook 'typescript-mode-hook #'iensu/setup-typescript)
+    (add-hook 'web-mode-hook
+              (lambda ()
+                (when (and buffer-file-name
+                           (string-equal "tsx" (file-name-extension buffer-file-name)))
+                  (iensu/setup-typescript)))))
 
   (use-package tide
     :delight " 潮"
@@ -1385,18 +1394,12 @@ Use =web-mode= if file is a choo template file.
                 ("C-c l n" . tide-rename-symbol)
                 ("C-c l r" . tide-refactor)
                 ("C-c t"   . npm-test-run-tests))
-    :init
-    (flycheck-add-mode 'typescript-tslint 'web-mode)
     :after (typescript-mode company flycheck web-mode)
-    :hook ((typescript-mode . iensu/setup-tide-mode)
-           (typescript-mode . tide-hl-identifier-mode)
-           (web-mode . (lambda ()
-                         (when (and buffer-file-name
-                                    (string-equal "tsx" (file-name-extension buffer-file-name)))
-                           (iensu/setup-tide-mode))))
-           (tide-mode . (lambda ()
-                          (when (not (iensu/use-prettier))
-                            (add-hook 'before-save-hook #'tide-format-before-save nil :local))))))
+    :config
+    (add-hook 'tide-mode-hook
+              (lambda ()
+                (when (not (iensu/use-prettier))
+                  (add-hook 'before-save-hook #'tide-format-before-save nil :local)))))
 #+END_SRC
 
 **** GraphQL
