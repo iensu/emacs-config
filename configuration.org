@@ -248,6 +248,10 @@ Setup =package.el= and =use-package= for clean package installation.
 ** Make it pretty
 
 #+BEGIN_SRC emacs-lisp
+  ;; Fix titlebar on MacOS
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist '(ns-appearence . dark))
+
   ;; --- Modeline cleanup
   (use-package delight
     :config
