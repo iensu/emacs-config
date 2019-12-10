@@ -1102,14 +1102,14 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (setq org-mime-library 'mml)
     :config
     (add-hook 'org-mime-html-hook
-            (lambda ()
-              (org-mime-change-element-style
-               "pre" (format "color: %s; background-color: %s; padding: 0.5em;"
-                             "#E6E1DC" "#232323"))))
+              (lambda ()
+                (org-mime-change-element-style
+                 "pre" (format "color: %s; background-color: %s; padding: 0.5em;"
+                               "#E6E1DC" "#232323"))))
     (add-hook 'org-mime-html-hook
-            (lambda ()
-              (org-mime-change-element-style
-               "blockquote" "border-left: 2px solid gray; padding-left: 4px;"))))
+              (lambda ()
+                (org-mime-change-element-style
+                 "blockquote" "border-left: 2px solid gray; padding-left: 4px;"))))
 #+END_SRC
 
 Unblock offlineimap before fetching email
