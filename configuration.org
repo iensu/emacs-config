@@ -36,7 +36,7 @@ Define helper functions needed for the rest of the configuration
 Basic configuration which does not depend on any external packages.
 
 #+BEGIN_SRC emacs-lisp
-;;  Maximize screen real estate by disabling menu-bar, tool-bar and scroll-bar
+  ;;  Maximize screen real estate by disabling menu-bar, tool-bar and scroll-bar
   (mapc
    (lambda (mode)
      (when (fboundp mode)
@@ -49,8 +49,8 @@ Basic configuration which does not depend on any external packages.
 
   ;; Improve displayed buffer names
   (setq-default frame-title-format "%b (%f)"
-          uniquify-buffer-name-style 'post-forward
-          uniquify-separator ":")
+                uniquify-buffer-name-style 'post-forward
+                uniquify-separator ":")
 
   ;; Highlight current line
   (global-hl-line-mode 1)
@@ -269,7 +269,7 @@ Setup =package.el= and =use-package= for clean package installation.
 
 ** Utility packages
 
-Make binaries on the =PATH= accessible in Emacs.
+*** Make binaries on the =PATH= accessible in Emacs.
 
 #+BEGIN_SRC emacs-lisp
   (use-package exec-path-from-shell
@@ -278,7 +278,7 @@ Make binaries on the =PATH= accessible in Emacs.
     (exec-path-from-shell-initialize))
 #+END_SRC
 
-Remember recent files.
+*** Remember recent files.
 
 #+BEGIN_SRC emacs-lisp
     (defun iensu--recentf-hook ()
@@ -293,7 +293,7 @@ Remember recent files.
       (add-hook 'recentf-mode-hook #'iensu--recentf-hook))
 #+END_SRC
 
-Password entry in minibuffer
+*** Password entry in minibuffer
 
 #+BEGIN_SRC emacs-lisp
   (use-package pinentry :init (pinentry-start))
