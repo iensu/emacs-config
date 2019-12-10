@@ -475,17 +475,46 @@ Password entry in minibuffer
 #+BEGIN_SRC emacs-lisp
   (use-package flyspell
     :delight
+    '(:eval (concat " FlyS:" (or ispell-local-dictionary ispell-dictionary)))
+    :bind
+    (:map flyspell-mode-map
+          ("C-å l" . iensu/cycle-ispell-dictionary)
+          ("C-:" . flyspell-popup-correct))
     :config
     (when (executable-find "aspell")
       (setq ispell-program-name "aspell"
             ispell-extra-args '("--sug-mode=ultra")
-            ispell-list-command "--list")))
+            ispell-list-command "--list"))
+    (setq ispell-dictionary "en_US"))
 
   (use-package flyspell-popup
-    :delight
-    :bind
-    (:map flyspell-mode-map
-          ("C-;" . flyspell-popup-correct)))
+    :delight)
+
+  (use-package synosaurus
+    :config
+    (setq synosaurus-backend 'synosaurus-backend-wordnet
+          synosaurus-choose-method 'popup))
+
+  (defun iensu/text-editing-support ()
+    "Sets up text editing nicities such as spell-check and thesaurus"
+    (interactive)
+    (flyspell-mode 1)
+    (synosaurus-mode 1))
+
+  (add-hook 'text-mode-hook #'iensu/text-editing-support)
+
+  (defvar iensu--language-ring nil)
+
+  (let ((languages '("swedish" "en_US")))
+    (setq iensu--language-ring (make-ring (length languages)))
+    (dolist (elem languages) (ring-insert iensu--language-ring elem)))
+
+  (defun iensu/cycle-ispell-dictionary ()
+    (interactive)
+    (let ((language (ring-ref iensu--language-ring -1)))
+      (ring-insert iensu--language-ring language)
+      (ispell-change-dictionary language)
+      (message (format "Switched to dictionary: %s" language))))
 #+END_SRC
 
 *** Treemacs
@@ -680,13 +709,7 @@ Setup capture templates.
           org-outline-path-complete-in-steps nil
           org-html-htmlize-output-type 'css
           org-export-initial-scope 'subtree
-          org-catch-invisible-edits 'show-and-error)
-    (when (or (executable-find "ispell")
-              (executable-find "aspell"))
-      (flyspell-mode 1)
-      (when (executable-find "aspell")
-        (setq ispell-program-name "aspell"
-              ispell-extra-args '("--sug-mode=ultra")))))
+          org-catch-invisible-edits 'show-and-error))
 
   (use-package org
     :delight
@@ -698,6 +721,7 @@ Setup capture templates.
            ("H-."   . org-time-stamp-inactive))
     :config
     (add-hook 'org-mode-hook 'iensu--org-mode-hook)
+    (add-hook 'org-mode-hook #'iensu/text-editing-support)
 
     (org-load-modules-maybe t)
     (setq org-agenda-files iensu-org-agenda-files
@@ -885,16 +909,6 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
           org-gcal-file-alist `(("jens.ostlund@futurice.com" . ,(iensu-org-file 'work-calendar)))))
 #+END_SRC
 
-*** Thesaurus
-
-#+BEGIN_SRC emacs-lisp
-  (use-package synosaurus
-    :config
-    (setq synosaurus-backend 'synosaurus-backend-wordnet
-          synosaurus-choose-method 'popup)
-    (add-hook 'org-mode-hook (lambda () (synosaurus-mode 1))))
-#+END_SRC
-
 *** Trello integration
 
 #+BEGIN_SRC emacs-lisp
@@ -1021,6 +1035,7 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
 
   (add-hook 'message-mode-hook 'turn-on-orgtbl)
   (add-hook 'message-mode-hook 'turn-on-orgstruct++)
+  (add-hook 'mu4e-compose-mode-hook #'iensu/text-editing-support)
   (add-hook 'mu4e-compose-mode-hook (lambda () (auto-fill-mode -1)))
 
   (setq user-mail-address "jens.ostlund@futurice.com"
@@ -1385,11 +1400,8 @@ You need to install [[https://github.com/ElmCast/elm-oracle][elm-oracle]] in ord
     :mode (("\\.md\\'"       . gfm-mode)
            ("\\.markdown\\'" . markdown-mode))
     :config
-    (when (executable-find "macdown")
-      (setq  markdown-open-command "macdown"))
-    (when (or (executable-find "ispell")
-              (executable-find "aspell"))
-      (flyspell-mode 1)))
+    (add-hook 'markdown-mode-hook #'iensu/text-editing-support)
+    (add-hook 'gfm-mode-hook #'iensu/text-editing-support))
 #+END_SRC
 
 *** YAML
