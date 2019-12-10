@@ -33,6 +33,12 @@ Define helper functions needed for the rest of the configuration
 
 ** Baseline setup
 
+Load credentials and secret stuff
+
+#+BEGIN_SRC emacs-lisp
+  (load-file (iensu--config-file "credentials.el"))
+#+END_SRC
+
 Basic configuration which does not depend on any external packages.
 
 #+BEGIN_SRC emacs-lisp
@@ -931,7 +937,6 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
 #+BEGIN_SRC emacs-lisp
   (use-package org-gcal
     :init
-    (load-file (iensu--config-file "credentials.el"))
     (setq org-gcal-token-file (iensu--config-file ".local/org-gcal/org-gcal-token")
           org-gcal-dir (iensu--config-file ".local/org-gcal/"))
     :config
