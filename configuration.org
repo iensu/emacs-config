@@ -198,19 +198,20 @@ Add a bunch of globally applied keybindings.
                                 ("M-i"           . imenu)
                                 ("M-o"           . occur)))
 
-  (iensu--assign-key-bindings '(("0" . iensu/update-mail-in-background)
-                                ("2" . mu4e)
-                                ("9" . iensu/refresh-work-calendar)
-                                ("c" . mu4e-compose-new)
-                                ("d" . iensu/duplicate-line)
-                                ("f" . other-frame)
-                                ("F" . make-frame)
-                                ("i" . iensu/open-init-file)
-                                ("k" . delete-frame)
-                                ("m" . mu4e-headers-search)
-                                ("s" . deadgrep)
-                                ("t" . toggle-truncate-lines)
-                                ("u" . revert-buffer))
+  (iensu--assign-key-bindings '(("0"   . iensu/update-mail-in-background)
+                                ("2"   . mu4e)
+                                ("9"   . iensu/refresh-work-calendar)
+                                ("c"   . mu4e-compose-new)
+                                ("d"   . iensu/duplicate-line)
+                                ("e f" . iensu/erc-freenode)
+                                ("f"   . other-frame)
+                                ("F"   . make-frame)
+                                ("i"   . iensu/open-init-file)
+                                ("k"   . delete-frame)
+                                ("m"   . mu4e-headers-search)
+                                ("s"   . deadgrep)
+                                ("t"   . toggle-truncate-lines)
+                                ("u"   . revert-buffer))
                               'iensu-map)
 #+END_SRC
 
@@ -1115,6 +1116,33 @@ Unblock offlineimap before fetching email
 
 #+BEGIN_SRC emacs-lisp
   (advice-add 'mu4e-update-mail-and-index :before 'iensu/unblock-offlineimap)
+#+END_SRC
+
+** ERC
+
+#+BEGIN_SRC emacs-lisp
+  (require 'erc)
+
+  (defun iensu/erc-freenode ()
+    (interactive)
+    (erc :server "irc.freenode.net" :port 6667 :nick *erc-nick*))
+
+  (setq erc-prompt-for-password nil
+        erc-fill-function 'erc-fill-static
+        erc-fill-static-center 22
+        erc-autojoin-channels-alist '(("freenode.net" "#emacs"))
+        erc-join-buffer 'bury
+        erc-autojoin-timing 'ident
+        erc-server-reconnect-attempts 5
+        erc-server-reconnect-timeout 3)
+
+  (add-to-list 'erc-modules 'spelling)
+  (erc-update-modules)
+
+  ;; Send message with C-c RET or C-c C-RET instead of just RET
+  (define-key erc-mode-map (kbd "RET") nil)
+  (define-key erc-mode-map (kbd "C-c RET") 'erc-send-current-line)
+  (define-key erc-mode-map (kbd "C-c C-RET") 'erc-send-current-line)
 #+END_SRC
 
 ** Programming
