@@ -958,16 +958,6 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (org-trello-sync-comment 'from-trello))
 #+END_SRC
 
-*** Pivotal integration
-
-#+BEGIN_SRC emacs-lisp
-  (use-package a)
-
-  (use-package org-pivotal
-    :load-path (lambda () (iensu--config-file "packages"))
-    :config
-    (setq org-pivotal-api-token *pivotal-api-token*))
-#+END_SRC
 
 ** Email configuration
 
