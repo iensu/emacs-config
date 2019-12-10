@@ -608,9 +608,6 @@ Setup =package.el= and =use-package= for clean package installation.
                                          "appointments"
                                          "refile"))
 
-  (setq iensu-org-agenda-files
-        (iensu--org-remove-file-if-match "\\.org\\.gpg"))
-
   (setq org-archive-location "archive/%s_archive::")
 #+END_SRC
 
@@ -727,18 +724,49 @@ Setup capture templates.
     (add-hook 'org-mode-hook #'iensu/text-editing-support)
 
     (org-load-modules-maybe t)
-    (setq org-agenda-files iensu-org-agenda-files
-          org-default-notes-file (iensu-org-file 'notes)
+
+    (setq org-default-notes-file (iensu-org-file 'notes)
           org-directory iensu-org-dir
           org-refile-targets '((iensu-org-refile-targets :maxlevel . 4))
           org-refile-allow-creating-parent-nodes 'confirm
           org-refile-use-outline-path 'file
-          org-deadline-warning-days -7
-          ;; org-agenda optimizations
-          org-agenda-dim-blocked-tasks nil
           org-latex-listings t
           org-src-fontify-natively t
           org-cycle-separator-lines 1))
+#+END_SRC
+
+*** Org-agenda configuration
+
+#+BEGIN_SRC emacs-lisp
+  (require 'org-agenda)
+
+  (setq iensu-org-agenda-files
+        (iensu--org-remove-file-if-match "\\.org\\.gpg"))
+
+  (dolist (file-name (cl-remove-if-not
+                      (lambda (fname) (string-match-p "^work\\..+\\.org$" fname))
+                      (directory-files iensu-org-dir)))
+    (let ((file (expand-file-name file-name iensu-org-dir)))
+      (add-to-list 'org-agenda-files file)
+      (add-to-list 'org-refile-targets `(,file :maxlevel . 3))))
+
+  (dolist (agenda-command
+           '(("z" "Two week agenda"
+              ((todo ""
+                     ((org-agenda-overriding-header "TODOs")
+                      (org-agenda-prefix-format "  ")
+                      (org-agenda-sorting-strategy '(priority-down deadline-up))
+                      (org-agenda-max-entries 20)))
+               (agenda ""
+                       ((org-agenda-start-day "0d")
+                        (org-agenda-span 14)
+                        (org-agenda-start-on-weekday nil)))))))
+    (add-to-list 'org-agenda-custom-commands agenda-command))
+
+  (setq org-agenda-files iensu-org-agenda-files
+        org-agenda-dim-blocked-tasks nil
+        org-deadline-warning-days -7
+        org-agenda-block-separator "")
 #+END_SRC
 
 *** Add extra language support in org source blocks
