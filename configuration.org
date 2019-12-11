@@ -99,6 +99,8 @@ Basic configuration which does not depend on any external packages.
 
   ;; use default browser for browsing stuff
   (setq browse-url-browser-function 'browse-url-default-browser)
+
+  (setq compilation-scroll-output t)
 #+END_SRC
 
 ** Sane editor defaults
@@ -209,6 +211,7 @@ Add a bunch of globally applied keybindings.
                                 ("i"   . iensu/open-init-file)
                                 ("k"   . delete-frame)
                                 ("m"   . mu4e-headers-search)
+                                ("n t" . iensu/npm-test)
                                 ("s"   . deadgrep)
                                 ("t"   . toggle-truncate-lines)
                                 ("u"   . revert-buffer))
@@ -1679,6 +1682,10 @@ You need to install [[https://github.com/ElmCast/elm-oracle][elm-oracle]] in ord
       (dolist (lockfile lockfiles)
         (delete-file (expand-file-name lockfile offlineimap-dir)))
       (message (format "Deleted %i lock files." (length lockfiles)))))
+
+  (defun iensu/npm-test ()
+    (interactive)
+    (compile "npm test" t))
 #+END_SRC
 
 ** Loading private settings
