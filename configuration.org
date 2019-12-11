@@ -1142,10 +1142,13 @@ Unblock offlineimap before fetching email
   (add-to-list 'erc-modules 'spelling)
   (erc-update-modules)
 
-  ;; Send message with C-c RET or C-c C-RET instead of just RET
+  ;; Send message with C-RET instead of just RET
   (define-key erc-mode-map (kbd "RET") nil)
-  (define-key erc-mode-map (kbd "C-c RET") 'erc-send-current-line)
-  (define-key erc-mode-map (kbd "C-c C-RET") 'erc-send-current-line)
+  (define-key erc-mode-map (kbd "C-<return>") 'erc-send-current-line)
+
+  (use-package erc-hl-nicks :after erc)
+
+  (use-package erc-image :after erc)
 #+END_SRC
 
 ** Programming
