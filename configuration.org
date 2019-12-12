@@ -1225,7 +1225,9 @@ Setup flycheck for on the fly linting.
           lsp-ui-doc-use-webkit t
           lsp-ui-doc-max-width 50
           lsp-ui-sideline-delay 1
-          lsp-ui-flycheck-enable t))
+          lsp-ui-flycheck-enable t)
+    ;; Disable flyckeck-popup if lsp-ui-mode is enabled
+    (add-hook 'lsp-ui-mode-hook (lambda () (flycheck-popup-tip-mode -1))))
 
   (use-package company-lsp
     :commands company-lsp)
