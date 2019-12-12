@@ -212,6 +212,7 @@ Add a bunch of globally applied keybindings.
                                 ("k"   . delete-frame)
                                 ("m"   . mu4e-headers-search)
                                 ("n t" . iensu/npm-test)
+                                ("p"   . list-processes)
                                 ("s"   . deadgrep)
                                 ("t"   . toggle-truncate-lines)
                                 ("u"   . revert-buffer))
