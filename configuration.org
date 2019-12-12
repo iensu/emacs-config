@@ -140,6 +140,9 @@ Set actual editor defaults to be more in line with expectations.
               (display-line-numbers-mode)
               (eldoc-mode 1)
               (show-paren-mode 1)))
+
+  ;; Open eshell and shell buffers in popup windows
+  (setq display-buffer-alist '(("\\`\\*e?shell" display-buffer-pop-up-window)))
 #+END_SRC
 
 Start the emacsclient server.
@@ -215,7 +218,8 @@ Add a bunch of globally applied keybindings.
                                 ("p"   . list-processes)
                                 ("s"   . deadgrep)
                                 ("t"   . toggle-truncate-lines)
-                                ("u"   . revert-buffer))
+                                ("u"   . revert-buffer)
+                                ("å"   . iensu/eshell))
                               'iensu-map)
 #+END_SRC
 
@@ -1685,6 +1689,12 @@ Use =web-mode= if file is a choo template file.
   (defun iensu/npm-test ()
     (interactive)
     (compile "npm test" t))
+
+  (defun iensu/eshell ()
+    (interactive)
+    (if (projectile-project-root)
+        (projectile-run-eshell)
+      (eshell :new-session)))
 #+END_SRC
 
 ** Loading private settings
