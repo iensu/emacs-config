@@ -63,7 +63,7 @@
 
 Define helper functions needed for the rest of the configuration
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun iensu--config-file (file)
       "Take a configuration FILE name and return the full file path."
       (expand-file-name file user-emacs-directory))
@@ -79,29 +79,29 @@ Define helper functions needed for the rest of the configuration
       (if keymap
           (define-key keymap (kbd (car key-def)) (cdr key-def))
         (global-set-key (kbd (car key-def)) (cdr key-def)))))
-#+END_SRC
+#+end_src
 
 ** Custom hooks
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defvar after-load-theme-hook nil
     "Hook run after a color theme is loaded using `load-theme'.")
   (defadvice load-theme (after run-after-load-theme-hook activate)
     "Run `after-load-theme-hook'."
     (run-hooks 'after-load-theme-hook))
-#+END_SRC
+#+end_src
 
 ** Baseline setup
 
 Load credentials and secret stuff
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (load-file (iensu--config-file "credentials.el"))
-#+END_SRC
+#+end_src
 
 Basic configuration which does not depend on any external packages.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   ;;  Maximize screen real estate by disabling menu-bar, tool-bar and scroll-bar
   (mapc
    (lambda (mode)
@@ -162,13 +162,13 @@ Basic configuration which does not depend on any external packages.
   (setq browse-url-browser-function 'browse-url-default-browser)
 
   (setq compilation-scroll-output t)
-#+END_SRC
+#+end_src
 
 ** Sane editor defaults
 
 Set actual editor defaults to be more in line with expectations.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (setq-default indent-tabs-mode nil
                 tab-width 2
 
@@ -204,13 +204,13 @@ Set actual editor defaults to be more in line with expectations.
 
   ;; Open eshell and shell buffers in popup windows
   (setq display-buffer-alist '(("\\`\\*e?shell" display-buffer-pop-up-window)))
-#+END_SRC
+#+end_src
 
 Start the emacsclient server.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (server-start)
-#+END_SRC
+#+end_src
 
 ** Global keybindings
 
@@ -218,45 +218,45 @@ Start the emacsclient server.
 
 Set the command button to be =meta= (=M=).
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (setq mac-command-modifier 'meta)
-#+END_SRC
+#+end_src
 
 Unset the option key (=meta= by default) to allow it to be used for typing
 extra characters.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (setq mac-option-modifier 'none)
-#+END_SRC
+#+end_src
 
 Set the right option modifier to =hyper= which gives us more keybindings to work with.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (setq mac-right-option-modifier 'hyper)
-#+END_SRC
+#+end_src
 
 On macOS, remember to disable the built-in dictionary lookup command (=C-M-d=)
 by running the following command followed by a restart of the computer:
 
-#+BEGIN_SRC shell :eval never
+#+begin_src shell :eval never
   defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 70 '<dict><key>enabled</key><false/></dict>'
-#+END_SRC
+#+end_src
 
 *** Setting up a custom keymap
 
 Create a custom =keymap= and assign it to =H-1=.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (define-prefix-command 'iensu-map)
   (global-set-key (kbd "H-1") 'iensu-map)
   (global-set-key (kbd "C-å") 'iensu-map)
-#+END_SRC
+#+end_src
 
 *** Various global keybindings
 
 Add a bunch of globally applied keybindings.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (iensu--assign-key-bindings '(("C-<backspace>" . delete-indentation)
                                 ("C-h C-s"       . iensu/toggle-scratch-buffer)
                                 ("C-x C-b"       . ibuffer)
@@ -283,11 +283,11 @@ Add a bunch of globally applied keybindings.
                                 ("u"   . revert-buffer)
                                 ("å"   . iensu/eshell))
                               'iensu-map)
-#+END_SRC
+#+end_src
 
 Enable window (visible buffer) navigation with =<shift>-<direction>=.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (windmove-default-keybindings)
 
   ;; Resolve org-mode conflicts
@@ -296,13 +296,13 @@ Enable window (visible buffer) navigation with =<shift>-<direction>=.
   (add-hook 'org-shiftleft-final-hook 'windmove-left)
   (add-hook 'org-shiftdown-final-hook 'windmove-down)
   (add-hook 'org-shiftright-final-hook 'windmove-right)
-#+END_SRC
+#+end_src
 
 ** External package installation
 
 Setup =package.el= and =use-package= for clean package installation.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   ;; --- Setting up package.el
   (require 'package)
 
@@ -321,11 +321,11 @@ Setup =package.el= and =use-package= for clean package installation.
   (eval-when-compile
     (require 'use-package)
     (setq use-package-always-ensure t))
-#+END_SRC
+#+end_src
 
 ** Make it pretty
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   ;; Fix titlebar on MacOS
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearence . dark))
@@ -356,22 +356,22 @@ Setup =package.el= and =use-package= for clean package installation.
   (global-font-lock-mode 1)
 
   (setq-default cursor-type '(bar . 2))
-#+END_SRC
+#+end_src
 
 ** Utility packages
 
 *** Make binaries on the =PATH= accessible in Emacs.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package exec-path-from-shell
     :init
     (setq exec-path-from-shell-check-startup-files nil)
     (exec-path-from-shell-initialize))
-#+END_SRC
+#+end_src
 
 *** Remember recent files.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
     (defun iensu--recentf-hook ()
       (add-to-list 'recentf-exclude (iensu--config-file ".local/recentf"))
       (setq recentf-save-file (iensu--config-file ".local/recentf")
@@ -382,17 +382,17 @@ Setup =package.el= and =use-package= for clean package installation.
       :init
       (recentf-mode 1)
       (add-hook 'recentf-mode-hook #'iensu--recentf-hook))
-#+END_SRC
+#+end_src
 
 *** Password entry in minibuffer
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package pinentry :init (pinentry-start))
-#+END_SRC
+#+end_src
 
 *** Editor functionality
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package editorconfig
     :delight
     :init
@@ -436,31 +436,31 @@ Setup =package.el= and =use-package= for clean package installation.
   (use-package undo-tree
     :delight
     :init (global-undo-tree-mode))
-#+END_SRC
+#+end_src
 
 *** Searching and finding stuff
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package smex
     :init
     (smex-initialize))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package deadgrep)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package wgrep
     :init
     (autoload 'wgrep-ag-setup "wgrep-ag")
     (add-hook 'ag-mode-hook 'wgrep-ag-setup))
 
   (use-package wgrep-ag)
-#+END_SRC
+#+end_src
 
 **** Ivy|Counsel
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package counsel
     :delight ivy-mode
     :init
@@ -509,11 +509,11 @@ Setup =package.el= and =use-package= for clean package installation.
     :delight
     :config
     (prescient-persist-mode))
-#+END_SRC
+#+end_src
 
 *** Project management
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package magit
     :bind (("C-x g" . magit-status))
     :config
@@ -541,11 +541,11 @@ Setup =package.el= and =use-package= for clean package installation.
     :after magit)
 
   (use-package counsel-projectile :init (counsel-projectile-mode 1))
-#+END_SRC
+#+end_src
 
 *** File browsing
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package dired+
     :load-path (lambda () (iensu--config-file "packages"))
     :config
@@ -559,11 +559,11 @@ Setup =package.el= and =use-package= for clean package installation.
     (bind-keys :map dired-mode-map
                ("<tab>" . dired-subtree-insert)
                ("<backtab>" . dired-subtree-remove)))
-#+END_SRC
+#+end_src
 
 *** Spellchecking
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package flyspell
     :delight
     '(:eval (concat " FlyS:" (or ispell-local-dictionary ispell-dictionary)))
@@ -606,11 +606,11 @@ Setup =package.el= and =use-package= for clean package installation.
       (ring-insert iensu--language-ring language)
       (ispell-change-dictionary language)
       (message (format "Switched to dictionary: %s" language))))
-#+END_SRC
+#+end_src
 
 *** Treemacs
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package winum
     :ensure t)
 
@@ -633,23 +633,23 @@ Setup =package.el= and =use-package= for clean package installation.
   (use-package treemacs-magit
     :ensure t
     :after treemacs magit)
-#+END_SRC
+#+end_src
 
 ** Org-mode
 
 *** Custom variables
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defvar iensu-org-dir)
   (defvar iensu-org-files-alist)
   (defvar iensu-org-refile-targets)
   (defvar iensu-org-agenda-files)
   (defvar iensu-org-capture-templates-alist)
-#+END_SRC
+#+end_src
 
 *** Helper functions
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun iensu--org-remove-file-if-match (&rest regexes)
     "Return a list of org file entries from `iensu-org-files-alist' not matching REGEXES."
     (let ((regex (string-join regexes "\\|")))
@@ -669,11 +669,11 @@ Setup =package.el= and =use-package= for clean package installation.
   (defun iensu-org-file (key)
         "Return file path for org file matching KEY. KEY must be in `iensu-org-files-alist'."
         (cadr (assoc key iensu-org-files-alist)))
-#+END_SRC
+#+end_src
 
 *** Org directory and file definitions
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (setq iensu-org-dir "~/Dropbox/org")
 
   (setq iensu-org-files-alist
@@ -697,13 +697,13 @@ Setup =package.el= and =use-package= for clean package installation.
                                          "refile"))
 
   (setq org-archive-location "archive/%s_archive::")
-#+END_SRC
+#+end_src
 
 *** Org-Capture configuration
 
 Enables capturing to file in the project root =<PROJECT-ROOT>/.project-notes.org=.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defvar iensu-org-capture-project-notes-file)
 
   (defun iensu/set-org-capture-project-notes-file (&rest args)
@@ -711,11 +711,11 @@ Enables capturing to file in the project root =<PROJECT-ROOT>/.project-notes.org
       (setq iensu-org-capture-project-notes-file (concat root-dir ".project-notes.org"))))
 
   (advice-add 'org-capture :before 'iensu/set-org-capture-project-notes-file)
-#+END_SRC
+#+end_src
 
 Setup capture templates.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (setq iensu-org-capture-templates-alist
         `(("t" "TODO" entry (file ,(iensu-org-file 'refile))
            ,(concat "* TODO %?\n"
@@ -775,11 +775,11 @@ Setup capture templates.
            ,(concat "* %^{STATE|TODO|DONE} %^{} <%^{}> %^g\n\n"))))
 
   (setq org-capture-templates iensu-org-capture-templates-alist)
-#+END_SRC
+#+end_src
 
 *** Main org-mode configuration
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun iensu--org-mode-hook ()
     (dolist (lang-mode '(("javascript" . js2) ("es" . es)))
       (add-to-list 'org-src-lang-modes lang-mode))
@@ -825,11 +825,11 @@ Setup capture templates.
           org-refile-use-outline-path 'file
           org-latex-listings t
           org-cycle-separator-lines 1))
-#+END_SRC
+#+end_src
 
 *** Org-agenda configuration
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (require 'org-agenda)
 
   (setq iensu-org-agenda-files
@@ -859,7 +859,7 @@ Setup capture templates.
         org-agenda-dim-blocked-tasks nil
         org-deadline-warning-days -7
         org-agenda-block-separator "")
-#+END_SRC
+#+end_src
 
 **** Project-based TODO lists
 
@@ -867,7 +867,7 @@ Create a TODO list based on TODO items in a project's =.project-notes.org= file.
 The =org-agenda-files= variable is temporarily set the only the project notes
 file and then reverted back to its previous value upon closing the TODO list buffer.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defvar iensu--project-agenda-buffer-name "*Project Agenda*")
 
   (defun iensu/project-todo-list ()
@@ -889,11 +889,11 @@ file and then reverted back to its previous value upon closing the TODO list buf
 
   ;; Reset org-agenda-files when the project TODO list buffer is closed
   (add-hook 'kill-buffer-hook #'iensu/reset-org-agenda-files)
-#+END_SRC
+#+end_src
 
 *** Add extra language support in org source blocks
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (org-babel-do-load-languages
    'org-babel-load-languages '((emacs-lisp . t)
                                (shell . t)
@@ -903,23 +903,23 @@ file and then reverted back to its previous value upon closing the TODO list buf
 
   ;; Add support for YAML files
   (defun org-babel-execute:yaml (body params) body)
-#+END_SRC
+#+end_src
 
 *** Add more block expansion templates
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (let ((additional-org-templates (if (version< (org-version) "9.2")
-                                      '(("ssh" "#+BEGIN_SRC shell \n?\n#+END_SRC")
-                                        ("sel" "#+BEGIN_SRC emacs-lisp \n?\n#+END_SRC"))
+                                      '(("ssh" "#+begin_src shell \n?\n#+end_src")
+                                        ("sel" "#+begin_src emacs-lisp \n?\n#+end_src"))
                                     '(("ssh" . "src shell")
                                       ("sel" . "src emacs-lisp")))))
     (dolist (template additional-org-templates)
       (add-to-list 'org-structure-template-alist template)))
-#+END_SRC
+#+end_src
 
 *** Add extra exporting options
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   ;; presentations using LaTeX
   (require 'ox-beamer)
   ;; standard markdown
@@ -929,11 +929,11 @@ file and then reverted back to its previous value upon closing the TODO list buf
     :init
     (eval-after-load "org"
       '(require 'ox-gfm nil t)))
-#+END_SRC
+#+end_src
 
 *** Customize TODO keyword sequence
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (setq org-todo-keywords
         '((sequence "TODO(t)" "DOING(d!)" "BLOCKED(b@/!)"
                     "|"
@@ -943,15 +943,15 @@ file and then reverted back to its previous value upon closing the TODO list buf
         '(("BLOCKED"   . (:foreground "#dd0066" :weight bold))
           ("CANCELED" . (:foreground "#6272a4"))
           ("POSTPONED" . (:foreground "#3388ff"))))
-#+END_SRC
+#+end_src
 
 *** Customize PRIORITIES
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (setq org-highest-priority ?A
         org-default-priority ?D
         org-lowest-priority  ?E)
-#+END_SRC
+#+end_src
 
 *** Table of contents-generation
 
@@ -969,21 +969,21 @@ headings marked with a =:TOC:= tag.
 
 Make view more compact
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (setq org-cycle-separator-lines 0)
-#+END_SRC
+#+end_src
 
 Only display one bullet per headline for a cleaner look.
 
-#+BEGIN_SRC
+#+begin_src
   (use-package org-bullets
     :init
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
     :config
     (setq org-bullets-bullet-list '("*")))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun iensu--org-mode-restyle ()
     ; Make all headlines have the same size and weight
     (dolist (heading-num (number-sequence 1 8))
@@ -998,35 +998,35 @@ Only display one bullet per headline for a cleaner look.
     (set-face-attribute 'org-headline-done nil :strike-through nil :foreground "#cccccc"))
 
   (add-hook 'after-load-theme-hook #'iensu--org-mode-restyle)
-#+END_SRC
+#+end_src
 
 Clean-up agenda view
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (setq org-agenda-prefix-format
         '((agenda . "   %?-12t    % s")
           (todo . " %i %-12:c")
           (tags . " %i %-12:c")
           (search . " %i %-12:c")))
-#+END_SRC
+#+end_src
 
 *** Swedish holidays
 
 Update the calendar to contain Swedish holidays etc.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (load-file (iensu--config-file "packages/kalender.el"))
-#+END_SRC
+#+end_src
 
 *** Capturing outside of emacs
 
 =org-protocol= enables capturing from outside of Emacs.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (require 'org-protocol)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defadvice org-capture-finalize
       (after delete-capture-frame activate)
     "Advise capture-finalize to close the frame"
@@ -1038,24 +1038,24 @@ Update the calendar to contain Swedish holidays etc.
     "Advise capture-destroy to close the frame"
     (if (equal "capture" (frame-parameter nil 'name))
         (delete-frame)))
-#+END_SRC
+#+end_src
 
 *** Save org buffers every 5 minutes
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defvar iensu--timer:org-save-buffers nil
     "Org save buffers timer object. Can be used to cancel the timer.")
 
   (setq iensu--timer:org-save-buffers
         (run-at-time t (* 5 60) #'iensu/org-save-buffers))
-#+END_SRC
+#+end_src
 
 *** Google calendar integration
 
 Stores google calendar events to my org =work-calendar= file. Sync by running
 =M-x org-gcal-sync=.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package org-gcal
     :init
     (setq org-gcal-token-file (iensu--config-file ".local/org-gcal/org-gcal-token")
@@ -1064,11 +1064,11 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (setq org-gcal-client-id *user-gcal-client-id*
           org-gcal-client-secret *user-gcal-client-secret*
           org-gcal-file-alist `(("jens.ostlund@futurice.com" . ,(iensu-org-file 'work-calendar)))))
-#+END_SRC
+#+end_src
 
 *** Trello integration
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package org-trello)
 
   (defun iensu/org-trello-sync-buffer ()
@@ -1082,12 +1082,12 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
   (defun iensu/org-trello-sync-comment ()
     (interactive)
     (org-trello-sync-comment 'from-trello))
-#+END_SRC
+#+end_src
 
 
 ** Email configuration
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defvar iensu--timer:mail-updates nil
     "Mail updates timer object. Can be used to cancel the recurring updates.")
 
@@ -1226,17 +1226,17 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
               (lambda ()
                 (org-mime-change-element-style
                  "blockquote" "border-left: 2px solid gray; padding-left: 4px;"))))
-#+END_SRC
+#+end_src
 
 Unblock offlineimap before fetching email
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (advice-add 'mu4e-update-mail-and-index :before 'iensu/unblock-offlineimap)
-#+END_SRC
+#+end_src
 
 ** ERC
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (require 'erc)
 
   (defun iensu/erc-freenode ()
@@ -1262,13 +1262,13 @@ Unblock offlineimap before fetching email
   (use-package erc-hl-nicks :after erc)
 
   (use-package erc-image :after erc)
-#+END_SRC
+#+end_src
 
 ** Programming
 
 Setup autocompletion.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
     (use-package company
       :delight
       :init (global-company-mode)
@@ -1289,11 +1289,11 @@ Setup autocompletion.
       :config
       (setq company-quickhelp-delay 1)
       (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin))
-#+END_SRC
+#+end_src
 
 Setup snippet expansions.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package yasnippet
     :delight yas-minor-mode
     :init
@@ -1303,11 +1303,11 @@ Setup snippet expansions.
     (add-hook 'snippet-mode-hook (lambda ()
                                    (setq mode-require-final-newline nil
                                          require-final-newline nil))))
-#+END_SRC
+#+end_src
 
 Setup flycheck for on the fly linting.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
     (use-package flycheck
       :init
       (global-flycheck-mode t)
@@ -1318,11 +1318,11 @@ Setup flycheck for on the fly linting.
       :init
       (eval-after-load 'flycheck
         '(add-hook 'flycheck-mode-hook 'flycheck-popup-tip-mode)))
-#+END_SRC
+#+end_src
 
 *** LSP mode
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package lsp-mode
     :commands lsp
     :bind
@@ -1348,13 +1348,13 @@ Setup flycheck for on the fly linting.
   (use-package lsp-treemacs)
 
   (use-package lsp-ivy)
-#+END_SRC
+#+end_src
 
 *** Web development
 
 **** General
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package emmet-mode
     :config
     (add-hook 'emmet-mode-hook
@@ -1403,11 +1403,11 @@ Setup flycheck for on the fly linting.
       (org-babel-do-load-languages
        'org-babel-load-languages
        '((restclient . t)))))
-#+END_SRC
+#+end_src
 
 **** CSS
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package rainbow-mode
     :config
     (add-hook 'css-mode-hook #'rainbow-mode))
@@ -1423,11 +1423,11 @@ Setup flycheck for on the fly linting.
                 ("C-." . company-complete-common-or-cycle))
     :config
     (add-hook 'css-mode-hook #'iensu--setup-css))
-#+END_SRC
+#+end_src
 
 **** JavaScript
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun iensu/-setup-javascript ()
     (electric-indent-mode t)
     (rainbow-delimiters-mode 1)
@@ -1492,18 +1492,18 @@ Setup flycheck for on the fly linting.
                   (append flycheck-disabled-checkers '(javascript-jshint)))
     (add-hook 'web-mode-hook 'emmet-mode)
     (flycheck-add-mode 'javascript-eslint 'web-mode))
-#+END_SRC
+#+end_src
 
 Use =web-mode= if file is a choo template file.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (add-to-list 'magic-mode-alist
                '("^const html = require.*choo/html" . web-mode))
-#+END_SRC
+#+end_src
 
 **** TypeScript
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun iensu/setup-typescript ()
     (interactive)
     (tide-setup)
@@ -1549,28 +1549,28 @@ Use =web-mode= if file is a choo template file.
               (lambda ()
                 (when (not (iensu/use-prettier))
                   (add-hook 'before-save-hook #'tide-format-before-save nil :local)))))
-#+END_SRC
+#+end_src
 
 **** GraphQL
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package graphql-mode)
-#+END_SRC
+#+end_src
 
 *** Elm
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package elm-mode
     :config
     (setq elm-tags-on-save t
           elm-sort-imports-on-save t
           elm-format-on-save t)
     (add-hook 'elm-mode-hook #'lsp))
-#+END_SRC
+#+end_src
 
 *** Markdown
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package markdown-mode
     :commands (markdown-mode gfm-mode)
     :mode (("\\.md\\'"       . gfm-mode)
@@ -1578,49 +1578,49 @@ Use =web-mode= if file is a choo template file.
     :config
     (add-hook 'markdown-mode-hook #'iensu/text-editing-support)
     (add-hook 'gfm-mode-hook #'iensu/text-editing-support))
-#+END_SRC
+#+end_src
 
 *** YAML
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package yaml-mode)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package highlight-indentation
     :config
     (add-hook 'yaml-mode-hook (lambda () (highlight-indentation-mode t))))
-#+END_SRC
+#+end_src
 
 *** Python
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package elpy
     :init
     (elpy-enable))
-#+END_SRC
+#+end_src
 
 *** Rust
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package rust-mode
     :bind (:map rust-mode-map
                 ("C-c C-c" . rust-run))
     :config
     (add-hook 'rust-mode-hook #'lsp)
     (setq rust-format-on-save t))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package flycheck-rust
     :init
     (with-eval-after-load 'rust-mode
       (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
-#+END_SRC
+#+end_src
 
 *** Terraform
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun iensu--terraform-format ()
     (when (executable-find "terraform")
       (let ((fname (buffer-file-name)))
@@ -1633,19 +1633,19 @@ Use =web-mode= if file is a choo template file.
     (add-hook 'terraform-mode-hook
               (lambda ()
                 (add-hook 'after-save-hook #'iensu--terraform-format nil 'local))))
-#+END_SRC
+#+end_src
 *** Graphviz Dot Mode
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package graphviz-dot-mode)
 
   (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot))
   (define-key graphviz-dot-mode-map (kbd "C-c C-c") 'graphviz-dot-preview)
-#+END_SRC
+#+end_src
 
 *** Java
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.java$" . java-mode))
   (add-hook 'java-mode-hook (lambda ()
                               (electric-pair-mode t)))
@@ -1671,20 +1671,20 @@ Use =web-mode= if file is a choo template file.
     (dap-ui-mode 1)
     (dap-tooltip-mode 1)
     (tooltip-mode 1))
-#+END_SRC
+#+end_src
 *** SQL
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.psql$" . sql-mode))
   (add-hook 'sql-mode-hook
             (lambda ()
               (when (string= (file-name-extension buffer-file-name) "psql")
                 (setq-local sql-product 'postgres))))
-#+END_SRC
+#+end_src
 
 ** Load theme
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package dracula-theme :ensure t)
 
   (when (display-graphic-p)
@@ -1700,11 +1700,11 @@ Use =web-mode= if file is a choo template file.
                       :background (face-background 'default)
                       :foreground "mediumspringgreen"
                       :weight 'extra-bold)
-#+END_SRC
+#+end_src
 
 ** Custom commands
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun iensu/open-init-file ()
     "Open my emacs configuration file."
     (interactive)
@@ -1804,14 +1804,14 @@ Use =web-mode= if file is a choo template file.
     (if (projectile-project-root)
         (projectile-run-eshell)
       (eshell :new-session)))
-#+END_SRC
+#+end_src
 
 ** Loading private settings
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (load custom-file 'noerror)
 
   (let ((private-settings (expand-file-name "private.el" user-emacs-directory)))
     (when (file-exists-p private-settings)
       (load private-settings)))
-#+END_SRC
+#+end_src
