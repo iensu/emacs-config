@@ -677,13 +677,18 @@ Setup capture templates.
                     "#+END_QUOTE\n\n\n%?")
            :prepend t)
 
-          ("n" "Project comment" entry (file+headline iensu-org-capture-project-notes-file "Notes")
+          ("m" "Project note" entry (file+headline iensu-org-capture-project-notes-file "Notes")
+           ,(concat "* %^{Title}\n"
+                    "%U\n\n"
+                    "%?\n\n"))
+
+          ("n" "Project note with link" entry (file+headline iensu-org-capture-project-notes-file "Notes")
            ,(concat "* %^{Title}\n"
                     "%U\n\n"
                     "Link: %a\n\n"
                     "%?\n\n"))
 
-          ("N" "Project comment with quote" entry (file+headline iensu-org-capture-project-notes-file "Notes")
+          ("N" "Project note with link + quote" entry (file+headline iensu-org-capture-project-notes-file "Notes")
            ,(concat "* %^{Title}\n"
                     "%U\n\n"
                     "Link: %a\n"
