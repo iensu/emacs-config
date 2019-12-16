@@ -68,6 +68,7 @@ Basic configuration which does not depend on any external packages.
         custom-file (iensu--config-file "custom.el")
 
         gc-cons-threshold 100000000
+        max-lisp-eval-depth 2000
 
         inhibit-startup-message t
         ring-bell-function 'ignore
