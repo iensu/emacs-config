@@ -289,6 +289,13 @@ Enable window (visible buffer) navigation with =<shift>-<direction>=.
 
 #+BEGIN_SRC emacs-lisp
   (windmove-default-keybindings)
+
+  ;; Resolve org-mode conflicts
+  (setq org-replace-disputed-keys t)
+  (add-hook 'org-shiftup-final-hook 'windmove-up)
+  (add-hook 'org-shiftleft-final-hook 'windmove-left)
+  (add-hook 'org-shiftdown-final-hook 'windmove-down)
+  (add-hook 'org-shiftright-final-hook 'windmove-right)
 #+END_SRC
 
 ** External package installation
@@ -817,7 +824,6 @@ Setup capture templates.
           org-refile-allow-creating-parent-nodes 'confirm
           org-refile-use-outline-path 'file
           org-latex-listings t
-          org-src-fontify-natively t
           org-cycle-separator-lines 1))
 #+END_SRC
 
@@ -1008,15 +1014,6 @@ Update the calendar to contain Swedish holidays etc.
 
 #+BEGIN_SRC emacs-lisp
   (load-file (iensu--config-file "packages/kalender.el"))
-#+END_SRC
-
-*** Don't interfere with windmove keybindings
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'org-shiftup-final-hook 'windmove-up)
-  (add-hook 'org-shiftleft-final-hook 'windmove-left)
-  (add-hook 'org-shiftdown-final-hook 'windmove-down)
-  (add-hook 'org-shiftright-final-hook 'windmove-right)
 #+END_SRC
 
 *** Capturing outside of emacs
