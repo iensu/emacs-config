@@ -1,4 +1,64 @@
 * Emacs configuration
+
+** Table of Contents                                                    :TOC_3_gh:
+- [[#emacs-configuration][Emacs configuration]]
+  - [[#helper-functions][Helper functions]]
+  - [[#custom-hooks][Custom hooks]]
+  - [[#baseline-setup][Baseline setup]]
+  - [[#sane-editor-defaults][Sane editor defaults]]
+  - [[#global-keybindings][Global keybindings]]
+    - [[#setting-up-keys-for-macos][Setting up keys for macOS]]
+    - [[#setting-up-a-custom-keymap][Setting up a custom keymap]]
+    - [[#various-global-keybindings][Various global keybindings]]
+  - [[#external-package-installation][External package installation]]
+  - [[#make-it-pretty][Make it pretty]]
+  - [[#utility-packages][Utility packages]]
+    - [[#make-binaries-on-the-path-accessible-in-emacs][Make binaries on the =PATH= accessible in Emacs.]]
+    - [[#remember-recent-files][Remember recent files.]]
+    - [[#password-entry-in-minibuffer][Password entry in minibuffer]]
+    - [[#editor-functionality][Editor functionality]]
+    - [[#searching-and-finding-stuff][Searching and finding stuff]]
+    - [[#project-management][Project management]]
+    - [[#file-browsing][File browsing]]
+    - [[#spellchecking][Spellchecking]]
+    - [[#treemacs][Treemacs]]
+  - [[#org-mode][Org-mode]]
+    - [[#custom-variables][Custom variables]]
+    - [[#helper-functions-1][Helper functions]]
+    - [[#org-directory-and-file-definitions][Org directory and file definitions]]
+    - [[#org-capture-configuration][Org-Capture configuration]]
+    - [[#main-org-mode-configuration][Main org-mode configuration]]
+    - [[#org-agenda-configuration][Org-agenda configuration]]
+    - [[#add-extra-language-support-in-org-source-blocks][Add extra language support in org source blocks]]
+    - [[#add-more-block-expansion-templates][Add more block expansion templates]]
+    - [[#add-extra-exporting-options][Add extra exporting options]]
+    - [[#customize-todo-keyword-sequence][Customize TODO keyword sequence]]
+    - [[#customize-priorities][Customize PRIORITIES]]
+    - [[#table-of-contents-generation][Table of contents-generation]]
+    - [[#make-it-prettier][Make it prettier]]
+    - [[#swedish-holidays][Swedish holidays]]
+    - [[#capturing-outside-of-emacs][Capturing outside of emacs]]
+    - [[#save-org-buffers-every-5-minutes][Save org buffers every 5 minutes]]
+    - [[#google-calendar-integration][Google calendar integration]]
+    - [[#trello-integration][Trello integration]]
+  - [[#email-configuration][Email configuration]]
+  - [[#erc][ERC]]
+  - [[#programming][Programming]]
+    - [[#lsp-mode][LSP mode]]
+    - [[#web-development][Web development]]
+    - [[#elm][Elm]]
+    - [[#markdown][Markdown]]
+    - [[#yaml][YAML]]
+    - [[#python][Python]]
+    - [[#rust][Rust]]
+    - [[#terraform][Terraform]]
+    - [[#graphviz-dot-mode][Graphviz Dot Mode]]
+    - [[#java][Java]]
+    - [[#sql][SQL]]
+  - [[#load-theme][Load theme]]
+  - [[#custom-commands][Custom commands]]
+  - [[#loading-private-settings][Loading private settings]]
+
 ** Helper functions
 
 Define helper functions needed for the rest of the configuration
@@ -884,6 +944,18 @@ file and then reverted back to its previous value upon closing the TODO list buf
         org-default-priority ?D
         org-lowest-priority  ?E)
 #+END_SRC
+
+*** Table of contents-generation
+
+Automatically generate Table of Contents entries for the current org file under
+headings marked with a =:TOC:= tag.
+
+#+begin_src emacs-lisp
+  (use-package toc-org
+    :ensure t
+    :config
+    (add-hook 'org-mode-hook 'toc-org-mode))
+#+end_src
 
 *** Make it prettier
 
