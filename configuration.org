@@ -217,6 +217,7 @@ Add a bunch of globally applied keybindings.
                                 ("m"   . mu4e-headers-search)
                                 ("n t" . iensu/npm-test)
                                 ("p"   . list-processes)
+                                ("P"   . iensu/project-todo-list)
                                 ("s"   . deadgrep)
                                 ("t"   . toggle-truncate-lines)
                                 ("u"   . revert-buffer)
@@ -772,7 +773,7 @@ Setup capture templates.
                       (lambda (fname) (string-match-p "^work\\..+\\.org$" fname))
                       (directory-files iensu-org-dir)))
     (let ((file (expand-file-name file-name iensu-org-dir)))
-      (add-to-list 'org-agenda-files file)
+      (add-to-list 'iensu-org-agenda-files file)
       (add-to-list 'org-refile-targets `(,file :maxlevel . 3))))
 
   (dolist (agenda-command
@@ -792,6 +793,36 @@ Setup capture templates.
         org-agenda-dim-blocked-tasks nil
         org-deadline-warning-days -7
         org-agenda-block-separator "")
+#+END_SRC
+
+**** Project-based TODO lists
+
+Create a TODO list based on TODO items in a project's =.project-notes.org= file.
+The =org-agenda-files= variable is temporarily set the only the project notes
+file and then reverted back to its previous value upon closing the TODO list buffer.
+
+#+BEGIN_SRC emacs-lisp
+  (defvar iensu--project-agenda-buffer-name "*Project Agenda*")
+
+  (defun iensu/project-todo-list ()
+    (interactive)
+    (let ((project-notes-file (expand-file-name ".project-notes.org"
+                                                (projectile-project-root))))
+      (if (file-exists-p project-notes-file)
+          (progn
+            (setq org-agenda-files `(,project-notes-file))
+            (org-todo-list)
+            (rename-buffer iensu--project-agenda-buffer-name 'unique))
+        (message "Could not locate any project notes file"))))
+
+  (defun iensu/reset-org-agenda-files ()
+    (interactive)
+    (when (string-equal iensu--project-agenda-buffer-name
+                        (buffer-name (current-buffer)))
+      (setq org-agenda-files iensu-org-agenda-files)))
+
+  ;; Reset org-agenda-files when the project TODO list buffer is closed
+  (add-hook 'kill-buffer-hook #'iensu/reset-org-agenda-files)
 #+END_SRC
 
 *** Add extra language support in org source blocks
