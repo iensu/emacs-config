@@ -1,9 +1,8 @@
 # -*- mode: snippet; require-final-newline: nil  -*-
-# name: switch
+# name: switch statement
 # key: sw
-# binding:
 # --
-switch ($1) {
+switch (${1:variable}) {
 default:
-return $0;
+return ${0:defaultResult};
 }

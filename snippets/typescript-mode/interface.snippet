@@ -2,6 +2,7 @@
 # name: interface
 # key: ifc
 # --
-interface $1 {
-          $2
+interface ${1:name} {
+${2:property}: ${3:type};
+$0
 };
