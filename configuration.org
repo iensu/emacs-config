@@ -908,11 +908,13 @@ file and then reverted back to its previous value upon closing the TODO list buf
 *** Add more block expansion templates
 
 #+BEGIN_SRC emacs-lisp
-    (let ((additional-org-templates '(("ssh" "#+BEGIN_SRC shell \n?\n#+END_SRC")
-                                      ("sel" "#+BEGIN_SRC emacs-lisp \n?\n#+END_SRC")
-                                      ("n" "#+NAME: ?"))))
-      (dolist (template additional-org-templates)
-        (add-to-list 'org-structure-template-alist template)))
+  (let ((additional-org-templates (if (version< (org-version) "9.2")
+                                      '(("ssh" "#+BEGIN_SRC shell \n?\n#+END_SRC")
+                                        ("sel" "#+BEGIN_SRC emacs-lisp \n?\n#+END_SRC"))
+                                    '(("ssh" . "src shell")
+                                      ("sel" . "src emacs-lisp")))))
+    (dolist (template additional-org-templates)
+      (add-to-list 'org-structure-template-alist template)))
 #+END_SRC
 
 *** Add extra exporting options
