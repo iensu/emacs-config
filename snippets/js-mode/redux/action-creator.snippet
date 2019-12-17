@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: Redux action creator
+# key: rac
+# group: redux
+# --
+function ${1:name}(${2:_args}) {
+return {
+type: ${3:type},
+payload: ${0:payload},
+}
+}
