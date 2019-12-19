@@ -219,6 +219,15 @@ Start the emacsclient server.
   (server-start)
 #+end_src
 
+Use [[https://github.com/BurntSushi/ripgrep][ripgrep]] as the default grep tool. Taken from https://stegosaurusdormant.com/emacs-ripgrep/.
+
+#+begin_src emacs-lisp
+  (when (executable-find "rg")
+    (grep-apply-setting
+     'grep-find-command
+     '("rg -n -H --no-heading -e '' $(git rev-parse --show-toplevel || pwd)" . 27)))
+#+end_src
+
 ** Global keybindings
 
 *** Setting up keys for macOS
