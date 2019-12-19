@@ -508,13 +508,11 @@ Setup =package.el= and =use-package= for clean package installation.
     (set-face-attribute 'ivy-posframe nil :background "grey16"))
 
   (use-package ivy-posframe
-    :ensure t
     :delight
     :hook
     (after-load-theme . iensu--load-ivy-posframe))
 
   (use-package ivy-prescient
-    :ensure t
     :delight
     :config
     (prescient-persist-mode))
@@ -546,7 +544,6 @@ Setup =package.el= and =use-package= for clean package installation.
         (add-to-list 'projectile-globally-ignored-files file))))
 
   (use-package forge
-    :ensure t
     :after magit)
 
   (use-package counsel-projectile :init (counsel-projectile-mode 1))
@@ -620,11 +617,9 @@ Setup =package.el= and =use-package= for clean package installation.
 *** Treemacs
 
 #+begin_src emacs-lisp
-  (use-package winum
-    :ensure t)
+  (use-package winum)
 
   (use-package treemacs
-    :ensure t
     :defer t
     :init
     (with-eval-after-load 'winum
@@ -640,7 +635,6 @@ Setup =package.el= and =use-package= for clean package installation.
           ("C-x t w"   . treemacs-switch-workspace)))
 
   (use-package treemacs-magit
-    :ensure t
     :after treemacs magit)
 #+end_src
 
@@ -969,7 +963,6 @@ headings marked with a =:TOC:= tag.
 
 #+begin_src emacs-lisp
   (use-package toc-org
-    :ensure t
     :config
     (add-hook 'org-mode-hook 'toc-org-mode))
 #+end_src
@@ -1338,7 +1331,7 @@ Setup flycheck for on the fly linting.
     :config
     (setq lsp-prefer-flymake nil))
 
-  (use-package lsp-ui :ensure tq
+  (use-package lsp-ui
     :init
     (setq lsp-ui-doc-delay 1
           lsp-ui-doc-border "violet"
@@ -1406,7 +1399,6 @@ Setup flycheck for on the fly linting.
     (add-to-list 'auto-mode-alist '("\\.restclient$" . restclient-mode)))
 
   (use-package ob-restclient
-    :ensure t
     :init
     (eval-after-load "org"
       (org-babel-do-load-languages
@@ -1660,7 +1652,6 @@ Use =web-mode= if file is a choo template file.
                               (electric-pair-mode t)))
 
   (use-package lsp-java
-    :ensure t
     :after lsp
     :init
     (add-hook 'java-mode-hook 'lsp)
@@ -1673,7 +1664,6 @@ Use =web-mode= if file is a choo template file.
                 ("C-c l i" . lsp-java-add-import))
 
   (use-package dap-mode
-    :ensure t
     :after lsp-java
     :config
     (dap-mode 1)
