@@ -167,7 +167,7 @@ Basic configuration which does not depend on any external packages.
 
 ** Sane editor defaults
 
-Set actual editor defaults to be more in line with expectations.
+Set editor defaults to be more in line with expectations.
 
 #+begin_src emacs-lisp
   (setq-default indent-tabs-mode nil
