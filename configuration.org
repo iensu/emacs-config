@@ -55,6 +55,7 @@
     - [[#graphviz-dot-mode][Graphviz Dot Mode]]
     - [[#java][Java]]
     - [[#sql][SQL]]
+    - [[#docker][Docker]]
   - [[#load-theme][Load theme]]
   - [[#custom-commands][Custom commands]]
   - [[#loading-private-settings][Loading private settings]]
@@ -1688,6 +1689,13 @@ Use =web-mode= if file is a choo template file.
             (lambda ()
               (when (string= (file-name-extension buffer-file-name) "psql")
                 (setq-local sql-product 'postgres))))
+#+end_src
+*** Docker
+
+https://github.com/Silex/docker.el
+
+#+begin_src emacs-lisp
+  (use-package docker)
 #+end_src
 
 ** Load theme
