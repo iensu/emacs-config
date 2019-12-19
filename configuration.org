@@ -1691,17 +1691,17 @@ https://github.com/Silex/docker.el
 ** Load theme
 
 #+begin_src emacs-lisp
-  (use-package dracula-theme :ensure t)
+  ;; (use-package dracula-theme)
 
   (when (display-graphic-p)
-    (load-theme 'dracula t)
-                                          ; (load-theme 'deeper-blue t)
-                                          ;    (load-theme 'wombat t)
+    ;; (load-theme 'dracula t)
+    (load-theme 'deeper-blue t)
+    ;; (load-theme 'wombat t)
     )
 
-  (set-face-attribute 'default nil :height 130)
-  (set-face-foreground 'mode-line "black")
-  (set-face-background 'mode-line "#dbffdb")
+  (set-face-attribute 'default nil :height 140)
+  ;;  (set-face-foreground 'mode-line "black")
+  ;;  (set-face-background 'mode-line "#dbffdb")
   (set-face-attribute 'show-paren-match nil
                       :background (face-background 'default)
                       :foreground "mediumspringgreen"
