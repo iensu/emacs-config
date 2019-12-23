@@ -1579,8 +1579,8 @@ Setup flycheck for on the fly linting.
 
 #+begin_src emacs-lisp
   (use-package highlight-indentation
-    :config
-    (add-hook 'yaml-mode-hook (lambda () (highlight-indentation-mode t))))
+    :hook
+    (yaml-mode . highlight-indentation-mode))
 #+end_src
 
 *** Python
@@ -1597,16 +1597,17 @@ Setup flycheck for on the fly linting.
   (use-package rust-mode
     :bind (:map rust-mode-map
                 ("C-c C-c" . rust-run))
-    :config
-    (add-hook 'rust-mode-hook #'lsp)
-    (setq rust-format-on-save t))
+    :hook
+    (rust-mode . lsp)
+    :custom
+    (rust-format-on-save t))
 #+end_src
 
 #+begin_src emacs-lisp
   (use-package flycheck-rust
-    :init
-    (with-eval-after-load 'rust-mode
-      (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
+    :after (rust-mode)
+    :hook
+    (flycheck-mode . flycheck-rust-setup))
 #+end_src
 
 *** Terraform
