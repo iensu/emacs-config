@@ -385,14 +385,12 @@ Setup =package.el= and =use-package= for clean package installation.
 #+begin_src emacs-lisp
   (use-package recentf
     :custom
-    (recentf-save-file (iensu--config-file ".local/recentf"))
     (recentf-max-menu-items 50)
     :config
-    ;; Do not show recentf file as a recent file candidate
-    (add-to-list 'recentf-exclude (iensu--config-file ".local/recentf"))
     (recentf-load-list)
     :init
-    (recentf-mode 1))
+    (recentf-mode 1)
+    (setq recentf-save-file "~/.emacs.d/.local/recentf"))
 #+end_src
 
 *** Password entry in minibuffer
