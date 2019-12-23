@@ -335,9 +335,16 @@ Setup =package.el= and =use-package= for clean package installation.
 ** Make it pretty
 
 #+begin_src emacs-lisp
-  ;; Fix titlebar on MacOS
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  (add-to-list 'default-frame-alist '(ns-appearence . dark))
+  (use-package emacs
+    :custom
+    (cursor-type '(bar . 2))
+    :config
+    (global-prettify-symbols-mode 1)
+    (global-font-lock-mode 1)
+
+    ;; Fix titlebar on MacOS
+    (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+    (add-to-list 'default-frame-alist '(ns-appearence . dark)))
 
   ;; --- Modeline cleanup
   (use-package delight
@@ -356,15 +363,9 @@ Setup =package.el= and =use-package= for clean package installation.
   (use-package all-the-icons)
 
   (use-package emojify
-    :init
-    (add-hook 'text-mode-hook 'emojify-mode)
-    (add-hook 'org-mode-hook 'emojify-mode)
-    (setq emojify-emojis-dir (iensu--config-file ".local/emojis")))
-
-  (global-prettify-symbols-mode 1)
-  (global-font-lock-mode 1)
-
-  (setq-default cursor-type '(bar . 2))
+    :hook (text-mode org-mode)
+    :custom
+    (emojify-emojis-dir (iensu--config-file ".local/emojis")))
 #+end_src
 
 ** Utility packages
@@ -373,24 +374,25 @@ Setup =package.el= and =use-package= for clean package installation.
 
 #+begin_src emacs-lisp
   (use-package exec-path-from-shell
+    :custom
+    (exec-path-from-shell-check-startup-files nil)
     :init
-    (setq exec-path-from-shell-check-startup-files nil)
     (exec-path-from-shell-initialize))
 #+end_src
 
 *** Remember recent files.
 
 #+begin_src emacs-lisp
-    (defun iensu--recentf-hook ()
-      (add-to-list 'recentf-exclude (iensu--config-file ".local/recentf"))
-      (setq recentf-save-file (iensu--config-file ".local/recentf")
-            recentf-max-menu-items 50)
-      (recentf-load-list))
-
-    (use-package recentf
-      :init
-      (recentf-mode 1)
-      (add-hook 'recentf-mode-hook #'iensu--recentf-hook))
+  (use-package recentf
+    :custom
+    (recentf-save-file (iensu--config-file ".local/recentf"))
+    (recentf-max-menu-items 50)
+    :config
+    ;; Do not show recentf file as a recent file candidate
+    (add-to-list 'recentf-exclude (iensu--config-file ".local/recentf"))
+    (recentf-load-list)
+    :init
+    (recentf-mode 1))
 #+end_src
 
 *** Password entry in minibuffer
@@ -414,8 +416,8 @@ Setup =package.el= and =use-package= for clean package installation.
      ("C-S-<right>"   . mc/mark-next-like-this)
      ("C-S-<left>"    . mc/mark-previous-like-this)
      ("C-S-<mouse-1>" . mc/add-cursor-on-click))
-    :init
-    (setq mc/list-file (iensu--config-file ".local/.mc-lists.el")))
+    :custom
+    (mc/list-file (iensu--config-file ".local/.mc-lists.el")))
 
   (use-package expand-region
     :bind
@@ -489,33 +491,58 @@ Setup =package.el= and =use-package= for clean package installation.
            ("M-y"     . counsel-yank-pop)
            :map ivy-minibuffer-map
            ("M-y"     . ivy-next-line))
-    :config
-    (setq ivy-use-virtual-buffers t
-          ivy-use-selectable-prompt t
-          ivy-count-format "(%d/%d) "
-          ivy-magic-slash-non-match-action 'ivy-magic-non-match-create
-          counsel-ag-base-command "ag --nocolor --nogroup --hidden %s"))
-
-  ;; As of 2019-10-12 border colors on child frames is not working on macos...
-  (defun iensu--load-ivy-posframe ()
-    (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center))
-          ivy-posframe-width 70
-          ivy-posframe-parameters '((left-margin-width . 10)
-                                    (right-margin-width . 10)
-                                    (internal-border-width . 2)
-                                    (internal-border-color . "white")))
-    (ivy-posframe-mode 1)
-    (set-face-attribute 'ivy-posframe nil :background "grey16"))
+    :custom
+    (ivy-use-virtual-buffers t)
+    (ivy-use-selectable-prompt t)
+    (ivy-count-format "(%d/%d) ")
+    (ivy-magic-slash-non-match-action 'ivy-magic-non-match-create)
+    (counsel-ag-base-command "ag --nocolor --nogroup --hidden %s")
+    (ivy-display-style 'fancy)
+    (ivy-re-builders-alist '((swiper . ivy--regex-plus)
+                             (swiper-isearch . ivy--regex-plus)
+                             (t . ivy--regex-plus))))
 
   (use-package ivy-posframe
     :delight
+    :custom
+    (ivy-posframe-height-alist
+     '((swiper . 15)
+       (swiper-isearch . 15)
+       (t . 10)))
+    (ivy-posframe-display-functions-alist '((swiper . nil)
+                                            (swiper-isearch . nil)
+                                            (t . ivy-posframe-display-at-frame-center)))
+    ;; As of 2019-10-12 border colors on child frames is not working on macos...
+    (ivy-posframe-parameters '((internal-border-width . 2)
+                               (internal-border-color . "white")))
     :hook
-    (after-load-theme . iensu--load-ivy-posframe))
+    (after-load-theme . (lambda () (set-face-attribute 'ivy-posframe nil :background "grey16")))
+    :config
+    (ivy-posframe-mode 1))
+
+  (use-package prescient
+    :delight
+    :custom
+    (prescient-history-length 50)
+    (prescient-filter-method '(fuzzy initialism regexp))
+    :config
+    (prescient-persist-mode 1))
 
   (use-package ivy-prescient
     :delight
+    :after (prescient ivy)
+    :custom
+    (ivy-prescient-sort-commands '(:not swiper ivy-switch-buffer counsel-switch-buffer))
+    (ivy-prescient-retain-classic-highlighting nil)
+    (ivy-prescient-enable-filtering t)
+    (ivy-prescient-enable-sorting t)
     :config
-    (prescient-persist-mode))
+    (ivy-prescient-mode 1))
+
+  (use-package ivy-rich
+    :delight
+    :config
+    (ivy-rich-mode 1))
 #+end_src
 
 *** Project management
@@ -523,25 +550,25 @@ Setup =package.el= and =use-package= for clean package installation.
 #+begin_src emacs-lisp
   (use-package magit
     :bind (("C-x g" . magit-status))
-    :config
-    (setq magit-bury-buffer-function 'quit-window))
+    :custom
+    (magit-bury-buffer-function 'quit-window))
 
   (use-package projectile
     :delight '(:eval (let ((project-name (projectile-project-name)))
                        (if (string-equal project-name "-")
                            ""
-                         (concat " <" project-name ">"))))
-    :init
-    (setq projectile-cache-file (iensu--config-file ".local/projectile.cache")
-          projectile-known-projects-file (iensu--config-file ".local/projectile-bookmarks.eld")
-          projectile-git-submodule-command nil)
+                         (concat " [" project-name "]"))))
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :custom
+    (projectile-completion-system 'ivy)
+    (projectile-cache-file (iensu--config-file ".local/projectile.cache"))
+    (projectile-known-projects-file (iensu--config-file ".local/projectile-bookmarks.eld"))
+    (projectile-git-submodule-command nil)
+    (projectile-sort-order 'access-time)
+    (projectile-globally-ignored-files '("TAGS" ".DS_Store" ".projectile"))
     :config
-    (projectile-global-mode)
-    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-    (setq projectile-sort-order 'access-time)
-    (let ((ignored-files '(".DS_Store" ".projectile")))
-      (dolist (file ignored-files)
-        (add-to-list 'projectile-globally-ignored-files file))))
+    (projectile-global-mode))
 
   (use-package forge
     :after magit)
@@ -554,17 +581,12 @@ Setup =package.el= and =use-package= for clean package installation.
 #+begin_src emacs-lisp
   (use-package dired+
     :load-path (lambda () (iensu--config-file "packages"))
+    :custom
+    (dired-listing-switches "-alGh --group-directories-first")
+    (dired-dwim-target t)
     :config
     (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
-      (setq insert-directory-program "/usr/local/bin/gls"))
-    (setq dired-listing-switches "-alGh --group-directories-first"
-          dired-dwim-target t))
-
-  (use-package dired-subtree
-    :config
-    (bind-keys :map dired-mode-map
-               ("<tab>" . dired-subtree-insert)
-               ("<backtab>" . dired-subtree-remove)))
+      (setq insert-directory-program "/usr/local/bin/gls")))
 #+end_src
 
 *** Spellchecking
@@ -577,41 +599,37 @@ Setup =package.el= and =use-package= for clean package installation.
     (:map flyspell-mode-map
           ("C-å l" . iensu/cycle-ispell-dictionary)
           ("C-:" . flyspell-popup-correct))
+    :hook (text-mode)
+    :custom
+    (ispell-extra-args '("--sug-mode=ultra"))
+    (ispell-list-command "--list")
+    (ispell-dictionary "en_US")
+
     :config
-    (when (executable-find "aspell")
-      (setq ispell-program-name "aspell"
-            ispell-extra-args '("--sug-mode=ultra")
-            ispell-list-command "--list"))
-    (setq ispell-dictionary "en_US"))
+    (defvar iensu--language-ring nil
+      "Ispell language ring used to toggle current selected ispell dictionary")
+
+    (let ((languages '("swedish" "en_US")))
+      (setq iensu--language-ring (make-ring (length languages)))
+      (dolist (elem languages) (ring-insert iensu--language-ring elem)))
+
+    (defun iensu/cycle-ispell-dictionary ()
+      "Cycle through the languages defined in `iensu--language-ring'."
+      (interactive)
+      (let ((language (ring-ref iensu--language-ring -1)))
+        (ring-insert iensu--language-ring language)
+        (ispell-change-dictionary language)
+        (message (format "Switched to dictionary: %s" language)))))
 
   (use-package flyspell-popup
-    :delight)
+    :delight
+    :after (flyspell))
 
   (use-package synosaurus
-    :config
-    (setq synosaurus-backend 'synosaurus-backend-wordnet
-          synosaurus-choose-method 'popup))
-
-  (defun iensu/text-editing-support ()
-    "Sets up text editing nicities such as spell-check and thesaurus"
-    (interactive)
-    (flyspell-mode 1)
-    (synosaurus-mode 1))
-
-  (add-hook 'text-mode-hook #'iensu/text-editing-support)
-
-  (defvar iensu--language-ring nil)
-
-  (let ((languages '("swedish" "en_US")))
-    (setq iensu--language-ring (make-ring (length languages)))
-    (dolist (elem languages) (ring-insert iensu--language-ring elem)))
-
-  (defun iensu/cycle-ispell-dictionary ()
-    (interactive)
-    (let ((language (ring-ref iensu--language-ring -1)))
-      (ring-insert iensu--language-ring language)
-      (ispell-change-dictionary language)
-      (message (format "Switched to dictionary: %s" language))))
+    :hook (text-mode)
+    :custom
+    (synosaurus-backend 'synosaurus-backend-wordnet)
+    (synosaurus-choose-method 'popup))
 #+end_src
 
 *** Treemacs
@@ -783,30 +801,6 @@ Setup capture templates.
 *** Main org-mode configuration
 
 #+begin_src emacs-lisp
-  (defun iensu--org-mode-hook ()
-    (dolist (lang-mode '(("javascript" . js2) ("es" . es)))
-      (add-to-list 'org-src-lang-modes lang-mode))
-    (auto-fill-mode nil)
-    (visual-line-mode 1)
-    (setq org-src-fontify-natively t
-          org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
-          truncate-lines t
-          org-image-actual-width nil
-          line-spacing 1
-          outline-blank-line t
-          org-adapt-indentation nil
-          org-fontify-quote-and-verse-blocks t
-          org-fontify-done-headline t
-          org-fontify-whole-heading-line t
-          org-hide-leading-stars t
-          org-indent-indentation-per-level 2
-          org-checkbox-hierarchical-statistics nil
-          org-log-done 'time
-          org-outline-path-complete-in-steps nil
-          org-html-htmlize-output-type 'css
-          org-export-initial-scope 'subtree
-          org-catch-invisible-edits 'show-and-error))
-
   (use-package org
     :delight
     (org-mode "\u2658" :major)
@@ -815,19 +809,43 @@ Setup capture templates.
            ("C-c l" . org-store-link)
            :map org-mode-map
            ("H-."   . org-time-stamp-inactive))
+    :hook
+    (org-mode . flyspell-mode)
+    (org-mode . synosaurus-mode)
+    (org-mode . #'iensu--org-mode-hook)
+    :custom
+    (org-default-notes-file (iensu-org-file 'notes))
+    (org-directory iensu-org-dir)
+    (org-refile-targets '((iensu-org-refile-targets :maxlevel . 4)))
+    (org-refile-allow-creating-parent-nodes 'confirm)
+    (org-refile-use-outline-path 'file)
+    (org-latex-listings t)
+    (org-cycle-separator-lines 1)
+    (org-src-fontify-natively t)
+    (org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
+    (truncate-lines t)
+    (org-image-actual-width nil)
+    (line-spacing 1)
+    (outline-blank-line t)
+    (org-adapt-indentation nil)
+    (org-fontify-quote-and-verse-blocks t)
+    (org-fontify-done-headline t)
+    (org-fontify-whole-heading-line t)
+    (org-hide-leading-stars t)
+    (org-indent-indentation-per-level 2)
+    (org-checkbox-hierarchical-statistics nil)
+    (org-log-done 'time)
+    (org-outline-path-complete-in-steps nil)
+    (org-html-htmlize-output-type 'css)
+    (org-export-initial-scope 'subtree)
+    (org-catch-invisible-edits 'show-and-error)
+
     :config
-    (add-hook 'org-mode-hook 'iensu--org-mode-hook)
-    (add-hook 'org-mode-hook #'iensu/text-editing-support)
-
     (org-load-modules-maybe t)
-
-    (setq org-default-notes-file (iensu-org-file 'notes)
-          org-directory iensu-org-dir
-          org-refile-targets '((iensu-org-refile-targets :maxlevel . 4))
-          org-refile-allow-creating-parent-nodes 'confirm
-          org-refile-use-outline-path 'file
-          org-latex-listings t
-          org-cycle-separator-lines 1))
+    (dolist (lang-mode '(("javascript" . js2) ("es" . es)))
+      (add-to-list 'org-src-lang-modes lang-mode))
+    (auto-fill-mode nil)
+    (visual-line-mode 1))
 #+end_src
 
 *** Org-agenda configuration
@@ -1171,8 +1189,18 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
               (lambda ()
                 (visual-line-mode)
                 (local-set-key (kbd "<tab>") 'shr-next-link)
-                (local-set-key (kbd "<backtab>") 'shr-previous-link)))
-    (setq shr-color-visible-luminance-min 20))
+                (local-set-key (kbd "<backtab>") 'shr-previous-link))))
+
+  (use-package shr
+    :commands (eww
+               eww-browse-url)
+    :custom
+    (browse-url-browser-function 'eww-browse-url)
+    (shr-use-fonts nil)
+    (shr-use-colors nil)
+    (shr-max-image-proportion 0.2)
+    ;; (shr-color-visible-luminance-min 20)
+    (shr-width (current-fill-column)))
 
   (defun iensu--send-email-setup ()
     (setq message-send-mail-function 'smtpmail-send-it
@@ -1182,25 +1210,23 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
           smtpmail-stream-type 'ssl
           smtpmail-debug-info t))
 
-  (add-hook 'message-mode-hook 'turn-on-orgtbl)
-  (add-hook 'message-mode-hook 'turn-on-orgstruct++)
-  (add-hook 'mu4e-compose-mode-hook #'iensu/text-editing-support)
-  (add-hook 'mu4e-compose-mode-hook (lambda () (auto-fill-mode -1)))
-
   (setq user-mail-address "jens.ostlund@futurice.com"
         user-full-name "Jens Östlund")
 
-  (let ((mu4e-path "/usr/local/share/emacs/site-lisp/mu/mu4e"))
-    (when (and (executable-find "mu")
-               (file-directory-p mu4e-path))
-      (add-to-list 'load-path mu4e-path)
-      (require 'mu4e)
-      (eval-after-load "mu4e"
-        (progn
-          (iensu--mu4e-setup)
-          (iensu--send-email-setup)
-          (setq iensu--timer:mail-updates
-                (run-at-time t (* 35 60) #'iensu/update-mail-in-background))))))
+  (use-package mu4e
+    :ensure nil
+    :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
+    :hook
+    (mu4e-compose-mode . flyspell-mode)
+    (mu4e-compose-mode . synosaurus-mode)
+    (message-mode . turn-on-orgtbl)
+    (message-mode . turn-on-orgstruct++)
+    :config
+    (add-hook 'mu4e-compose-mode-hook (lambda () (auto-fill-mode -1)))
+    (iensu--mu4e-setup)
+    (iensu--send-email-setup)
+    (setq iensu--timer:mail-updates
+          (run-at-time t (* 35 60) #'iensu/update-mail-in-background)))
 
   (use-package mu4e-alert
     :after mu4e
@@ -1576,9 +1602,11 @@ Use =web-mode= if file is a choo template file.
     :commands (markdown-mode gfm-mode)
     :mode (("\\.md\\'"       . gfm-mode)
            ("\\.markdown\\'" . markdown-mode))
-    :config
-    (add-hook 'markdown-mode-hook #'iensu/text-editing-support)
-    (add-hook 'gfm-mode-hook #'iensu/text-editing-support))
+    :hook
+    (markdown-mode . flyspell-mode)
+    (markdown-mode . synosaurus-mode)
+    (gfm-mode . flyspell-mode)
+    (gfm-mode . synosaurus-mode))
 #+end_src
 
 *** YAML
@@ -1691,21 +1719,17 @@ https://github.com/Silex/docker.el
 ** Load theme
 
 #+begin_src emacs-lisp
-  ;; (use-package dracula-theme)
-
-  (when (display-graphic-p)
-    ;; (load-theme 'dracula t)
-    (load-theme 'deeper-blue t)
-    ;; (load-theme 'wombat t)
-    )
-
-  (set-face-attribute 'default nil :height 140)
-  ;;  (set-face-foreground 'mode-line "black")
-  ;;  (set-face-background 'mode-line "#dbffdb")
-  (set-face-attribute 'show-paren-match nil
-                      :background (face-background 'default)
-                      :foreground "mediumspringgreen"
-                      :weight 'extra-bold)
+  (use-package dracula-theme
+    :config
+    (when (display-graphic-p)
+      (load-theme 'dracula t)
+      ;; Enlarge default font size
+      (set-face-attribute 'default nil :height 140)
+      ;; Improve matching paren highlighting
+      (set-face-attribute 'show-paren-match nil
+                          :background (face-background 'default)
+                          :foreground "mediumspringgreen"
+                          :weight 'extra-bold)))
 #+end_src
 
 ** Custom commands
