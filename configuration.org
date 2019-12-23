@@ -207,12 +207,6 @@ Set editor defaults to be more in line with expectations.
   (setq display-buffer-alist '(("\\`\\*e?shell" display-buffer-pop-up-window)))
 #+end_src
 
-Use =bash= as shell instead of the system default shell.
-
-#+begin_src emacs-lisp
-  (setq shell-file-name "/bin/bash")
-#+end_src
-
 Start the emacsclient server.
 
 #+begin_src emacs-lisp
