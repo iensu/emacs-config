@@ -41,7 +41,7 @@
     - [[#save-org-buffers-every-5-minutes][Save org buffers every 5 minutes]]
     - [[#google-calendar-integration][Google calendar integration]]
     - [[#trello-integration][Trello integration]]
-  - [[#email-configuration][Email configuration]]
+  - [[#email][Email]]
   - [[#erc][ERC]]
   - [[#programming][Programming]]
     - [[#lsp-mode][LSP mode]]
@@ -1102,127 +1102,100 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
       (org-trello-sync-comment 'from-trello)))
 #+end_src
 
-
-** Email configuration
+** Email
 
 #+begin_src emacs-lisp
-  (defvar iensu--timer:mail-updates nil
-    "Mail updates timer object. Can be used to cancel the recurring updates.")
+  (use-package mu4e
+    :ensure nil
+    :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
+    :bind (:map mu4e-view-mode-map
+                ("<tab>" . shr-next-link)
+                ("<backtab>" . shr-previous-link))
+    :hook
+    ;; Support org-mode niceties when composing emails
+    (message-mode . turn-on-orgtbl)
+    (message-mode . turn-on-orgstruct++)
+    (mu4e-view-mode . visual-line-mode)
+    :custom
+    (mail-user-agent 'mu4e-user-agent)
+    (mu4e-mu-binary "/usr/local/bin/mu")
+    (mu4e-maildir "~/Mail")
+    (mu4e-confirm-quit nil)
+    (mu4e-get-mail-command "offlineimap")
+    (mu4e-context-policy 'pick-first)
 
-  (defun iensu--render-html-message ()
-    (let ((dom (libxml-parse-html-region (point-min) (point-max))))
-      (erase-buffer)
-      (shr-insert-document dom)
-      (goto-char (point-min))))
+    ;; Configuration for viewing emails
+    (mu4e-view-show-images t)
+    (mu4e-show-images t)
+    (mu4e-view-image-max-width 800)
+    (mu4e-compose-format-flowed t)
+    (mu4e-view-show-addresses t)
+    (mu4e-headers-fields '((:human-date . 12)
+                           (:flags . 6)
+                           (:tags . 16)
+                           (:from . 22)
+                           (:subject)))
 
-  (defun iensu--mu4e-setup ()
-    (setq mail-user-agent 'mu4e-user-agent
-          mu4e-mu-binary "/usr/local/bin/mu"
+    ;; Configuration for composing/sending emails
+    (user-mail-address "jens.ostlund@futurice.com")
+    (user-full-name "Jens Östlund")
+    (message-send-mail-function 'smtpmail-send-it)
+    (smtpmail-smtp-server "smtp.gmail.com")
+    (smtpmail-default-smtp-server "smtp.gmail.com")
+    (smtpmail-smtp-service 465)
+    (smtpmail-stream-type 'ssl)
+    (smtpmail-debug-info t)
+    (mu4e-sent-messages-behavior 'delete)
+    (message-kill-buffer-on-exit t)
+    (mu4e-compose-context-policy 'ask-if-none)
 
-          mu4e-maildir "~/Mail"
-          mu4e-maildir-shortcuts
-          '(("/futurice/All mail" . ?F)
-            ("/private/All mail" . ?P))
-
-          mu4e-sent-messages-behavior 'delete
-
-          mu4e-context-policy 'pick-first
-          mu4e-confirm-quit nil
-          message-kill-buffer-on-exit t
-
-          mu4e-get-mail-command "offlineimap"
-
-          mu4e-view-show-images t
-          mu4e-show-images t
-          mu4e-view-image-max-width 800
-
-          mu4e-compose-format-flowed t
-          mu4e-view-show-addresses t
-
-          mu4e-headers-fields '((:human-date . 12)
-                                (:flags . 6)
-                                (:tags . 16)
-                                (:from . 22)
-                                (:subject))
-
-          mu4e-compose-context-policy 'ask-if-none
-          mu4e-contexts
+    :config
+    ;; Email contexts
+    (setq mu4e-contexts
           `(,(make-mu4e-context
               :name "Futurice"
               :enter-func (lambda () (mu4e-message "Entering Futurice context"))
-              :leave-func (lambda () (setq mu4e-maildir-list nil)) ; forces refresh of address list when switching context
+              ;; forces refresh of address list when switching context
+              :leave-func (lambda () (setq mu4e-maildir-list nil))
               :match-func (lambda (msg)
                             (when msg
                               (string-match-p "^/futurice" (mu4e-message-field msg :maildir))))
               :vars '((mu4e-sent-folder   . "/futurice/sent")
                       (mu4e-drafts-folder . "/futurice/drafts")
                       (mu4e-trash-folder  . "/futurice/trash")
-
                       (user-mail-address  . "jens.ostlund@futurice.com")
                       (user-full-name     . "Jens Östlund")
-
                       (smtpmail-smtp-user . "jens.ostlund@futurice.com")))
-
             ,(make-mu4e-context
               :name "Private"
               :enter-func (lambda () (mu4e-message "Entering Private context"))
-              :leave-func (lambda () (setq mu4e-maildir-list nil)) ; forces refresh of address list when switching context
+              ;;forces refresh of address list when switching context
+              :leave-func (lambda () (setq mu4e-maildir-list nil))
               :match-func (lambda (msg)
                             (when msg
                               (string-match-p "^/private" (mu4e-message-field msg :maildir))))
               :vars '((mu4e-sent-folder   . "/private/sent")
                       (mu4e-drafts-folder . "/private/drafts")
                       (mu4e-trash-folder  . "/private/trash")
-
                       (user-mail-address  . "jostlund@gmail.com")
                       (user-full-name     . "Jens Östlund")
-
                       (smtpmail-smtp-user . "jostlund")))))
 
+    (add-hook 'mu4e-compose-mode-hook (lambda () (auto-fill-mode -1)))
+
+    ;; Always unblock offlineimap before fetching emails
+    (advice-add 'mu4e-update-mail-and-index :before 'iensu/unblock-offlineimap)
+
+    ;; Add email viewing modes
     (add-to-list 'mu4e-view-actions '("EWW" . iensu--mu4e-view-in-eww) t)
     (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t)
 
-    ;; message viewing settings
-    (add-hook 'mu4e-view-mode-hook
-              (lambda ()
-                (visual-line-mode)
-                (local-set-key (kbd "<tab>") 'shr-next-link)
-                (local-set-key (kbd "<backtab>") 'shr-previous-link))))
-
-  (use-package shr
-    :commands (eww
-               eww-browse-url)
-    :custom
-    (browse-url-browser-function 'eww-browse-url)
-    (shr-use-fonts nil)
-    (shr-use-colors nil)
-    (shr-max-image-proportion 0.2)
-    ;; (shr-color-visible-luminance-min 20)
-    (shr-width (current-fill-column)))
-
-  (defun iensu--send-email-setup ()
-    (setq message-send-mail-function 'smtpmail-send-it
-          smtpmail-smtp-server "smtp.gmail.com"
-          smtpmail-default-smtp-server "smtp.gmail.com"
-          smtpmail-smtp-service 465
-          smtpmail-stream-type 'ssl
-          smtpmail-debug-info t))
-
-  (setq user-mail-address "jens.ostlund@futurice.com"
-        user-full-name "Jens Östlund")
-
-  (use-package mu4e
-    :ensure nil
-    :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
-    :hook
-    (message-mode . turn-on-orgtbl)
-    (message-mode . turn-on-orgstruct++)
-    :config
-    (add-hook 'mu4e-compose-mode-hook (lambda () (auto-fill-mode -1)))
-    (iensu--mu4e-setup)
-    (iensu--send-email-setup)
+    ;; Recurring update of email
+    (defvar iensu--timer:mail-updates nil
+      "Mail updates timer object. Can be used to cancel the recurring updates.")
     (setq iensu--timer:mail-updates
-          (run-at-time t (* 35 60) #'iensu/update-mail-in-background)))
+          (run-at-time t (* 10 60) #'iensu/update-mail-in-background))
+    )
 
   (use-package mu4e-alert
     :after mu4e
@@ -1250,12 +1223,16 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
               (lambda ()
                 (org-mime-change-element-style
                  "blockquote" "border-left: 2px solid gray; padding-left: 4px;"))))
-#+end_src
 
-Unblock offlineimap before fetching email
-
-#+begin_src emacs-lisp
-  (advice-add 'mu4e-update-mail-and-index :before 'iensu/unblock-offlineimap)
+  (use-package shr
+    :commands (eww
+               eww-browse-url)
+    :custom
+    (browse-url-browser-function 'eww-browse-url)
+    (shr-use-fonts nil)
+    (shr-use-colors nil)
+    (shr-max-image-proportion 0.2)
+    (shr-width (current-fill-column)))
 #+end_src
 
 ** ERC
