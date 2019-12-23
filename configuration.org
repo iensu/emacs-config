@@ -210,16 +210,7 @@ Set editor defaults to be more in line with expectations.
 Start the emacsclient server.
 
 #+begin_src emacs-lisp
-  (server-start)
-#+end_src
-
-Use [[https://github.com/BurntSushi/ripgrep][ripgrep]] as the default grep tool. Taken from https://stegosaurusdormant.com/emacs-ripgrep/.
-
-#+begin_src emacs-lisp
-  (when (executable-find "rg")
-    (grep-apply-setting
-     'grep-find-command
-     '("rg -n -H --no-heading -e '' $(git rev-parse --show-toplevel || pwd)" . 27)))
+  (server-start 'kill-existing 'no-prompt)
 #+end_src
 
 ** Global keybindings
