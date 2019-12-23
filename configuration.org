@@ -1287,7 +1287,7 @@ Unblock offlineimap before fetching email
 
 ** Programming
 
-Setup autocompletion.
+Setup auto-completion.
 
 #+begin_src emacs-lisp
   (use-package company
@@ -1613,15 +1613,15 @@ Setup flycheck for on the fly linting.
 *** Terraform
 
 #+begin_src emacs-lisp
-  (defun iensu--terraform-format ()
-    (when (executable-find "terraform")
-      (let ((fname (buffer-file-name)))
-        (when (file-exists-p fname)
-            (shell-command (format "terraform fmt %s" fname))
-            (revert-buffer nil t)))))
-
   (use-package terraform-mode
     :config
+    (defun iensu--terraform-format ()
+      (when (executable-find "terraform")
+        (let ((fname (buffer-file-name)))
+          (when (file-exists-p fname)
+              (shell-command (format "terraform fmt %s" fname))
+              (revert-buffer nil t)))))
+
     (add-hook 'terraform-mode-hook
               (lambda ()
                 (add-hook 'after-save-hook #'iensu--terraform-format nil 'local))))
@@ -1629,24 +1629,28 @@ Setup flycheck for on the fly linting.
 *** Graphviz Dot Mode
 
 #+begin_src emacs-lisp
-  (use-package graphviz-dot-mode)
-
-  (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot))
-  (define-key graphviz-dot-mode-map (kbd "C-c C-c") 'graphviz-dot-preview)
+  (use-package graphviz-dot-mode
+    :bind (:graphviz-dot-mode-map
+           ("C-c C-c" . graphviz-dot-preview))
+    :config
+    (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot)))
 #+end_src
 
 *** Java
 
 #+begin_src emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.java$" . java-mode))
-  (add-hook 'java-mode-hook (lambda ()
-                              (electric-pair-mode t)))
+  (use-package java-mode
+    :ensure nil
+    :mode "\\.java$"
+    :hook
+    (java-mode-hook . electric-pair-mode))
 
   (use-package lsp-java
     :after lsp
+    :hook
+    (java-mode . lsp)
     :init
-    (add-hook 'java-mode-hook 'lsp)
-    (add-hook 'java-mode-hook (lambda () (require 'dap-java)))
+    (require 'dap-java)
     :bind (:map java-mode-map
                 ("C-c l f" . lsp-execute-code-action)
                 ("C-c l n" . lsp-rename)
@@ -1665,12 +1669,17 @@ Setup flycheck for on the fly linting.
 *** SQL
 
 #+begin_src emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.psql$" . sql-mode))
-  (add-hook 'sql-mode-hook
-            (lambda ()
-              (when (string= (file-name-extension buffer-file-name) "psql")
-                (setq-local sql-product 'postgres))))
+  (use-package sql-mode
+    :ensure nil
+    :mode "\\.psql$"
+    :config
+    (add-hook 'sql-mode-hook
+              (lambda ()
+                (when (string= (file-name-extension buffer-file-name) "psql")
+                  (setq-local sql-product 'postgres)))))
+
 #+end_src
+
 *** Docker
 
 https://github.com/Silex/docker.el
