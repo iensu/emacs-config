@@ -20,7 +20,7 @@
     - [[#searching-and-finding-stuff][Searching and finding stuff]]
     - [[#project-management][Project management]]
     - [[#file-browsing][File browsing]]
-    - [[#spellchecking][Spellchecking]]
+    - [[#text-editing-tools][Text editing tools]]
     - [[#treemacs][Treemacs]]
   - [[#org-mode][Org-mode]]
     - [[#custom-variables][Custom variables]]
@@ -361,11 +361,6 @@ Setup =package.el= and =use-package= for clean package installation.
   (use-package rainbow-delimiters :delight)
 
   (use-package all-the-icons)
-
-  (use-package emojify
-    :hook (text-mode org-mode)
-    :custom
-    (emojify-emojis-dir (iensu--config-file ".local/emojis")))
 #+end_src
 
 ** Utility packages
@@ -572,7 +567,7 @@ Setup =package.el= and =use-package= for clean package installation.
       (setq insert-directory-program "/usr/local/bin/gls")))
 #+end_src
 
-*** Spellchecking
+*** Text editing tools
 
 #+begin_src emacs-lisp
   (use-package flyspell
@@ -582,7 +577,6 @@ Setup =package.el= and =use-package= for clean package installation.
     (:map flyspell-mode-map
           ("C-å l" . iensu/cycle-ispell-dictionary)
           ("C-:" . flyspell-popup-correct))
-    :hook (text-mode)
     :custom
     (ispell-extra-args '("--sug-mode=ultra"))
     (ispell-list-command "--list")
@@ -609,10 +603,29 @@ Setup =package.el= and =use-package= for clean package installation.
     :after (flyspell))
 
   (use-package synosaurus
-    :hook (text-mode)
     :custom
     (synosaurus-backend 'synosaurus-backend-wordnet)
     (synosaurus-choose-method 'popup))
+
+  (use-package emojify
+    :custom
+    (emojify-emojis-dir (iensu--config-file ".local/emojis")))
+
+  (use-package emacs
+    :config
+    (defun iensu/configure-text-editing-tools ()
+      "Enables text editing tools such as spell checking and thesaurus support"
+      (interactive)
+      (flyspell-mode 1)
+      (synosaurus-mode 1)
+      (emojify-mode 1))
+
+    ;; for some timing-related (?) reason use-package :hook fails to load this hook
+    (add-hook 'org-mode-hook #'iensu/configure-text-editing-tools)
+    (add-hook 'mu4e-compose-mode-hook #'iensu/configure-text-editing-tools)
+    (add-hook 'markdown-mode-hook #'iensu/configure-text-editing-tools)
+    (add-hook 'gfm-mode-hook #'iensu/configure-text-editing-tools)
+    (add-hook 'text-mode-hook #'iensu/configure-text-editing-tools))
 #+end_src
 
 *** Treemacs
@@ -792,10 +805,6 @@ Setup capture templates.
            ("C-c l" . org-store-link)
            :map org-mode-map
            ("H-."   . org-time-stamp-inactive))
-    :hook
-    (org-mode . flyspell-mode)
-    (org-mode . synosaurus-mode)
-    (org-mode . #'iensu--org-mode-hook)
     :custom
     (org-default-notes-file (iensu-org-file 'notes))
     (org-directory iensu-org-dir)
@@ -1200,8 +1209,6 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     :ensure nil
     :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
     :hook
-    (mu4e-compose-mode . flyspell-mode)
-    (mu4e-compose-mode . synosaurus-mode)
     (message-mode . turn-on-orgtbl)
     (message-mode . turn-on-orgstruct++)
     :config
@@ -1550,12 +1557,7 @@ Use =web-mode= if file is a choo template file.
   (use-package markdown-mode
     :commands (markdown-mode gfm-mode)
     :mode (("\\.md\\'"       . gfm-mode)
-           ("\\.markdown\\'" . markdown-mode))
-    :hook
-    (markdown-mode . flyspell-mode)
-    (markdown-mode . synosaurus-mode)
-    (gfm-mode . flyspell-mode)
-    (gfm-mode . synosaurus-mode))
+           ("\\.markdown\\'" . markdown-mode)))
 #+end_src
 
 *** YAML
