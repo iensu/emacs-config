@@ -476,7 +476,7 @@ Setup =package.el= and =use-package= for clean package installation.
     :delight ivy-mode
     :init
     (ivy-mode 1)
-    :bind (("C-s"     . swiper)
+    :bind (("C-s"     . swiper-isearch)
            ("M-x"     . counsel-M-x)
            ("C-x C-f"	. counsel-find-file)
            ("C-x C-r" . counsel-recentf)
