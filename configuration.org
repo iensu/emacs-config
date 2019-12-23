@@ -1338,20 +1338,20 @@ Setup flycheck for on the fly linting.
 #+begin_src emacs-lisp
   (use-package lsp-mode
     :commands lsp
-    :bind
-    :config
-    (setq lsp-prefer-flymake nil))
+    :custom
+    (lsp-prefer-flymake nil))
 
   (use-package lsp-ui
-    :init
-    (setq lsp-ui-doc-delay 1
-          lsp-ui-doc-border "violet"
-          lsp-ui-doc-position 'at-point
-          lsp-ui-doc-use-webkit t
-          lsp-ui-doc-max-width 50
-          lsp-ui-sideline-delay 0.5
-          lsp-ui-sideline-enable t
-          lsp-ui-flycheck-enable t)
+    :custom
+    (lsp-ui-doc-delay 1)
+    (lsp-ui-doc-border "violet")
+    (lsp-ui-doc-position 'at-point)
+    (lsp-ui-doc-use-webkit t)
+    (lsp-ui-doc-max-width 50)
+    (lsp-ui-sideline-delay 0.5)
+    (lsp-ui-sideline-enable t)
+    (lsp-ui-flycheck-enable t)
+    :config
     ;; Disable flyckeck-popup if lsp-ui-mode is enabled
     (add-hook 'lsp-ui-mode-hook (lambda () (flycheck-popup-tip-mode -1))))
 
