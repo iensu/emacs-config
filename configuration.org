@@ -46,6 +46,9 @@
   - [[#programming][Programming]]
     - [[#lsp-mode][LSP mode]]
     - [[#web-development][Web development]]
+    - [[#javascript][JavaScript]]
+    - [[#typescript][TypeScript]]
+    - [[#graphql][GraphQL]]
     - [[#elm][Elm]]
     - [[#markdown][Markdown]]
     - [[#yaml][YAML]]
@@ -1418,46 +1421,81 @@ Setup flycheck for on the fly linting.
       (css-indent-offset 2))
 #+end_src
 
-**** JavaScript
+**** Web mode
 
 #+begin_src emacs-lisp
-  (defun iensu/-setup-javascript ()
-    (electric-indent-mode t)
-    (rainbow-delimiters-mode 1)
-    (smartparens-mode 1)
-    (js2-mode-hide-warnings-and-errors)
-    (js2-imenu-extras-mode)
-    (js2-refactor-mode)
-    (js2r-add-keybindings-with-prefix "C-c C-m")
-    (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)
-    (lsp)
-    (setq js-switch-indent-offset 2
-          js2-basic-offset 2
-          js2-highlight-level 3)
-    (setq-default flycheck-disabled-checkers
-                  (append flycheck-disabled-checkers '(javascript-jshint)))
+    (use-package web-mode
+      :mode ("\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$" "\\.vue$" "\\.tsx$")
+      :hook
+      (web-mode . emmet-mode)
+      :custom
+      (web-mode-css-indent-offset 2)
+      (web-mode-code-indent-offset 2)
+      (web-mode-markup-indent-offset 2)
+      (web-mode-attr-indent-offset 2)
+      (web-mode-attr-value-indent-offset 2)
+      (web-mode-enable-css-colorization t)
+      (web-mode-enable-current-element-highlight t)
+      (web-mode-enable-current-column-highlight t)
+      :config
+      (add-hook 'web-mode-hook
+                (lambda () (yas-activate-extra-mode 'js-mode)))
+      (flycheck-add-mode 'javascript-eslint 'web-mode)
+      ;; Use web-mode for choo files
+      (add-to-list 'magic-mode-alist
+                   '("^const html = require.*choo/html" . web-mode)))
+#+end_src
+
+*** JavaScript
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :custom
+    (flycheck-disabled-checkers
+     (append flycheck-disabled-checkers '(javascript-jshint))))
+
+  (use-package js
+    :ensure nil
+    :custom
+    (js-switch-indent-offset 2)
+    :config
     (define-key js-mode-map (kbd "M-.") nil))
 
   (use-package js2-mode
     :mode ("\\.js\\'")
     :interpreter ("node" "nodejs")
+    :custom
+    (js2-basic-offset 2)
+    (js2-highlight-level 3)
+    :hook
+    (js2-mode . electric-indent-mode)
+    (js2-mode . rainbow-delimiters-mode)
+    (js2-mode . smartparens-mode)
+    (js2-mode . lsp)
     :config
-    (add-hook 'js2-mode-hook #'iensu/-setup-javascript))
+    (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)
+    (js2-mode-hide-warnings-and-errors))
 
   (use-package rjsx-mode
     :mode ("\\.jsx\\'")
+    :hook
+    (rjsx-mode . electric-indent-mode)
+    (rjsx-mode . rainbow-delimiters-mode)
+    (rjsx-mode . smartparens-mode)
+    (rjsx-mode . emmet-mode)
+    (rjsx-mode . lsp)
     :init
     (add-to-list 'magic-mode-alist '((lambda () (and (string-equal "js" (file-name-extension buffer-file-name))
                                                 (string-match "^import .* from [\"']react[\"']" (buffer-string)))) . rjsx-mode))
     :config
-    (add-hook 'rjsx-mode-hook (lambda ()
-                                (emmet-mode)
-                                (setq emmet-expand-jsx-className? t)))
-    (add-hook 'rjsx-mode-hook 'iensu/-setup-javascript)
-    (flycheck-add-mode 'javascript-eslint 'rjsx-mode))
+    (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
+    (add-hook 'rjsx-mode-hook (lambda () (setq emmet-expand-jsx-className? t))))
 
   (use-package js2-refactor
-    :delight js2-refactor-mode)
+    :delight js2-refactor-mode
+    :hook
+    (rjsx-mode . js2-refactor-mode)
+    (js2-mode . js2-refactor-mode))
 
   (use-package xref-js2
     :defer nil)
@@ -1465,36 +1503,9 @@ Setup flycheck for on the fly linting.
   (use-package mocha)
 
   (use-package nvm)
-
-  (use-package web-mode
-    :init
-    (dolist (ext (list "\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$" "\\.vue$" "\\.tsx$"))
-      (add-to-list 'auto-mode-alist `(,ext . web-mode)))
-    :config
-    (setq web-mode-css-indent-offset 2
-          web-mode-code-indent-offset 2
-          web-mode-markup-indent-offset 2
-          web-mode-attr-indent-offset 2
-          web-mode-attr-value-indent-offset 2
-          web-mode-enable-css-colorization t
-          web-mode-enable-current-element-highlight t
-          web-mode-enable-current-column-highlight t)
-    (add-hook 'web-mode-hook
-              (lambda () (yas-activate-extra-mode 'js-mode)))
-    (setq-default flychqeck-disabled-checkers
-                  (append flycheck-disabled-checkers '(javascript-jshint)))
-    (add-hook 'web-mode-hook 'emmet-mode)
-    (flycheck-add-mode 'javascript-eslint 'web-mode))
 #+end_src
 
-Use =web-mode= if file is a choo template file.
-
-#+begin_src emacs-lisp
-  (add-to-list 'magic-mode-alist
-               '("^const html = require.*choo/html" . web-mode))
-#+end_src
-
-**** TypeScript
+*** TypeScript
 
 #+begin_src emacs-lisp
   (use-package typescript-mode
@@ -1534,7 +1545,7 @@ Use =web-mode= if file is a choo template file.
     (tide-hl-identifier-mode 1))
 #+end_src
 
-**** GraphQL
+*** GraphQL
 
 #+begin_src emacs-lisp
   (use-package graphql-mode)
