@@ -452,22 +452,7 @@ Setup =package.el= and =use-package= for clean package installation.
 *** Searching and finding stuff
 
 #+begin_src emacs-lisp
-  (use-package smex
-    :init
-    (smex-initialize))
-#+end_src
-
-#+begin_src emacs-lisp
   (use-package deadgrep)
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package wgrep
-    :init
-    (autoload 'wgrep-ag-setup "wgrep-ag")
-    (add-hook 'ag-mode-hook 'wgrep-ag-setup))
-
-  (use-package wgrep-ag)
 #+end_src
 
 **** Ivy|Counsel
