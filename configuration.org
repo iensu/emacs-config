@@ -86,7 +86,7 @@ Define helper functions needed for the rest of the configuration
 
 #+begin_src emacs-lisp
   (defvar after-load-theme-hook nil
-    "Hook run after a color theme is loaded using `load-theme'.")
+    "Hook run after a color theme is loaded using `load-theme' in order to override some of the theme's settings.")
   (defadvice load-theme (after run-after-load-theme-hook activate)
     "Run `after-load-theme-hook'."
     (run-hooks 'after-load-theme-hook))
