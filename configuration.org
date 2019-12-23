@@ -320,7 +320,7 @@ Setup =package.el= and =use-package= for clean package installation.
           ("melpa" . "https://melpa.org/packages/")
           ("melpa-stable" . "https://stable.melpa.org/packages/")))
 
-  (when (not (string-prefix-p "27" emacs-version))
+  (when (version< emacs-version "27")
     (package-initialize))
 
   ;; --- Setting up use-package.el
