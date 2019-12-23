@@ -1261,27 +1261,28 @@ Unblock offlineimap before fetching email
 ** ERC
 
 #+begin_src emacs-lisp
-  (require 'erc)
+  (use-package erc
+    :ensure nil
+    :bind (:map erc-mode-map
+           ("RET" . nil)
+           ("C-<return>" . erc-send-current-line))
+    :custom
+    (erc-prompt-for-password nil)
+    (erc-fill-function 'erc-fill-static)
+    (erc-fill-static-center 22)
+    (erc-autojoin-channels-alist '(("freenode.net" "#emacs")))
+    (erc-join-buffer 'bury)
+    (erc-autojoin-timing 'ident)
+    (erc-server-reconnect-attempts 5)
+    (erc-server-reconnect-timeout 3)
+    :config
+    (add-to-list 'erc-modules 'spelling)
+    (erc-update-modules)
 
-  (defun iensu/erc-freenode ()
-    (interactive)
-    (erc :server "irc.freenode.net" :port 6667 :nick *erc-nick*))
-
-  (setq erc-prompt-for-password nil
-        erc-fill-function 'erc-fill-static
-        erc-fill-static-center 22
-        erc-autojoin-channels-alist '(("freenode.net" "#emacs"))
-        erc-join-buffer 'bury
-        erc-autojoin-timing 'ident
-        erc-server-reconnect-attempts 5
-        erc-server-reconnect-timeout 3)
-
-  (add-to-list 'erc-modules 'spelling)
-  (erc-update-modules)
-
-  ;; Send message with C-RET instead of just RET
-  (define-key erc-mode-map (kbd "RET") nil)
-  (define-key erc-mode-map (kbd "C-<return>") 'erc-send-current-line)
+    (defun iensu/erc-freenode ()
+      "Connect to irc.freenode.net"
+      (interactive)
+      (erc :server "irc.freenode.net" :port 6667 :nick *erc-nick*)))
 
   (use-package erc-hl-nicks :after erc)
 
@@ -1633,7 +1634,7 @@ Setup flycheck for on the fly linting.
 
 #+begin_src emacs-lisp
   (use-package graphviz-dot-mode
-    :bind (:graphviz-dot-mode-map
+    :bind (:map graphviz-dot-mode-map
            ("C-c C-c" . graphviz-dot-preview))
     :config
     (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot)))
