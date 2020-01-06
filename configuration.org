@@ -13,6 +13,7 @@
   - [[#external-package-installation][External package installation]]
   - [[#make-it-pretty][Make it pretty]]
   - [[#utility-packages][Utility packages]]
+    - [[#hydra][Hydra]]
     - [[#make-binaries-on-the-path-accessible-in-emacs][Make binaries on the =PATH= accessible in Emacs.]]
     - [[#remember-recent-files][Remember recent files.]]
     - [[#password-entry-in-minibuffer][Password entry in minibuffer]]
@@ -368,6 +369,14 @@ Setup =package.el= and =use-package= for clean package installation.
 
 ** Utility packages
 
+*** Hydra
+
+#+begin_src emacs-lisp
+  (use-package hydra)
+  (use-package pretty-hydra
+    :after (hydra))
+#+end_src
+
 *** Make binaries on the =PATH= accessible in Emacs.
 
 #+begin_src emacs-lisp
@@ -539,8 +548,8 @@ Setup =package.el= and =use-package= for clean package installation.
                        (if (string-equal project-name "-")
                            ""
                          (concat " [" project-name "]"))))
-    :bind-keymap
-    ("C-c p" . projectile-command-map)
+    :bind
+    (("C-c p" . hydra-project/body))
     :custom
     (projectile-completion-system 'ivy)
     (projectile-cache-file (iensu--config-file ".local/projectile.cache"))
@@ -548,8 +557,36 @@ Setup =package.el= and =use-package= for clean package installation.
     (projectile-git-submodule-command nil)
     (projectile-sort-order 'access-time)
     (projectile-globally-ignored-files '("TAGS" ".DS_Store" ".projectile"))
+    :pretty-hydra
+    ((:color teal :quit-key "q" :title "Project")
+      ("Project"
+       (("p" counsel-projectile-switch-project "open project")
+        ("k" projectile-kill-buffers "close project")
+        ("t" projectile-test-project "test project")
+        ("c" projectile-compile-project "compile project"))
+       "Files & Buffers"
+       (("f" counsel-projectile-find-file "open project file")
+        ("b" counsel-projectile-switch-to-buffer "open project buffer")
+        ("S" projectile-save-buffers "save project buffers"))
+       "Search"
+       (("s" projectile-ripgrep "search")
+        ("r" projectile-replace "replace literal")
+        ("R" projectile-replace-regexp "replace regex"))))
     :config
-    (projectile-global-mode))
+    (projectile-global-mode)
+    (projectile-register-project-type
+     'node-npm '("package.json")
+     :compile "npm run build"
+     :test "npm test")
+    (projectile-register-project-type
+     'rust-cargo '("cargo.toml")
+     :compile "cargo check"
+     :test "cargo test"
+     :run "cargo run")
+    (projectile-register-project-type
+     'java-maven '("pom.xml")
+     :compile "mvn compile"
+     :test "mvn test"))
 
   (use-package forge
     :after magit)
@@ -1329,8 +1366,22 @@ Setup flycheck for on the fly linting.
 #+begin_src emacs-lisp
   (use-package lsp-mode
     :commands lsp
+    :bind (:map lsp-mode-map
+                ("C-c l" . hydra-lsp/body))
     :custom
-    (lsp-prefer-flymake nil))
+    (lsp-prefer-flymake nil)
+    :pretty-hydra
+    ((:title "LSP" :quit-key "q" :color teal)
+      ("Exploration"
+       (("l" lsp-find-references "list references")
+        ("d" lsp-describe-thing-at-point "describe")
+        ("e" lsp-treemacs-errors-list "list errors")
+        ("t" lsp-goto-type-definition "find type definition"))
+       "Refactoring"
+       (("n" lsp-rename "rename symbol")
+        ("i" lsp-organize-imports "organize imports"))
+       "Misc"
+       (("w" lsp-restart-workspace "restart LSP server")))))
 
   (use-package lsp-ui
     :custom
@@ -1515,13 +1566,15 @@ Setup flycheck for on the fly linting.
                 ("C-."     . company-files)
                 ("M-."     . tide-jump-to-definition)
                 ("M-,"     . tide-jump-back)
-                ("C-c l d" . tide-documentation-at-point)
-                ("C-c l l" . tide-references)
-                ("C-c l e" . tide-project-errors)
-                ("C-c l f" . tide-fix)
-                ("C-c l n" . tide-rename-symbol)
-                ("C-c l r" . tide-refactor)
-                ("C-c t"   . npm-test-run-tests))
+                ("C-c t"   . hydra-tide/body))
+    :pretty-hydra
+    ((:color teal :quit-key "q" :title "Typescript Tide")
+     ("Commands"
+      (("d" tide-documentation-at-point "documentation at point")
+       ("e" tide-project-errors "list errors")
+       ("f" tide-fix "fix issue at point")
+       ("n" tide-rename-symbol "rename symbol")
+       ("r" tide-refactor "refactor"))))
     :config
     (tide-hl-identifier-mode 1))
 #+end_src
@@ -1577,7 +1630,7 @@ Setup flycheck for on the fly linting.
 #+begin_src emacs-lisp
   (use-package rust-mode
     :bind (:map rust-mode-map
-                ("C-c C-c" . rust-run))
+                ("C-c C-c" . rust-compile))
     :hook
     (rust-mode . lsp)
     :custom
