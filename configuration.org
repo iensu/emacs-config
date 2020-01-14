@@ -1548,7 +1548,6 @@ Setup flycheck for on the fly linting.
     :mode ("\\.ts$")
     :hook
     (typescript-mode . lsp)
-    (typescript-mode . tide-setup)
     (typescript-mode . prettier-js-mode)
     :custom
     (flycheck-check-syntax-automatically '(save mode-enabled))
@@ -1559,26 +1558,7 @@ Setup flycheck for on the fly linting.
               (lambda ()
                 (when (and buffer-file-name
                            (string-equal "tsx" (file-name-extension buffer-file-name)))
-                  (tide-setup)
                   (lsp)))))
-
-  (use-package tide
-    :delight " 潮"
-    :bind (:map tide-mode-map
-                ("C-."     . company-files)
-                ("M-."     . tide-jump-to-definition)
-                ("M-,"     . tide-jump-back)
-                ("C-c t"   . hydra-tide/body))
-    :pretty-hydra
-    ((:color teal :quit-key "q" :title "Typescript Tide")
-     ("Commands"
-      (("d" tide-documentation-at-point "documentation at point")
-       ("e" tide-project-errors "list errors")
-       ("f" tide-fix "fix issue at point")
-       ("n" tide-rename-symbol "rename symbol")
-       ("r" tide-refactor "refactor"))))
-    :config
-    (tide-hl-identifier-mode 1))
 #+end_src
 
 *** GraphQL
