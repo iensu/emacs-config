@@ -1713,6 +1713,7 @@ https://github.com/Silex/docker.el
 
 #+begin_src emacs-lisp
   (use-package docker)
+  (use-package dockerfile-mode)
 #+end_src
 
 ** Load theme
