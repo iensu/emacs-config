@@ -556,19 +556,19 @@ Setup =package.el= and =use-package= for clean package installation.
     (projectile-globally-ignored-files '("TAGS" ".DS_Store" ".projectile"))
     :pretty-hydra
     ((:color teal :quit-key "q" :title "Project")
-      ("Project"
-       (("p" counsel-projectile-switch-project "open project")
-        ("k" projectile-kill-buffers "close project")
-        ("t" projectile-test-project "test project" :exit t)
-        ("c" projectile-compile-project "compile project" :exit t))
-       "Files & Buffers"
-       (("f" counsel-projectile-find-file "open project file")
-        ("b" counsel-projectile-switch-to-buffer "open project buffer")
-        ("S" projectile-save-buffers "save project buffers"))
-       "Search"
-       (("s" projectile-ripgrep "search")
-        ("r" projectile-replace "replace literal")
-        ("R" projectile-replace-regexp "replace regex"))))
+     ("Project"
+      (("p" counsel-projectile-switch-project "open project")
+       ("k" projectile-kill-buffers "close project")
+       ("t" projectile-test-project "test project" :exit t)
+       ("c" projectile-compile-project "compile project" :exit t))
+      "Files & Buffers"
+      (("f" counsel-projectile-find-file "open project file")
+       ("b" counsel-projectile-switch-to-buffer "open project buffer")
+       ("S" projectile-save-buffers "save project buffers"))
+      "Search"
+      (("s" projectile-ripgrep "search")
+       ("r" projectile-replace "replace literal")
+       ("R" projectile-replace-regexp "replace regex"))))
     :config
     (projectile-global-mode)
     (projectile-register-project-type
