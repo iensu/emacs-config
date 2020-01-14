@@ -1503,9 +1503,11 @@ Setup flycheck for on the fly linting.
     (js2-mode . rainbow-delimiters-mode)
     (js2-mode . smartparens-mode)
     (js2-mode . lsp)
+    (js2-mode . prettier-js-mode)
     :config
     (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)
-    (js2-mode-hide-warnings-and-errors))
+    (js2-mode-hide-warnings-and-errors)
+    (flycheck-add-mode 'javascript-eslint 'js2-mode))
 
   (use-package rjsx-mode
     :mode ("\\.jsx\\'")
@@ -1515,6 +1517,7 @@ Setup flycheck for on the fly linting.
     (rjsx-mode . smartparens-mode)
     (rjsx-mode . emmet-mode)
     (rjsx-mode . lsp)
+    (rjsx-mode . prettier-js-mode)
     :init
     (add-to-list 'magic-mode-alist '((lambda () (and (string-equal "js" (file-name-extension buffer-file-name))
                                                 (string-match "^import .* from [\"']react[\"']" (buffer-string)))) . rjsx-mode))
