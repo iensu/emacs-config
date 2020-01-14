@@ -448,10 +448,6 @@ Setup =package.el= and =use-package= for clean package installation.
            (repl-mode . smartparens-strict-mode)
            (lisp-mode . smartparens-strict-mode)
            (emacs-lisp-mode . smartparens-strict-mode)))
-
-  (use-package undo-tree
-    :delight
-    :init (global-undo-tree-mode))
 #+end_src
 
 *** Searching and finding stuff
@@ -587,9 +583,6 @@ Setup =package.el= and =use-package= for clean package installation.
      'java-maven '("pom.xml")
      :compile "mvn compile"
      :test "mvn test"))
-
-  (use-package forge
-    :after magit)
 
   (use-package counsel-projectile :init (counsel-projectile-mode 1))
 #+end_src
