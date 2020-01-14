@@ -770,23 +770,24 @@ Setup capture templates.
         `(("t" "TODO" entry (file ,(iensu-org-file 'refile))
            ,(concat "* TODO %?\n"
                     "%U\n"
-                    "%a\n")
-           :clock-in t :clock-resume t)
+                    "%a")
+           :clock-in t :clock-resume t :empty-lines 1)
 
           ("j" "Journal" entry (file+datetree ,(iensu-org-file 'journal))
-           ,(concat "* %^{Location|Stockholm, Sweden}\n"
-                    "%U\n\n"
-                    "%?\n"))
+           ,(concat "* %^{Titel}\n"
+                    "%U, %^{Location|Stockholm, Sverige}\n\n"
+                    "%?")
+           :empty-lines 1)
 
           ("l" "Link" entry (file ,(iensu-org-file 'refile))
            ,(concat "* %? %^L %^G \n"
-                    "%U\n")
+                    "%U")
            :prepend t)
 
           ("L" "Browser Link" entry (file ,(iensu-org-file 'refile))
            ,(concat "* TODO %a\n"
-                    "%U\n")
-           :prepend t :immediate-finish t)
+                    "%U")
+           :prepend t :immediate-finish t :empty-lines 1)
 
           ("p" "Browser Link and Selection" entry (file ,(iensu-org-file 'refile))
            ,(concat "* TODO %^{Title}\n"
@@ -794,18 +795,20 @@ Setup capture templates.
                     "#+BEGIN_QUOTE\n"
                     "%i\n"
                     "#+END_QUOTE\n\n\n%?")
-           :prepend t)
+           :prepend t :empty-lines 1)
 
           ("m" "Project note" entry (file+headline iensu-org-capture-project-notes-file "Notes")
            ,(concat "* %^{Title}\n"
                     "%U\n\n"
-                    "%?\n\n"))
+                    "%?")
+           :empty-lines 1)
 
           ("n" "Project note with link" entry (file+headline iensu-org-capture-project-notes-file "Notes")
            ,(concat "* %^{Title}\n"
                     "%U\n\n"
                     "Link: %a\n\n"
-                    "%?\n\n"))
+                    "%?")
+           :empty-lines 1)
 
           ("N" "Project note with link + quote" entry (file+headline iensu-org-capture-project-notes-file "Notes")
            ,(concat "* %^{Title}\n"
@@ -814,15 +817,18 @@ Setup capture templates.
                     "#+BEGIN_QUOTE\n"
                     "%i\n"
                     "#+END_QUOTE\n\n"
-                    "%?\n\n"))
+                    "%?")
+           :empty-lines 1)
 
           ("a" "Appointment" entry (file ,(iensu-org-file 'appointments))
            ,(concat "* %^{title} %^G\n"
                     "SCHEDULED: %^T\n\n"
-                    "%?\n"))
+                    "%?")
+           :empty-lines 1)
 
           ("b" "Book" entry (file+headline ,(iensu-org-file 'books) "Läslista")
-           ,(concat "* %^{STATE|TODO|DONE} %^{} <%^{}> %^g\n\n"))))
+           ,(concat "* %^{STATE|TODO|DONE} %^{} <%^{}> %^g")
+           :empty-lines 1)))
 
   (setq org-capture-templates iensu-org-capture-templates-alist)
 #+end_src
