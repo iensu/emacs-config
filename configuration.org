@@ -1342,16 +1342,16 @@ Setup snippet expansions.
 Setup flycheck for on the fly linting.
 
 #+begin_src emacs-lisp
-    (use-package flycheck
-      :init
-      (global-flycheck-mode t)
-      :config
-      (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+  (use-package flycheck
+    :init
+    (global-flycheck-mode t)
+    :config
+    (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
-    (use-package flycheck-popup-tip
-      :init
-      (eval-after-load 'flycheck
-        '(add-hook 'flycheck-mode-hook 'flycheck-popup-tip-mode)))
+  (use-package flycheck-popup-tip
+    :init
+    (eval-after-load 'flycheck
+      '(add-hook 'flycheck-mode-hook 'flycheck-popup-tip-mode)))
 #+end_src
 
 *** LSP mode
@@ -1449,26 +1449,26 @@ Setup flycheck for on the fly linting.
 **** Web mode
 
 #+begin_src emacs-lisp
-    (use-package web-mode
-      :mode ("\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$" "\\.vue$" "\\.tsx$")
-      :hook
-      (web-mode . emmet-mode)
-      :custom
-      (web-mode-css-indent-offset 2)
-      (web-mode-code-indent-offset 2)
-      (web-mode-markup-indent-offset 2)
-      (web-mode-attr-indent-offset 2)
-      (web-mode-attr-value-indent-offset 2)
-      (web-mode-enable-css-colorization t)
-      (web-mode-enable-current-element-highlight t)
-      (web-mode-enable-current-column-highlight t)
-      :config
-      (add-hook 'web-mode-hook
-                (lambda () (yas-activate-extra-mode 'js-mode)))
-      (flycheck-add-mode 'javascript-eslint 'web-mode)
-      ;; Use web-mode for choo files
-      (add-to-list 'magic-mode-alist
-                   '("^const html = require.*choo/html" . web-mode)))
+  (use-package web-mode
+    :mode ("\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$" "\\.vue$" "\\.tsx$" "\\.php$")
+    :hook
+    (web-mode . emmet-mode)
+    :custom
+    (web-mode-css-indent-offset 2)
+    (web-mode-code-indent-offset 2)
+    (web-mode-markup-indent-offset 2)
+    (web-mode-attr-indent-offset 2)
+    (web-mode-attr-value-indent-offset 2)
+    (web-mode-enable-css-colorization t)
+    (web-mode-enable-current-element-highlight t)
+    (web-mode-enable-current-column-highlight t)
+    :config
+    (add-hook 'web-mode-hook
+              (lambda () (yas-activate-extra-mode 'js-mode)))
+    (flycheck-add-mode 'javascript-eslint 'web-mode)
+    ;; Use web-mode for choo files
+    (add-to-list 'magic-mode-alist
+                 '("^const html = require.*choo/html" . web-mode)))
 #+end_src
 
 *** JavaScript
