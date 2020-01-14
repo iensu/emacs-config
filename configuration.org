@@ -58,6 +58,7 @@
     - [[#terraform][Terraform]]
     - [[#graphviz-dot-mode][Graphviz Dot Mode]]
     - [[#java][Java]]
+    - [[#scala][Scala]]
     - [[#sql][SQL]]
     - [[#docker][Docker]]
   - [[#load-theme][Load theme]]
@@ -585,6 +586,13 @@ Setup =package.el= and =use-package= for clean package installation.
      :test "mvn test"))
 
   (use-package counsel-projectile :init (counsel-projectile-mode 1))
+
+  (use-package ibuffer-projectile :after (projectile)
+    :hook
+    (ibuffer-mode . (lambda ()
+                      (ibuffer-projectile-set-filter-groups)
+                      (unless (eq ibuffer-sorting-mode 'alphabetic)
+                        (ibuffer-do-sort-by-alphabetic)))))
 #+end_src
 
 *** File browsing
@@ -683,6 +691,9 @@ Setup =package.el= and =use-package= for clean package installation.
 
   (use-package treemacs-magit
     :after treemacs magit)
+
+  (use-package treemacs-projectile
+    :after treemacs projectile)
 #+end_src
 
 ** Org-mode
@@ -1682,6 +1693,28 @@ Setup flycheck for on the fly linting.
     (dap-tooltip-mode 1)
     (tooltip-mode 1))
 #+end_src
+*** Scala
+
+#+begin_src emacs-lisp
+  (use-package scala-mode
+    :hook
+    (scala-mode . lsp)
+    :mode "\\.s\\(cala\\|bt\\)$")
+
+  (use-package sbt-mode
+    :commands (sbt-start sbt-command)
+    :custom
+    ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+    (sbt:program-options '("-Dsbt.supershell=false"))
+    :config
+    ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+    ;; allows using SPACE when in the minibuffer
+    (substitute-key-definition
+     'minibuffer-complete-word
+     'self-insert-command
+     minibuffer-local-completion-map))
+#+end_src
+
 *** SQL
 
 #+begin_src emacs-lisp
