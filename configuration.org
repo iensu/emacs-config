@@ -549,7 +549,7 @@ Setup =package.el= and =use-package= for clean package installation.
                            ""
                          (concat " [" project-name "]"))))
     :bind
-    (("C-c p" . hydra-project/body))
+    (("C-c p" . projectile-hydra/body))
     :custom
     (projectile-completion-system 'ivy)
     (projectile-cache-file (iensu--config-file ".local/projectile.cache"))
@@ -562,8 +562,8 @@ Setup =package.el= and =use-package= for clean package installation.
       ("Project"
        (("p" counsel-projectile-switch-project "open project")
         ("k" projectile-kill-buffers "close project")
-        ("t" projectile-test-project "test project")
-        ("c" projectile-compile-project "compile project"))
+        ("t" projectile-test-project "test project" :exit t)
+        ("c" projectile-compile-project "compile project" :exit t))
        "Files & Buffers"
        (("f" counsel-projectile-find-file "open project file")
         ("b" counsel-projectile-switch-to-buffer "open project buffer")
@@ -1367,7 +1367,7 @@ Setup flycheck for on the fly linting.
   (use-package lsp-mode
     :commands lsp
     :bind (:map lsp-mode-map
-                ("C-c l" . hydra-lsp/body))
+                ("C-c l" . lsp-mode-hydra/body))
     :custom
     (lsp-prefer-flymake nil)
     :pretty-hydra
