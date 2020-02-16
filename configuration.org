@@ -165,7 +165,7 @@ Basic configuration which does not depend on any external packages.
         epa-pinentry-mode 'loopback)
 
   ;; use default browser for browsing stuff
-  (setq browse-url-browser-function 'browse-url-default-browser)
+  (setq browse-url-browser-function 'browse-url-default-macosx-browser)
 
   (setq compilation-scroll-output t)
 #+end_src
