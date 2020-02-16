@@ -940,8 +940,11 @@ Setup capture templates.
     (org-load-modules-maybe t)
     (dolist (lang-mode '(("javascript" . js2) ("es" . es)))
       (add-to-list 'org-src-lang-modes lang-mode))
-    (auto-fill-mode nil)
-    (visual-line-mode 1))
+    (visual-line-mode 1)
+    (add-hook 'org-mode-hook
+              (lambda ()
+                (setq buffer-face-mode '(:family "Inconsolata"))
+                (buffer-face-mode))))
 #+end_src
 
 *** Org-agenda configuration
@@ -1801,7 +1804,9 @@ https://github.com/Silex/docker.el
     (when (display-graphic-p)
       (load-theme 'dracula t)
       ;; Enlarge default font size
-      (set-face-attribute 'default nil :height 140)
+      (set-face-attribute 'default nil :family "Fira Code" :height 140)
+      ;; Comments in italic
+      (set-face-attribute 'font-lock-comment-face :slant 'italic)
       ;; Improve matching paren highlighting
       (set-face-attribute 'show-paren-match nil
                           :background (face-background 'default)
