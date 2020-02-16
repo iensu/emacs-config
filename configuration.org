@@ -5,6 +5,7 @@
   - [[#helper-functions][Helper functions]]
   - [[#custom-hooks][Custom hooks]]
   - [[#baseline-setup][Baseline setup]]
+    - [[#window-configuration][Window configuration]]
   - [[#sane-editor-defaults][Sane editor defaults]]
   - [[#global-keybindings][Global keybindings]]
     - [[#setting-up-keys-for-macos][Setting up keys for macOS]]
@@ -168,6 +169,38 @@ Basic configuration which does not depend on any external packages.
   (setq browse-url-browser-function 'browse-url-default-macosx-browser)
 
   (setq compilation-scroll-output t)
+#+end_src
+
+*** Window configuration
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :custom
+    (display-buffer-alist
+     '(("\\*e?shell\\.*"
+        (display-buffer-in-side-window)
+        (window-height . 0.25)
+        (side . bottom)
+        (slot . 0))
+
+       ("\\*[Hh]elp\\.*"
+        (display-buffer-in-side-window)
+        (window-height . 0.25)
+        (side . bottom)
+        (slot . 1))))
+    :config
+    (defun iensu/make-frame-without-minibuffer ()
+      (interactive)
+      (make-frame '((minibuffer . nil)
+                    (mode-line-format . (" ")))))
+
+    (defun iensu/buffer->bottom-window ()
+      (interactive)
+      (if (> 2 (length (window-list)))
+          (message "Must have 2 or more windows in frame.")
+        (let ((buffer (current-buffer)))
+          (delete-window)
+          (display-buffer-at-bottom buffer)))))
 #+end_src
 
 ** Sane editor defaults
