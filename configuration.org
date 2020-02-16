@@ -1445,7 +1445,8 @@ Setup flycheck for on the fly linting.
         ("e" lsp-treemacs-errors-list "list errors")
         ("t" lsp-goto-type-definition "find type definition"))
        "Refactoring"
-       (("n" lsp-rename "rename symbol")
+       (("a" lsp-execute-code-action "execute code action")
+        ("n" lsp-rename "rename symbol")
         ("i" lsp-organize-imports "organize imports"))
        "Misc"
        (("w" lsp-restart-workspace "restart LSP server")))))
@@ -1587,8 +1588,11 @@ Setup flycheck for on the fly linting.
     (rjsx-mode . lsp)
     (rjsx-mode . prettier-js-mode)
     :init
-    (add-to-list 'magic-mode-alist '((lambda () (and (string-equal "js" (file-name-extension buffer-file-name))
-                                                (string-match "^import .* from [\"']react[\"']" (buffer-string)))) . rjsx-mode))
+    (add-to-list 'magic-mode-alist
+                 '((lambda () (and buffer-file-name
+                              (string-equal "js" (file-name-extension buffer-file-name))
+                              (string-match "^import .* from [\"']react[\"']" (buffer-string))))
+                   . rjsx-mode))
     :config
     (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
     (add-hook 'rjsx-mode-hook (lambda () (setq emmet-expand-jsx-className? t))))
@@ -1615,7 +1619,7 @@ Setup flycheck for on the fly linting.
     (typescript-mode "TS" :major)
     :mode ("\\.ts$")
     :hook
-    (typescript-mode . lsp)
+    ;; (typescript-mode . lsp)
     (typescript-mode . prettier-js-mode)
     :custom
     (flycheck-check-syntax-automatically '(save mode-enabled))
@@ -1627,6 +1631,28 @@ Setup flycheck for on the fly linting.
                 (when (and buffer-file-name
                            (string-equal "tsx" (file-name-extension buffer-file-name)))
                   (lsp)))))
+
+  (use-package tide
+    :after (typescript-mode company flycheck)
+    :hook ((typescript-mode . tide-setup)
+           (typescript-mode . tide-hl-identifier-mode))
+    :bind (:map tide-mode-map
+                  ("C-c l" . tide-hydra/body))
+      :pretty-hydra
+      ((:title "Tide" :quit-key "q" :color teal)
+        ("Exploration"
+         (("l" tide-references "list references")
+          ("d" tide-documentation-at-point "describe")
+          ("e" tide-project-errors "list errors")
+          ("å" flycheck-previous-error "goto previous error in buffer")
+          ("ä" flycheck-next-error "goto next error in buffer "))
+         "Refactoring"
+         (("a" tide-fix "execute code action")
+          ("n" tide-rename-symbol "rename symbol")
+          ("i" tide-organize-imports "organize imports")
+          ("D" tide-jsdoc-template "insert JSDOC template"))
+         "Misc"
+         (("w" tide-restart-server "restart LSP server")))))
 #+end_src
 
 *** GraphQL
