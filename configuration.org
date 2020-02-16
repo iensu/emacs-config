@@ -52,6 +52,7 @@
     - [[#typescript][TypeScript]]
     - [[#graphql][GraphQL]]
     - [[#elm][Elm]]
+    - [[#shell][Shell]]
     - [[#markdown][Markdown]]
     - [[#yaml][YAML]]
     - [[#python][Python]]
@@ -1643,6 +1644,14 @@ Setup flycheck for on the fly linting.
           elm-sort-imports-on-save t
           elm-format-on-save t)
     (add-hook 'elm-mode-hook #'lsp))
+#+end_src
+
+*** Shell
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :config
+    (add-to-list 'auto-mode-alist '("\\.envrc$" . sh-mode)))
 #+end_src
 
 *** Markdown
