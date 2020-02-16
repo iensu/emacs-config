@@ -1649,6 +1649,8 @@ Setup flycheck for on the fly linting.
     :commands (markdown-mode gfm-mode)
     :mode (("\\.md\\'"       . gfm-mode)
            ("\\.markdown\\'" . markdown-mode)))
+
+  (use-package markdown-toc)
 #+end_src
 
 *** YAML
