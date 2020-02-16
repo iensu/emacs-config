@@ -573,6 +573,26 @@ Setup =package.el= and =use-package= for clean package installation.
     :custom
     (magit-bury-buffer-function 'quit-window))
 
+  (use-package smerge-mode
+    :ensure nil
+    :bind (:map smerge-mode-map (("C-c ö" . smerge-mode-hydra/body)))
+    :pretty-hydra
+    ((:color teal :quit-key "q" :title "Smerge - Git conflicts")
+     ("Resolving"
+      (("RET" smerge-keep-current      "Keep current"          :exit nil)
+       ("l"   smerge-keep-lower        "Keep lower"            :exit nil)
+       ("u"   smerge-keep-upper        "Keep upper"            :exit nil)
+       ("b"   smerge-keep-base         "Keep base"             :exit nil)
+       ("C"   smerge-combine-with-next "Combine with next")
+       ("a"   smerge-keep-all          "Keep all"              :exit nil)
+       ("r"   smerge-resolve           "Resolve"))
+      "Navigation"
+      (("n"   smerge-next              "Next conflict"         :exit nil)
+       ("p"   smerge-prev              "Previous conflict"     :exit nil)
+       ("R"   smerge-refine            "Highlight differences" :exit nil))
+      "Misc"
+      (("E"   smerge-ediff             "Open in Ediff")))))
+
   (use-package projectile
     :delight '(:eval (let ((project-name (projectile-project-name)))
                        (if (string-equal project-name "-")
