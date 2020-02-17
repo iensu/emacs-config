@@ -1095,7 +1095,7 @@ Make view more compact
 
 Only display one bullet per headline for a cleaner look.
 
-#+begin_src
+#+begin_src emacs-lisp
   (use-package org-bullets
     :init
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
@@ -1105,17 +1105,20 @@ Only display one bullet per headline for a cleaner look.
 
 #+begin_src emacs-lisp
   (defun iensu--org-mode-restyle ()
-    ; Make all headlines have the same size and weight
+    ;; Make all headlines have the same size and weight
     (dolist (heading-num (number-sequence 1 8))
       (set-face-attribute (intern (format "org-level-%d" heading-num))
                           nil
                           :height 1.2
                           :weight 'bold))
-    ; Style org blocks
+    ;; Style org blocks
     (set-face-attribute 'org-block-begin-line nil :height 120)
     (set-face-attribute 'org-meta-line        nil :height 120)
-    ; Other font styles
-    (set-face-attribute 'org-headline-done nil :strike-through nil :foreground "#cccccc"))
+    ;; Other font styles
+    (set-face-attribute 'org-headline-done nil :strike-through nil :foreground "#cccccc")
+
+    (setq org-src-block-faces '(("emacs-lisp" (:family "Input Mono"))
+                                ("shell" (:family "Input Mono")))))
 
   (add-hook 'after-load-theme-hook #'iensu--org-mode-restyle)
 #+end_src
