@@ -1852,6 +1852,14 @@ https://github.com/Silex/docker.el
                           :weight 'extra-bold)))
 #+end_src
 
+Add function to enable custom modeline.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :config
+    (load-file (iensu--config-file "packages/custom-modeline.el")))
+#+end_src
+
 ** Custom commands
 
 #+begin_src emacs-lisp
