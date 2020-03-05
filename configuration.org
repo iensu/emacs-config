@@ -236,11 +236,11 @@ Set editor defaults to be more in line with expectations.
   ;; defaults for programming modes
   (add-hook 'prog-mode-hook
             (lambda ()
-              (subword-mode 1)
-              (column-number-mode 1)
+              (subword-mode)
+              (column-number-mode)
               (display-line-numbers-mode)
-              (eldoc-mode 1)
-              (show-paren-mode 1)))
+              (eldoc-mode)
+              (show-paren-mode)))
 
   ;; Open eshell and shell buffers in popup windows
   (setq display-buffer-alist '(("\\`\\*e?shell" display-buffer-pop-up-window)))
@@ -249,7 +249,7 @@ Set editor defaults to be more in line with expectations.
 Start the emacsclient server.
 
 #+begin_src emacs-lisp
-  (server-start 'kill-existing 'no-prompt)
+  (server-start)
 #+end_src
 
 ** Global keybindings
@@ -389,7 +389,10 @@ Setup =package.el= and =use-package= for clean package installation.
   (use-package delight
     :config
     (delight 'global-auto-revert-mode nil t)
-    (delight 'auto-revert-mode nil t))
+    (delight 'auto-revert-mode nil t)
+    (delight 'auto-fill nil t)
+    (delight 'org-src-mode nil t)
+    (delight 'subword-mode nil t))
 
   (use-package diminish
     :init
@@ -444,45 +447,46 @@ Setup =package.el= and =use-package= for clean package installation.
 *** Editor functionality
 
 #+begin_src emacs-lisp
-  (use-package editorconfig
-    :delight
-    :init
-    (add-hook 'prog-mode-hook (editorconfig-mode 1))
-    (add-hook 'text-mode-hook (editorconfig-mode 1)))
+    (use-package editorconfig
+      :delight
+      :init
+      (add-hook 'prog-mode-hook (editorconfig-mode 1))
+      (add-hook 'text-mode-hook (editorconfig-mode 1)))
 
-  (use-package multiple-cursors
-    :bind
-    (("M-="           . mc/edit-lines)
-     ("C-S-<right>"   . mc/mark-next-like-this)
-     ("C-S-<left>"    . mc/mark-previous-like-this)
-     ("C-S-<mouse-1>" . mc/add-cursor-on-click))
-    :custom
-    (mc/list-file (iensu--config-file ".local/.mc-lists.el")))
+    (use-package multiple-cursors
+      :bind
+      (("M-="           . mc/edit-lines)
+       ("C-S-<right>"   . mc/mark-next-like-this)
+       ("C-S-<left>"    . mc/mark-previous-like-this)
+       ("C-S-<mouse-1>" . mc/add-cursor-on-click))
+      :custom
+      (mc/list-file (iensu--config-file ".local/.mc-lists.el")))
 
-  (use-package expand-region
-    :bind
-    (("C-=" . er/expand-region)
-     ("C-M-=" . er/contract-region)))
+    (use-package expand-region
+      :bind
+      (("C-=" . er/expand-region)
+       ("C-M-=" . er/contract-region)))
 
-  (use-package iedit)
+    (use-package iedit)
 
-  (use-package smartparens
-    :init
-    (require 'smartparens-config)
-    :bind (:map smartparens-mode-map
-                ("M-s"       . sp-unwrap-sexp)
-                ("C-<down>"  . sp-down-sexp)
-                ("C-<up>"    . sp-up-sexp)
-                ("M-<down>"  . sp-backward-down-sexp)
-                ("M-<up>"    . sp-backward-up-sexp)
-                ("C-<right>" . sp-forward-slurp-sexp)
-                ("M-<right>" . sp-forward-barf-sexp)
-                ("C-<left>"  . sp-backward-slurp-sexp)
-                ("M-<left>"  . sp-backward-barf-sexp))
-    :hook ((prog-mode . smartparens-mode)
-           (repl-mode . smartparens-strict-mode)
-           (lisp-mode . smartparens-strict-mode)
-           (emacs-lisp-mode . smartparens-strict-mode)))
+    (use-package smartparens
+      :delight
+      :init
+      (require 'smartparens-config)
+      :bind (:map smartparens-mode-map
+                  ("M-s"       . sp-unwrap-sexp)
+                  ("C-<down>"  . sp-down-sexp)
+                  ("C-<up>"    . sp-up-sexp)
+                  ("M-<down>"  . sp-backward-down-sexp)
+                  ("M-<up>"    . sp-backward-up-sexp)
+                  ("C-<right>" . sp-forward-slurp-sexp)
+                  ("M-<right>" . sp-forward-barf-sexp)
+                  ("C-<left>"  . sp-backward-slurp-sexp)
+                  ("M-<left>"  . sp-backward-barf-sexp))
+      :hook ((prog-mode . smartparens-mode)
+             (repl-mode . smartparens-strict-mode)
+             (lisp-mode . smartparens-strict-mode)
+             (emacs-lisp-mode . smartparens-strict-mode)))
 #+end_src
 
 *** Searching and finding stuff
@@ -521,25 +525,9 @@ Setup =package.el= and =use-package= for clean package installation.
     (ivy-display-style 'fancy)
     (ivy-re-builders-alist '((swiper . ivy--regex-plus)
                              (swiper-isearch . ivy--regex-plus)
+                             (counsel-find-file . ivy--regex-plus)
+                             (counsel-projectile-fine-file . ivy--regex-plus)
                              (t . ivy--regex-plus))))
-
-  (use-package ivy-posframe
-    :delight
-    :custom
-    (ivy-posframe-height-alist
-     '((swiper . 15)
-       (swiper-isearch . 15)
-       (t . 10)))
-    (ivy-posframe-display-functions-alist '((swiper . nil)
-                                            (swiper-isearch . nil)
-                                            (t . ivy-posframe-display-at-frame-center)))
-    ;; As of 2019-10-12 border colors on child frames is not working on macos...
-    (ivy-posframe-parameters '((internal-border-width . 2)
-                               (internal-border-color . "white")))
-    :hook
-    (after-load-theme . (lambda () (set-face-attribute 'ivy-posframe nil :background "grey16")))
-    :config
-    (ivy-posframe-mode 1))
 
   (use-package prescient
     :delight
@@ -698,6 +686,7 @@ Setup =package.el= and =use-package= for clean package installation.
     :after (flyspell))
 
   (use-package synosaurus
+    :delight
     :custom
     (synosaurus-backend 'synosaurus-backend-wordnet)
     (synosaurus-choose-method 'popup))
@@ -941,11 +930,7 @@ Setup capture templates.
     (org-load-modules-maybe t)
     (dolist (lang-mode '(("javascript" . js2) ("es" . es)))
       (add-to-list 'org-src-lang-modes lang-mode))
-    (visual-line-mode 1)
-    (add-hook 'org-mode-hook
-              (lambda ()
-                (setq buffer-face-mode '(:family "Inconsolata"))
-                (buffer-face-mode))))
+    (visual-line-mode 1))
 #+end_src
 
 *** Org-agenda configuration
@@ -1029,13 +1014,14 @@ file and then reverted back to its previous value upon closing the TODO list buf
 *** Add more block expansion templates
 
 #+begin_src emacs-lisp
-  (let ((additional-org-templates (if (version< (org-version) "9.2")
-                                      '(("ssh" "#+begin_src shell \n?\n#+end_src")
-                                        ("sel" "#+begin_src emacs-lisp \n?\n#+end_src"))
-                                    '(("ssh" . "src shell")
-                                      ("sel" . "src emacs-lisp")))))
-    (dolist (template additional-org-templates)
-      (add-to-list 'org-structure-template-alist template)))
+    (let ((additional-org-templates (if (version< (org-version) "9.2")
+                                        '(("ssh" "#+begin_src shell \n?\n#+end_src")
+                                          ("sel" "#+begin_src emacs-lisp \n?\n#+end_src"))
+                                      '(("ssh" . "src shell")
+                                        ("sel" . "src emacs-lisp")
+                                        ("sr"  . "src restclient")))))
+      (dolist (template additional-org-templates)
+        (add-to-list 'org-structure-template-alist template)))
 #+end_src
 
 *** Add extra exporting options
@@ -1100,7 +1086,7 @@ Only display one bullet per headline for a cleaner look.
     :init
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
     :config
-    (setq org-bullets-bullet-list '("*")))
+    (setq org-bullets-bullet-list '("◆")))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1109,7 +1095,7 @@ Only display one bullet per headline for a cleaner look.
     (dolist (heading-num (number-sequence 1 8))
       (set-face-attribute (intern (format "org-level-%d" heading-num))
                           nil
-                          :height 1.2
+                          :height 1.0
                           :weight 'bold))
     ;; Style org blocks
     (set-face-attribute 'org-block-begin-line nil :height 120)
@@ -1381,15 +1367,14 @@ Setup auto-completion.
   (use-package company
     :delight
     :init (global-company-mode)
-    :custom
-    (company-idle-delay 0.3)
-    (company-minimum-prefix-length 2)
-    (company-selection-wrap-around t)
-    (company-auto-complete t)
-    (company-tooltip-align-annotations t)
-    (company-dabbrev-downcase nil)
-    (company-auto-complete-chars nil)
     :config
+    (setq company-idle-delay 0.3)
+    (setq company-minimum-prefix-length 2)
+    (setq company-selection-wrap-around t)
+    (setq company-auto-complete t)
+    (setq company-tooltip-align-annotations t)
+    (setq company-dabbrev-downcase nil)
+    (setq company-auto-complete-chars nil)
     (add-hook 'emacs-lisp-mode-hook
               (lambda ()
                 (add-to-list 'company-backends 'company-elisp)))
@@ -1398,8 +1383,8 @@ Setup auto-completion.
   (use-package company-quickhelp
     :bind (:map company-active-map
                 ("M-h" . company-quickhelp-manual-begin))
-    :custom
-    (company-quickhelp-delay 1))
+    :config
+    (setq company-quickhelp-delay 1))
 #+end_src
 
 Setup snippet expansions.
@@ -1428,7 +1413,10 @@ Setup flycheck for on the fly linting.
   (use-package flycheck-popup-tip
     :init
     (eval-after-load 'flycheck
-      '(add-hook 'flycheck-mode-hook 'flycheck-popup-tip-mode)))
+      '(add-hook 'flycheck-mode-hook
+                 (lambda ()
+                   (unless lsp-ui-mode
+                     (flycheck-popup-tip-mode))))))
 #+end_src
 
 *** LSP mode
@@ -1438,14 +1426,16 @@ Setup flycheck for on the fly linting.
     :commands lsp
     :bind (:map lsp-mode-map
                 ("C-c l" . lsp-mode-hydra/body))
-    :custom
-    (lsp-prefer-flymake nil)
+    :config
+    (setq lsp-diagnostic-package :none)
     :pretty-hydra
     ((:title "LSP" :quit-key "q" :color teal)
       ("Exploration"
        (("l" lsp-find-references "list references")
         ("d" lsp-describe-thing-at-point "describe")
         ("e" lsp-treemacs-errors-list "list errors")
+        ("å" flycheck-previous-error "goto previous error in buffer")
+        ("ä" flycheck-next-error "goto next error in buffer ")
         ("t" lsp-goto-type-definition "find type definition"))
        "Refactoring"
        (("a" lsp-execute-code-action "execute code action")
@@ -1455,18 +1445,15 @@ Setup flycheck for on the fly linting.
        (("w" lsp-restart-workspace "restart LSP server")))))
 
   (use-package lsp-ui
-    :custom
-    (lsp-ui-doc-delay 1)
-    (lsp-ui-doc-border "violet")
-    (lsp-ui-doc-position 'at-point)
-    (lsp-ui-doc-use-webkit t)
-    (lsp-ui-doc-max-width 50)
-    (lsp-ui-sideline-delay 0.5)
-    (lsp-ui-sideline-enable t)
-    (lsp-ui-flycheck-enable t)
     :config
-    ;; Disable flyckeck-popup if lsp-ui-mode is enabled
-    (add-hook 'lsp-ui-mode-hook (lambda () (flycheck-popup-tip-mode -1))))
+    (setq lsp-ui-doc-delay 1)
+    (setq lsp-ui-doc-border "violet")
+    (setq lsp-ui-doc-position 'at-point)
+    (setq lsp-ui-doc-use-webkit t)
+    (setq lsp-ui-doc-max-width 50)
+    (setq lsp-ui-sideline-delay 0.5)
+    (setq lsp-ui-sideline-enable t)
+    (setq lsp-ui-flycheck-enable nil))
 
   (use-package company-lsp
     :commands company-lsp)
@@ -1490,6 +1477,7 @@ Setup flycheck for on the fly linting.
                   (setq emmet-expand-jsx-className? t)))))
 
   (use-package prettier-js
+    :delight
     :after (js-mode web-mode)
     :hook (web-mode js2-mode))
 
@@ -1519,7 +1507,6 @@ Setup flycheck for on the fly linting.
       :hook
       (css-mode-hook . emmet-mode)
       (css-mode-hook . rainbow-delimiters-mode)
-      (css-mode-hook . show-paren-mode)
       :custom
       (css-indent-offset 2))
 #+end_src
@@ -1612,6 +1599,15 @@ Setup flycheck for on the fly linting.
   (use-package mocha)
 
   (use-package nvm)
+
+  (use-package add-node-modules-path
+    :config
+    (eval-after-load 'js2-mode
+      '(add-hook 'js-mode-hook #'add-node-modules-path))
+    (eval-after-load 'rjsx-mode
+      '(add-hook 'js-mode-hook #'add-node-modules-path))
+    (eval-after-load 'typescript-mode
+      '(add-hook 'js-mode-hook #'add-node-modules-path)))
 #+end_src
 
 *** TypeScript
@@ -1619,7 +1615,7 @@ Setup flycheck for on the fly linting.
 #+begin_src emacs-lisp
   (use-package typescript-mode
     :delight
-    (typescript-mode "TS" :major)
+    (typescript-mode :major)
     :mode ("\\.ts$")
     :hook
     ;; (typescript-mode . lsp)
@@ -1636,26 +1632,29 @@ Setup flycheck for on the fly linting.
                   (lsp)))))
 
   (use-package tide
+    :delight
     :after (typescript-mode company flycheck)
     :hook ((typescript-mode . tide-setup)
            (typescript-mode . tide-hl-identifier-mode))
     :bind (:map tide-mode-map
-                  ("C-c l" . tide-hydra/body))
-      :pretty-hydra
-      ((:title "Tide" :quit-key "q" :color teal)
-        ("Exploration"
-         (("l" tide-references "list references")
-          ("d" tide-documentation-at-point "describe")
-          ("e" tide-project-errors "list errors")
-          ("å" flycheck-previous-error "goto previous error in buffer")
-          ("ä" flycheck-next-error "goto next error in buffer "))
-         "Refactoring"
-         (("a" tide-fix "execute code action")
-          ("n" tide-rename-symbol "rename symbol")
-          ("i" tide-organize-imports "organize imports")
-          ("D" tide-jsdoc-template "insert JSDOC template"))
-         "Misc"
-         (("w" tide-restart-server "restart LSP server")))))
+                ("C-c l" . tide-hydra/body))
+    :pretty-hydra
+    ((:title "Tide" :quit-key "q" :color teal)
+     ("Exploration"
+      (("l" tide-references "list references")
+       ("d" tide-documentation-at-point "describe")
+       ("e" tide-project-errors "list errors")
+       ("å" flycheck-previous-error "goto previous error in buffer")
+       ("ä" flycheck-next-error "goto next error in buffer "))
+      "Refactoring"
+      (("a" tide-fix "execute code action")
+       ("n" tide-rename-symbol "rename symbol")
+       ("i" tide-organize-imports "organize imports")
+       ("D" tide-jsdoc-template "insert JSDOC template"))
+      "Misc"
+      (("w" tide-restart-server "restart LSP server"))))
+    :config
+    (add-hook 'tide-mode-hook (lambda () (eldoc-mode))))
 #+end_src
 
 *** GraphQL
@@ -1722,8 +1721,9 @@ Setup flycheck for on the fly linting.
                 ("C-c C-c" . rust-compile))
     :hook
     (rust-mode . lsp)
-    :custom
-    (rust-format-on-save t))
+    :config
+    (setq rust-format-on-save t)
+    (setq lsp-rust-clippy-preference "on"))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1844,7 +1844,7 @@ https://github.com/Silex/docker.el
       ;; Enlarge default font size
       (set-face-attribute 'default nil :family "Fira Code" :height 140)
       ;; Comments in italic
-      (set-face-attribute 'font-lock-comment-face :slant 'italic)
+      (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
       ;; Improve matching paren highlighting
       (set-face-attribute 'show-paren-match nil
                           :background (face-background 'default)
