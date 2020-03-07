@@ -1836,6 +1836,17 @@ https://github.com/Silex/docker.el
 
 ** Load theme
 
+Load custom modeline.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :config
+    (load-file (iensu--config-file "packages/iensu-modeline.el"))
+    (add-hook 'after-load-theme-hook #'iensu-modeline/enable))
+#+end_src
+
+Load theme.
+
 #+begin_src emacs-lisp
   (use-package dracula-theme
     :config
@@ -1850,14 +1861,6 @@ https://github.com/Silex/docker.el
                           :background (face-background 'default)
                           :foreground "mediumspringgreen"
                           :weight 'extra-bold)))
-#+end_src
-
-Add function to enable custom modeline.
-
-#+begin_src emacs-lisp
-  (use-package emacs
-    :config
-    (load-file (iensu--config-file "packages/custom-modeline.el")))
 #+end_src
 
 ** Custom commands
