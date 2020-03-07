@@ -2,15 +2,23 @@
   (let ((buffer-state (format-mode-line "%*")))
     (cond
      ((string-equal buffer-state "*")
-      (propertize (all-the-icons-faicon "chain-broken" :height 1.2 :v-adjust -0.0)
-                  'face `(:family ,(all-the-icons-faicon-family))))
-     ((string-equal buffer-state "-")
-      (propertize (all-the-icons-faicon "link" :height 1.2 :v-adjust -0.0)
-                  'face `(:family ,(all-the-icons-faicon-family))))
+      (propertize (all-the-icons-faicon "asterisk" :height 1.0 :v-adjust -0.0)
+                  'face `(:family ,(all-the-icons-faicon-family) :foreground "orange")))
+     ((string-equal buffer-state "-" )
+      (propertize (all-the-icons-material "save" :height 1.2 :v-adjust -0.1)
+                  'face `(:family ,(all-the-icons-material-family) :height 1.3 :foreground "green")))
      ((string-equal buffer-state "%")
       (propertize (all-the-icons-octicon "lock" :height 1.2 :v-adjust 0.1)
-                  'face `(:family ,(all-the-icons-octicon-family))))
+                  'face `(:family ,(all-the-icons-octicon-family) :foreground "gray85")))
      (t " "))))
+
+(defun iensu--custom-modeline-space-between (left right)
+  (let* ((pad-string (lambda (str padding)
+                       (format (concat "%" (int-to-string padding) "s") str)))
+
+         (padded-right (format (format "%%%ds" (- (window-total-width) (length left)))
+                               right)))
+    (concat left padded-right)))
 
 (defun iensu--custom-modeline-icon-vc ()
   (when vc-mode
@@ -18,9 +26,9 @@
      ((string-match "Git[:-]" vc-mode) (let ((branch (mapconcat 'concat (cdr (split-string vc-mode "[:-]")) "-")))
                                          (concat
                                           (propertize (format "%s" (all-the-icons-octicon "git-branch"  :v-adjust 0.0))
-                                                      'face `(:height 1.0 :family ,(all-the-icons-octicon-family))
+                                                      'face `(:height 1.0 :family ,(all-the-icons-octicon-family) :foreground "gray85")
                                                       'display '(raise 0.1))
-                                          (propertize (format " %s" branch) 'face '(:height 0.9)))))
+                                          (propertize (format " %s" branch) 'face '(:height 0.9 :foreground "gray85")))))
      (t (format "%s" vc-mode)))))
 
 (defun iensu--custom-modeline-flycheck-status ()
@@ -35,7 +43,7 @@
                               (propertize "✔ No Issues" 'face '(:height 0.9 :foreground "green"))))
                  (`running     (propertize "⟲ Running" 'face '(:height 0.9 :foreground "green")))
                  (`no-checker  (propertize "⚠ No Checker" 'face '(:height 0.9 :foreground "orange")))
-                 (`not-checked (propertize "✖ Disabled" 'face '(:height 0.9 :foreground "gray")))
+                 (`not-checked (propertize "✖ Disabled" 'face '(:height 0.9 :foreground "gray85")))
                  (`errored     (propertize "⚠ Error" 'face '(:height 0.9 :foreground "red")))
                  (`interrupted "")
                  (`suspicious  ""))))
@@ -44,6 +52,7 @@
                 'mouse-face '(:box 1)
                 'local-map (make-mode-line-mouse-map
                             'mouse-1 (lambda () (interactive) (flycheck-list-errors))))))
+
 (defun iensu--custom-modeline-spell-checking ()
   (when flyspell-mode
     (concat
@@ -67,33 +76,39 @@
 
 (defun iensu--custom-modeline-buffer-mode ()
   (propertize (all-the-icons-icon-for-mode
-                                (buffer-local-value 'major-mode (current-buffer)) :height 1.0 :v-adjust 0.0)))
+               (buffer-local-value 'major-mode (current-buffer)) :height 1.0 :v-adjust 0.0)))
 
 (defun iensu--custom-modeline-project-name ()
-  (when (projectile-project-name)
-                           (propertize (format "%s " (projectile-project-name)) 'face '(:height 0.9))))
+  (let ((project-name (projectile-project-name)))
+    (when (and project-name (not (string-equal project-name "-")))
+      (concat
+       (propertize (all-the-icons-octicon "graph" :height 1.0 :v-adjust 0.1)
+                   'face `(:family ,(all-the-icons-octicon-family) :foreground "gray85"))
+       (propertize (format " %s " project-name) 'face '(:height 0.9 :foreground "gray85"))))))
 
 (defun iensu/custom-modeline ()
   (interactive)
   (custom-set-faces
    '(mode-line ((t (:background "#44475a" :foreground "white" :box (:line-width 4 :color "#44475a"))))))
-  (setq-default mode-line-format
-                '(" "
-                  (   :eval (iensu--custom-modeline-buffer-mode))
-                  " "
-                  (   :eval (iensu--custom-modeline-modified))
-                  " "
-                  (   :eval (iensu--custom-modeline-buffer-name))
-                  " "
-                  (5  :eval (iensu--custom-modeline-buffer-position))
-                  (11  :eval (propertize "(%l,%c)" 'face '(:height 0.9)))
-                  " "
-                  (   :eval (iensu--custom-modeline-spell-checking))
-                  " "
-                  (14 :eval (iensu--custom-modeline-flycheck-status))
-                  (   :eval (iensu--custom-modeline-project-name))
-                  (   :eval (iensu--custom-modeline-icon-vc))
-                  " "
-                  )))
+  (setq mode-line-format
+                '((:eval (let ((left-side (format-mode-line
+                                           '(" "
+                                             (   :eval (iensu--custom-modeline-modified))
+                                             " "
+                                             (   :eval (iensu--custom-modeline-buffer-name))
+                                             "  "
+                                             (   :eval (iensu--custom-modeline-project-name))
+                                             (   :eval (iensu--custom-modeline-icon-vc)))))
+                               (right-side (format-mode-line
+                                            '(" "
+                                              (    :eval (iensu--custom-modeline-spell-checking))
+                                              " "
+                                              (-14 :eval (iensu--custom-modeline-flycheck-status))
+                                              " "
+                                              (11  :eval (propertize "(%l,%c) " 'face '(:height 0.9)))
+                                              (6   :eval (concat (iensu--custom-modeline-buffer-position) "%%"))
+                                              " "
+                                              (    :eval (iensu--custom-modeline-buffer-mode))))))
+                           (iensu--custom-modeline-space-between left-side right-side))))))
 
 (provide 'iensu/custom-modeline)
