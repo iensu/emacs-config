@@ -1,6 +1,6 @@
 * Emacs configuration
 
-** Table of Contents                                                    :TOC_3_gh:
+** Table of Contents                                               :TOC_3_gh:
 - [[#emacs-configuration][Emacs configuration]]
   - [[#helper-functions][Helper functions]]
   - [[#custom-hooks][Custom hooks]]
@@ -9,7 +9,6 @@
   - [[#sane-editor-defaults][Sane editor defaults]]
   - [[#global-keybindings][Global keybindings]]
     - [[#setting-up-keys-for-macos][Setting up keys for macOS]]
-    - [[#setting-up-a-custom-keymap][Setting up a custom keymap]]
     - [[#various-global-keybindings][Various global keybindings]]
   - [[#external-package-installation][External package installation]]
   - [[#make-it-pretty][Make it pretty]]
@@ -55,12 +54,15 @@
     - [[#shell][Shell]]
     - [[#markdown][Markdown]]
     - [[#yaml][YAML]]
+    - [[#toml][TOML]]
     - [[#python][Python]]
     - [[#rust][Rust]]
     - [[#terraform][Terraform]]
     - [[#graphviz-dot-mode][Graphviz Dot Mode]]
     - [[#java][Java]]
     - [[#scala][Scala]]
+    - [[#c][C#]]
+    - [[#f][F#]]
     - [[#sql][SQL]]
     - [[#docker][Docker]]
   - [[#load-theme][Load theme]]
@@ -165,9 +167,6 @@ Basic configuration which does not depend on any external packages.
         ;; https://www.gnupg.org/software/pinentry/index.html
         auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc")
         epa-pinentry-mode 'loopback)
-
-  ;; use default browser for browsing stuff
-  (setq browse-url-browser-function 'browse-url-default-macosx-browser)
 
   (setq compilation-scroll-output t)
 #+end_src
@@ -282,16 +281,6 @@ by running the following command followed by a restart of the computer:
   defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 70 '<dict><key>enabled</key><false/></dict>'
 #+end_src
 
-*** Setting up a custom keymap
-
-Create a custom =keymap= and assign it to =H-1=.
-
-#+begin_src emacs-lisp
-  (define-prefix-command 'iensu-map)
-  (global-set-key (kbd "H-1") 'iensu-map)
-  (global-set-key (kbd "C-å") 'iensu-map)
-#+end_src
-
 *** Various global keybindings
 
 Avoid suspending frame by accident.
@@ -311,26 +300,6 @@ Add a bunch of globally applied keybindings.
                                 ("M-<backspace>" . fixup-whitespace)
                                 ("M-i"           . imenu)
                                 ("M-o"           . occur)))
-
-  (iensu--assign-key-bindings '(("0"   . iensu/update-mail-in-background)
-                                ("2"   . mu4e)
-                                ("9"   . iensu/refresh-work-calendar)
-                                ("c"   . mu4e-compose-new)
-                                ("d"   . iensu/duplicate-line)
-                                ("e f" . iensu/erc-freenode)
-                                ("f"   . other-frame)
-                                ("F"   . make-frame)
-                                ("i"   . iensu/open-init-file)
-                                ("k"   . delete-frame)
-                                ("m"   . mu4e-headers-search)
-                                ("n t" . iensu/npm-test)
-                                ("p"   . list-processes)
-                                ("P"   . iensu/project-todo-list)
-                                ("s"   . deadgrep)
-                                ("t"   . toggle-truncate-lines)
-                                ("u"   . revert-buffer)
-                                ("å"   . iensu/eshell))
-                              'iensu-map)
 #+end_src
 
 Enable window (visible buffer) navigation with =<shift>-<direction>=.
@@ -415,6 +384,36 @@ Setup =package.el= and =use-package= for clean package installation.
     :after (hydra))
 #+end_src
 
+Setup global hydra.
+
+#+begin_src emacs-lisp
+  (pretty-hydra-define iensu-hydra
+    (:color teal :quit-key "q" :title "Global commands")
+    ("Email"
+     (("e u" iensu/update-mail-in-background "update")
+      ("e e" mu4e                            "open email")
+      ("e c" mu4e-compose-new                "write email")
+      ("e s" mu4e-headers-search             "search email"))
+     "Org clock"
+     (("c s" org-clock-in                    "start clock")
+      ("c r" org-clock-in-last               "resume clock")
+      ("c o" org-clock-out                   "stop clock")
+      ("c g" org-clock-goto                  "goto clocked task"))
+     "Utilities"
+     (("d"   iensu/duplicate-line            "duplicate line" :exit nil)
+      ("s"   deadgrep                        "search")
+      ("t"   toggle-truncate-lines           "truncate lines")
+      ("u"   revert-buffer                   "reload buffer")
+      ("l"   iensu/cycle-ispell-dictionary   "change dictionary"))
+     "Misc"
+     (("P"   iensu/project-todo-list         "project todo list")
+      ("i"   iensu/open-init-file            "open emacs config")
+      ("9"   iensu/refresh-work-calendar     "update calendar"))))
+
+  (use-package emacs
+    :bind (("C-å" . iensu-hydra/body)))
+#+end_src
+
 *** Make binaries on the =PATH= accessible in Emacs.
 
 #+begin_src emacs-lisp
@@ -495,7 +494,7 @@ Setup =package.el= and =use-package= for clean package installation.
   (use-package deadgrep)
 #+end_src
 
-**** Ivy|Counsel
+**** Ivy and Counsel
 #+begin_src emacs-lisp
   (use-package counsel
     :delight ivy-mode
@@ -556,6 +555,8 @@ Setup =package.el= and =use-package= for clean package installation.
 
 *** Project management
 
+**** VCS
+
 #+begin_src emacs-lisp
   (use-package magit
     :bind (("C-x g" . magit-status))
@@ -581,7 +582,19 @@ Setup =package.el= and =use-package= for clean package installation.
        ("R"   smerge-refine            "Highlight differences" :exit nil))
       "Misc"
       (("E"   smerge-ediff             "Open in Ediff")))))
+#+end_src
 
+**** Projectile
+
+#+begin_src emacs-lisp
+  (defun iensu/open-project-org-file ()
+    (interactive)
+    (if (boundp 'iensu-org-project-file)
+        (find-file iensu-org-project-file)
+      (message "No org project file specified.")))
+#+end_src
+
+#+begin_src emacs-lisp
   (use-package projectile
     :delight '(:eval (let ((project-name (projectile-project-name)))
                        (if (string-equal project-name "-")
@@ -605,6 +618,8 @@ Setup =package.el= and =use-package= for clean package installation.
        ("c" projectile-compile-project "compile project" :exit t))
       "Files & Buffers"
       (("f" counsel-projectile-find-file "open project file")
+       ("o" iensu/open-project-org-file "open project org file")
+       ("T" iensu/project-todo-list "open project TODO list")
        ("b" counsel-projectile-switch-to-buffer "open project buffer")
        ("S" projectile-save-buffers "save project buffers"))
       "Search"
@@ -658,7 +673,6 @@ Setup =package.el= and =use-package= for clean package installation.
     '(:eval (concat " FlyS:" (or ispell-local-dictionary ispell-dictionary)))
     :bind
     (:map flyspell-mode-map
-          ("C-å l" . iensu/cycle-ispell-dictionary)
           ("C-:" . flyspell-popup-correct))
     :custom
     (ispell-extra-args '("--sug-mode=ultra"))
@@ -750,6 +764,7 @@ Setup =package.el= and =use-package= for clean package installation.
   (defvar iensu-org-refile-targets)
   (defvar iensu-org-agenda-files)
   (defvar iensu-org-capture-templates-alist)
+  (defvar iensu-org-project-file)
 #+end_src
 
 *** Helper functions
@@ -768,8 +783,7 @@ Setup =package.el= and =use-package= for clean package installation.
                        (lambda ()
                          (string-match-p
                           (expand-file-name org-directory)
-                          (buffer-file-name (current-buffer)))))
-    (message "Saved org buffers..."))
+                          (buffer-file-name (current-buffer))))))
 
   (defun iensu-org-file (key)
         "Return file path for org file matching KEY. KEY must be in `iensu-org-files-alist'."
@@ -804,6 +818,16 @@ Setup =package.el= and =use-package= for clean package installation.
   (setq org-archive-location "archive/%s_archive::")
 #+end_src
 
+Add work related org files to refile targets.
+
+#+begin_src emacs-lisp
+  (dolist (filename (remove-if-not
+                     (lambda (fname)
+                       (string-match-p "^work..+.org$" fname))
+                     (directory-files iensu-org-dir)))
+    (add-to-list 'iensu-org-refile-targets (format "%s/%s" iensu-org-dir filename)))
+#+end_src
+
 *** Org-Capture configuration
 
 Enables capturing to file in the project root =<PROJECT-ROOT>/.project-notes.org=.
@@ -822,10 +846,15 @@ Setup capture templates.
 
 #+begin_src emacs-lisp
   (setq iensu-org-capture-templates-alist
-        `(("t" "TODO" entry (file ,(iensu-org-file 'refile))
+        `(("t" "TODO with link" entry (file ,(iensu-org-file 'refile))
            ,(concat "* TODO %?\n"
                     "%U\n"
                     "%a")
+           :clock-in t :clock-resume t :empty-lines 1)
+
+          ("T" "TODO" entry (file ,(iensu-org-file 'refile))
+           ,(concat "* TODO %?\n"
+                    "%U")
            :clock-in t :clock-resume t :empty-lines 1)
 
           ("j" "Journal" entry (file+datetree ,(iensu-org-file 'journal))
@@ -1319,8 +1348,6 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
                  "blockquote" "border-left: 2px solid gray; padding-left: 4px;"))))
 
   (use-package shr
-    :commands (eww
-               eww-browse-url)
     :custom
     (shr-use-fonts nil)
     (shr-use-colors nil)
@@ -1696,7 +1723,10 @@ Setup flycheck for on the fly linting.
 *** YAML
 
 #+begin_src emacs-lisp
-  (use-package yaml-mode)
+  (use-package yaml-mode
+    :hook
+    (yaml-mode . display-line-numbers-mode)
+    (yaml-mode . flyspell-mode-off))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1705,12 +1735,19 @@ Setup flycheck for on the fly linting.
     (yaml-mode . highlight-indentation-mode))
 #+end_src
 
+*** TOML
+
+#+begin_src emacs-lisp
+  (use-package toml-mode
+    :mode ("\\.toml$" "_redirects$"))
+#+end_src
+
 *** Python
 
 #+begin_src emacs-lisp
-  (use-package elpy
-    :init
-    (elpy-enable))
+  (use-package emacs
+    :hook
+    (python-mode . lsp))
 #+end_src
 
 *** Rust
@@ -1809,6 +1846,65 @@ Setup flycheck for on the fly linting.
      'minibuffer-complete-word
      'self-insert-command
      minibuffer-local-completion-map))
+#+end_src
+*** C#
+
+#+begin_src emacs-lisp
+  (use-package csharp-mode
+    :mode ("\\.cs$")
+    :hook
+    (csharp-mode . (lambda ()
+                     (c-set-offset 'arglist-intro '+))))
+
+  (use-package emacs
+    :config
+    (add-to-list 'auto-mode-alist '("\\.csproj$" . xml-mode))
+    (add-to-list 'auto-mode-alist '("function.proj$" . xml-mode)))
+
+  (use-package omnisharp
+    :hook
+    (csharp-mode . omnisharp-mode)
+    :bind (:map omnisharp-mode-map
+                ("C-c l" . omnisharp-hydra/body))
+    :pretty-hydra
+    ((:title "Omnisharp" :quit-key "q" :color teal)
+     ("Exploration"
+      (("l" omnisharp-find-usages "list references")
+       ("d" omnisharp-current-type-documentation "describe")
+       ("e" omnisharp-solution-errors "list errors")
+       ("å" flycheck-previous-error "goto previous error in buffer")
+       ("ä" flycheck-next-error "goto next error in buffer")
+       ("D" omnisharp-go-to-definition-other-window "goto definition"))
+      "Refactoring"
+      (("a" omnisharp-run-code-action-refactorings "execute code action")
+       ("n" omnisharp-rename "rename symbol")
+       ("i" omnisharp-fix-usings "fix imports")
+       ("f" omnisharp-code-format-entire-file "format file"))
+      "Unit testing"
+      (("u p" omnisharp-unit-test-at-point "run unit test under point")
+       ("u b" omnisharp-unit-test-buffer "run all tests in buffer")
+       ("u l" omnisharp-unit-test-last "re-run last unit test run"))
+      "Misc"
+      (("w" omnisharp-reload-solution "reload solution")
+       ("I" omnisharp-imenu-create-index "create imenu index"))))
+    :config
+    (setq c-basic-offset 4)
+    :init
+    (eval-after-load 'company '(add-to-list 'company-backends 'company-omnisharp)))
+#+end_src
+
+*** F#
+
+#+begin_src emacs-lisp
+  (use-package fsharp-mode
+    :defer t
+    :hook
+    (fsharp-mode . lsp)
+    :mode ("\\.fs$" . fsharp-mode))
+
+  (use-package emacs
+    :config
+    (add-to-list 'auto-mode-alist '("\\.fsproj$" . xml-mode)))
 #+end_src
 
 *** SQL
