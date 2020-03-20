@@ -302,19 +302,6 @@ Add a bunch of globally applied keybindings.
                                 ("M-o"           . occur)))
 #+end_src
 
-Enable window (visible buffer) navigation with =<shift>-<direction>=.
-
-#+begin_src emacs-lisp
-  (windmove-default-keybindings)
-
-  ;; Resolve org-mode conflicts
-  (setq org-replace-disputed-keys t)
-  (add-hook 'org-shiftup-final-hook 'windmove-up)
-  (add-hook 'org-shiftleft-final-hook 'windmove-left)
-  (add-hook 'org-shiftdown-final-hook 'windmove-down)
-  (add-hook 'org-shiftright-final-hook 'windmove-right)
-#+end_src
-
 ** External package installation
 
 Setup =package.el= and =use-package= for clean package installation.
