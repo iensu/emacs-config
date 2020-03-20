@@ -85,8 +85,14 @@
                 'local-map (make-mode-line-mouse-map
                             'mouse-1 (lambda () (interactive) (flycheck-list-errors))))))
 
+(defun --iensu-modeline/lsp-server ()
+  (when (and lsp-mode lsp--buffer-workspaces)
+    (propertize (apply 'concat (--map (format " LSP:%s" (lsp--workspace-print it))
+                                      lsp--buffer-workspaces))
+                'face `(:height 0.7))))
+
 (defun --iensu-modeline/major-mode ()
-  (propertize (format "        %s"
+  (propertize (format "   %s"
                       (all-the-icons-icon-for-mode (buffer-local-value 'major-mode (current-buffer))
                                                    :height 1.0 :v-adjust 0.0))))
 
@@ -96,7 +102,7 @@
       (concat
        (propertize (all-the-icons-octicon "graph" :height 1.0 :v-adjust 0.1)
                    'face `(:family ,(all-the-icons-octicon-family) :foreground ,iensu-modeline--color-shaded))
-       (propertize (format " %s " project-name) 'face '(:height ,iensu-modeline--default-text-height :foreground ,iensu-modeline--color-shaded))))))
+       (propertize (format " %s " project-name) 'face `(:height ,iensu-modeline--default-text-height :foreground ,iensu-modeline--color-shaded))))))
 
 (defun --iensu-modeline/spell-checking ()
   (when flyspell-mode
@@ -132,8 +138,9 @@
                              " "
                              (   :eval (--iensu-modeline/buffer-name))
                              (   :eval (--iensu-modeline/coding-system))
+                             (   :eval (--iensu-modeline/lsp-server))
                              " "
-                             (10 :eval (--iensu-modeline/cursor-position))
+                             (9   :eval (--iensu-modeline/cursor-position))
                              (10 :eval (--iensu-modeline/buffer-position))
                              " "
                              (   :eval (--iensu-modeline/flycheck-status))
