@@ -96,6 +96,15 @@
                       (all-the-icons-icon-for-mode (buffer-local-value 'major-mode (current-buffer))
                                                    :height 1.0 :v-adjust 0.0))))
 
+(defun --iensu-modeline/org-clock ()
+  (when org-clock-current-task
+    (propertize (all-the-icons-octicon "clock" :v-adjust 0.1)
+                'face `(:family ,(all-the-icons-octicon-family) :foreground ,iensu-modeline--color-ok :height 0.9)
+                'help-echo "Go to clocked task"
+                'mouse-face '(:box 1)
+                'local-map (make-mode-line-mouse-map
+                            'mouse-1 (lambda () (interactive) (org-clock-goto))))))
+
 (defun --iensu-modeline/project-name ()
   (let ((project-name (projectile-project-name)))
     (when (and project-name (not (string-equal project-name "-")))
@@ -141,7 +150,8 @@
                              (   :eval (--iensu-modeline/lsp-server))
                              " "
                              (9   :eval (--iensu-modeline/cursor-position))
-                             (10 :eval (--iensu-modeline/buffer-position))
+                             (6 :eval (--iensu-modeline/buffer-position))
+                             (4   :eval (--iensu-modeline/org-clock))
                              " "
                              (   :eval (--iensu-modeline/flycheck-status))
                              "  "
