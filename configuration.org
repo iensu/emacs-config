@@ -211,7 +211,7 @@ Set editor defaults to be more in line with expectations.
   (setq-default indent-tabs-mode nil
                 tab-width 2
 
-                fill-column 120
+                fill-column 100
 
                 require-final-newline t
 
@@ -302,6 +302,12 @@ Add a bunch of globally applied keybindings.
                                 ("M-o"           . occur)))
 #+end_src
 
+Enable window (visible buffer) navigation with =<shift>-<direction>=.
+
+#+begin_src emacs-lisp
+  (windmove-default-keybindings)
+#+end_src
+
 ** External package installation
 
 Setup =package.el= and =use-package= for clean package installation.
@@ -382,9 +388,9 @@ Setup global hydra.
       ("e c" mu4e-compose-new                "write email")
       ("e s" mu4e-headers-search             "search email"))
      "Org clock"
-     (("c s" org-clock-in                    "start clock")
+     (("c c" org-clock-in                    "start clock")
       ("c r" org-clock-in-last               "resume clock")
-      ("c o" org-clock-out                   "stop clock")
+      ("c s" org-clock-out                   "stop clock")
       ("c g" org-clock-goto                  "goto clocked task"))
      "Utilities"
      (("d"   iensu/duplicate-line            "duplicate line" :exit nil)
@@ -773,8 +779,11 @@ Setup global hydra.
                           (buffer-file-name (current-buffer))))))
 
   (defun iensu-org-file (key)
-        "Return file path for org file matching KEY. KEY must be in `iensu-org-files-alist'."
-        (cadr (assoc key iensu-org-files-alist)))
+    "Return file path for org file matching KEY. KEY must be in `iensu-org-files-alist'."
+    (cadr (assoc key iensu-org-files-alist)))
+
+  (defun iensu--org-capture-project-notes-file ()
+    (concat (projectile-project-root) ".project-notes.org"))
 #+end_src
 
 *** Org directory and file definitions
@@ -783,51 +792,22 @@ Setup global hydra.
   (setq iensu-org-dir "~/Dropbox/org")
 
   (setq iensu-org-files-alist
-        `((appointments     ,(concat iensu-org-dir "/appointments.org"))
-          (books            ,(concat iensu-org-dir "/books.org"))
-          (work-calendar    ,(concat iensu-org-dir "/calendars/work.org"))
-          (ekonomi          ,(concat iensu-org-dir "/ekonomi.org"))
-          (journal          ,(concat iensu-org-dir "/journal.org.gpg"))
-          (music            ,(concat iensu-org-dir "/music.org"))
-          (notes            ,(concat iensu-org-dir "/notes.org"))
-          (private          ,(concat iensu-org-dir "/private.org"))
-          (projects         ,(concat iensu-org-dir "/projects.org"))
-          (refile           ,(concat iensu-org-dir "/refile.org"))
-          (richard          ,(concat iensu-org-dir "/richard.org"))
-          (work             ,(concat iensu-org-dir "/work.org"))))
+        '((futurice         "futurice.org")
+          (work-calendar    "calendars/work.org")
+          (ekonomi          "ekonomi.org.gpg")
+          (journal          "journal.org.gpg")
+          (private          "private.org")
+          (refile           "refile.org")))
 
   (setq iensu-org-refile-targets
         (iensu--org-remove-file-if-match "calendars"
                                          "journal"
-                                         "appointments"
                                          "refile"))
 
   (setq org-archive-location "archive/%s_archive::")
 #+end_src
 
-Add work related org files to refile targets.
-
-#+begin_src emacs-lisp
-  (dolist (filename (remove-if-not
-                     (lambda (fname)
-                       (string-match-p "^work..+.org$" fname))
-                     (directory-files iensu-org-dir)))
-    (add-to-list 'iensu-org-refile-targets (format "%s/%s" iensu-org-dir filename)))
-#+end_src
-
 *** Org-Capture configuration
-
-Enables capturing to file in the project root =<PROJECT-ROOT>/.project-notes.org=.
-
-#+begin_src emacs-lisp
-  (defvar iensu-org-capture-project-notes-file)
-
-  (defun iensu/set-org-capture-project-notes-file (&rest args)
-    (let ((root-dir (projectile-project-root)))
-      (setq iensu-org-capture-project-notes-file (concat root-dir ".project-notes.org"))))
-
-  (advice-add 'org-capture :before 'iensu/set-org-capture-project-notes-file)
-#+end_src
 
 Setup capture templates.
 
@@ -868,20 +848,20 @@ Setup capture templates.
                     "#+END_QUOTE\n\n\n%?")
            :prepend t :empty-lines 1)
 
-          ("m" "Project note" entry (file+headline iensu-org-capture-project-notes-file "Notes")
+          ("m" "Project note" entry (file+headline iensu--org-capture-project-notes-file "Notes")
            ,(concat "* %^{Title}\n"
                     "%U\n\n"
                     "%?")
            :empty-lines 1)
 
-          ("n" "Project note with link" entry (file+headline iensu-org-capture-project-notes-file "Notes")
+          ("n" "Project note with link" entry (file+headline iensu--org-capture-project-notes-file "Notes")
            ,(concat "* %^{Title}\n"
                     "%U\n\n"
                     "Link: %a\n\n"
                     "%?")
            :empty-lines 1)
 
-          ("N" "Project note with link + quote" entry (file+headline iensu-org-capture-project-notes-file "Notes")
+          ("N" "Project note with link + quote" entry (file+headline iensu--org-capture-project-notes-file "Notes")
            ,(concat "* %^{Title}\n"
                     "%U\n\n"
                     "Link: %a\n"
@@ -889,16 +869,6 @@ Setup capture templates.
                     "%i\n"
                     "#+END_QUOTE\n\n"
                     "%?")
-           :empty-lines 1)
-
-          ("a" "Appointment" entry (file ,(iensu-org-file 'appointments))
-           ,(concat "* %^{title} %^G\n"
-                    "SCHEDULED: %^T\n\n"
-                    "%?")
-           :empty-lines 1)
-
-          ("b" "Book" entry (file+headline ,(iensu-org-file 'books) "Läslista")
-           ,(concat "* %^{STATE|TODO|DONE} %^{} <%^{}> %^g")
            :empty-lines 1)))
 
   (setq org-capture-templates iensu-org-capture-templates-alist)
@@ -908,41 +878,40 @@ Setup capture templates.
 
 #+begin_src emacs-lisp
   (use-package org
-    :delight
-    (org-mode "\u2658" :major)
     :bind (("C-c c" . org-capture)
            ("C-c a" . org-agenda)
            ("C-c l" . org-store-link)
            :map org-mode-map
            ("H-."   . org-time-stamp-inactive))
-    :custom
-    (org-default-notes-file (iensu-org-file 'notes))
-    (org-directory iensu-org-dir)
-    (org-refile-targets '((iensu-org-refile-targets :maxlevel . 4)))
-    (org-refile-allow-creating-parent-nodes 'confirm)
-    (org-refile-use-outline-path 'file)
-    (org-latex-listings t)
-    (org-cycle-separator-lines 1)
-    (org-src-fontify-natively t)
-    (org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
-    (truncate-lines t)
-    (org-image-actual-width nil)
-    (line-spacing 1)
-    (outline-blank-line t)
-    (org-adapt-indentation nil)
-    (org-fontify-quote-and-verse-blocks t)
-    (org-fontify-done-headline t)
-    (org-fontify-whole-heading-line t)
-    (org-hide-leading-stars t)
-    (org-indent-indentation-per-level 2)
-    (org-checkbox-hierarchical-statistics nil)
-    (org-log-done 'time)
-    (org-outline-path-complete-in-steps nil)
-    (org-html-htmlize-output-type 'css)
-    (org-export-initial-scope 'subtree)
-    (org-catch-invisible-edits 'show-and-error)
-
     :config
+    (setq org-default-notes-file (iensu-org-file 'notes))
+    (setq org-directory iensu-org-dir)
+    (setq org-refile-targets '((iensu-org-refile-targets :maxlevel . 4)))
+    (setq org-refile-allow-creating-parent-nodes 'confirm)
+    (setq org-refile-use-outline-path 'file)
+    (setq org-latex-listings t)
+    (setq org-cycle-separator-lines 1)
+    (setq org-src-fontify-natively t)
+    (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
+    (setq truncate-lines t)
+    (setq org-image-actual-width nil)
+    (setq line-spacing 1)
+    (setq outline-blank-line t)
+    (setq org-adapt-indentation nil)
+    (setq org-fontify-quote-and-verse-blocks t)
+    (setq org-fontify-done-headline t)
+    (setq org-fontify-whole-heading-line t)
+    (setq org-hide-leading-stars t)
+    (setq org-indent-indentation-per-level 2)
+    (setq org-checkbox-hierarchical-statistics nil)
+    (setq org-log-done 'time)
+    (setq org-outline-path-complete-in-steps nil)
+    (setq org-html-htmlize-output-type 'css)
+    (setq org-export-initial-scope 'subtree)
+    (setq org-catch-invisible-edits 'show-and-error)
+
+    (setq org-clock-in-switch-to-state "DOING")
+
     (org-load-modules-maybe t)
     (dolist (lang-mode '(("javascript" . js2) ("es" . es)))
       (add-to-list 'org-src-lang-modes lang-mode))
@@ -956,13 +925,6 @@ Setup capture templates.
 
   (setq iensu-org-agenda-files
         (iensu--org-remove-file-if-match "\\.org\\.gpg"))
-
-  (dolist (file-name (cl-remove-if-not
-                      (lambda (fname) (string-match-p "^work\\..+\\.org$" fname))
-                      (directory-files iensu-org-dir)))
-    (let ((file (expand-file-name file-name iensu-org-dir)))
-      (add-to-list 'iensu-org-agenda-files file)
-      (add-to-list 'org-refile-targets `(,file :maxlevel . 3))))
 
   (dolist (agenda-command
            '(("z" "Two week agenda"
