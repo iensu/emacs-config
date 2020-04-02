@@ -1266,15 +1266,7 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (defvar iensu--timer:mail-updates nil
       "Mail updates timer object. Can be used to cancel the recurring updates.")
     (setq iensu--timer:mail-updates
-          (run-at-time t (* 10 60) #'iensu/update-mail-in-background))
-    )
-
-  (use-package mu4e-alert
-    :after mu4e
-    :init
-    (mu4e-alert-set-default-style 'notifier)
-    (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display)
-    (add-hook 'after-init-hook #'mu4e-alert-enable-notifications))
+          (run-at-time t (* 10 60) #'iensu/update-mail-in-background)))
 
   (use-package org-mu4e :ensure nil)
 
