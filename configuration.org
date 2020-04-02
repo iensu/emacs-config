@@ -714,8 +714,7 @@ Setup global hydra.
       (interactive)
       (flyspell-mode 1)
       (synosaurus-mode 1)
-      (emojify-mode 1)
-      (auto-fill-mode))
+      (emojify-mode 1))
 
     ;; for some timing-related (?) reason use-package :hook fails to load this hook
     (add-hook 'org-mode-hook #'iensu/configure-text-editing-tools)
