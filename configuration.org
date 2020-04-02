@@ -1464,7 +1464,9 @@ TODO highlighting.
     (js-indent-level 2))
 
   (use-package restclient
-    :mode ("\\.rest$" "\\.restclient$"))
+    :init
+    (add-to-list 'auto-mode-alist '("\\.rest$" . restclient-mode))
+    (add-to-list 'auto-mode-alist '("\\.restclient$" . restclient-mode)))
 
   (use-package ob-restclient
     :after (org)
