@@ -1189,44 +1189,40 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
                 ("<tab>" . shr-next-link)
                 ("<backtab>" . shr-previous-link))
     :hook
-    ;; Support org-mode niceties when composing emails
-    (message-mode . turn-on-orgtbl)
-    (message-mode . turn-on-orgstruct++)
     (mu4e-view-mode . visual-line-mode)
-    :custom
-    (mail-user-agent 'mu4e-user-agent)
-    (mu4e-mu-binary "/usr/local/bin/mu")
-    (mu4e-maildir "~/Mail")
-    (mu4e-confirm-quit nil)
-    (mu4e-get-mail-command "offlineimap")
-    (mu4e-context-policy 'pick-first)
+    :config
+    (setq mail-user-agent 'mu4e-user-agent)
+    (setq mu4e-mu-binary "/usr/local/bin/mu")
+    (setq mu4e-maildir "~/Mail")
+    (setq mu4e-confirm-quit nil)
+    (setq mu4e-get-mail-command "offlineimap")
+    (setq mu4e-context-policy 'pick-first)
 
     ;; Configuration for viewing emails
-    (mu4e-view-show-images t)
-    (mu4e-show-images t)
-    (mu4e-view-image-max-width 800)
-    (mu4e-compose-format-flowed t)
-    (mu4e-view-show-addresses t)
-    (mu4e-headers-fields '((:human-date . 12)
-                           (:flags . 6)
-                           (:tags . 16)
-                           (:from . 22)
-                           (:subject)))
+    (setq mu4e-view-show-images t)
+    (setq mu4e-show-images t)
+    (setq mu4e-view-image-max-width 800)
+    (setq mu4e-compose-format-flowed t)
+    (setq mu4e-view-show-addresses t)
+    (setq mu4e-headers-fields '((:human-date . 12)
+                                (:flags . 6)
+                                (:tags . 16)
+                                (:from . 22)
+                                (:subject)))
 
     ;; Configuration for composing/sending emails
-    (user-mail-address "jens.ostlund@futurice.com")
-    (user-full-name "Jens Östlund")
-    (message-send-mail-function 'smtpmail-send-it)
-    (smtpmail-smtp-server "smtp.gmail.com")
-    (smtpmail-default-smtp-server "smtp.gmail.com")
-    (smtpmail-smtp-service 465)
-    (smtpmail-stream-type 'ssl)
-    (smtpmail-debug-info t)
-    (mu4e-sent-messages-behavior 'delete)
-    (message-kill-buffer-on-exit t)
-    (mu4e-compose-context-policy 'ask-if-none)
+    (setq user-mail-address "jens.ostlund@futurice.com")
+    (setq user-full-name "Jens Östlund")
+    (setq message-send-mail-function 'smtpmail-send-it)
+    (setq smtpmail-smtp-server "smtp.gmail.com")
+    (setq smtpmail-default-smtp-server "smtp.gmail.com")
+    (setq smtpmail-smtp-service 465)
+    (setq smtpmail-stream-type 'ssl)
+    (setq smtpmail-debug-info t)
+    (setq mu4e-sent-messages-behavior 'delete)
+    (setq message-kill-buffer-on-exit t)
+    (setq mu4e-compose-context-policy 'ask-if-none)
 
-    :config
     ;; Email contexts
     (setq mu4e-contexts
           `(,(make-mu4e-context
