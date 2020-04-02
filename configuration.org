@@ -928,7 +928,7 @@ Setup capture templates.
 
   (dolist (agenda-command
            '(("z" "Two week agenda"
-              ((todo ""
+              ((tags-todo "-books-music-movies"
                      ((org-agenda-overriding-header "TODOs")
                       (org-agenda-prefix-format "  ")
                       (org-agenda-sorting-strategy '(priority-down deadline-up))
