@@ -817,12 +817,12 @@ Setup capture templates.
            ,(concat "* TODO %?\n"
                     "%U\n"
                     "%a")
-           :clock-in t :clock-resume t :empty-lines 1)
+           :empty-lines 1)
 
           ("T" "TODO" entry (file ,(iensu-org-file 'refile))
            ,(concat "* TODO %?\n"
                     "%U")
-           :clock-in t :clock-resume t :empty-lines 1)
+           :empty-lines 1)
 
           ("j" "Journal" entry (file+datetree ,(iensu-org-file 'journal))
            ,(concat "* %^{Titel}\n"
