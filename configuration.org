@@ -886,7 +886,7 @@ Setup capture templates.
     :config
     (setq org-default-notes-file (iensu-org-file 'notes))
     (setq org-directory iensu-org-dir)
-    (setq org-refile-targets '((iensu-org-refile-targets :maxlevel . 4)))
+    (setq org-refile-targets '((iensu-org-refile-targets :maxlevel . 10)))
     (setq org-refile-allow-creating-parent-nodes 'confirm)
     (setq org-refile-use-outline-path 'file)
     (setq org-latex-listings t)
