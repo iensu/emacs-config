@@ -575,6 +575,11 @@ Setup global hydra.
        ("R"   smerge-refine            "Highlight differences" :exit nil))
       "Misc"
       (("E"   smerge-ediff             "Open in Ediff")))))
+
+  (use-package magit-todos
+    :init
+    (eval-after-load 'magit
+      (magit-todos-mode)))
 #+end_src
 
 **** Projectile
@@ -1385,6 +1390,14 @@ Setup flycheck for on the fly linting.
                  (lambda ()
                    (unless lsp-ui-mode
                      (flycheck-popup-tip-mode))))))
+#+end_src
+
+TODO highlighting.
+
+#+begin_src emacs-lisp
+  (use-package hl-todo
+    :hook
+    ((prog-mode . hl-todo-mode)))
 #+end_src
 
 *** LSP mode
