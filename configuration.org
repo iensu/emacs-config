@@ -1459,8 +1459,8 @@ TODO highlighting.
 
   (use-package prettier-js
     :delight
-    :after (js-mode web-mode)
-    :hook (web-mode js2-mode))
+    :after (js-mode web-mode yaml-mode)
+    :hook (web-mode js2-mode yaml-mode))
 
   (use-package json-mode
     :mode ("\\.json$")
