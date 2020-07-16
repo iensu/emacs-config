@@ -798,7 +798,7 @@ Setup global hydra.
 
   (setq iensu-org-files-alist
         '((futurice         "futurice.org")
-          (work-calendar    "calendars/work.org")
+          (work-calendar    "~/Dropbox/org/calendars/work.org")
           (ekonomi          "ekonomi.org.gpg")
           (journal          "journal.org.gpg")
           (private          "private.org")
@@ -1982,19 +1982,7 @@ Load theme.
   (defun iensu/refresh-work-calendar ()
     "Fetch Google calendar events and add the proper file tag(s)."
     (interactive)
-    (org-gcal-fetch)
-    (run-at-time "7 sec" nil
-                 (lambda ()
-                   (let ((work-calendar (iensu-org-file 'work-calendar)))
-                     (save-excursion
-                       (with-temp-file work-calendar
-                         (insert-file-contents work-calendar)
-                         (save-match-data
-                           (goto-char (point-min))
-                           (when (not (search-forward "#+FILETAGS:" nil t))
-                             (insert (concat "#+FILETAGS: :work:\n"
-                                             "\n"))))))
-                     (message "Updated work calendar")))))
+    (org-gcal-fetch))
 
   (defun iensu/update-mail-in-background ()
     "Updates email in background without opening a status buffer."
