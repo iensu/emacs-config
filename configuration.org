@@ -1410,19 +1410,19 @@ TODO highlighting.
     (setq lsp-diagnostic-package :none)
     :pretty-hydra
     ((:title "LSP" :quit-key "q" :color teal)
-      ("Exploration"
-       (("l" lsp-find-references "list references")
-        ("d" lsp-describe-thing-at-point "describe")
-        ("e" lsp-treemacs-errors-list "list errors")
-        ("å" flycheck-previous-error "goto previous error in buffer")
-        ("ä" flycheck-next-error "goto next error in buffer ")
-        ("t" lsp-goto-type-definition "find type definition"))
-       "Refactoring"
-       (("a" lsp-execute-code-action "execute code action")
-        ("n" lsp-rename "rename symbol")
-        ("i" lsp-organize-imports "organize imports"))
-       "Misc"
-       (("w" lsp-restart-workspace "restart LSP server")))))
+     ("Exploration"
+      (("l" lsp-find-references "list references")
+       ("d" lsp-describe-thing-at-point "describe")
+       ("e" lsp-treemacs-errors-list "list errors")
+       ("å" flycheck-previous-error "goto previous error in buffer")
+       ("ä" flycheck-next-error "goto next error in buffer ")
+       ("t" lsp-goto-type-definition "find type definition"))
+      "Refactoring"
+      (("a" lsp-execute-code-action "execute code action")
+       ("n" lsp-rename "rename symbol")
+       ("i" lsp-organize-imports "organize imports"))
+      "Misc"
+      (("w" lsp-restart-workspace "restart LSP server")))))
 
   (use-package lsp-ui
     :config
@@ -1433,7 +1433,8 @@ TODO highlighting.
     (setq lsp-ui-doc-max-width 50)
     (setq lsp-ui-sideline-delay 0.5)
     (setq lsp-ui-sideline-enable t)
-    (setq lsp-ui-flycheck-enable nil))
+    (setq lsp-ui-flycheck-enable nil)
+    (setq lsp-auto-guess-root nil))
 
   (use-package company-lsp
     :commands company-lsp)
