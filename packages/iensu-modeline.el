@@ -97,7 +97,8 @@
                                                    :height 1.0 :v-adjust 0.0))))
 
 (defun --iensu-modeline/org-clock ()
-  (when (boundp 'org-clock-current-task)
+  (when (and (boundp 'org-clock-current-task)
+             org-clock-current-task)
     (propertize (all-the-icons-octicon "clock" :v-adjust 0.1)
                 'face `(:family ,(all-the-icons-octicon-family) :foreground ,iensu-modeline--color-ok :height 0.9)
                 'help-echo "Go to clocked task"
