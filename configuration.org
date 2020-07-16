@@ -65,6 +65,7 @@
     - [[#f][F#]]
     - [[#sql][SQL]]
     - [[#docker][Docker]]
+    - [[#webassembly][WebAssembly]]
   - [[#load-theme][Load theme]]
   - [[#custom-commands][Custom commands]]
   - [[#loading-private-settings][Loading private settings]]
@@ -1879,6 +1880,13 @@ https://github.com/Silex/docker.el
 #+begin_src emacs-lisp
   (use-package docker)
   (use-package dockerfile-mode)
+#+end_src
+
+*** WebAssembly
+
+#+begin_src emacs-lisp
+  (use-package wat-mode
+    :load-path (lambda () (iensu--config-file "packages/wat-mode")))
 #+end_src
 
 ** Load theme
