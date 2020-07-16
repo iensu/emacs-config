@@ -383,7 +383,7 @@ Setup global hydra.
   (pretty-hydra-define iensu-hydra
     (:color teal :quit-key "q" :title "Global commands")
     ("Email"
-     (("e u" iensu/update-mail-in-background "update")
+     (("e u" iensu/update-mail-in-background "update" :exit nil)
       ("e e" mu4e                            "open email")
       ("e c" mu4e-compose-new                "write email")
       ("e s" mu4e-headers-search             "search email"))
