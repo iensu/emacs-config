@@ -1820,17 +1820,21 @@ TODO highlighting.
   (use-package omnisharp
     :hook
     (csharp-mode . omnisharp-mode)
+    (omnisharp-mode . eldoc-mode)
     :bind (:map omnisharp-mode-map
-                ("C-c l" . omnisharp-hydra/body))
+                ("C-c l" . omnisharp-hydra/body)
+                ("M-." . omnisharp-go-to-definition))
     :pretty-hydra
     ((:title "Omnisharp" :quit-key "q" :color teal)
      ("Exploration"
       (("l" omnisharp-find-usages "list references")
        ("d" omnisharp-current-type-documentation "describe")
        ("e" omnisharp-solution-errors "list errors")
+       ("o" omnisharp-show-overloads-at-point "list overloads")
        ("å" flycheck-previous-error "goto previous error in buffer")
        ("ä" flycheck-next-error "goto next error in buffer")
-       ("D" omnisharp-go-to-definition-other-window "goto definition"))
+       ("D" omnisharp-go-to-definition-other-window "goto definition")
+       ("g" omnisharp-find-implementations "goto implementations"))
       "Refactoring"
       (("a" omnisharp-run-code-action-refactorings "execute code action")
        ("n" omnisharp-rename "rename symbol")
