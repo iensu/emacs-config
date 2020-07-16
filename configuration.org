@@ -1716,7 +1716,8 @@ TODO highlighting.
     (rust-mode . lsp)
     :config
     (setq rust-format-on-save t)
-    (setq lsp-rust-clippy-preference "on"))
+    (setq lsp-rust-clippy-preference "on")
+    (setq lsp-rust-server 'rust-analyzer))
 #+end_src
 
 #+begin_src emacs-lisp
