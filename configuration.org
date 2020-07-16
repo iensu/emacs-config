@@ -847,7 +847,7 @@ Setup capture templates.
 
           ("p" "Browser Link and Selection" entry (file ,(iensu-org-file 'refile))
            ,(concat "* TODO %^{Title}\n"
-                    "Source: %u, %c\n"
+                    "Source: %u, %c\n\n"
                     "#+BEGIN_QUOTE\n"
                     "%i\n"
                     "#+END_QUOTE\n\n\n%?")
@@ -866,13 +866,13 @@ Setup capture templates.
                     "%?")
            :empty-lines 1)
 
-          ("N" "Project note with link + quote" entry (file+headline iensu--org-capture-project-notes-file "Notes")
+          ("N" "Project note with link + code quote" entry (file+headline iensu--org-capture-project-notes-file "Notes")
            ,(concat "* %^{Title}\n"
                     "%U\n\n"
-                    "Link: %a\n"
-                    "#+BEGIN_QUOTE\n"
+                    "Link: %a\n\n"
+                    "#+begin_src %^{Language}\n"
                     "%i\n"
-                    "#+END_QUOTE\n\n"
+                    "#+end_src\n\n"
                     "%?")
            :empty-lines 1)))
 
@@ -916,6 +916,7 @@ Setup capture templates.
     (setq org-catch-invisible-edits 'show-and-error)
 
     (setq org-clock-in-switch-to-state "DOING")
+    (setq org-log-into-drawer t)
 
     (org-load-modules-maybe t)
     (dolist (lang-mode '(("javascript" . js2) ("es" . es)))
@@ -948,6 +949,8 @@ Setup capture templates.
         org-agenda-dim-blocked-tasks nil
         org-deadline-warning-days -7
         org-agenda-block-separator "")
+
+  (plist-put org-agenda-clockreport-parameter-plist :maxlevel 6)
 #+end_src
 
 **** Project-based TODO lists
