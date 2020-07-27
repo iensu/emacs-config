@@ -577,10 +577,10 @@ Setup global hydra.
       "Misc"
       (("E"   smerge-ediff             "Open in Ediff")))))
 
-  (use-package magit-todos
-    :init
-    (eval-after-load 'magit
-      (magit-todos-mode)))
+  ;; (use-package magit-todos
+  ;;   :init
+  ;;   (eval-after-load 'magit
+  ;;     (magit-todos-mode)))
 #+end_src
 
 **** Projectile
