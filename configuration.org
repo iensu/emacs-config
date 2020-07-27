@@ -129,9 +129,6 @@ Basic configuration which does not depend on any external packages.
                 uniquify-buffer-name-style 'post-forward
                 uniquify-separator ":")
 
-  ;; Highlight current line
-  (global-hl-line-mode 1)
-
   ;; Shorter confirmation prompts
   (fset 'yes-or-no-p 'y-or-n-p)
 
