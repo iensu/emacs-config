@@ -1,3 +1,5 @@
+#+startup: showeverything
+
 * Emacs configuration
 
 ** Table of Contents                                               :TOC_3_gh:
