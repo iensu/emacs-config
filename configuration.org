@@ -493,13 +493,13 @@ Setup global hydra.
 #+end_src
 
 **** Ivy and Counsel
+
 #+begin_src emacs-lisp
   (use-package counsel
     :delight ivy-mode
     :init
     (ivy-mode 1)
-    :bind (("C-s"     . swiper-isearch)
-           ("M-x"     . counsel-M-x)
+    :bind (("M-x"     . counsel-M-x)
            ("C-x C-f"	. counsel-find-file)
            ("C-x C-r" . counsel-recentf)
            ("<f1> f"	. counsel-describe-function)
@@ -511,6 +511,7 @@ Setup global hydra.
            ("C-x l"   . counsel-locate)
            ("C-x b"   . ivy-switch-buffer)
            ("M-y"     . counsel-yank-pop)
+           ("C-s"     . swiper-isearch)
            :map ivy-minibuffer-map
            ("M-y"     . ivy-next-line))
     :custom
@@ -523,32 +524,33 @@ Setup global hydra.
     (ivy-re-builders-alist '((swiper . ivy--regex-plus)
                              (swiper-isearch . ivy--regex-plus)
                              (counsel-find-file . ivy--regex-plus)
-                             (counsel-projectile-fine-file . ivy--regex-plus)
+                             (counsel-projectile-find-file . ivy--regex-plus)
                              (t . ivy--regex-plus))))
+#+end_src
 
-  (use-package prescient
-    :delight
-    :custom
-    (prescient-history-length 50)
-    (prescient-filter-method '(fuzzy initialism regexp))
-    :config
-    (prescient-persist-mode 1))
+Add descriptions to candidates if available.
 
-  (use-package ivy-prescient
-    :delight
-    :after (prescient ivy)
-    :custom
-    (ivy-prescient-sort-commands '(:not swiper ivy-switch-buffer counsel-switch-buffer))
-    (ivy-prescient-retain-classic-highlighting nil)
-    (ivy-prescient-enable-filtering t)
-    (ivy-prescient-enable-sorting t)
-    :config
-    (ivy-prescient-mode 1))
-
+#+begin_src emacs-lisp
   (use-package ivy-rich
     :delight
     :config
     (ivy-rich-mode 1))
+#+end_src
+
+Sort candidates by most recently used.
+
+#+begin_src emacs-lisp
+  (use-package prescient
+    :config
+    (prescient-persist-mode 1))
+  (use-package ivy-prescient
+    :config
+    (ivy-prescient-mode 1)
+    (setq ivy-prescient-enable-sorting t)
+    (setq ivy-prescient-enable-filtering t))
+  (use-package company-prescient
+    :config
+    (company-prescient-mode 1))
 #+end_src
 
 *** Project management
