@@ -1918,19 +1918,14 @@ Load custom modeline.
 Load theme.
 
 #+begin_src emacs-lisp
-  (use-package dracula-theme
+  (use-package modus-vivendi-theme
     :config
-    (when (display-graphic-p)
-      (load-theme 'dracula t)
-      ;; Enlarge default font size
-      (set-face-attribute 'default nil :family "Fira Code" :height 140)
-      ;; Comments in italic
-      (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-      ;; Improve matching paren highlighting
-      (set-face-attribute 'show-paren-match nil
-                          :background (face-background 'default)
-                          :foreground "mediumspringgreen"
-                          :weight 'extra-bold)))
+    (load-theme 'modus-vivendi t)
+    (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
+    (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
+    (set-face-attribute 'default nil :font "Hack-15")
+    (set-face-attribute 'fixed-pitch nil :font "Hack-15")
+    (set-face-attribute 'variable-pitch nil :font "DejaVu Serif-14"))
 #+end_src
 
 ** Custom commands
