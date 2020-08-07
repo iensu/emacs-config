@@ -31,9 +31,7 @@
     (_ " ")))
 
 (defun --iensu-modeline/buffer-name ()
-  (cond
-   ((buffer-file-name) (file-name-nondirectory (buffer-file-name)))
-   (t (buffer-name))))
+  (buffer-name))
 
 (defun --iensu-modeline/buffer-position ()
   (concat (propertize
@@ -138,8 +136,6 @@
 
 (defun iensu-modeline/enable ()
   (interactive)
-  (custom-set-faces
-   '(mode-line ((t (:background "#44475a" :foreground "white" :box (:line-width 4 :color "#44475a"))))))
   (setq-default mode-line-format
                 '((:eval (--iensu-modeline/space-between
                           (format-mode-line
