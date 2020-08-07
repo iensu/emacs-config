@@ -803,12 +803,12 @@ Sort candidates by most recently used.
   (setq iensu-org-dir "~/Dropbox/org")
 
   (setq iensu-org-files-alist
-        '((futurice         "futurice.org")
+        '((futurice         "~/Dropbox/org/futurice.org")
           (work-calendar    "~/Dropbox/org/calendars/work.org")
-          (ekonomi          "ekonomi.org.gpg")
-          (journal          "journal.org.gpg")
-          (private          "private.org")
-          (refile           "refile.org")))
+          (ekonomi          "~/Dropbox/org/ekonomi.org.gpg")
+          (journal          "~/Dropbox/org/journal.org.gpg")
+          (private          "~/Dropbox/org/private.org")
+          (refile           "~/Dropbox/org/refile.org")))
 
   (setq iensu-org-refile-targets
         (iensu--org-remove-file-if-match "calendars"
@@ -823,6 +823,9 @@ Sort candidates by most recently used.
 Setup capture templates.
 
 #+begin_src emacs-lisp
+  (defun iensu--get-current-inactive-timestamp ()
+    (concat "[" (format-time-string "%F %a %H:%M") "]"))
+
   (setq iensu-org-capture-templates-alist
         `(("t" "TODO with link" entry (file ,(iensu-org-file 'refile))
            ,(concat "* TODO %?\n"
@@ -847,8 +850,9 @@ Setup capture templates.
            :prepend t)
 
           ("L" "Browser Link" entry (file ,(iensu-org-file 'refile))
-           ,(concat "* TODO %a\n"
-                    "%U")
+           ,(concat "* TODO %:description\n"
+                    "%U\n\n"
+                    "%:link")
            :prepend t :immediate-finish t :empty-lines 1)
 
           ("p" "Browser Link and Selection" entry (file ,(iensu-org-file 'refile))
@@ -880,6 +884,15 @@ Setup capture templates.
                     "%i\n"
                     "#+end_src\n\n"
                     "%?")
+           :empty-lines 1)
+
+          ("b" "Book" entry (file+headline ,(iensu-org-file 'private) "Reading list")
+           ,(concat "* %^{Title}"
+                    " %^{Author}p"
+                    " %^{Genre}p"
+                    " %^{Published}p"
+                    " %(org-set-property \"Added\" (iensu--get-current-inactive-timestamp))")
+           :prepend t
            :empty-lines 1)))
 
   (setq org-capture-templates iensu-org-capture-templates-alist)
