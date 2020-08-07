@@ -44,6 +44,7 @@
     - [[#save-org-buffers-every-5-minutes][Save org buffers every 5 minutes]]
     - [[#google-calendar-integration][Google calendar integration]]
   - [[#email][Email]]
+    - [[#mu4e][MU4E]]
   - [[#erc][ERC]]
   - [[#programming][Programming]]
     - [[#lsp-mode][LSP mode]]
@@ -1162,6 +1163,7 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
 
 ** Email
 
+*** MU4E
 #+begin_src emacs-lisp
   (use-package mu4e
     :ensure nil
@@ -1171,12 +1173,14 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
                 ("<backtab>" . shr-previous-link))
     :hook
     (mu4e-view-mode . visual-line-mode)
+    :init
+    (require 'mu4e)
     :config
     (setq mail-user-agent 'mu4e-user-agent)
     (setq mu4e-mu-binary "/usr/local/bin/mu")
     (setq mu4e-maildir "~/Mail")
     (setq mu4e-confirm-quit nil)
-    (setq mu4e-get-mail-command "offlineimap")
+    (setq mu4e-get-mail-command "offlineimap -o")
     (setq mu4e-context-policy 'pick-first)
 
     ;; Configuration for viewing emails
@@ -1195,45 +1199,10 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (setq user-mail-address "jens.ostlund@futurice.com")
     (setq user-full-name "Jens Östlund")
     (setq message-send-mail-function 'smtpmail-send-it)
-    (setq smtpmail-smtp-server "smtp.gmail.com")
-    (setq smtpmail-default-smtp-server "smtp.gmail.com")
-    (setq smtpmail-smtp-service 465)
-    (setq smtpmail-stream-type 'ssl)
     (setq smtpmail-debug-info t)
     (setq mu4e-sent-messages-behavior 'delete)
     (setq message-kill-buffer-on-exit t)
     (setq mu4e-compose-context-policy 'ask-if-none)
-
-    ;; Email contexts
-    (setq mu4e-contexts
-          `(,(make-mu4e-context
-              :name "Futurice"
-              :enter-func (lambda () (mu4e-message "Entering Futurice context"))
-              ;; forces refresh of address list when switching context
-              :leave-func (lambda () (setq mu4e-maildir-list nil))
-              :match-func (lambda (msg)
-                            (when msg
-                              (string-match-p "^/futurice" (mu4e-message-field msg :maildir))))
-              :vars '((mu4e-sent-folder   . "/futurice/sent")
-                      (mu4e-drafts-folder . "/futurice/drafts")
-                      (mu4e-trash-folder  . "/futurice/trash")
-                      (user-mail-address  . "jens.ostlund@futurice.com")
-                      (user-full-name     . "Jens Östlund")
-                      (smtpmail-smtp-user . "jens.ostlund@futurice.com")))
-            ,(make-mu4e-context
-              :name "Private"
-              :enter-func (lambda () (mu4e-message "Entering Private context"))
-              ;;forces refresh of address list when switching context
-              :leave-func (lambda () (setq mu4e-maildir-list nil))
-              :match-func (lambda (msg)
-                            (when msg
-                              (string-match-p "^/private" (mu4e-message-field msg :maildir))))
-              :vars '((mu4e-sent-folder   . "/private/sent")
-                      (mu4e-drafts-folder . "/private/drafts")
-                      (mu4e-trash-folder  . "/private/trash")
-                      (user-mail-address  . "jostlund@gmail.com")
-                      (user-full-name     . "Jens Östlund")
-                      (smtpmail-smtp-user . "jostlund")))))
 
     (add-hook 'mu4e-compose-mode-hook (lambda () (auto-fill-mode -1)))
 
@@ -1242,13 +1211,7 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
 
     ;; Add email viewing modes
     (add-to-list 'mu4e-view-actions '("EWW" . iensu--mu4e-view-in-eww) t)
-    (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t)
-
-    ;; Recurring update of email
-    (defvar iensu--timer:mail-updates nil
-      "Mail updates timer object. Can be used to cancel the recurring updates.")
-    (setq iensu--timer:mail-updates
-          (run-at-time t (* 10 60) #'iensu/update-mail-in-background)))
+    (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t))
 
   (use-package org-mu4e :ensure nil)
 
