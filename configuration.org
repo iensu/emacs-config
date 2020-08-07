@@ -710,6 +710,10 @@ Sort candidates by most recently used.
     (synosaurus-backend 'synosaurus-backend-wordnet)
     (synosaurus-choose-method 'popup))
 
+  (use-package sdcv-mode
+    :delight
+    :load-path (lambda () (iensu--config-file "packages")))
+
   (use-package emojify
     :custom
     (emojify-emojis-dir (iensu--config-file ".local/emojis")))
