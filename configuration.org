@@ -2024,9 +2024,10 @@ Load theme.
         (delete-file (expand-file-name lockfile offlineimap-dir)))
       (message (format "Deleted %i lock files." (length lockfiles)))))
 
-  (defun iensu/npm-test ()
+  (defun iensu/finish-item ()
+    "Sets a `Finished' property on an org-mode item. The value is the current time as an inactive timestamp."
     (interactive)
-    (compile "npm test" t))
+    (org-set-property "Finished" (iensu--get-current-inactive-timestamp)))
 
   (defun iensu/eshell ()
     (interactive)
