@@ -45,6 +45,7 @@
     - [[#google-calendar-integration][Google calendar integration]]
   - [[#email][Email]]
     - [[#mu4e][MU4E]]
+  - [[#elfeed][Elfeed]]
   - [[#erc][ERC]]
   - [[#programming][Programming]]
     - [[#lsp-mode][LSP mode]]
@@ -387,6 +388,9 @@ Setup global hydra.
       ("e e" mu4e                            "open email")
       ("e c" mu4e-compose-new                "write email")
       ("e s" mu4e-headers-search             "search email"))
+     "Elfeed"
+     (("f f" elfeed)
+      ("f u" elfeed-update))
      "Org clock"
      (("c c" org-clock-in                    "start clock")
       ("c r" org-clock-in-last               "resume clock")
@@ -1239,6 +1243,28 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (shr-use-colors nil)
     (shr-max-image-proportion 0.2)
     (shr-width (current-fill-column)))
+#+end_src
+
+
+** Elfeed
+
+#+begin_src emacs-lisp
+  (use-package elfeed
+    :config
+    (setq-default elfeed-search-filter "@1-months-ago +unread -saved")
+
+    (defun iensu/elfeed-toggle-saved ()
+      "Toggle `saved' tag on selected item(s)."
+      (interactive)
+      (let ((entry elfeed-show-entry))
+        (if entry
+            (if (elfeed-tagged-p 'saved entry)
+                (elfeed-show-untag 'saved)
+              (elfeed-show-tag 'saved))
+          (elfeed-search-toggle-all 'saved))))
+
+    (define-key elfeed-show-mode-map (kbd "t") 'iensu/elfeed-toggle-saved)
+    (define-key elfeed-search-mode-map (kbd "t") 'iensu/elfeed-toggle-saved))
 #+end_src
 
 ** ERC
