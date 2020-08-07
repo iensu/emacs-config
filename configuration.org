@@ -43,7 +43,6 @@
     - [[#capturing-outside-of-emacs][Capturing outside of emacs]]
     - [[#save-org-buffers-every-5-minutes][Save org buffers every 5 minutes]]
     - [[#google-calendar-integration][Google calendar integration]]
-    - [[#trello-integration][Trello integration]]
   - [[#email][Email]]
   - [[#erc][ERC]]
   - [[#programming][Programming]]
@@ -1160,26 +1159,6 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
           org-gcal-file-alist `(("jens.ostlund@futurice.com" . ,(iensu-org-file 'work-calendar)))))
 #+end_src
 
-*** Trello integration
-
-#+begin_src emacs-lisp
-  (use-package org-trello
-    :config
-    (defun iensu/org-trello-sync-buffer ()
-      "Sync trello buffer without pushing local changes."
-      (interactive)
-      (org-trello-sync-buffer 'from-trello))
-
-    (defun iensu/org-trello-sync-card ()
-      "Sync trello card without pushing local changes."
-      (interactive)
-      (org-trello-sync-card 'from-trello))
-
-    (defun iensu/org-trello-sync-comment ()
-      "Sync trello comment without pushing local changes."
-      (interactive)
-      (org-trello-sync-comment 'from-trello)))
-#+end_src
 
 ** Email
 
