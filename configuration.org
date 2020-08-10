@@ -234,14 +234,18 @@ Set editor defaults to be more in line with expectations.
   (setq global-auto-revert-non-file-buffers t
         auto-revert-verbose nil)
 
+  (defun iensu--prog-mode-hook ()
+    "Defaults for programming modes"
+    (subword-mode 1)
+    (column-number-mode 1)
+    (display-line-numbers-mode 1)
+    (eldoc-mode 1)
+    (show-paren-mode 1)
+    (hs-minor-mode 1)
+    (outline-minor-mode 1))
+
   ;; defaults for programming modes
-  (add-hook 'prog-mode-hook
-            (lambda ()
-              (subword-mode)
-              (column-number-mode)
-              (display-line-numbers-mode)
-              (eldoc-mode)
-              (show-paren-mode)))
+  (add-hook 'prog-mode-hook #'iensu--prog-mode-hook)
 
   ;; Open eshell and shell buffers in popup windows
   (setq display-buffer-alist '(("\\`\\*e?shell" display-buffer-pop-up-window)))
