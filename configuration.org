@@ -1027,19 +1027,22 @@ file and then reverted back to its previous value upon closing the TODO list buf
 
   ;; Add support for YAML files
   (defun org-babel-execute:yaml (body params) body)
+
+  (defun org-babel-execute:rust (body params) body)
 #+end_src
 
 *** Add more block expansion templates
 
 #+begin_src emacs-lisp
-    (let ((additional-org-templates (if (version< (org-version) "9.2")
-                                        '(("ssh" "#+begin_src shell \n?\n#+end_src")
-                                          ("sel" "#+begin_src emacs-lisp \n?\n#+end_src"))
-                                      '(("ssh" . "src shell")
-                                        ("sel" . "src emacs-lisp")
-                                        ("sr"  . "src restclient")))))
-      (dolist (template additional-org-templates)
-        (add-to-list 'org-structure-template-alist template)))
+  (let ((additional-org-templates (if (version< (org-version) "9.2")
+                                      '(("ssh" "#+begin_src shell \n?\n#+end_src")
+                                        ("sel" "#+begin_src emacs-lisp \n?\n#+end_src"))
+                                    '(("ssh" . "src shell")
+                                      ("sel" . "src emacs-lisp")
+                                      ("sr"  . "src restclient")
+                                      ("sR"  .  "src rust")))))
+    (dolist (template additional-org-templates)
+      (add-to-list 'org-structure-template-alist template)))
 #+end_src
 
 *** Add extra exporting options
