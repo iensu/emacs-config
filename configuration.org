@@ -1194,7 +1194,6 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (setq mu4e-mu-binary "/usr/local/bin/mu")
     (setq mu4e-maildir "~/Mail")
     (setq mu4e-confirm-quit nil)
-    (setq mu4e-get-mail-command "offlineimap -o")
     (setq mu4e-context-policy 'pick-first)
 
     ;; Configuration for viewing emails
@@ -1219,9 +1218,6 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
     (setq mu4e-compose-context-policy 'ask-if-none)
 
     (add-hook 'mu4e-compose-mode-hook (lambda () (auto-fill-mode -1)))
-
-    ;; Always unblock offlineimap before fetching emails
-    (advice-add 'mu4e-update-mail-and-index :before 'iensu/unblock-offlineimap)
 
     ;; Add email viewing modes
     (add-to-list 'mu4e-view-actions '("EWW" . iensu--mu4e-view-in-eww) t)
@@ -2041,21 +2037,6 @@ Load theme.
     "Fetch Google calendar events and add the proper file tag(s)."
     (interactive)
     (org-gcal-fetch))
-
-  (defun iensu/update-mail-in-background ()
-    "Updates email in background without opening a status buffer."
-    (interactive)
-    (mu4e-update-mail-and-index :run-in-background))
-
-  (defun iensu/unblock-offlineimap (&rest args)
-    "Unblocks offlineimap by deleting all lock files in ~/.offlineimap"
-    (interactive)
-    (let* ((offlineimap-dir "~/.offlineimap")
-           (lockfiles (remove-if-not (lambda (filename) (string-match-p "\\.lock$" filename))
-                                     (directory-files offlineimap-dir))))
-      (dolist (lockfile lockfiles)
-        (delete-file (expand-file-name lockfile offlineimap-dir)))
-      (message (format "Deleted %i lock files." (length lockfiles)))))
 
   (defun iensu/finish-item ()
     "Sets a `Finished' property on an org-mode item. The value is the current time as an inactive timestamp."
