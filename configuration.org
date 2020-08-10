@@ -386,34 +386,39 @@ Setup =package.el= and =use-package= for clean package installation.
 Setup global hydra.
 
 #+begin_src emacs-lisp
-  (pretty-hydra-define iensu-hydra
-    (:color teal :quit-key "q" :title "Global commands")
-    ("Email"
-     (("e u" iensu/update-mail-in-background "update" :exit nil)
-      ("e e" mu4e                            "open email")
-      ("e c" mu4e-compose-new                "write email")
-      ("e s" mu4e-headers-search             "search email"))
-     "Elfeed"
-     (("f f" elfeed)
-      ("f u" elfeed-update))
-     "Org clock"
-     (("c c" org-clock-in                    "start clock")
-      ("c r" org-clock-in-last               "resume clock")
-      ("c s" org-clock-out                   "stop clock")
-      ("c g" org-clock-goto                  "goto clocked task"))
-     "Utilities"
-     (("d"   iensu/duplicate-line            "duplicate line" :exit nil)
-      ("s"   deadgrep                        "search")
-      ("t"   toggle-truncate-lines           "truncate lines")
-      ("u"   revert-buffer                   "reload buffer")
-      ("l"   iensu/cycle-ispell-dictionary   "change dictionary"))
-     "Misc"
-     (("P"   iensu/project-todo-list         "project todo list")
-      ("i"   iensu/open-init-file            "open emacs config")
-      ("9"   iensu/refresh-work-calendar     "update calendar"))))
+    (pretty-hydra-define iensu-hydra
+      (:color teal :quit-key "q" :title "Global commands")
+      ("Email"
+       (("e u" mu4u-update-index               "update" :exit nil)
+        ("e e" mu4e                            "open email")
+        ("e c" mu4e-compose-new                "write email")
+        ("e s" mu4e-headers-search             "search email"))
+       "Elfeed"
+       (("f f" elfeed)
+        ("f u" elfeed-update))
+       "Org clock"
+       (("c c" org-clock-in                    "start clock")
+        ("c r" org-clock-in-last               "resume clock")
+        ("c s" org-clock-out                   "stop clock")
+        ("c g" org-clock-goto                  "goto clocked task"))
+       "Utilities"
+       (("d"   iensu/duplicate-line            "duplicate line" :exit nil)
+        ("s"   deadgrep                        "search")
+        ("t"   toggle-truncate-lines           "truncate lines")
+        ("u"   revert-buffer                   "reload buffer")
+        ("l"   iensu/cycle-ispell-dictionary   "change dictionary"))
+       "Misc"
+       (("P"   iensu/project-todo-list         "project todo list")
+        ("i"   iensu/open-init-file            "open emacs config")
+        ("9"   iensu/refresh-work-calendar     "update calendar"))
+       "Hide/show"
+       (("h h" hs-toggle-hiding "Toggle block visibility")
+        ("h l" hs-hide-level "Hide all blocks at same level")
+        ("h a" hs-hide-all "Hide all")
+        ("h s" hs-show-all "Show all"))))
 
-  (use-package emacs
-    :bind (("C-å" . iensu-hydra/body)))
+    (use-package emacs
+      :bind (("C-å" . iensu-hydra/body)))
 #+end_src
 
 *** Make binaries on the =PATH= accessible in Emacs.
