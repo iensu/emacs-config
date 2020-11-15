@@ -581,11 +581,6 @@ Sort candidates by most recently used.
        ("R"   smerge-refine            "Highlight differences" :exit nil))
       "Misc"
       (("E"   smerge-ediff             "Open in Ediff")))))
-
-  ;; (use-package magit-todos
-  ;;   :init
-  ;;   (eval-after-load 'magit
-  ;;     (magit-todos-mode)))
 #+end_src
 
 **** Projectile
