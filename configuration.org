@@ -1900,14 +1900,17 @@ Load doom modeline.
 Load theme.
 
 #+begin_src emacs-lisp
-  (use-package modus-vivendi-theme
+  (use-package modus-operandi-theme
     :config
     (load-theme 'modus-vivendi t)
+    ;; (load-theme 'modus-operandi t)
     (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
     (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
-    (set-face-attribute 'default nil :font "Hack-15")
-    (set-face-attribute 'fixed-pitch nil :font "Hack-15")
-    (set-face-attribute 'variable-pitch nil :font "DejaVu Serif-14"))
+    (set-face-attribute 'default nil :font "Hack-13")
+    (set-face-attribute 'fixed-pitch nil :font "Hack-13")
+    (set-face-attribute 'variable-pitch nil :font "Helvetica-14"))
+#+end_src
+
 #+end_src
 
 ** Custom commands
