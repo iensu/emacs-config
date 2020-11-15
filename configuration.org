@@ -1630,7 +1630,7 @@ TODO highlighting.
     (typescript-mode :major)
     :mode ("\\.ts$" "\\.tsx$")
     :hook
-    ;; (typescript-mode . lsp)
+    (typescript-mode . lsp)
     (typescript-mode . prettier-js-mode)
     :custom
     (flycheck-check-syntax-automatically '(save mode-enabled))
@@ -1642,31 +1642,6 @@ TODO highlighting.
                 (when (and buffer-file-name
                            (string-equal "tsx" (file-name-extension buffer-file-name)))
                   (lsp)))))
-
-  (use-package tide
-    :delight
-    :after (typescript-mode company flycheck)
-    :hook ((typescript-mode . tide-setup)
-           (typescript-mode . tide-hl-identifier-mode))
-    :bind (:map tide-mode-map
-                ("C-c l" . tide-hydra/body))
-    :pretty-hydra
-    ((:title "Tide" :quit-key "q" :color teal)
-     ("Exploration"
-      (("l" tide-references "list references")
-       ("d" tide-documentation-at-point "describe")
-       ("e" tide-project-errors "list errors")
-       ("å" flycheck-previous-error "goto previous error in buffer")
-       ("ä" flycheck-next-error "goto next error in buffer "))
-      "Refactoring"
-      (("a" tide-fix "execute code action")
-       ("n" tide-rename-symbol "rename symbol")
-       ("i" tide-organize-imports "organize imports")
-       ("D" tide-jsdoc-template "insert JSDOC template"))
-      "Misc"
-      (("w" tide-restart-server "restart LSP server"))))
-    :config
-    (add-hook 'tide-mode-hook (lambda () (eldoc-mode))))
 #+end_src
 
 *** GraphQL
