@@ -70,7 +70,6 @@
     - [[#sql][SQL]]
     - [[#docker][Docker]]
     - [[#webassembly][WebAssembly]]
-  - [[#writing][Writing]]
   - [[#load-theme][Load theme]]
   - [[#custom-commands][Custom commands]]
   - [[#loading-private-settings][Loading private settings]]
@@ -1898,66 +1897,6 @@ https://github.com/Silex/docker.el
   (use-package wat-mode
     :load-path (lambda () (iensu--config-file "packages/wat-mode")))
 #+end_src
-
-
-** Writing
-
-#+begin_src emacs-lisp
-  (use-package olivetti
-    :defer
-    :config
-    (setq olivetti-body-width 0.65)
-    (setq olivetti-minimum-body-width 72)
-    (setq olivetti-recall-visual-line-mode-entry-state t))
-
-  (define-minor-mode iensu/olivetti-mode
-    "Olivetti-mode configuration"
-    :init-value nil
-    :global nil
-
-    (if iensu/olivetti-mode
-        (progn
-          (olivetti-mode 1)
-          (set-window-fringes (selected-window) 0 0)
-          (iensu/hidden-mode-line-mode 1)
-          (iensu/scroll-center-mode 1)
-          (variable-pitch-mode 1)
-          (global-hl-line-mode -1))
-      (olivetti-mode -1)
-      (set-window-fringes (selected-window) nil)
-      (iensu/hidden-mode-line-mode -1)
-      (iensu/scroll-center-mode -1)
-      (variable-pitch-mode -1)
-      (global-hl-line-mode 1)))
-#+end_src
-
-#+begin_src emacs-lisp
-  (define-minor-mode iensu/hidden-mode-line-mode
-    "Toggle modeline visibility"
-    :init-value nil
-    :global nil
-    (if iensu/hidden-mode-line-mode
-        (setq-local mode-line-format nil)
-      (kill-local-variable 'mode-line-format)
-      (force-mode-line-update)))
-#+end_src
-
-#+begin_src emacs-lisp
-  (define-minor-mode iensu/scroll-center-mode
-    "Toggle centered line"
-    :init-value nil
-    :global nil
-    (if iensu/scroll-center-mode
-        (setq-local scroll-margin (* (frame-height) 2)
-                    scroll-conservatively 0
-                    maximum-scroll-margin 0.5)
-      (dolist (local '(scroll-preserve-screen-position
-                       scroll-conservatively
-                       maximum-scroll-margin
-                       scroll-margin))
-        (kill-local-variable `,local))))
-#+end_src
-
 
 ** Load theme
 
