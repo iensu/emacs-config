@@ -25,6 +25,7 @@
     - [[#file-browsing][File browsing]]
     - [[#text-editing-tools][Text editing tools]]
     - [[#treemacs][Treemacs]]
+    - [[#source-code-buffer-screenshots][Source code buffer screenshots]]
   - [[#org-mode][Org-mode]]
     - [[#custom-variables][Custom variables]]
     - [[#helper-functions-1][Helper functions]]
@@ -769,6 +770,16 @@ Sort candidates by most recently used.
 
   (use-package treemacs-projectile
     :after treemacs projectile)
+#+end_src
+
+
+*** Source code buffer screenshots
+
+=silicon= enables creating PNG screenshots of the current source code buffer. It relies on the [[https://github.com/Aloxaf/silicon][Silicon]] command line tool.
+
+#+begin_src emacs-lisp
+(use-package silicon
+    :load-path "~/Projects/private/emacs/silicon-el")
 #+end_src
 
 ** Org-mode
