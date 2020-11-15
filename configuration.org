@@ -554,15 +554,24 @@ Sort candidates by most recently used.
 
 *** Project management
 
-**** VCS
+**** Version control
+
+Setup =magit= which is a great tool for working with =git= repositories.
 
 #+begin_src emacs-lisp
   (use-package magit
     :bind (("C-x g" . magit-status))
     :custom
-    (magit-bury-buffer-function 'quit-window))
+    (magit-bury-buffer-function 'quit-window)
+    :config
+    (setq magit-git-executable "/usr/bin/git") ; Speeds up magit on macOS
+    (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+#+end_src
 
-  (use-package smerge-mode
+=smerge-mode= is a merge conflict resolution tool which is great but unfortunately has awful default keybindings. Here I define a hydra to make =smerge= easier to work with.
+
+#+begin_src emacs-lisp
+(use-package smerge-mode
     :ensure nil
     :bind (:map smerge-mode-map (("C-c ö" . smerge-mode-hydra/body)))
     :pretty-hydra
