@@ -1527,7 +1527,7 @@ TODO highlighting.
 
 #+begin_src emacs-lisp
   (use-package web-mode
-    :mode ("\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$" "\\.vue$" "\\.tsx$" "\\.php$")
+    :mode ("\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$" "\\.vue$" "\\.php$")
     :hook
     (web-mode . emmet-mode)
     :custom
@@ -1628,7 +1628,7 @@ TODO highlighting.
   (use-package typescript-mode
     :delight
     (typescript-mode :major)
-    :mode ("\\.ts$")
+    :mode ("\\.ts$" "\\.tsx$")
     :hook
     ;; (typescript-mode . lsp)
     (typescript-mode . prettier-js-mode)
