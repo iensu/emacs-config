@@ -1782,6 +1782,7 @@ TODO highlighting.
               (lambda ()
                 (add-hook 'after-save-hook #'iensu--terraform-format nil 'local))))
 #+end_src
+
 *** Graphviz Dot Mode
 
 #+begin_src emacs-lisp
@@ -1845,9 +1846,11 @@ TODO highlighting.
 #+begin_src emacs-lisp
   (use-package csharp-mode
     :mode ("\\.cs$")
-    :hook
-    (csharp-mode . (lambda ()
-                     (c-set-offset 'arglist-intro '+))))
+    :config
+    (defun iensu--csharp-mode-hook ()
+      (c-set-offset 'arglist-intro '+)
+      (setq c-basic-offset 4))
+    (add-hook 'csharp-mode-hook #'iensu--csharp-mode-hook))
 
   (use-package emacs
     :config
@@ -1857,7 +1860,6 @@ TODO highlighting.
   (use-package omnisharp
     :hook
     (csharp-mode . omnisharp-mode)
-    (omnisharp-mode . eldoc-mode)
     :bind (:map omnisharp-mode-map
                 ("C-c l" . omnisharp-hydra/body)
                 ("M-." . omnisharp-go-to-definition))
@@ -1873,7 +1875,7 @@ TODO highlighting.
        ("D" omnisharp-go-to-definition-other-window "goto definition")
        ("g" omnisharp-find-implementations "goto implementations"))
       "Refactoring"
-      (("a" omnisharp-run-code-action-refactorings "execute code action")
+      (("a" omnisharp-run-code-action-refactoring "execute code action")
        ("n" omnisharp-rename "rename symbol")
        ("i" omnisharp-fix-usings "fix imports")
        ("f" omnisharp-code-format-entire-file "format file"))
@@ -1884,8 +1886,6 @@ TODO highlighting.
       "Misc"
       (("w" omnisharp-reload-solution "reload solution")
        ("I" omnisharp-imenu-create-index "create imenu index"))))
-    :config
-    (setq c-basic-offset 4)
     :init
     (eval-after-load 'company '(add-to-list 'company-backends 'company-omnisharp)))
 #+end_src
