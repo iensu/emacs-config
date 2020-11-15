@@ -2,7 +2,8 @@
 
 ;;;;;;;; VARIABLES
 
-(defvar iensu-modeline--color-ok "green")
+;; (defvar iensu-modeline--color-ok "#006400")
+(defvar iensu-modeline--color-ok "#00CC00")
 (defvar iensu-modeline--color-danger "red")
 (defvar iensu-modeline--color-warning "orange")
 (defvar iensu-modeline--color-shaded "gray85")
