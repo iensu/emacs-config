@@ -1981,11 +1981,38 @@ Load theme.
     (interactive)
     (org-set-property "Finished" (iensu--get-current-inactive-timestamp)))
 
-  (defun iensu/eshell ()
+  (defun iensu/wat-to-wasm ()
+    "Translate a WebAssembly text format file to binary wasm."
     (interactive)
-    (if (projectile-project-root)
-        (projectile-run-eshell)
-      (eshell :new-session)))
+    (if (commandp "wat2wasm")
+        (let* ((file-path (expand-file-name (buffer-file-name)))
+               (output-path (concat (file-name-sans-extension file-path)
+                                    ".wasm")))
+          (compile (string-join `("wat2wasm"
+                                  ,file-path
+                                  "--output"
+                                  ,output-path)
+                                " "))
+          (message (format "Wrote file %s" output-path)))))
+
+  (defun iensu/toggle-show-paren-style ()
+    "Toggles the current style of matching parentheses."
+    (interactive)
+    (setq show-paren-style
+          (if (eq show-paren-style 'parenthesis)
+              'expression
+            'parenthesis)))
+
+  (defun iensu/toggle-profiler ()
+    "Starts or stops the profiler, displaying the report when stopped."
+    (interactive)
+    (if (profiler-running-p)
+        (progn
+          (profiler-stop)
+          (profiler-report))
+      (progn
+        (profiler-reset)
+        (profiler-start 'cpu+mem))))
 #+end_src
 
 ** Loading private settings
