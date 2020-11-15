@@ -357,21 +357,6 @@ Setup =package.el= and =use-package= for clean package installation.
     (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
     (add-to-list 'default-frame-alist '(ns-appearence . dark)))
 
-  ;; --- Modeline cleanup
-  (use-package delight
-    :config
-    (delight 'global-auto-revert-mode nil t)
-    (delight 'auto-revert-mode nil t)
-    (delight 'auto-fill nil t)
-    (delight 'org-src-mode nil t)
-    (delight 'subword-mode nil t))
-
-  (use-package diminish
-    :init
-    (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "Eλ")))
-    (add-hook 'lisp-interaction-mode (lambda () (setq mode-name "λ")))
-    (add-hook 'js2-mode-hook (lambda () (setq mode-name "js2"))))
-
   (use-package rainbow-delimiters :delight)
 
   (use-package all-the-icons)
@@ -1904,13 +1889,12 @@ https://github.com/Silex/docker.el
 
 ** Load theme
 
-Load custom modeline.
+Load doom modeline.
 
 #+begin_src emacs-lisp
-  (use-package emacs
-    :config
-    (load-file (iensu--config-file "packages/iensu-modeline.el"))
-    (add-hook 'after-load-theme-hook #'iensu-modeline/enable))
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
 #+end_src
 
 Load theme.
