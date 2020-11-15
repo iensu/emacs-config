@@ -1403,7 +1403,7 @@ Setup flycheck for on the fly linting.
                      (flycheck-popup-tip-mode))))))
 #+end_src
 
-TODO highlighting.
+Highlight TODO keywords.
 
 #+begin_src emacs-lisp
   (use-package hl-todo
