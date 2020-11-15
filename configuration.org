@@ -233,7 +233,11 @@ Set editor defaults to be more in line with expectations.
   (global-auto-revert-mode 1)
   (setq global-auto-revert-non-file-buffers t
         auto-revert-verbose nil)
+#+end_src
 
+Setup basic configuration for programming modes.
+
+#+begin_src emacs-lisp
   (defun iensu--prog-mode-hook ()
     "Defaults for programming modes"
     (subword-mode 1)
