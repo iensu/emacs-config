@@ -1517,6 +1517,12 @@ TODO highlighting.
       (css-indent-offset 2))
 #+end_src
 
+#+begin_src emacs-lisp
+  (use-package scss-mode
+    :ensure nil
+    :mode ("\\.scss$" "\\.styl$"))
+#+end_src
+
 **** Web mode
 
 #+begin_src emacs-lisp
