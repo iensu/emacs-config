@@ -251,14 +251,10 @@ Setup basic configuration for programming modes.
     (hs-minor-mode 1)
     (outline-minor-mode 1))
 
-  ;; defaults for programming modes
   (add-hook 'prog-mode-hook #'iensu--prog-mode-hook)
-
-  ;; Open eshell and shell buffers in popup windows
-  (setq display-buffer-alist '(("\\`\\*e?shell" display-buffer-pop-up-window)))
 #+end_src
 
-Start the emacsclient server.
+Start the emacsclient server so that emacs can be invoked from the command line without starting a new process.
 
 #+begin_src emacs-lisp
   (server-start)
