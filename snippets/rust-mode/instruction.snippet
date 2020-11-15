@@ -1,0 +1,24 @@
+# -*- mode: snippet -*-
+# name: instruction
+# key: instr
+# group: Gejmboj
+# --
+/// ${1:description}
+///
+/// ## Examples
+///
+/// \`\`\`
+/// # use gejmboj_cpu::registers::*;
+/// # use gejmboj_cpu::memory::*;
+/// # use gejmboj_cpu::instructions::*;
+/// let mut registers = Registers::new();
+/// let mut memory = Memory::new();
+/// let instruction = ${2:name} { };
+///
+/// assert_eq!(1, 2);
+/// \`\`\`
+pub struct $2 {}
+
+impl Instruction for $2 {}
+
+impl Display for $2 {}

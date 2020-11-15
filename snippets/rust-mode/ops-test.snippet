@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: Ops test
+# key: opstest
+# --
+#[test]
+fn op_${1:name}() {
+let ops = vec![${2:ops}];
+let mut memory = Memory::new();
+let mut registers = Registers::new(PROGRAM_START);
+
+ops.iter().for_each(|op| {
+(*op).call(&mut registers, &mut memory).unwrap();
+});
+
+${0}
+}
