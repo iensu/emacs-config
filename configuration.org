@@ -224,7 +224,10 @@ Set editor defaults to be more in line with expectations.
 
                 scroll-conservatively 0
                 scroll-step 4
-                next-screen-context-lines 20)
+                next-screen-context-lines 20
+
+                show-paren-when-point-inside-paren t
+                show-paren-when-point-in-periphery t)
 
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
