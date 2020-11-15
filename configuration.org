@@ -1842,7 +1842,12 @@ TODO highlighting.
      'minibuffer-complete-word
      'self-insert-command
      minibuffer-local-completion-map))
+
+  (use-package dumb-jump
+    :config
+    (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 #+end_src
+
 *** C#
 
 #+begin_src emacs-lisp
