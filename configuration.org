@@ -1813,14 +1813,6 @@ TODO highlighting.
                 ("C-c l F" . lsp-format-buffer)
                 ("C-c l h" . lsp-symbol-highlight))
                 ("C-c l i" . lsp-java-add-import))
-
-  (use-package dap-mode
-    :after lsp-java
-    :config
-    (dap-mode 1)
-    (dap-ui-mode 1)
-    (dap-tooltip-mode 1)
-    (tooltip-mode 1))
 #+end_src
 *** Scala
 
