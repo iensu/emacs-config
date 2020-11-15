@@ -675,6 +675,8 @@ Setup =magit= which is a great tool for working with =git= repositories.
 
 *** Text editing tools
 
+Setup spell-checking and dictionary rotation.
+
 #+begin_src emacs-lisp
   (use-package flyspell
     :delight
@@ -706,21 +708,46 @@ Setup =magit= which is a great tool for working with =git= repositories.
   (use-package flyspell-popup
     :delight
     :after (flyspell))
+#+end_src
 
+Add =synosaurus= as a thesaurus to look up synonyms.
+
+#+begin_src emacs-lisp
   (use-package synosaurus
     :delight
     :custom
     (synosaurus-backend 'synosaurus-backend-wordnet)
     (synosaurus-choose-method 'popup))
+#+end_src
 
-  (use-package sdcv-mode
-    :delight
-    :load-path (lambda () (iensu--config-file "packages")))
+Add emoji support because it's essential...
 
+#+begin_src emacs-lisp
   (use-package emojify
     :custom
     (emojify-emojis-dir (iensu--config-file ".local/emojis")))
+#+end_src
 
+SDCV adds support for additional dictionary look-ups.
+
+#+begin_src emacs-lisp
+  (use-package sdcv-mode
+    :delight
+    :load-path (lambda () (iensu--config-file "packages")))
+#+end_src
+
+=visual-fill-column= makes it possible to visually wrap and center text which is good for document-like editing.
+
+#+begin_src emacs-lisp
+  (use-package visual-fill-column
+    :config
+    (setq-default visual-fill-column-width 100)
+    (setq-default visual-fill-column-center-text t))
+#+end_src
+
+Enable tools installed above in document-like modes such as =org-mode= and =markdown-mode= etc
+
+#+begin_src emacs-lisp
   (use-package emacs
     :config
     (defun iensu/configure-text-editing-tools ()
@@ -728,7 +755,9 @@ Setup =magit= which is a great tool for working with =git= repositories.
       (interactive)
       (flyspell-mode 1)
       (synosaurus-mode 1)
-      (emojify-mode 1))
+      (emojify-mode 1)
+      (visual-line-mode 1)
+      (visual-fill-column-mode 1))
 
     ;; for some timing-related (?) reason use-package :hook fails to load this hook
     (add-hook 'org-mode-hook #'iensu/configure-text-editing-tools)
@@ -924,6 +953,11 @@ Setup capture templates.
            ("C-c l" . org-store-link)
            :map org-mode-map
            ("H-."   . org-time-stamp-inactive))
+    :hook
+    (org-mode . (lambda ()
+                  (org-num-mode 1)
+                  (visual-line-mode 1)
+                  (variable-pitch-mode 1)))
     :config
     (setq org-default-notes-file (iensu-org-file 'notes))
     (setq org-directory iensu-org-dir)
@@ -1109,7 +1143,9 @@ Only display one bullet per headline for a cleaner look.
 #+begin_src emacs-lisp
   (use-package org-superstar
     :init
-    (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+    (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+    :config
+    (setq org-superstar-headline-bullets-list '(?◉)))
 #+end_src
 
 Clean-up agenda view
