@@ -989,9 +989,8 @@ Setup capture templates.
     (setq org-log-into-drawer t)
 
     (org-load-modules-maybe t)
-    (dolist (lang-mode '(("javascript" . js2) ("es" . es)))
-      (add-to-list 'org-src-lang-modes lang-mode))
-    (visual-line-mode 1))
+    (dolist (lang-mode '(("javascript" . js2) ("es" . es) ("wat" . wat))
+      (add-to-list 'org-src-lang-modes lang-mode))))
 #+end_src
 
 *** Org-agenda configuration
