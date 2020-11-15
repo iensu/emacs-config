@@ -1745,7 +1745,10 @@ TODO highlighting.
   (defun iensu--rust-mode-hook ()
     (setq-local outline-regexp "\s*//>+")
     (setq-local iensu-prog-run-tests-fn 'rust-test)
-    (setq-local iensu-prog-compile-project-fn 'rust-compile))
+    (setq-local iensu-prog-compile-project-fn 'rust-compile)
+    (setq-local lsp-rust-server 'rust-analyzer)
+    (setq-local lsp-rust-clippy-preference "on")
+    (setq-local lsp-rust-all-features t))
 
   (use-package rust-mode
     :bind (:map rust-mode-map
@@ -1754,9 +1757,7 @@ TODO highlighting.
     (rust-mode . lsp)
     (rust-mode . iensu--rust-mode-hook)
     :config
-    (setq rust-format-on-save t)
-    (setq lsp-rust-clippy-preference "on")
-    (setq lsp-rust-server 'rust-analyzer))
+    (setq rust-format-on-save t))
 #+end_src
 
 #+begin_src emacs-lisp
