@@ -6,13 +6,13 @@
 - [[#emacs-configuration][Emacs configuration]]
   - [[#helper-functions][Helper functions]]
   - [[#custom-hooks][Custom hooks]]
+  - [[#external-package-installation][External package installation]]
   - [[#baseline-setup][Baseline setup]]
     - [[#window-configuration][Window configuration]]
   - [[#sane-editor-defaults][Sane editor defaults]]
   - [[#global-keybindings][Global keybindings]]
     - [[#setting-up-keys-for-macos][Setting up keys for macOS]]
     - [[#various-global-keybindings][Various global keybindings]]
-  - [[#external-package-installation][External package installation]]
   - [[#make-it-pretty][Make it pretty]]
   - [[#utility-packages][Utility packages]]
     - [[#hydra][Hydra]]
@@ -105,6 +105,33 @@ Define helper functions needed for the rest of the configuration
     "Run `after-load-theme-hook'."
     (run-hooks 'after-load-theme-hook))
 #+end_src
+
+** External package installation
+
+Setup =package.el= and =use-package= for clean package installation.
+
+#+begin_src emacs-lisp
+  ;; --- Setting up package.el
+  (require 'package)
+
+  (setq package-archives
+	'(("gnu"   . "https://elpa.gnu.org/packages/")
+	  ("melpa" . "https://melpa.org/packages/")
+	  ("melpa-stable" . "https://stable.melpa.org/packages/")))
+
+  (when (version< emacs-version "27")
+    (package-initialize))
+
+  ;; --- Setting up use-package.el
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+
+  (eval-when-compile
+    (require 'use-package)
+    (setq use-package-always-ensure t))
+#+end_src
+
 
 ** Baseline setup
 
@@ -315,31 +342,6 @@ Enable window (visible buffer) navigation with =<shift>-<direction>=.
 
 #+begin_src emacs-lisp
   (windmove-default-keybindings)
-#+end_src
-
-** External package installation
-
-Setup =package.el= and =use-package= for clean package installation.
-
-#+begin_src emacs-lisp
-  ;; --- Setting up package.el
-  (require 'package)
-
-  (setq package-archives
-        '(("gnu"   . "https://elpa.gnu.org/packages/")
-          ("melpa" . "https://melpa.org/packages/")
-          ("melpa-stable" . "https://stable.melpa.org/packages/")))
-
-  (when (version< emacs-version "27")
-    (package-initialize))
-
-  ;; --- Setting up use-package.el
-  (unless (package-installed-p 'use-package)
-    (package-install 'use-package))
-
-  (eval-when-compile
-    (require 'use-package)
-    (setq use-package-always-ensure t))
 #+end_src
 
 ** Make it pretty
@@ -1198,6 +1200,9 @@ Update the calendar to contain Swedish holidays etc.
 #+end_src
 
 *** Google calendar integration
+:PROPERTIES:
+:header-args: :tangle (iensu/tangle-is-feature-enabled 'gcal-calendar)
+:END:
 
 Stores google calendar events to my org =work-calendar= file. Sync by running
 =M-x org-gcal-sync=.
@@ -1213,11 +1218,13 @@ Stores google calendar events to my org =work-calendar= file. Sync by running
           org-gcal-file-alist `(("jens.ostlund@futurice.com" . ,(iensu-org-file 'work-calendar)))))
 #+end_src
 
-
 ** Email
+:PROPERTIES:
+:header-args: :tangle (iensu/tangle-is-feature-enabled 'email)
+:END:
 
 *** MU4E
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :exports none
   (use-package mu4e
     :ensure nil
     :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
@@ -1923,15 +1930,15 @@ Load doom modeline.
 Load theme.
 
 #+begin_src emacs-lisp
-  (use-package modus-operandi-theme
+  (use-package modus-vivendi-theme
     :config
     (load-theme 'modus-vivendi t)
     ;; (load-theme 'modus-operandi t)
     (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
     (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
-    (set-face-attribute 'default nil :font "Hack-13")
-    (set-face-attribute 'fixed-pitch nil :font "Hack-13")
-    (set-face-attribute 'variable-pitch nil :font "Helvetica-14"))
+    (set-face-attribute 'default nil :font "FiraCode-11")
+    (set-face-attribute 'fixed-pitch nil :font "FiraCode-11")
+    (set-face-attribute 'variable-pitch nil :font "Cantarell-12"))
 #+end_src
 
 #+end_src

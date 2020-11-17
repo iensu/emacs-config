@@ -11,6 +11,8 @@ emojis/
 .dap-breakpoints
 test.org
 transient/
+.dir-locals.el
+features.el
 
 /projectile-bookmarks.eld
 flycheck_init.el
