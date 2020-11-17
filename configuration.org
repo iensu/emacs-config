@@ -438,7 +438,7 @@ Setup global hydra.
 
 *** Password entry in minibuffer
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle (iensu/tangle-is-feature-enabled 'pinentry)
   (use-package pinentry :init (pinentry-start))
 #+end_src
 
