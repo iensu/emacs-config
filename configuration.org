@@ -1401,13 +1401,7 @@ Setup flycheck for on the fly linting.
     :config
     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
-  (use-package flycheck-popup-tip
-    :init
-    (eval-after-load 'flycheck
-      '(add-hook 'flycheck-mode-hook
-                 (lambda ()
-                   (unless lsp-ui-mode
-                     (flycheck-popup-tip-mode))))))
+  (use-package flycheck-popup-tip)
 #+end_src
 
 Highlight TODO keywords.
@@ -1420,6 +1414,8 @@ Highlight TODO keywords.
 
 *** LSP mode
 
+Basic LSP setup.
+
 #+begin_src emacs-lisp
   (defvar iensu-prog-run-tests-fn
     (lambda () (message "`iensu--prog-run-tests-fn' is not defined for current mode,"))
@@ -1430,48 +1426,74 @@ Highlight TODO keywords.
     "Function to compile a project in a specific programming language mode.")
 
   (use-package lsp-mode
-    :commands lsp
+    :commands (lsp lsp-deferred)
     :bind (:map lsp-mode-map
                 ("C-c l" . lsp-mode-hydra/body))
+    :init
+    (setq lsp-keymap-prefix "C-ä")
+    :hook
+    (lsp-mode . lsp-enable-which-key-integration)
     :config
-    (setq lsp-diagnostic-package :none)
+    (setq lsp-auto-guess-root nil)
 
     :pretty-hydra
     ((:title "LSP" :quit-key "q" :color teal)
      ("Exploration"
       (("l" lsp-find-references "list references")
+       ("s" lsp-ivy-workspace-symbol "search symbol in workspace")
        ("d" lsp-describe-thing-at-point "describe")
-       ("e" lsp-treemacs-errors-list "list errors")
+       ("e" flycheck-list-errors "list buffer errors")
        ("å" flycheck-previous-error "goto previous error in buffer")
        ("ä" flycheck-next-error "goto next error in buffer ")
+       ("E" lsp-treemacs-errors-list "list workspace errors")
        ("T" lsp-goto-type-definition "find type definition"))
       "Refactoring"
       (("a" lsp-execute-code-action "execute code action")
        ("n" lsp-rename "rename symbol")
-       ("i" lsp-organize-imports "organize imports"))
+       ("i" lsp-organize-imports "organize imports")
+       ("f" lsp-format-buffer "format buffer"))
       "Misc"
       (("w" lsp-restart-workspace "restart LSP server")
        ("t" (funcall `,iensu-prog-run-tests-fn) "run tests")
        ("c" (funcall `,iensu-prog-compile-project-fn) "compile project")))))
+#+end_src
 
+=lsp-ui= enables in buffer documentation popups etc.
+
+#+begin_src emacs-lisp
   (use-package lsp-ui
+    :commands lsp-ui-mode
     :config
-    (setq lsp-ui-doc-delay 1)
-    (setq lsp-ui-doc-border "violet")
-    (setq lsp-ui-doc-position 'at-point)
-    (setq lsp-ui-doc-use-webkit t)
-    (setq lsp-ui-doc-max-width 50)
-    (setq lsp-ui-sideline-delay 0.5)
-    (setq lsp-ui-sideline-enable t)
-    (setq lsp-ui-flycheck-enable nil)
-    (setq lsp-auto-guess-root nil))
+    (lsp-ui-sideline-mode 1)
+    (setq lsp-ui-sideline-show-diagnostics t
+          lsp-ui-sideline-show-code-actions nil
+          lsp-ui-sideline-show-symbol nil
+          lsp-ui-sideline-show-hover nil)
+    (lsp-ui-doc-mode 1))
+#+end_src
 
-  (use-package company-lsp
-    :commands company-lsp)
+Integrate LSP with company mode.
 
-  (use-package lsp-treemacs)
+#+begin_src emacs-lisp
+  (use-package company-lsp :commands company-lsp)
+#+end_src
 
-  (use-package lsp-ivy)
+Integrate LSP with treemacs.
+
+#+begin_src emacs-lisp
+   (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+#+end_src
+
+Integrate LSP with ivy to search through symbols in a workspace.
+
+#+begin_src emacs-lisp
+  (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package which-key
+    :config
+    (which-key-mode))
 #+end_src
 
 *** Web development
