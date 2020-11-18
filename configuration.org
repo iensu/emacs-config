@@ -1929,9 +1929,9 @@ Load theme.
     ;; (load-theme 'modus-operandi t)
     (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
     (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
-    (set-face-attribute 'default nil :font "Fira Code-11")
-    (set-face-attribute 'fixed-pitch nil :font "Fira Code-11")
-    (set-face-attribute 'variable-pitch nil :font "Cantarell-12"))
+    (set-face-attribute 'default nil :font "Fira Code-13")
+    (set-face-attribute 'fixed-pitch nil :font "Fira Code-13")
+    (set-face-attribute 'variable-pitch nil :font "Cantarell-14"))
 #+end_src
 
 #+end_src
