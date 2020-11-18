@@ -1850,7 +1850,10 @@ Integrate LSP with ivy to search through symbols in a workspace.
 
 #+begin_src emacs-lisp
   (use-package csharp-mode
-    :mode ("\\.cs$")
+    :mode ("\\.cs$" "\\.cshtml")
+    :hook (csharp-mode . lsp)
+    :custom
+    (flycheck-check-syntax-automatically '(save mode-enabled))
     :config
     (defun iensu--csharp-mode-hook ()
       (c-set-offset 'arglist-intro '+)
@@ -1861,38 +1864,6 @@ Integrate LSP with ivy to search through symbols in a workspace.
     :config
     (add-to-list 'auto-mode-alist '("\\.csproj$" . xml-mode))
     (add-to-list 'auto-mode-alist '("function.proj$" . xml-mode)))
-
-  (use-package omnisharp
-    :hook
-    (csharp-mode . omnisharp-mode)
-    :bind (:map omnisharp-mode-map
-                ("C-c l" . omnisharp-hydra/body)
-                ("M-." . omnisharp-go-to-definition))
-    :pretty-hydra
-    ((:title "Omnisharp" :quit-key "q" :color teal)
-     ("Exploration"
-      (("l" omnisharp-find-usages "list references")
-       ("d" omnisharp-current-type-documentation "describe")
-       ("e" omnisharp-solution-errors "list errors")
-       ("o" omnisharp-show-overloads-at-point "list overloads")
-       ("å" flycheck-previous-error "goto previous error in buffer")
-       ("ä" flycheck-next-error "goto next error in buffer")
-       ("D" omnisharp-go-to-definition-other-window "goto definition")
-       ("g" omnisharp-find-implementations "goto implementations"))
-      "Refactoring"
-      (("a" omnisharp-run-code-action-refactoring "execute code action")
-       ("n" omnisharp-rename "rename symbol")
-       ("i" omnisharp-fix-usings "fix imports")
-       ("f" omnisharp-code-format-entire-file "format file"))
-      "Unit testing"
-      (("u p" omnisharp-unit-test-at-point "run unit test under point")
-       ("u b" omnisharp-unit-test-buffer "run all tests in buffer")
-       ("u l" omnisharp-unit-test-last "re-run last unit test run"))
-      "Misc"
-      (("w" omnisharp-reload-solution "reload solution")
-       ("I" omnisharp-imenu-create-index "create imenu index"))))
-    :init
-    (eval-after-load 'company '(add-to-list 'company-backends 'company-omnisharp)))
 #+end_src
 
 *** F#
