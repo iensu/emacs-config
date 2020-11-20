@@ -50,26 +50,7 @@
   - [[#erc][ERC]]
   - [[#programming][Programming]]
     - [[#lsp-mode][LSP mode]]
-    - [[#web-development][Web development]]
-    - [[#javascript][JavaScript]]
-    - [[#typescript][TypeScript]]
-    - [[#graphql][GraphQL]]
-    - [[#elm][Elm]]
-    - [[#shell][Shell]]
-    - [[#markdown][Markdown]]
-    - [[#yaml][YAML]]
-    - [[#toml][TOML]]
-    - [[#python][Python]]
-    - [[#rust][Rust]]
-    - [[#terraform][Terraform]]
-    - [[#graphviz-dot-mode][Graphviz Dot Mode]]
-    - [[#java][Java]]
-    - [[#scala][Scala]]
-    - [[#c][C#]]
-    - [[#f][F#]]
-    - [[#sql][SQL]]
-    - [[#docker][Docker]]
-    - [[#webassembly][WebAssembly]]
+    - [[#language-support][Language support]]
   - [[#load-theme][Load theme]]
   - [[#custom-commands][Custom commands]]
   - [[#loading-private-settings][Loading private settings]]
@@ -1496,9 +1477,12 @@ Integrate LSP with ivy to search through symbols in a workspace.
     (which-key-mode))
 #+end_src
 
-*** Web development
 
-**** General
+*** Language support
+
+**** Web development
+
+***** General
 
 #+begin_src emacs-lisp
   (use-package emmet-mode
@@ -1530,7 +1514,7 @@ Integrate LSP with ivy to search through symbols in a workspace.
     (org-babel-do-load-languages 'org-babel-load-languages '((restclient . t))))
 #+end_src
 
-**** CSS
+***** CSS
 
 #+begin_src emacs-lisp
     (use-package rainbow-mode
@@ -1552,7 +1536,7 @@ Integrate LSP with ivy to search through symbols in a workspace.
     :mode ("\\.scss$" "\\.styl$"))
 #+end_src
 
-**** Web mode
+***** Web mode
 
 #+begin_src emacs-lisp
   (use-package web-mode
@@ -1577,7 +1561,7 @@ Integrate LSP with ivy to search through symbols in a workspace.
                  '("^const html = require.*choo/html" . web-mode)))
 #+end_src
 
-*** JavaScript
+**** JavaScript
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -1651,7 +1635,7 @@ Integrate LSP with ivy to search through symbols in a workspace.
       '(add-hook 'js-mode-hook #'add-node-modules-path)))
 #+end_src
 
-*** TypeScript
+**** TypeScript
 
 #+begin_src emacs-lisp
   (use-package typescript-mode
@@ -1673,13 +1657,13 @@ Integrate LSP with ivy to search through symbols in a workspace.
                   (lsp)))))
 #+end_src
 
-*** GraphQL
+**** GraphQL
 
 #+begin_src emacs-lisp
   (use-package graphql-mode)
 #+end_src
 
-*** Elm
+**** Elm
 
 #+begin_src emacs-lisp
   (use-package elm-mode
@@ -1690,7 +1674,7 @@ Integrate LSP with ivy to search through symbols in a workspace.
     (add-hook 'elm-mode-hook #'lsp))
 #+end_src
 
-*** Shell
+**** Shell
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -1698,7 +1682,7 @@ Integrate LSP with ivy to search through symbols in a workspace.
     (add-to-list 'auto-mode-alist '("\\.envrc$" . sh-mode)))
 #+end_src
 
-*** Markdown
+**** Markdown
 
 #+begin_src emacs-lisp
   (use-package markdown-mode
@@ -1709,7 +1693,7 @@ Integrate LSP with ivy to search through symbols in a workspace.
   (use-package markdown-toc)
 #+end_src
 
-*** YAML
+**** YAML
 
 #+begin_src emacs-lisp
   (use-package yaml-mode
@@ -1728,14 +1712,14 @@ Integrate LSP with ivy to search through symbols in a workspace.
     (yaml-mode . highlight-indentation-mode))
 #+end_src
 
-*** TOML
+**** TOML
 
 #+begin_src emacs-lisp
   (use-package toml-mode
     :mode ("\\.toml$" "_redirects$"))
 #+end_src
 
-*** Python
+**** Python
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -1743,7 +1727,7 @@ Integrate LSP with ivy to search through symbols in a workspace.
     (python-mode . lsp))
 #+end_src
 
-*** Rust
+**** Rust
 
 #+begin_src emacs-lisp
   (defun iensu--rust-mode-hook ()
@@ -1771,7 +1755,7 @@ Integrate LSP with ivy to search through symbols in a workspace.
     (flycheck-mode . flycheck-rust-setup))
 #+end_src
 
-*** Terraform
+**** Terraform
 
 #+begin_src emacs-lisp
   (use-package terraform-mode
@@ -1788,7 +1772,7 @@ Integrate LSP with ivy to search through symbols in a workspace.
                 (add-hook 'after-save-hook #'iensu--terraform-format nil 'local))))
 #+end_src
 
-*** Graphviz Dot Mode
+**** Graphviz Dot Mode
 
 #+begin_src emacs-lisp
   (use-package graphviz-dot-mode
@@ -1798,7 +1782,7 @@ Integrate LSP with ivy to search through symbols in a workspace.
     (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot)))
 #+end_src
 
-*** Java
+**** Java
 
 #+begin_src emacs-lisp
   (use-package java-mode
@@ -1820,7 +1804,8 @@ Integrate LSP with ivy to search through symbols in a workspace.
                 ("C-c l h" . lsp-symbol-highlight))
                 ("C-c l i" . lsp-java-add-import))
 #+end_src
-*** Scala
+
+**** Scala
 
 #+begin_src emacs-lisp
   (use-package scala-mode
@@ -1846,7 +1831,7 @@ Integrate LSP with ivy to search through symbols in a workspace.
     (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 #+end_src
 
-*** C#
+**** C#
 
 #+begin_src emacs-lisp
   (use-package csharp-mode
@@ -1866,7 +1851,7 @@ Integrate LSP with ivy to search through symbols in a workspace.
     (add-to-list 'auto-mode-alist '("function.proj$" . xml-mode)))
 #+end_src
 
-*** F#
+**** F#
 
 #+begin_src emacs-lisp
   (use-package fsharp-mode
@@ -1880,7 +1865,7 @@ Integrate LSP with ivy to search through symbols in a workspace.
     (add-to-list 'auto-mode-alist '("\\.fsproj$" . xml-mode)))
 #+end_src
 
-*** SQL
+**** SQL
 
 #+begin_src emacs-lisp
   (use-package sql-mode
@@ -1894,7 +1879,7 @@ Integrate LSP with ivy to search through symbols in a workspace.
 
 #+end_src
 
-*** Docker
+**** Docker
 
 https://github.com/Silex/docker.el
 
@@ -1903,7 +1888,7 @@ https://github.com/Silex/docker.el
   (use-package dockerfile-mode)
 #+end_src
 
-*** WebAssembly
+**** WebAssembly
 
 #+begin_src emacs-lisp
   (use-package wat-mode
