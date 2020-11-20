@@ -1842,7 +1842,9 @@ Integrate LSP with ivy to search through symbols in a workspace.
     :config
     (defun iensu--csharp-mode-hook ()
       (c-set-offset 'arglist-intro '+)
-      (setq c-basic-offset 4))
+      (setq c-basic-offset 2)
+      (flet ((lsp-format-buffer #'ignore)
+             (lsp-format-region #'ignore))))
     (add-hook 'csharp-mode-hook #'iensu--csharp-mode-hook))
 
   (use-package emacs
