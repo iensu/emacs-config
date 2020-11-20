@@ -1895,6 +1895,14 @@ https://github.com/Silex/docker.el
     :load-path (lambda () (iensu--config-file "packages/wat-mode")))
 #+end_src
 
+**** NixOS files
+
+Add syntax highlighting for NixOS configuration files.
+
+#+begin_src emacs-lisp
+  (use-package nix-mode)
+#+end_src
+
 ** Load theme
 
 Load doom modeline.
