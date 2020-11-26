@@ -187,6 +187,7 @@
   "Defaults for programming modes"
   (subword-mode 1) ; delimit words at camelCase boundries
   (eldoc-mode 1) ; display documentation in minibuffer
+  (display-line-numbers-mode 1) ;; display line numbers
   (show-paren-mode 1) ; highlight matching parentheses
   (setq-default show-paren-when-point-in-periphery t
                 show-paren-when-point-inside-paren t)
