@@ -96,12 +96,17 @@
 (setq gc-cons-threshold 100000000
       max-lisp-eval-depth 2000)
 
-;; Move backups and auto-saves to ~/.emacs.d/.local/.saves.
+;; Move backups and auto-saves
 (setq create-lockfiles nil
-      backup-directory-alist `(("." . ,(expand-file-name ".local/.saves/" user-emacs-directory)))
+      backup-directory-alist `(("." . ,(expand-file-name ".local/backups/" user-emacs-directory)))
       backup-by-copying t
       delete-old-versions t
-      kept-new-versions 6)
+      kept-new-versions 6
+
+      auto-save-list-file-name (expand-file-name ".local/auto-saves-list" user-emacs-directory))
+
+;; Enable autosaves
+(auto-save-mode 1)
 
 ;; Remember recent files
 (use-package recentf
