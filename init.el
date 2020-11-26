@@ -512,10 +512,7 @@
   :config
   (load-theme 'modus-vivendi t)
   (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-  (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
-  (set-face-attribute 'default nil :font "Fira Code-13")
-  (set-face-attribute 'fixed-pitch nil :font "Fira Code-13")
-  (set-face-attribute 'variable-pitch nil :font "Cantarell-14"))
+  (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic))
 
 
 ;;;; Version control
