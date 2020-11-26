@@ -42,7 +42,7 @@
   (add-to-list 'mu4e-view-actions '("EWW" . iensu--mu4e-view-in-eww) t)
   (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t))
 
-(pretty-hydra-define+ iensu-hydra
+(pretty-hydra-define+ iensu-hydra ()
   ("Email"
    (("e u" mu4u-update-index               "update" :exit nil)
     ("e e" mu4e                            "open email")

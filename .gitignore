@@ -12,8 +12,8 @@ emojis/
 test.org
 transient/
 .dir-locals.el
-features.el
 local-settings.el
+local-feature-settings.el
 
 /projectile-bookmarks.eld
 flycheck_init.el

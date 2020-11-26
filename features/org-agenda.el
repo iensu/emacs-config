@@ -1,8 +1,5 @@
 (require 'org-agenda)
 
-(setq iensu-org-agenda-files
-      (iensu--org-remove-file-if-match "\\.org\\.gpg"))
-
 (dolist (agenda-command
          '(("z" "Two week agenda"
             ((tags-todo "-books-music-movies"
@@ -31,4 +28,4 @@
         (search . " %i %-12:c")))
 
 ;; Update the calendar to contain Swedish holidays etc.
-(load-file (iensu--config-file "packages/kalender.el"))
+(load-file (expand-file-name "packages/kalender.el" user-emacs-directory))

@@ -11,7 +11,5 @@
            (lsp-format-region #'ignore))))
   (add-hook 'csharp-mode-hook #'iensu--csharp-mode-hook))
 
-(use-package emacs
-  :config
-  (add-to-list 'auto-mode-alist '("\\.csproj$" . xml-mode))
-  (add-to-list 'auto-mode-alist '("function.proj$" . xml-mode)))
+(add-to-list 'auto-mode-alist '("\\.csproj$" . xml-mode))
+(add-to-list 'auto-mode-alist '("function.proj$" . xml-mode))

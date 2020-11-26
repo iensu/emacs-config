@@ -1,16 +1,13 @@
-(use-package emacs :custom (flycheck-disabled-checkers (append flycheck-disabled-checkers '(javascript-jshint))))
+(setq flycheck-disabled-checkers (append flycheck-disabled-checkers '(javascript-jshint)))
 
-(use-package js
-  :custom
-  (js-switch-indent-offset 2)
-  :config
-  (define-key js-mode-map (kbd "M-.") nil))
+(setq js-switch-indent-offset 2)
+(define-key js-mode-map (kbd "M-.") nil)
 
 (use-package js2-mode
   :mode ("\\.js\\'")
   :interpreter ("node" "nodejs")
   :custom
-  (js2-basic-offset 2)
+  (js2-indent-level 2)
   (js2-highlight-level 3)
   :hook
   (js2-mode . electric-indent-mode)

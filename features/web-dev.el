@@ -16,14 +16,16 @@
             (lambda () (yas-activate-extra-mode 'js-mode)))
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
+;;;; CSS
 (use-package css-mode
-      :bind (:map css-mode-map
-                  ("C-." . company-complete-common-or-cycle))
-      :hook
-      (css-mode-hook . emmet-mode)
-      (css-mode-hook . rainbow-delimiters-mode)
-      :custom
-      (css-indent-offset 2))
+  :ensure nil
+  :bind (:map css-mode-map
+              ("C-." . company-complete-common-or-cycle))
+  :hook
+  (css-mode-hook . emmet-mode)
+  (css-mode-hook . rainbow-delimiters-mode)
+  :custom
+  (css-indent-offset 2))
 
 (use-package rainbow-mode :hook (css-mode))
 
