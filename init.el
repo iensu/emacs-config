@@ -785,7 +785,7 @@
                                user-emacs-directory)))
 
 ;; Load additional local feature configurations
-(let ((feature-conf (expand-file-name "local-feature-settings.el")))
+(let ((feature-conf (expand-file-name "local-feature-settings.el" user-emacs-directory)))
   (when (file-exists-p feature-conf)
     (load-file feature-conf)))
 
