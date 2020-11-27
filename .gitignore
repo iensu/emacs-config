@@ -44,3 +44,4 @@ eclipse.jdt.ls/
 workspace/
 persist/
 /.extension/
+*~
