@@ -55,7 +55,6 @@
   (setq org-export-initial-scope 'subtree)
   (setq org-catch-invisible-edits 'show-and-error)
   (setq org-archive-location "archive/%s_archive::")
-  (setq org-capture-templates iensu-org-capture-templates)
 
   (setq org-modules '(org-protocol))
 
@@ -194,6 +193,8 @@
                               " %^{Published}p"
                               " %(org-set-property \"Added\" (iensu--get-current-inactive-timestamp))")
                      :prepend t :empty-lines 1))
+
+(setq org-capture-templates iensu-org-capture-templates)
 
 (pretty-hydra-define+ iensu-hydra ()
   ("Org clock"
