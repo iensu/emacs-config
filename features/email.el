@@ -1,6 +1,6 @@
 (use-package mu4e
   :ensure nil
-  :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
+  :load-path iensu-email-mu4e-package-path
   :bind (:map mu4e-view-mode-map
               ("<tab>" . shr-next-link)
               ("<backtab>" . shr-previous-link))
@@ -10,8 +10,8 @@
   (require 'mu4e)
   :config
   (setq mail-user-agent 'mu4e-user-agent)
-  (setq mu4e-mu-binary "/usr/local/bin/mu")
-  (setq mu4e-maildir "~/Mail")
+  (setq mu4e-mu-binary iensu-email-mu-binary-path)
+  (setq mu4e-maildir iensu-email-directory)
   (setq mu4e-confirm-quit nil)
   (setq mu4e-context-policy 'pick-first)
 

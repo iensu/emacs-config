@@ -44,6 +44,15 @@
 (defvar iensu-org-capture-templates nil
   "Capture templates to be used by Org mode.")
 
+(defvar iensu-email-directory "~/Mail"
+  "Path to email directory.")
+
+(defvar iensu-email-mu4e-package-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
+  "Path to mu4e Emacs package.")
+
+(defvar iensu-email-mu-binary-path "/usr/local/bin/mu"
+  "Path to the mu binary.")
+
 (defvar iensu-enabled-features-alist nil
   "Locally enabled features. Available features are stored in the `features/' directory.")
 
