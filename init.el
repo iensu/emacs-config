@@ -791,11 +791,3 @@
 (let ((feature-conf (expand-file-name "local-feature-settings.el" user-emacs-directory)))
   (when (file-exists-p feature-conf)
     (load-file feature-conf)))
-
-
-;;;; Emacs server
-
-;; The Emacs server keeps the Emacs instance running in the background so opening files in Emacs
-;; will be snappy.
-(unless (server-running-p)
-  (server-start))
