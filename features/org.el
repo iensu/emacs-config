@@ -1,4 +1,9 @@
+;;; Org mode configuration
+
+;;; Code:
+
 ;;;; Helper functions and variables
+
 (defun iensu--get-current-inactive-timestamp ()
   (concat "[" (format-time-string "%F %a %H:%M") "]"))
 
@@ -13,6 +18,8 @@
 
 (defvar iensu--timer:org-save-buffers nil
   "Org save buffers timer object. Can be used to cancel the timer.")
+
+;;;; Org package configuration
 
 (use-package org
   :bind (("C-c c" . org-capture)
@@ -31,27 +38,25 @@
   :config
   (setq org-directory iensu-org-dir)
   (setq org-default-notes-file (expand-file-name "notes.org" org-directory))
-  (setq org-refile-targets '((iensu-org-refile-targets :maxlevel . 10)))
-  (setq org-refile-allow-creating-parent-nodes 'confirm)
-  (setq org-refile-use-outline-path 'file)
-  (setq org-latex-listings t)
-  (setq org-cycle-separator-lines 1)
+
   (setq org-src-fontify-natively t)
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
-  (setq truncate-lines t)
-  (setq org-image-actual-width nil)
-  (setq line-spacing 1)
-  (setq outline-blank-line t)
-  (setq org-adapt-indentation nil)
   (setq org-fontify-quote-and-verse-blocks t)
   (setq org-fontify-done-headline t)
   (setq org-fontify-whole-heading-line t)
+
+  (setq org-refile-targets '((iensu-org-refile-targets :maxlevel . 10)))
+  (setq org-refile-allow-creating-parent-nodes 'confirm)
+  (setq org-refile-use-outline-path 'file)
+
+  (setq org-image-actual-width nil)
+
+  (setq org-adapt-indentation 'headline-data)
   (setq org-hide-leading-stars t)
   (setq org-indent-indentation-per-level 2)
   (setq org-checkbox-hierarchical-statistics nil)
   (setq org-log-done 'time)
   (setq org-outline-path-complete-in-steps nil)
-  (setq org-html-htmlize-output-type 'css)
+
   (setq org-export-initial-scope 'subtree)
   (setq org-catch-invisible-edits 'show-and-error)
   (setq org-archive-location "archive/%s_archive::")
@@ -59,30 +64,23 @@
   (setq org-modules '(org-protocol))
 
   (org-load-modules-maybe t)
-  (dolist (lang-mode '(("javascript" . js2) ("es" . es) ("wat" . wat))
-                     (add-to-list 'org-src-lang-modes lang-mode)))
 
-  (org-babel-do-load-languages
-   'org-babel-load-languages '((emacs-lisp . t)
-                               (shell . t)
-                               (js . t)
-                               (python . t)
-                               (dot . t)))
+  (dolist (lang '((emacs-lisp . t)
+                  (shell . t)))
+    (add-to-list 'org-babel-load-languages lang))
 
-  (let ((additional-org-templates (if (version< (org-version) "9.2")
-                                    '(("ssh" "#+begin_src shell \n?\")
-                                        ("sel" " \n?\"))
-                                  '(("ssh" . "src shell")
+  (let ((additional-org-templates '(("ssh" . "src shell")
                                     ("sel" . "src emacs-lisp")
-                                    ("sr"  . "src restclient")
-                                    ("sR"  .  "src rust")))))
+                                    ("sr"  . "src restclient"))))
     (dolist (template additional-org-templates)
       (add-to-list 'org-structure-template-alist template))))
 
-(setq calendar-week-start-day 1) ; The week starts on Monday.
+;; YAML support in source blocks
+(defun org-babel-execute:yaml (body params) body)
 
-;;;; Markdown export
-;; standard markdown
+;;;; Markdown exporters
+
+;; Standard markdown
 (require 'ox-md)
 
 ;; Github-flavoured markdown
@@ -90,9 +88,6 @@
   :init
   (eval-after-load "org"
     '(require 'ox-gfm nil t)))
-
-;;;; YAML support in source blocks
-(defun org-babel-execute:yaml (body params) body)
 
 ;;;; Capture things everywhere
 
@@ -129,7 +124,6 @@
 
 (setq org-clock-in-switch-to-state "DOING")
 (setq org-log-into-drawer t)
-
 
 ;;;;; Make org-mode prettier
 

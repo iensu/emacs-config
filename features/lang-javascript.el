@@ -18,7 +18,8 @@
   :config
   (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)
   (js2-mode-hide-warnings-and-errors)
-  (flycheck-add-mode 'javascript-eslint 'js2-mode))
+  (flycheck-add-mode 'javascript-eslint 'js2-mode)
+  (add-to-list 'org-src-lang-modes '("javascript" . js2)))
 
 (use-package rjsx-mode
   :mode ("\\.jsx\\'")
@@ -54,3 +55,6 @@
     '(add-hook 'js-mode-hook #'add-node-modules-path))
   (eval-after-load 'typescript-mode
     '(add-hook 'js-mode-hook #'add-node-modules-path)))
+
+;;;; Org src block support
+(add-to-list 'org-babel-load-languages '(js . t))

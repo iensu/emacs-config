@@ -86,6 +86,9 @@
 ;; Remove the GNU/Emacs startup screen to boot direct to the Scratch buffer.
 (setq inhibit-startup-screen t)
 
+;; The week starts on Monday.
+(setq calendar-week-start-day 1)
+
 ;; Make sure that buffer names become unique when opening multiple files of the same name.
 (setq-default frame-title-format "%b (%f)"
               uniquify-buffer-name-style 'post-forward
