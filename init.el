@@ -468,6 +468,7 @@
     ("b"   bookmark-set                    "set bookmark"))
    "Misc"
    (("P"   iensu/project-todo-list         "project todo list")
+    ("p"   iensu/open-project-org-file     "open project notes file")
     ("i"   list-bookmarks                  "list bookmarks")
     ("+"   enlarge-window-horizontally     "enlarge window" :exit nil)
     ("-"   shrink-window-horizontally      "shrink window" :exit nil))
@@ -666,6 +667,10 @@
   (when (string-equal iensu--project-agenda-buffer-name
                       (buffer-name (current-buffer)))
     (setq org-agenda-files iensu-org-agenda-files)))
+
+(defun iensu/open-project-org-file ()
+  (interactive)
+  (find-file (iensu--org-capture-project-notes-file)))
 
 ;; Reset org-agenda-files when the project TODO list buffer is closed
 (add-hook 'kill-buffer-hook #'iensu/reset-org-agenda-files)
