@@ -231,6 +231,7 @@
   (prog-mode . smartparens-mode) ; non-strict by default, but keep strict in LISPs
   (repl-mode . smartparens-strict-mode)
   (lisp-mode . smartparens-strict-mode)
+  (ielm-mode . smartparens-strict-mode)
   (emacs-lisp-mode . smartparens-strict-mode))
 
 ;;;;; Text editing tools
