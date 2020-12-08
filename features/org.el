@@ -50,7 +50,7 @@
 
   (setq org-image-actual-width nil)
 
-  (setq org-adapt-indentation 'headline-data)
+  (setq org-adapt-indentation nil)
   (setq org-hide-leading-stars t)
   (setq org-indent-indentation-per-level 2)
   (setq org-checkbox-hierarchical-statistics nil)
