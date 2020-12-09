@@ -166,14 +166,14 @@
                               "%U")
                      :prepend t)
 
-                   `("L" "Browser Link" entry (file ,(expand-file-name "refile.org" iensu-org-dir))
-                     ,(concat "* TODO %:description\n"
-                              "%U\n\n"
-                              "%:link")
+                   `("L" "Browser Link" entry (file ,(expand-file-name "links.org" iensu-org-dir))
+                     ,(concat "* %:description\n"
+                              "%:link\n"
+                              "%U\n")
                      :prepend t :immediate-finish t :empty-lines 1)
 
-                   `("p" "Browser Link and Selection" entry (file ,(expand-file-name "refile.org" iensu-org-dir))
-                     ,(concat "* TODO %^{Title}\n"
+                   `("p" "Browser Link with Selection" entry (file ,(expand-file-name "links.org" iensu-org-dir))
+                     ,(concat "* %^{Title}\n"
                               "Source: %u, %c\n\n"
                               "#+BEGIN_QUOTE\n"
                               "%i\n"
