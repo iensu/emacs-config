@@ -52,8 +52,6 @@
   (eval-after-load 'js2-mode
     '(add-hook 'js-mode-hook #'add-node-modules-path))
   (eval-after-load 'rjsx-mode
-    '(add-hook 'js-mode-hook #'add-node-modules-path))
-  (eval-after-load 'typescript-mode
     '(add-hook 'js-mode-hook #'add-node-modules-path)))
 
 ;;;; Org src block support

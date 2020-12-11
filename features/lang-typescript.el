@@ -1,8 +1,9 @@
 (use-package typescript-mode
   :mode ("\\.ts$" "\\.tsx$")
   :hook
-  (typescript-mode . lsp)
-  (typescript-mode . prettier-js-mode)
+  ((typescript-mode . add-node-modules-path)
+   (typescript-mode . lsp)
+   (typescript-mode . prettier-js-mode))
   :custom
   (flycheck-check-syntax-automatically '(save mode-enabled))
   (typescript-indent-level 2)
