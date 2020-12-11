@@ -29,12 +29,16 @@
          ("H-."   . org-time-stamp-inactive))
   :hook
   (org-mode . (lambda ()
-                (org-num-mode 1)
+                (unless org-num-mode
+                  (org-num-mode 1))
                 (visual-line-mode 1)
                 (variable-pitch-mode 1)))
   :init
   ;; Necessary to make Org-mode stuff available
   (require 'org)
+  (require 'org-indent)
+  (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+  (set-face-attribute 'org-checkbox nil :inherit '(fixed-pitch))
   :config
   (setq org-directory iensu-org-dir)
   (setq org-default-notes-file (expand-file-name "notes.org" org-directory))
@@ -43,6 +47,9 @@
   (setq org-fontify-quote-and-verse-blocks t)
   (setq org-fontify-done-headline t)
   (setq org-fontify-whole-heading-line t)
+
+  (setq org-hide-emphasis-markers t)
+  (setq org-ellipsis " ▾")
 
   (setq org-refile-targets '((iensu-org-refile-targets :maxlevel . 10)))
   (setq org-refile-allow-creating-parent-nodes 'confirm)
