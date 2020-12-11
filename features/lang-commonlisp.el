@@ -12,7 +12,15 @@
   (smartparens-strict-mode 1)
   (eldoc-mode 1))
 
-(use-package sly
+(use-package slime
   :ensure t)
 
-(add-hook 'sly-mrepl-mode-hook #'iensu-slime-hook)
+(use-package slime-company
+  :after (slime company)
+  :config
+  (add-to-list 'slime-contribs 'slime-company)
+  (add-to-list 'company-backends #'company-slime)
+  (setq slime-company-completion 'fuzzy
+        slime-company-after-completion 'slime-company-just-one-space))
+
+(add-hook 'slime-repl-mode-hook #'iensu-slime-hook)
