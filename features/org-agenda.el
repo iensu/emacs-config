@@ -1,15 +1,19 @@
 (require 'org-agenda)
 
 (dolist (agenda-command
-         '(("z" "Two week agenda"
-            ((tags-todo "-books-music-movies"
+         '(("z" "One week agenda"
+            ((tags-todo "-books-music-movies-refile"
                         ((org-agenda-overriding-header "TODOs")
                          (org-agenda-prefix-format "  ")
                          (org-agenda-sorting-strategy '(priority-down deadline-up))
                          (org-agenda-max-entries 20)))
+             (tags-todo "+refile"
+                        ((org-agenda-overriding-header "Refile")
+                         (org-agenda-prefix-format "  ")
+                         (org-agenda-max-entries 10)))
              (agenda ""
                      ((org-agenda-start-day "0d")
-                      (org-agenda-span 14)
+                      (org-agenda-span 7)
                       (org-agenda-start-on-weekday nil)))))))
   (add-to-list 'org-agenda-custom-commands agenda-command))
 
