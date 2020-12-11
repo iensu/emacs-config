@@ -712,6 +712,10 @@
 ;; Company as a completion frontend
 (use-package company
   :init (global-company-mode)
+  :bind (:map company-mode-map (("C-n" . company-select-next)
+                                ("C-p" . company-select-previous)
+                                ("C-d" . company-show-doc-buffer)
+                                ("M-." . company-show-location)))
   :config
   (setq company-idle-delay 0.3)
   (setq company-minimum-prefix-length 2)
@@ -724,6 +728,7 @@
             (lambda ()
               (add-to-list 'company-backends 'company-elisp)))
   (eval-after-load 'company (company-quickhelp-mode 1)))
+
 (use-package company-quickhelp
   :bind (:map company-active-map
               ("M-h" . company-quickhelp-manual-begin))
