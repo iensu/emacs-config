@@ -29,8 +29,7 @@
          ("H-."   . org-time-stamp-inactive))
   :hook
   (org-mode . (lambda ()
-                (unless org-num-mode
-                  (org-num-mode 1))
+                (org-num-mode 1)
                 (visual-line-mode 1)
                 (variable-pitch-mode 1)))
   :init
@@ -115,7 +114,7 @@
 
 ;;;; TODO keyword and priorities setup
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "DOING(d!)" "BLOCKED(b@/!)"
+      '((sequence "TODO(t)" "PROJ(p)" "DOING(d!)" "BLOCKED(b@/!)"
                   "|"
                   "CANCELED(C@/!)" "POSTPONED(P@/!)" "DONE(D@/!)")))
 

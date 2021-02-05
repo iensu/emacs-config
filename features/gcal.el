@@ -23,3 +23,14 @@
   "Fetch Google calendar events and add the proper file tag(s)."
   (interactive)
   (org-gcal-fetch))
+
+(defvar iensu--timer:update-work-calendar nil)
+
+(defun iensu/start-work-calendar-update-timer ()
+  (interactive)
+  (setq iensu--timer:update-work-calendar
+        (run-at-time t (* 30 60) #'iensu/refresh-work-calendar)))
+
+(defun iensu/stop-work-calendar-timer ()
+  (interactive)
+  (cancel-timer iensu--timer:update-work-calendar))

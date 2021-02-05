@@ -2,11 +2,21 @@
 
 (dolist (agenda-command
          '(("z" "One week agenda"
-            ((tags-todo "-books-music-movies-refile"
+            ((tags-todo "DEADLINE<=\"<+1w>\"|SCHEDULED<=\"<+1w>\""
                         ((org-agenda-overriding-header "TODOs")
                          (org-agenda-prefix-format "  ")
+                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("PROJ") 'regexp ":(books|music|movies|refile):"))
                          (org-agenda-sorting-strategy '(priority-down deadline-up))
                          (org-agenda-max-entries 20)))
+             (tags-todo "+TODO=\"PROJ\""
+                        ((org-agenda-overriding-header "Projects")
+                         (org-agenda-prefix-format "  ")
+                         (org-agenda-max-entries 10)))
+             (tags-todo "-refile-TODO=\"PROJ\""
+                        ((org-agenda-overriding-header "Unscheduled")
+                         (org-agenda-prefix-format "  ")
+                         (org-agenda-max-entries 5)
+                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp 'regexp ":(books|music|movies|refile):"))))
              (tags-todo "+refile"
                         ((org-agenda-overriding-header "Refile")
                          (org-agenda-prefix-format "  ")

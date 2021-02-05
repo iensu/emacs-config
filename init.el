@@ -157,6 +157,9 @@
 (setq-default indent-tabs-mode nil
               tab-width 2)
 
+;; Read-only buffers are visited in `view-mode'.
+(setq view-read-only t)
+
 (setq-default require-final-newline t) ; Files should always have a final newline.
 
 (setq-default sentence-end-double-space nil) ; Sentence end does not require two spaces.
@@ -276,7 +279,7 @@
 ;; document-like editing.
 (use-package visual-fill-column
   :config
-  (setq-default visual-fill-column-width 80)
+  (setq-default visual-fill-column-width 110)
   (setq-default visual-fill-column-center-text t))
 
 (defun iensu/text-editing-mode-hook ()
@@ -381,6 +384,19 @@
 (use-package dumb-jump
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
+
+;; Speedbar for file navigation
+(require 'speedbar)
+(defun iensu/speedbar-reset-layout ()
+  (setf (alist-get 'width speedbar-frame-parameters) 60)
+  (setf (alist-get 'height speedbar-frame-parameters) 45)
+  (setf (alist-get 'left speedbar-frame-parameters) 0)
+  (setf (alist-get 'top speedbar-frame-parameters) 0))
+
+(add-hook 'speedbar-after-create-hook #'iensu/speedbar-reset-layout)
+
+(define-key speedbar-file-key-map (kbd "<tab>") #'speedbar-toggle-line-expansion)
+(global-set-key (kbd "C-ä") #'speedbar)
 
 
 ;;;; Custom commands
@@ -697,6 +713,7 @@
                               "Link: %a\n\n"
                               "#+begin_src %^{Language}\n"
                               "%i\n"
+                              "#+end_src"
                               "\n\n"
                               "%?")
                      :empty-lines 1))
@@ -712,10 +729,10 @@
 ;; Company as a completion frontend
 (use-package company
   :init (global-company-mode)
-  :bind (:map company-mode-map (("C-n" . company-select-next)
-                                ("C-p" . company-select-previous)
-                                ("C-d" . company-show-doc-buffer)
-                                ("M-." . company-show-location)))
+  :bind (:map company-active-map (("C-n" . company-select-next)
+                                  ("C-p" . company-select-previous)
+                                  ("C-d" . company-show-doc-buffer)
+                                  ("M-." . company-show-location)))
   :config
   (setq company-idle-delay 0.3)
   (setq company-minimum-prefix-length 2)
@@ -748,8 +765,6 @@
   :commands (lsp lsp-deferred)
   :bind (:map lsp-mode-map
               ("C-c l" . lsp-mode-hydra/body))
-  :init
-  (setq lsp-keymap-prefix "C-ä")
   :hook
   (lsp-mode . lsp-enable-which-key-integration)
   :config
