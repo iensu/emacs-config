@@ -29,7 +29,6 @@
          ("H-."   . org-time-stamp-inactive))
   :hook
   (org-mode . (lambda ()
-                (org-num-mode 1)
                 (visual-line-mode 1)
                 (variable-pitch-mode 1)))
   :init
