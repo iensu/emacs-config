@@ -669,6 +669,28 @@
 (defun iensu--org-capture-project-notes-file ()
   (concat (projectile-project-root) ".project-notes.org"))
 
+(defun iensu/create-project-notes-file ()
+  "Creates a note file somewhere in `org-directory' and links it to the current directory as `.project-notes.org.'"
+  (interactive)
+  (let* ((versioned-dir (locate-dominating-file (buffer-file-name)
+                                                ".git"))
+         (project-dir (expand-file-name (or versioned-dir
+                                           (file-name-directory (buffer-file-name)))))
+         (project-name (car (last (remove-if (lambda (x) (string-equal ""
+                                                                  x))
+                                             (split-string project-dir
+                                                           "/")))))
+         (notes-link (concat project-dir ".project-notes.org"))
+         (notes-file-name (concat project-name ".org"))
+         (notes-dir (expand-file-name (read-directory-name (format "Where to save %s? "
+                                                                   notes-file-name)
+                                                           (concat (file-name-as-directory org-directory)
+                                                                   "projects"))))
+         (notes-file (concat notes-dir notes-file-name)))
+    (make-empty-file notes-file)
+    (make-symbolic-link notes-file notes-link)
+    (find-file notes-link)))
+
 (defun iensu/project-todo-list ()
   (interactive)
   (let ((project-notes-file (expand-file-name ".project-notes.org"
