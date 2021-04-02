@@ -237,6 +237,29 @@
   (ielm-mode . smartparens-strict-mode)
   (emacs-lisp-mode . smartparens-strict-mode))
 
+;; Prettify compilation-mode buffers
+(use-package ansi-color
+  :init
+  (defun iensu--compilation-colorize-buffer ()
+    "Apply `ansi-color' to compilation buffers"
+    (let ((inhibit-read-only t))
+      (ansi-color-apply-on-region compilation-filter-start (point-max))))
+
+  (defun iensu--compilation-remove-unhandled-sequence ()
+    "Removes escape sequences not handled by `ansi-color'"
+    (let ((regexp "\\(\^[(B\\|\^[=\\)")
+          (start-marker (point-min-marker))
+          (end-marker (process-mark (get-buffer-process (current-buffer)))))
+      (save-excursion
+        (goto-char start-marker)
+        (while (re-search-forward regexp end-marker t)
+          (replace-match "")))))
+
+  (add-hook 'compilation-mode-hook
+            (lambda () (setq compilation-environment '("TERM=xterm-256color"))))
+  (add-hook 'compilation-filter-hook 'iensu--compilation-colorize-buffer)
+  (add-hook 'compilation-filter-hook 'iensu--compilation-remove-unhandled-sequence))
+
 ;;;;; Text editing tools
 
 ;; Spellcheck using flyspell
@@ -549,7 +572,9 @@
   :config
   (load-theme 'modus-vivendi t)
   (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-  (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic))
+  (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
+  (set-face-attribute 'org-block-begin-line nil :foreground "#2e2e2e" :background "#00000" :underline nil)
+  (set-face-attribute 'org-block-end-line nil :underline nil :overline nil))
 
 
 ;;;; Version control
