@@ -18,6 +18,7 @@
   ;; Configuration for viewing emails
   (setq mu4e-view-show-images t)
   (setq mu4e-show-images t)
+  (setq mu4e-view-use-gnus t)
   (setq mu4e-view-image-max-width 800)
   (setq mu4e-compose-format-flowed t)
   (setq mu4e-view-show-addresses t)
