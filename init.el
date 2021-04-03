@@ -238,27 +238,17 @@
   (emacs-lisp-mode . smartparens-strict-mode))
 
 ;; Prettify compilation-mode buffers
-(use-package ansi-color
+(use-package xterm-color
   :init
-  (defun iensu--compilation-colorize-buffer ()
-    "Apply `ansi-color' to compilation buffers"
-    (let ((inhibit-read-only t))
-      (ansi-color-apply-on-region compilation-filter-start (point-max))))
-
-  (defun iensu--compilation-remove-unhandled-sequence ()
-    "Removes escape sequences not handled by `ansi-color'"
-    (let ((regexp "\\(\^[(B\\|\^[=\\)")
-          (start-marker (point-min-marker))
-          (end-marker (process-mark (get-buffer-process (current-buffer)))))
-      (save-excursion
-        (goto-char start-marker)
-        (while (re-search-forward regexp end-marker t)
-          (replace-match "")))))
-
+  (defun iensu--advice-compilation-filter (f proc string)
+    ;; Apply `xterm-color' only to real compilation buffers, and not buffers which rely on the
+    ;; color codes for parsing (ag.el, rg.el)
+    ;; More info: https://github.com/atomontage/xterm-color/issues/37
+    (funcall f proc (if (string-prefix-p "*compilation" (buffer-name (process-buffer proc)))
+                        (xterm-color-filter string) string)))
+  (advice-add 'compilation-filter :around #'iensu--advice-compilation-filter)
   (add-hook 'compilation-mode-hook
-            (lambda () (setq compilation-environment '("TERM=xterm-256color"))))
-  (add-hook 'compilation-filter-hook 'iensu--compilation-colorize-buffer)
-  (add-hook 'compilation-filter-hook 'iensu--compilation-remove-unhandled-sequence))
+            (lambda () (setq compilation-environment '("TERM=xterm-256color")))))
 
 ;;;;; Text editing tools
 
