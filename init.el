@@ -653,13 +653,6 @@
 
 (use-package counsel-projectile :init (counsel-projectile-mode 1))
 
-(use-package ibuffer-projectile :after (projectile)
-  :hook
-  (ibuffer-mode . (lambda ()
-                    (ibuffer-projectile-set-filter-groups)
-                    (unless (eq ibuffer-sorting-mode 'alphabetic)
-                      (ibuffer-do-sort-by-alphabetic)))))
-
 ;; `treemacs' for a visual project tree structure.
 (use-package treemacs
   :defer t
