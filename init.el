@@ -625,7 +625,8 @@
     (("p" counsel-projectile-switch-project "open project")
      ("k" projectile-kill-buffers "close project")
      ("t" projectile-test-project "test project" :exit t)
-     ("c" projectile-compile-project "compile project" :exit t))
+     ("c" projectile-compile-project "compile project" :exit t)
+     ("C" projectile-run-project "run project" :exit t))
     "Files & Buffers"
     (("f" counsel-projectile-find-file "open project file")
      ("o" iensu/open-project-org-file "open project org file")
@@ -640,7 +641,8 @@
   (projectile-global-mode)
   (projectile-register-project-type 'node-npm '("package.json")
                                     :compile "npm run build"
-                                    :test "npm test")
+                                    :test "npm test"
+                                    :run "npm start")
   (projectile-register-project-type 'rust-cargo '("cargo.toml")
                                     :compile "cargo check"
                                     :test "cargo test"
