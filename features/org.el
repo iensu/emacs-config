@@ -76,7 +76,8 @@
 
   (let ((additional-org-templates '(("ssh" . "src shell")
                                     ("sel" . "src emacs-lisp")
-                                    ("sr"  . "src restclient"))))
+                                    ("sr"  . "src restclient")
+                                    ("sa"  . "src artist"))))
     (dolist (template additional-org-templates)
       (add-to-list 'org-structure-template-alist template))))
 
