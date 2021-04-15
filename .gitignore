@@ -46,3 +46,4 @@ persist/
 /.extension/
 *~
 projects
+eln-cache/
