@@ -343,6 +343,13 @@
 
 (use-package deadgrep)
 
+(use-package wgrep
+  :ensure nil
+  :load-path (lambda () (expand-file-name "packages" user-emacs-directory))
+  :config
+  (setq wgrep-auto-save-buffer t)
+  (require 'wgrep-deadgrep))
+
 ;; `counsel', `ivy' and `swiper' constitute a very useful completion framework.
 (use-package counsel
   :delight ivy-mode
