@@ -19,6 +19,19 @@
   (require 'use-package)
   (setq use-package-always-ensure t))
 
+;; Make system path variables accessible in Emacs
+(use-package exec-path-from-shell
+  :custom
+  (exec-path-from-shell-check-startup-files nil)
+  :init
+  (exec-path-from-shell-initialize))
+
+(when (and (fboundp 'native-comp-available-p)
+      	    (native-comp-available-p))
+	 (message "Native compilation enabled!")
+   (setq comp-deferred-compilation t))
+
+
 
 ;;;; System local configuration
 
@@ -313,13 +326,6 @@
 ;; Install `hydra' with `pretty-hydra' which simplifies hydra definitions
 (use-package hydra)
 (use-package pretty-hydra :after (hydra))
-
-;; Make system path variables accessible in Emacs
-(use-package exec-path-from-shell
-  :custom
-  (exec-path-from-shell-check-startup-files nil)
-  :init
-  (exec-path-from-shell-initialize))
 
 ;; Password entry in minibuffer
 (use-package pinentry
