@@ -780,16 +780,20 @@
                                   ("C-d" . company-show-doc-buffer)
                                   ("M-." . company-show-location)))
   :config
-  (setq company-idle-delay 0.3)
+  (setq company-idle-delay 0.1)
   (setq company-minimum-prefix-length 2)
   (setq company-selection-wrap-around t)
   (setq company-auto-complete t)
   (setq company-tooltip-align-annotations t)
   (setq company-dabbrev-downcase nil)
   (setq company-auto-complete-chars nil)
-  (add-hook 'emacs-lisp-mode-hook
-            (lambda ()
-              (add-to-list 'company-backends 'company-elisp)))
+
+  (defun iensu--emacs-lisp-mode-hook ()
+    (require 'company-elisp)
+    (add-to-list 'company-backends 'company-elisp))
+  (add-hook 'emacs-lisp-mode-hook #'iensu--emacs-lisp-mode-hook)
+  (add-hook 'lisp-interaction-mode-hook #'iensu--emacs-lisp-mode-hook)
+
   (eval-after-load 'company (company-quickhelp-mode 1)))
 
 (use-package company-quickhelp
@@ -815,6 +819,7 @@
   (lsp-mode . lsp-enable-which-key-integration)
   :config
   (setq lsp-auto-guess-root nil)
+  (setq lsp-eldoc-render-all nil)
 
   :pretty-hydra
   ((:title "LSP" :quit-key "q" :color teal)
