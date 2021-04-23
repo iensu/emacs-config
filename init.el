@@ -351,7 +351,7 @@
 
 (use-package wgrep
   :ensure nil
-  :load-path (lambda () (expand-file-name "packages" user-emacs-directory))
+  :load-path (lambda () (expand-file-name "packages/wgrep" user-emacs-directory))
   :config
   (setq wgrep-auto-save-buffer t)
   (require 'wgrep-deadgrep))
