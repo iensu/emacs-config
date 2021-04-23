@@ -12,10 +12,11 @@
     (message "Rendering Markdown preview of %s" filename)
     (shell-command-on-region (point-min) (point-max) "pandoc -f gfm" "*Preview Markdown Output*")
     (save-selected-window
-      (switch-to-buffer-other-window "*Preview Markdown Output*")
+      (switch-to-buffer-other-window (concat "* Preview Markdown " filename " *"))
       (let ((document (libxml-parse-html-region (point) (point-max)))
             (url (concat "file://" filename)))
         (erase-buffer)
         (shr-insert-document `(base ((href . ,url)) ,document))
         (goto-char (point-min))
+        (visual-fill-column-mode)
         (setq buffer-read-only t)))))
