@@ -600,7 +600,6 @@
   (load-theme 'modus-vivendi t)
   (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
   (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
-  (set-face-attribute 'org-block-begin-line nil :foreground "#2e2e2e" :background "#00000" :underline nil)
   (set-face-attribute 'org-date nil :foreground (face-attribute 'org-special-keyword :foreground)))
 
 
