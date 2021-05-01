@@ -599,8 +599,7 @@
   :config
   (load-theme 'modus-vivendi t)
   (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-  (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
-  (set-face-attribute 'org-date nil :foreground (face-attribute 'org-special-keyword :foreground)))
+  (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic))
 
 
 ;;;; Version control
