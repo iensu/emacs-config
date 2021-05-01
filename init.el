@@ -712,7 +712,17 @@
          (notes-file (concat notes-dir notes-file-name)))
     (make-empty-file notes-file)
     (make-symbolic-link notes-file notes-link)
-    (find-file notes-link)))
+    (find-file notes-link)
+    (iensu/refresh-agenda-files)))
+
+(defun iensu/refresh-agenda-files ()
+  (interactive)
+  (setq-default org-agenda-files
+                (append (directory-files iensu-org-dir
+                                         :full-path
+                                         "\\.org$")
+                        (directory-files-recursively (concat iensu-org-dir "/projects")
+                                                     "\\.org$"))))
 
 (defun iensu/project-todo-list ()
   (interactive)
