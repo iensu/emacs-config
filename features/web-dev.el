@@ -18,7 +18,6 @@
 
 ;;;; CSS
 (use-package css-mode
-  :ensure nil
   :bind (:map css-mode-map
               ("C-." . company-complete-common-or-cycle))
   :hook

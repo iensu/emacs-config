@@ -1,5 +1,4 @@
 (use-package sql-mode
-  :ensure nil
   :mode "\\.psql$"
   :config
   (add-hook 'sql-mode-hook

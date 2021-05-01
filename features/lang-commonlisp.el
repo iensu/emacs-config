@@ -12,8 +12,7 @@
   (smartparens-strict-mode 1)
   (eldoc-mode 1))
 
-(use-package slime
-  :ensure t)
+(use-package slime)
 
 (use-package slime-company
   :after (slime company)

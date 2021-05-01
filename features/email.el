@@ -1,5 +1,4 @@
 (use-package mu4e
-  :ensure nil
   :load-path iensu-email-mu4e-package-path
   :bind (:map mu4e-view-mode-map
               ("<tab>" . shr-next-link)

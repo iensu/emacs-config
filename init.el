@@ -2,22 +2,27 @@
 
 ;;;; Package installation and management
 
-;; This section initializes `package' with a set of archives and installs `use-package' which is
-;; used to install other package dependencies.
+;; This section initializes `straight' as the package manager and installs `use-package' which is
+;; used to install packages.
 
-(require 'package)
+(setq package-enable-at-startup nil)
 
-(setq package-archives
-      '(("gnu"   . "https://elpa.gnu.org/packages/")
-        ("melpa" . "https://melpa.org/packages/")))
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(unless (package-installed-p 'use-package) ; install use-package if it's not already installed
-  (package-refresh-contents)
-  (package-install 'use-package))
+(straight-use-package 'use-package)
 
-(eval-when-compile
-  (require 'use-package)
-  (setq use-package-always-ensure t))
+(setq straight-use-package-by-default t)
 
 ;; Make system path variables accessible in Emacs
 (use-package exec-path-from-shell
@@ -30,7 +35,6 @@
       	    (native-comp-available-p))
 	 (message "Native compilation enabled!")
    (setq comp-deferred-compilation t))
-
 
 
 ;;;; System local configuration
@@ -135,7 +139,6 @@
 
 ;; Remember recent files
 (use-package recentf
-  :ensure nil
   :custom
   (recentf-max-menu-items 50)
   :config
@@ -267,7 +270,6 @@
 
 ;; Spellcheck using flyspell
 (use-package flyspell
-  :ensure nil
   :bind (:map flyspell-mode-map ("C-:" . flyspell-popup-correct))
   :custom
   (ispell-program-name "/usr/local/bin/aspell")
@@ -350,7 +352,6 @@
 (use-package deadgrep)
 
 (use-package wgrep
-  :ensure nil
   :load-path (lambda () (expand-file-name "packages/wgrep" user-emacs-directory))
   :config
   (setq wgrep-auto-save-buffer t)
@@ -598,7 +599,6 @@
 ;; `smerge-mode' is a merge conflict resolution tool which is great but unfortunately has awful
 ;; default keybindings. Here I define a hydra to make `smerge' easier to work with.
 (use-package smerge-mode
-  :ensure nil
   :bind (:map smerge-mode-map (("C-c ö" . smerge-mode-hydra/body)))
   :pretty-hydra
   ((:color teal :quit-key "q" :title "Smerge - Git conflicts")
