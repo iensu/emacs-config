@@ -123,7 +123,8 @@
 
 ;; Improve performance by increasing the garbage collector threshold and max LISP evaluation depth.
 (setq gc-cons-threshold 100000000
-      max-lisp-eval-depth 2000)
+      max-lisp-eval-depth 2000
+      read-process-output-max (* 1024 1024))
 
 ;; Move backups and auto-saves
 (setq create-lockfiles nil
