@@ -578,7 +578,7 @@
   (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
   (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
   (set-face-attribute 'org-block-begin-line nil :foreground "#2e2e2e" :background "#00000" :underline nil)
-  (set-face-attribute 'org-block-end-line nil :underline nil :overline nil))
+  (set-face-attribute 'org-date nil :foreground (face-attribute 'org-special-keyword :foreground)))
 
 
 ;;;; Version control
@@ -855,15 +855,34 @@
   :commands lsp-ui-mode
   :config
   (lsp-ui-sideline-mode 1)
-  (setq lsp-ui-sideline-show-diagnostics t
-        lsp-ui-sideline-show-code-actions nil
-        lsp-ui-sideline-show-symbol nil
-        lsp-ui-sideline-show-hover nil)
+  (defun iensu--lsp-ui-sideline-mode-hook ()
+    (setq lsp-ui-sideline-show-diagnostics nil
+          lsp-ui-sideline-show-code-actions nil
+          lsp-ui-sideline-show-symbol t
+          lsp-ui-sideline-show-hover nil))
+  (add-hook 'lsp-ui-sideline-mode-hook #'iensu--lsp-ui-sideline-mode-hook)
   (lsp-ui-doc-mode 1))
+
+;; `lsp-lens' adds buttons to run tests or debug sessions
+(use-package lsp-lens
+  :config
+  (setq lsp-lens-enable t))
 
 (use-package company-lsp :commands company-lsp)
 (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+
+;; `dap-mode' for debugging
+
+(use-package dap-mode
+  :config
+  (setq lsp-enable-dap-auto-configure t)
+  (require 'dap-gdb-lldb)
+  (dap-gdb-lldb-setup)
+  (require 'dap-go)
+  (dap-go-setup)
+  (require 'dap-node)
+  (dap-node-setup))
 
 ;; Autoformatting
 (use-package prettier-js)
