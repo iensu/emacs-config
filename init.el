@@ -850,6 +850,9 @@
   :config
   (setq lsp-auto-guess-root nil)
   (setq lsp-eldoc-render-all nil)
+  (setq lsp-idle-delay 0.5)
+  (lsp-lens-mode)
+  (setq lsp-lens-enable t)
 
   :pretty-hydra
   ((:title "LSP" :quit-key "q" :color teal)
@@ -881,11 +884,6 @@
           lsp-ui-sideline-show-hover nil))
   (add-hook 'lsp-ui-sideline-mode-hook #'iensu--lsp-ui-sideline-mode-hook)
   (lsp-ui-doc-mode 1))
-
-;; `lsp-lens' adds buttons to run tests or debug sessions
-(use-package lsp-lens
-  :config
-  (setq lsp-lens-enable t))
 
 (use-package company-lsp :commands company-lsp)
 (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
