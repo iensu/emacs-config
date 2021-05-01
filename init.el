@@ -326,6 +326,68 @@
 
 ;;;; Utility packages
 
+;; Use `selectrum' and `prescient' for candidate narrowing
+(use-package prescient
+  :config
+  (prescient-persist-mode 1))
+
+(use-package selectrum
+  :config
+  (selectrum-mode))
+
+(use-package selectrum-prescient
+  :after selectrum prescient
+  :config
+  (selectrum-prescient-mode 1))
+
+(use-package marginalia
+  :init
+  (marginalia-mode)
+  :config
+  (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil)))
+
+(use-package consult
+  :bind
+  (("C-c h" . consult-history)
+   ("C-x M-:" . consult-complex-command)
+   ("C-x b" . consult-buffer)
+   ("C-x 4 b" . consult-buffer-other-window)
+   ("C-x 5 b" . consult-buffer-other-frame)
+   ("M-y" . consult-yank-pop)
+   ("<help> a" . consult-apropos)
+   ("M-g e" . consult-compile-error)
+   ("M-g g" . consult-goto-line)
+   ("M-g M-g" . consult-goto-line)
+   ("M-g o" . consult-outline)
+   ("M-g m" . consult-mark)
+   ("M-g k" . consult-global-mark)
+   ("M-g i" . consult-imenu)
+   ("M-g I" . consult-project-imenu)
+   ;; TODO: Decide on prefix key, conflicts with barf
+   ;; ("M-s f" . consult-find)
+   ;; ("M-s L" . consult-locate)
+   ;; ("M-s g" . consult-grep)
+   ;; ("M-s G" . consult-git-grep)
+   ;; ("M-s r" . consult-ripgrep)
+   ;; ("M-s l" . consult-line)
+   ;; ("M-s m" . consult-multi-occur)
+   ;; ("M-s k" . consult-keep-lines)
+   ;; ("M-s u" . consult-focus-lines)
+   ;; ("M-s e" . consult-isearch)
+   :map isearch-mode-map
+   ("M-e" . consult-isearch)
+   ("M-s e" . consult-isearch)
+   ("M-s l" . consult-line))
+  :config
+  (setq consult-narrow-key "<")
+  (autoload 'projectile-project-root "projectile")
+  (setq consult-project-root-function #'projectile-project-root))
+
+(use-package embark
+  :bind
+  (("H-a" . embark-act)
+   ("C-h B" . embark-bindings)))
+
 ;; Install `hydra' with `pretty-hydra' which simplifies hydra definitions
 (use-package hydra)
 (use-package pretty-hydra :after (hydra))
@@ -357,46 +419,6 @@
   :config
   (setq wgrep-auto-save-buffer t)
   (require 'wgrep-deadgrep))
-
-;; `counsel', `ivy' and `swiper' constitute a very useful completion framework.
-(use-package counsel
-  :delight ivy-mode
-  :init
-  (ivy-mode 1)
-  :bind (("M-x"     . counsel-M-x)
-         ("C-x C-f"	. counsel-find-file)
-         ("C-x C-r" . counsel-recentf)
-         ("C-c k"   . counsel-ag)
-         ("C-x b"   . ivy-switch-buffer)
-         ("M-y"     . counsel-yank-pop)
-         ("C-s"     . swiper-isearch)
-         :map ivy-minibuffer-map
-         ("M-y"     . ivy-next-line))
-  :custom
-  (ivy-use-virtual-buffers t)
-  (ivy-use-selectable-prompt t)
-  (ivy-count-format "(%d/%d) ")
-  (ivy-magic-slash-non-match-action 'ivy-magic-non-match-create)
-  (counsel-ag-base-command "ag --nocolor --nogroup --hidden %s")
-  (ivy-display-style 'fancy)
-  (ivy-re-builders-alist '((swiper . ivy--regex-plus)
-                           (swiper-isearch . ivy--regex-plus)
-                           (counsel-find-file . ivy--regex-plus)
-                           (counsel-projectile-find-file . ivy--regex-plus)
-                           (t . ivy--regex-plus))))
-
-(use-package ivy-rich :config (ivy-rich-mode 1)) ; Add documentation to ivy results
-
-;; `prescient' ranks search candidates by most recent.
-(use-package prescient :config (prescient-persist-mode 1))
-(use-package ivy-prescient
-  :config
-  (ivy-prescient-mode 1)
-  (setq ivy-prescient-enable-sorting t)
-  (setq ivy-prescient-enable-filtering t))
-(use-package company-prescient
-  :config
-  (company-prescient-mode 1))
 
 ;; Snippet expansion for less repetitive text editing
 (use-package yasnippet
@@ -627,7 +649,6 @@
   :bind
   (("C-c p" . projectile-hydra/body))
   :custom
-  (projectile-completion-system 'ivy)
   (projectile-cache-file (expand-file-name ".local/projectile.cache" user-emacs-directory))
   (projectile-known-projects-file (expand-file-name ".local/projectile-bookmarks.eld" user-emacs-directory))
   (projectile-git-submodule-command nil)
@@ -636,16 +657,16 @@
   :pretty-hydra
   ((:color teal :quit-key "q" :title "Project")
    ("Project"
-    (("p" counsel-projectile-switch-project "open project")
+    (("p" projectile-switch-project "open project")
      ("k" projectile-kill-buffers "close project")
      ("t" projectile-test-project "test project" :exit t)
      ("c" projectile-compile-project "compile project" :exit t)
      ("C" projectile-run-project "run project" :exit t))
     "Files & Buffers"
-    (("f" counsel-projectile-find-file "open project file")
+    (("f" projectile-find-file "open project file")
      ("o" iensu/open-project-org-file "open project org file")
      ("T" iensu/project-todo-list "open project TODO list")
-     ("b" counsel-projectile-switch-to-buffer "open project buffer")
+     ("b" projectile-switch-to-buffer "open project buffer")
      ("S" projectile-save-buffers "save project buffers"))
     "Search"
     (("s" projectile-ripgrep "search")
@@ -664,8 +685,6 @@
   (projectile-register-project-type 'java-maven '("pom.xml")
                                     :compile "mvn compile"
                                     :test "mvn test"))
-
-(use-package counsel-projectile :init (counsel-projectile-mode 1))
 
 ;; `treemacs' for a visual project tree structure.
 (use-package treemacs
@@ -791,8 +810,8 @@
                                   ("C-d" . company-show-doc-buffer)
                                   ("M-." . company-show-location)))
   :config
-  (setq company-idle-delay 0.1)
-  (setq company-minimum-prefix-length 2)
+  (setq company-idle-delay 0.0)
+  (setq company-minimum-prefix-length 1)
   (setq company-selection-wrap-around t)
   (setq company-auto-complete t)
   (setq company-tooltip-align-annotations t)
@@ -836,7 +855,6 @@
   ((:title "LSP" :quit-key "q" :color teal)
    ("Exploration"
     (("l" lsp-find-references "list references")
-     ("s" lsp-ivy-workspace-symbol "search symbol in workspace")
      ("d" lsp-describe-thing-at-point "describe")
      ("e" flycheck-list-errors "list buffer errors")
      ("å" flycheck-previous-error "goto previous error in buffer")
@@ -871,7 +889,6 @@
 
 (use-package company-lsp :commands company-lsp)
 (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
-(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 
 ;; `dap-mode' for debugging
 
