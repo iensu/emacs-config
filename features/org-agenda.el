@@ -5,7 +5,7 @@
             ((tags-todo "DEADLINE<=\"<+1w>\"|SCHEDULED<=\"<+1w>\""
                         ((org-agenda-overriding-header "TODOs")
                          (org-agenda-prefix-format "  ")
-                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("PROJ") 'regexp ":(books|music|movies|refile):"))
+                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("PROJ") 'regexp ":(books|music|movies|refile|links):"))
                          (org-agenda-sorting-strategy '(priority-down deadline-up))
                          (org-agenda-max-entries 20)))
              (tags-todo "+TODO=\"PROJ\""
