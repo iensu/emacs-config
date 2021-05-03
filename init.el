@@ -392,6 +392,9 @@
 (use-package hydra)
 (use-package pretty-hydra :after (hydra))
 
+;; Armor exported PGP-keys
+(setq epa-armor t)
+
 ;; Password entry in minibuffer
 (use-package pinentry
   :init
