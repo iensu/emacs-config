@@ -133,6 +133,7 @@
       delete-old-versions t
       kept-new-versions 6
 
+      delete-by-moving-to-trash t
       auto-save-list-file-name (expand-file-name ".local/auto-saves-list" user-emacs-directory))
 
 ;; Enable autosaves
