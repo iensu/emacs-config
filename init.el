@@ -134,6 +134,8 @@
       kept-new-versions 6
 
       delete-by-moving-to-trash t
+      undo-limit 8000000
+
       auto-save-list-file-name (expand-file-name ".local/auto-saves-list" user-emacs-directory))
 
 ;; Enable autosaves
