@@ -892,6 +892,11 @@
   (require 'dap-node)
   (dap-node-setup))
 
+;; Tree-sitter for syntax highlighting
+(use-package tree-sitter)
+
+(use-package tree-sitter-langs)
+
 ;; Autoformatting
 (use-package prettier-js)
 
