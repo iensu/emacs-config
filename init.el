@@ -512,7 +512,7 @@
   (org-set-property "Finished" (iensu--get-current-inactive-timestamp)))
 
 
-;;;; Global keybindings
+;;;; Global key-bindings
 
 (global-set-key (kbd "C-<backspace>") 'delete-indentation)
 (global-set-key (kbd "C-h C-s") 'iensu/toggle-scratch-buffer)
@@ -520,6 +520,7 @@
 (global-set-key (kbd "M-<backspace>") 'fixup-whitespace)
 (global-set-key (kbd "M-i") 'imenu)
 (global-set-key (kbd "M-o") 'occur)
+(global-unset-key (kbd "C-z")) ;; Disable the suspend Emacs key-binding
 
 ;; `windmove' enables navigation using `<shift>-<direction>'. These bindings conflict `org-mode' so
 ;; we make `windmove' take precedence.
