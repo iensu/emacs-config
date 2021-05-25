@@ -26,17 +26,16 @@
          ("C-c a" . org-agenda)
          ("C-c l" . org-store-link)
          :map org-mode-map
-         ("H-."   . org-time-stamp-inactive))
+         ("H-."   . org-time-stamp-inactive)
+         ("C-c s" . org-schedule))
   :hook
   (org-mode . (lambda ()
-                (visual-line-mode 1)
-                (variable-pitch-mode 1)))
+                (visual-line-mode 1)))
   :init
   ;; Necessary to make Org-mode stuff available
   (require 'org)
   (require 'org-indent)
-  (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-  (set-face-attribute 'org-checkbox nil :inherit '(fixed-pitch))
+  (require 'org-tempo)
   :config
   (setq org-directory iensu-org-dir)
   (setq org-default-notes-file (expand-file-name "notes.org" org-directory))
@@ -75,12 +74,18 @@
     (add-to-list 'org-babel-load-languages lang))
 
   (let ((additional-org-templates '(("ssh" . "src shell")
+                                    ("sb"  . "src bash")
                                     ("sel" . "src emacs-lisp")
                                     ("sr"  . "src restclient")
                                     ("sa"  . "src artist")
                                     ("st"  . "src typescript"))))
     (dolist (template additional-org-templates)
-      (add-to-list 'org-structure-template-alist template))))
+      (add-to-list 'org-structure-template-alist template)))
+  (dolist (face '(org-special-keyword
+                  org-drawer
+                  org-date))
+    (set-face-attribute face nil :height 0.8))
+  (set-face-attribute 'org-link nil :underline nil))
 
 ;; YAML support in source blocks
 (defun org-babel-execute:yaml (body params) body)
@@ -115,9 +120,9 @@
 
 ;;;; TODO keyword and priorities setup
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "PROJ(p)" "DOING(d!)" "BLOCKED(b@/!)"
+      '((sequence "TODO(t)" "PROJ(p)" "DOING(d)" "BLOCKED(b)"
                   "|"
-                  "CANCELED(C@/!)" "POSTPONED(P@/!)" "DONE(D@/!)")))
+                  "CANCELED(C@/!)" "POSTPONED(P@/!)" "DONE(D)")))
 
 (setq org-todo-keyword-faces
       '(("BLOCKED"   . (:foreground "#dd0066" :weight bold))
@@ -167,6 +172,11 @@
                               "%U, %^{Location|Stockholm, Sverige}\n\n"
                               "%?")
                      :empty-lines 1)
+
+                   `("d" "Date entry" entry (file ,(expand-file-name "refile.org" iensu-org-dir))
+                     ,(concat "* %<%Y-%m-%d %A>\n"
+                              "%t\n"
+                              "%?"))
 
                    `("l" "Link" entry (file ,(expand-file-name "refile.org" iensu-org-dir))
                      ,(concat "* %? %^L %^G \n"

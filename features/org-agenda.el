@@ -12,11 +12,6 @@
                         ((org-agenda-overriding-header "Projects")
                          (org-agenda-prefix-format "  ")
                          (org-agenda-max-entries 10)))
-             (tags-todo "-refile-TODO=\"PROJ\""
-                        ((org-agenda-overriding-header "Unscheduled")
-                         (org-agenda-prefix-format "  ")
-                         (org-agenda-max-entries 5)
-                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp 'regexp ":(books|music|movies|refile):"))))
              (tags-todo "+refile"
                         ((org-agenda-overriding-header "Refile")
                          (org-agenda-prefix-format "  ")
