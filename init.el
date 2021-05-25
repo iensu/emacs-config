@@ -732,6 +732,8 @@
                                          :full-path
                                          "\\.org$")
                         (directory-files-recursively (concat iensu-org-dir "/projects")
+                                                     "\\.org$")
+                        (directory-files-recursively (concat iensu-org-dir "/calendars")
                                                      "\\.org$"))))
 
 (defun iensu/project-todo-list ()
