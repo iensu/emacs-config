@@ -533,11 +533,13 @@
 (pretty-hydra-define iensu-hydra
   (:color teal :quit-key "q" :title "Global commands")
   ("Utilities"
-   (("d"   iensu/duplicate-line            "duplicate line" :exit nil)
-    ("s"   deadgrep                        "search")
-    ("t"   toggle-truncate-lines           "truncate lines")
-    ("u"   revert-buffer                   "reload buffer")
-    ("D"   iensu/cycle-ispell-dictionary   "change dictionary"))
+   (("d"   iensu/duplicate-line                    "duplicate line" :exit nil)
+    ("s"   deadgrep                                "search")
+    ("t"   toggle-truncate-lines                   "truncate lines")
+    ("u"   revert-buffer                           "reload buffer")
+    ("D"   iensu/cycle-ispell-dictionary           "change dictionary")
+    ("+"   (lambda () (enlarge-window-horizontally 10)) "enlarge horizontally")
+    ("?"   (lambda () (enlarge-window 5))               "enlarge vertically"))
    "Bookmarks"
    (("l"   list-bookmarks                  "list bookmarks")
     ("b"   bookmark-set                    "set bookmark"))
