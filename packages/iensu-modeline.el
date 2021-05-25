@@ -106,7 +106,9 @@
                             'mouse-1 (lambda () (interactive) (org-clock-goto))))))
 
 (defun --iensu-modeline/project-name ()
-  (let ((project-name (projectile-project-name)))
+  (let ((project-name (car (last (split-string (project-root (project-current))
+                                               "/"
+                                               :omit-nulls)))))
     (when (and project-name (not (string-equal project-name "-")))
       (concat
        (propertize (all-the-icons-octicon "graph" :height 1.0 :v-adjust 0.1)
