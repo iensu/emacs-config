@@ -607,6 +607,8 @@
 (use-package modus-vivendi-theme
   :config
   (load-theme 'modus-vivendi t)
+  (setq modus-themes-headings
+        '((t . bold)))
   (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
   (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic))
 
