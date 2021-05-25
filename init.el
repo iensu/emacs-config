@@ -653,62 +653,43 @@
 ;;;; Project management
 
 ;; Settings which help with handling and navigating projects.
+(defun iensu/project-save ()
+  "Save current project to `project-list-file'."
+  (interactive)
+  (project-remember-project (project-current)))
 
-(use-package projectile
+(defun iensu/project-remove ()
+  "Remove current project from `project-list-file'."
+  (interactive)
+  (project-remove-known-project (project-root (project-current))))
+
+(defun iensu/project-ripgrep ()
+  "Run ripgrep in the current project."
+  (interactive)
+  (consult-ripgrep (project-root (project-current))))
+
+(use-package project
   :bind
-  (("C-c p" . projectile-hydra/body))
-  :custom
-  (projectile-cache-file (expand-file-name ".local/projectile.cache" user-emacs-directory))
-  (projectile-known-projects-file (expand-file-name ".local/projectile-bookmarks.eld" user-emacs-directory))
-  (projectile-git-submodule-command nil)
-  (projectile-sort-order 'access-time)
-  (projectile-globally-ignored-files '("TAGS" ".DS_Store" ".projectile"))
+  (("C-c p" . project-hydra/body))
   :pretty-hydra
-  ((:color teal :quit-key "q" :title "Project")
+  ((:color teal :quit-key "q" :title "Project management")
    ("Project"
-    (("p" projectile-switch-project "open project")
-     ("k" projectile-kill-buffers "close project")
-     ("t" projectile-test-project "test project" :exit t)
-     ("c" projectile-compile-project "compile project" :exit t)
-     ("C" projectile-run-project "run project" :exit t))
+    (("p" project-switch-project "open project")
+     ("k" project-kill-buffers "close project")
+     ("a" iensu/project-save "remember project")
+     ("A" iensu/project-remove "forget project"))
     "Files & Buffers"
-    (("f" projectile-find-file "open project file")
+    (("f" project-find-file "open project file")
      ("o" iensu/open-project-org-file "open project org file")
-     ("T" iensu/project-todo-list "open project TODO list")
-     ("b" projectile-switch-to-buffer "open project buffer")
-     ("S" projectile-save-buffers "save project buffers"))
+     ("T" iensu/project-todo-list "open project TODO list"))
     "Search"
-    (("s" projectile-ripgrep "search")
-     ("r" projectile-replace "replace literal")
-     ("R" projectile-replace-regexp "replace regex"))))
+    (("s" iensu/project-ripgrep "search")
+     ("r" project-query-replace-regexp "query replace"))))
   :config
-  (projectile-global-mode)
-  (projectile-register-project-type 'node-npm '("package.json")
-                                    :compile "npm run build"
-                                    :test "npm test"
-                                    :run "npm start")
-  (projectile-register-project-type 'rust-cargo '("cargo.toml")
-                                    :compile "cargo check"
-                                    :test "cargo test"
-                                    :run "cargo run")
-  (projectile-register-project-type 'java-maven '("pom.xml")
-                                    :compile "mvn compile"
-                                    :test "mvn test"))
+  (setq project-list-file (expand-file-name "projects"
+                                            (concat user-emacs-directory ".local/"))))
 
-;; `treemacs' for a visual project tree structure.
-(use-package treemacs
-  :defer t
-  :bind
-  (:map global-map
-        ("M-0"       . treemacs-select-window)
-        ("C-x t 1"   . treemacs-delete-other-windows)
-        ("C-x t t"   . treemacs)
-        ("C-x t B"   . treemacs-bookmark)
-        ("C-x t C-t" . treemacs-find-file)
-        ("C-x t M-t" . treemacs-find-tag)
-        ("C-x t w"   . treemacs-switch-workspace)))
 (use-package treemacs-magit :after treemacs magit)
-(use-package treemacs-projectile :after treemacs projectile)
 
 ;;;;; Project-based TODO lists
 
@@ -719,7 +700,7 @@
 (defvar iensu--project-agenda-buffer-name "*Project Agenda*")
 
 (defun iensu--org-capture-project-notes-file ()
-  (concat (projectile-project-root) ".project-notes.org"))
+  (concat (locate-dominating-file (buffer-file-name) ".git") ".project-notes.org"))
 
 (defun iensu/create-project-notes-file ()
   "Creates a note file somewhere in `org-directory' and links it to the current directory as `.project-notes.org.'"
@@ -756,7 +737,7 @@
 (defun iensu/project-todo-list ()
   (interactive)
   (let ((project-notes-file (expand-file-name ".project-notes.org"
-                                              (projectile-project-root))))
+                                              (project-root (project-current)))))
     (if (file-exists-p project-notes-file)
         (progn
           (setq org-agenda-files `(,project-notes-file))
