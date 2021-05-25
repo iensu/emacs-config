@@ -687,7 +687,19 @@
      ("r" project-query-replace-regexp "query replace"))))
   :config
   (setq project-list-file (expand-file-name "projects"
-                                            (concat user-emacs-directory ".local/"))))
+                                            (concat user-emacs-directory ".local/")))
+
+  ;; Handle projects which are not version controlled
+  (defun iensu--locate-non-vc-project (dir)
+    "Locate project root based on the existence of .project file.
+Falls back to looking for .projectile for compatibility reasons."
+    (let ((root (or (locate-dominating-file dir ".project")
+                    (locate-dominating-file dir ".projectile"))))
+      (and root (cons 'non-vc root))))
+  (add-to-list 'project-find-functions #'iensu--locate-non-vc-project)
+  (cl-defmethod project-root ((project (head non-vc)))
+    "Handle `non-vc' projects, i.e. projects which are not version controlled."
+    (cdr project)))
 
 (use-package treemacs-magit :after treemacs magit)
 
