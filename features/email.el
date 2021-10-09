@@ -14,6 +14,7 @@
   (setq mu4e-maildir iensu-email-directory)
   (setq mu4e-confirm-quit nil)
   (setq mu4e-context-policy 'pick-first)
+  (setq mu4e-headers-date-format "%Y-%m-%d")
 
   ;; Configuration for viewing emails
   (setq mu4e-view-show-images t)

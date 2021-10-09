@@ -30,7 +30,8 @@
          ("C-c s" . org-schedule))
   :hook
   (org-mode . (lambda ()
-                (visual-line-mode 1)))
+                (visual-line-mode 1)
+                (company-mode -1)))
   :init
   ;; Necessary to make Org-mode stuff available
   (require 'org)

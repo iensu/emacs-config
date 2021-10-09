@@ -121,6 +121,9 @@
 (setq custom-file (expand-file-name "custom.el"
                                     user-emacs-directory))
 
+;; Prefer to recompile newer files instead of using already compiled code
+(setq load-prefer-newer t)
+
 ;; Improve performance by increasing the garbage collector threshold and max LISP evaluation depth.
 (setq gc-cons-threshold 100000000
       max-lisp-eval-depth 2000
@@ -335,8 +338,8 @@
   (prescient-persist-mode 1))
 
 (use-package selectrum
-  :config
-  (selectrum-mode))
+  :init
+  (selectrum-mode +1))
 
 (use-package selectrum-prescient
   :after selectrum prescient
@@ -405,14 +408,18 @@
   (pinentry-start))
 
 ;; Improved file browsing
-(use-package dired+
-  :load-path (lambda () (expand-file-name "packages" user-emacs-directory))
-  :custom
-  (dired-listing-switches "-alGh --group-directories-first")
-  (dired-dwim-target t)
-  :config
-  (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
-    (setq insert-directory-program "/usr/local/bin/gls")))
+;; (use-package dired+
+;;   :custom
+;;   (dired-listing-switches "-alGh --group-directories-first")
+;;   (dired-dwim-target t)
+;;   :config
+;;   (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
+;;     (setq insert-directory-program "/usr/local/bin/gls")))
+
+(setq-default dired-listing-switches "-alGh --group-directories-first"
+              dired-dwim-target t)
+(when (executable-find "gls") ;; native OSX ls works differently then GNU ls
+    (setq insert-directory-program "/usr/local/bin/gls"))
 
 ;;;; Navigation
 
@@ -544,7 +551,8 @@
    (("l"   list-bookmarks                  "list bookmarks")
     ("b"   bookmark-set                    "set bookmark"))
    "Misc"
-   (("P"   iensu/project-todo-list         "project todo list")
+   (("T"   treemacs                        "open treemacs view")
+    ("P"   iensu/project-todo-list         "project todo list")
     ("p"   iensu/open-project-org-file     "open project notes file")
     ("i"   list-bookmarks                  "list bookmarks")
     ("+"   enlarge-window-horizontally     "enlarge window" :exit nil)
@@ -604,7 +612,7 @@
   :init (doom-modeline-mode 1))
 
 ;; Set theme
-(use-package modus-vivendi-theme
+(use-package modus-themes
   :config
   (load-theme 'modus-vivendi t)
   (setq modus-themes-headings
@@ -700,6 +708,8 @@ Falls back to looking for .projectile for compatibility reasons."
   (cl-defmethod project-root ((project (head non-vc)))
     "Handle `non-vc' projects, i.e. projects which are not version controlled."
     (cdr project)))
+
+(use-package treemacs)
 
 (use-package treemacs-magit :after treemacs magit)
 
@@ -826,15 +836,14 @@ Falls back to looking for .projectile for compatibility reasons."
     (require 'company-elisp)
     (add-to-list 'company-backends 'company-elisp))
   (add-hook 'emacs-lisp-mode-hook #'iensu--emacs-lisp-mode-hook)
-  (add-hook 'lisp-interaction-mode-hook #'iensu--emacs-lisp-mode-hook)
-
-  (eval-after-load 'company (company-quickhelp-mode 1)))
+  (add-hook 'lisp-interaction-mode-hook #'iensu--emacs-lisp-mode-hook))
 
 (use-package company-quickhelp
   :bind (:map company-active-map
               ("M-h" . company-quickhelp-manual-begin))
   :config
-  (setq company-quickhelp-delay 1))
+  (setq company-quickhelp-delay 1)
+  (eval-after-load 'company (company-quickhelp-mode 1)))
 
 ;; Flycheck for on the fly error reporting
 (use-package flycheck
@@ -903,11 +912,6 @@ Falls back to looking for .projectile for compatibility reasons."
   (dap-go-setup)
   (require 'dap-node)
   (dap-node-setup))
-
-;; Tree-sitter for syntax highlighting
-(use-package tree-sitter)
-
-(use-package tree-sitter-langs)
 
 ;; Autoformatting
 (use-package prettier-js)
