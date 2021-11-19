@@ -924,8 +924,11 @@ Falls back to looking for .projectile for compatibility reasons."
   :config
   (org-babel-do-load-languages 'org-babel-load-languages '((restclient . t))))
 
-;; Handle .direnv as shell file
-(add-to-list 'auto-mode-alist '("\\.envrc$" . sh-mode))
+(use-package direnv
+  :config
+  (direnv-mode)
+  ;; Handle .direnv as shell file
+  (add-to-list 'auto-mode-alist '("\\.envrc$" . sh-mode)))
 
 
 ;;;; Load features
