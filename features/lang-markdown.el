@@ -20,3 +20,7 @@
         (goto-char (point-min))
         (visual-fill-column-mode)
         (setq buffer-read-only t)))))
+
+(use-package separedit
+  :config
+  (setq separedit-default-mode 'markdown-mode))
