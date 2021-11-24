@@ -1,3 +1,1 @@
-(use-package nix-mode
-  :hook
-  (nix-mode . electric-pair-mode))
+(use-package nix-mode)
