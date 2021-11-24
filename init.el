@@ -814,6 +814,12 @@ Falls back to looking for .projectile for compatibility reasons."
 ;; Highlight TODOs in programming buffers
 (use-package hl-todo :hook ((prog-mode . hl-todo-mode)))
 
+;; Use tree-sitter for syntax highlighting where availaible
+(use-package tree-sitter
+  :config
+  (global-tree-sitter-mode))
+(use-package tree-sitter-langs)
+
 ;;;;; Autocompletion and intellisense
 
 ;; Company as a completion frontend
