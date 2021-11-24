@@ -2,7 +2,7 @@
 
 (dolist (agenda-command
          '(("z" "One week agenda"
-            ((tags-todo "DEADLINE<=\"<+1w>\"|SCHEDULED<=\"<+1w>\""
+            ((tags-todo "DEADLINE<=\"<+1w>\"|SCHEDULED<=\"<+1w>\"|PRIORITY=\"A\""
                         ((org-agenda-overriding-header "TODOs")
                          (org-agenda-prefix-format "  ")
                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("PROJ") 'regexp ":(books|music|movies|refile|links):"))
