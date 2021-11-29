@@ -551,7 +551,7 @@
    (("l"   list-bookmarks                  "list bookmarks")
     ("b"   bookmark-set                    "set bookmark"))
    "Misc"
-   (("T"   treemacs                        "open treemacs view")
+   (("å"   iensu/treemacs                  "open treemacs view")
     ("P"   iensu/project-todo-list         "project todo list")
     ("p"   iensu/open-project-org-file     "open project notes file")
     ("i"   list-bookmarks                  "list bookmarks")
@@ -709,7 +709,14 @@ Falls back to looking for .projectile for compatibility reasons."
     "Handle `non-vc' projects, i.e. projects which are not version controlled."
     (cdr project)))
 
-(use-package treemacs)
+(use-package treemacs
+  :init
+  (defun iensu/treemacs ()
+    "Open Treemacs and query for the active workspace."
+    (interactive)
+    (unless (treemacs-get-local-window)
+      (treemacs))
+    (treemacs-switch-workspace nil)))
 
 (use-package treemacs-magit :after treemacs magit)
 
