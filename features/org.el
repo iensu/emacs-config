@@ -49,7 +49,10 @@
   (setq org-hide-emphasis-markers t)
   (setq org-ellipsis " ▾")
 
-  (setq org-refile-targets '((iensu-org-refile-targets :maxlevel . 10)))
+  (setq org-refile-targets `((,(append
+                                (directory-files iensu-org-dir :full-path "\\.org$")
+                                (directory-files-recursively (concat iensu-org-dir "/projects") "\\.org$"))
+                              :maxlevel . 10)))
   (setq org-refile-allow-creating-parent-nodes 'confirm)
   (setq org-refile-use-outline-path 'file)
 
@@ -121,7 +124,7 @@
 
 ;;;; TODO keyword and priorities setup
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "PROJ(p)" "DOING(d)" "BLOCKED(b)"
+      '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "WAITING(w)" "DOING(d)" "BLOCKED(b)"
                   "|"
                   "CANCELED(C@/!)" "POSTPONED(P@/!)" "DONE(D)")))
 

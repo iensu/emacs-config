@@ -2,18 +2,14 @@
 
 (dolist (agenda-command
          '(("z" "One week agenda"
-            ((tags-todo "DEADLINE<=\"<+1w>\"|SCHEDULED<=\"<+1w>\"|PRIORITY=\"A\""
-                        ((org-agenda-overriding-header "TODOs")
+            ((tags-todo "+TODO=\"NEXT\""
+                        ((org-agenda-overriding-header "Next actions")
                          (org-agenda-prefix-format "  ")
                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("PROJ") 'regexp ":(books|music|movies|refile|links):"))
                          (org-agenda-sorting-strategy '(priority-down deadline-up))
                          (org-agenda-max-entries 20)))
              (tags-todo "+TODO=\"PROJ\""
-                        ((org-agenda-overriding-header "Projects")
-                         (org-agenda-prefix-format "  ")
-                         (org-agenda-max-entries 10)))
-             (tags-todo "+refile"
-                        ((org-agenda-overriding-header "Refile")
+                        ((org-agenda-overriding-header "Active projects")
                          (org-agenda-prefix-format "  ")
                          (org-agenda-max-entries 10)))
              (agenda ""
@@ -22,7 +18,7 @@
                       (org-agenda-start-on-weekday nil)))))))
   (add-to-list 'org-agenda-custom-commands agenda-command))
 
-(setq org-agenda-files iensu-org-agenda-files
+(setq org-agenda-files (directory-files iensu-org-dir :full-path "projects.org$")
       org-agenda-dim-blocked-tasks nil
       org-deadline-warning-days -7
       org-agenda-block-separator "")
