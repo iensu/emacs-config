@@ -273,6 +273,9 @@
   (add-hook 'compilation-mode-hook
             (lambda () (setq compilation-environment '("TERM=xterm-256color")))))
 
+;; Install vterm for better terminal support
+(use-package vterm)
+
 ;;;;; Text editing tools
 
 ;; Spellcheck using flyspell
