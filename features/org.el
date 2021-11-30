@@ -124,9 +124,9 @@
 
 ;;;; TODO keyword and priorities setup
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "WAITING(w)" "DOING(d)" "BLOCKED(b)"
+      '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "WAITING(w)" "BLOCKED(b)"
                   "|"
-                  "CANCELED(C@/!)" "POSTPONED(P@/!)" "DONE(D)")))
+                  "CANCELED(C@/!)" "DELEGATED(D)" "POSTPONED(P@/!)" "DONE(D)")))
 
 (setq org-todo-keyword-faces
       '(("BLOCKED"   . (:foreground "#dd0066" :weight bold))
@@ -162,13 +162,11 @@
 (iensu-add-to-list 'iensu-org-capture-templates
                    `("t" "TODO with link" entry (file ,(expand-file-name "refile.org" iensu-org-dir))
                      ,(concat "* TODO %?\n"
-                              "%U\n"
                               "%a")
                      :empty-lines 1)
 
                    `("T" "TODO" entry (file ,(expand-file-name "refile.org" iensu-org-dir))
-                     ,(concat "* TODO %?\n"
-                              "%U")
+                     ,(concat "* TODO %?\n")
                      :empty-lines 1)
 
                    `("j" "Journal" entry (file+datetree ,(expand-file-name "journal.org.gpg" iensu-org-dir))
