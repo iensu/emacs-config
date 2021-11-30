@@ -126,7 +126,7 @@
 (setq org-todo-keywords
       '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "WAITING(w)" "BLOCKED(b)"
                   "|"
-                  "CANCELED(C@/!)" "DELEGATED(D)" "POSTPONED(P@/!)" "DONE(D)")))
+                  "CANCELED(C@/!)" "DELEGATED(D)" "POSTPONED(P@/!)" "DONE(d)")))
 
 (setq org-todo-keyword-faces
       '(("BLOCKED"   . (:foreground "#dd0066" :weight bold))
