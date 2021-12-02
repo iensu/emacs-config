@@ -126,7 +126,7 @@
 (setq org-todo-keywords
       '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "WAITING(w)" "BLOCKED(b)"
                   "|"
-                  "CANCELED(C@/!)" "DELEGATED(D)" "POSTPONED(P@/!)" "DONE(d)")))
+                  "CANCELED(C@/!)" "DELEGATED(d)" "POSTPONED(P@/!)" "DONE(D)")))
 
 (setq org-todo-keyword-faces
       '(("BLOCKED"   . (:foreground "#dd0066" :weight bold))
@@ -160,12 +160,12 @@
 
 ;;;; Capture templates
 (iensu-add-to-list 'iensu-org-capture-templates
-                   `("t" "TODO with link" entry (file ,(expand-file-name "refile.org" iensu-org-dir))
+                   `("T" "TODO with link" entry (file ,(expand-file-name "refile.org" iensu-org-dir))
                      ,(concat "* TODO %?\n"
                               "%a")
                      :empty-lines 1)
 
-                   `("T" "TODO" entry (file ,(expand-file-name "refile.org" iensu-org-dir))
+                   `("t" "TODO" entry (file ,(expand-file-name "refile.org" iensu-org-dir))
                      ,(concat "* TODO %?\n")
                      :empty-lines 1)
 
