@@ -318,8 +318,10 @@
 ;; document-like editing.
 (use-package visual-fill-column
   :config
-  (setq-default visual-fill-column-width 110)
-  (setq-default visual-fill-column-center-text t))
+  (setq-default visual-fill-column-center-text t)
+  (let ((column-width 130))
+    (setq-default visual-fill-column-width column-width)
+    (setq fill-column column-width)))
 
 (defun iensu/text-editing-mode-hook ()
   "Enables text editing tools such as spell checking and thesaurus support"
