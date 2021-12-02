@@ -10,7 +10,6 @@
   (require 'mu4e)
   :config
   (setq mail-user-agent 'mu4e-user-agent)
-  (setq mu4e-mu-binary iensu-email-mu-binary-path)
   (setq mu4e-maildir iensu-email-directory)
   (setq mu4e-confirm-quit nil)
   (setq mu4e-context-policy 'pick-first)
