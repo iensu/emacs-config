@@ -128,6 +128,17 @@
                   "|"
                   "CANCELED(C@/!)" "DELEGATED(d)" "POSTPONED(P@/!)" "DONE(D)")))
 
+(defun iensu/gtd-maybe-mark-project-as-done (_n-done _n-not-done)
+  "Mark PROJ as done if it has a completion rate of 100%."
+  (let* ((headline (org-entry-get nil "ITEM"))
+         (state (org-entry-get nil "TODO"))
+         (is-proj (string-equal state "PROJ"))
+         (mark-as-done (string-match-p "\\[100%\\]" headline)))
+    (when (and is-proj mark-as-done)
+      (org-todo "PROJ"))))
+
+(add-hook 'org-after-todo-statistics-hook 'iensu/gtd-maybe-mark-project-as-done)
+
 (setq org-todo-keyword-faces
       '(("BLOCKED"   . (:foreground "#dd0066" :weight bold))
         ("CANCELED" . (:foreground "#6272a4"))
