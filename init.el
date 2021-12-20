@@ -945,6 +945,8 @@ Falls back to looking for .projectile for compatibility reasons."
   ;; Handle .direnv as shell file
   (add-to-list 'auto-mode-alist '("\\.envrc$" . sh-mode)))
 
+(global-auto-revert-mode 1)
+
 
 ;;;; Load features
 
