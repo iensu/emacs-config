@@ -14,7 +14,7 @@
                          (org-agenda-max-entries 10)))
              (agenda ""
                      ((org-agenda-start-day "0d")
-                      (org-agenda-span 7)
+                      (org-agenda-span 1)
                       (org-agenda-start-on-weekday nil)))))))
   (add-to-list 'org-agenda-custom-commands agenda-command))
 
