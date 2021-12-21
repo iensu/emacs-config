@@ -18,7 +18,8 @@
                       (org-agenda-start-on-weekday nil)))))))
   (add-to-list 'org-agenda-custom-commands agenda-command))
 
-(setq org-agenda-files (directory-files iensu-org-dir :full-path "projects.org$")
+(setq org-agenda-files (cl-loop for f in '("projects.org")
+                                collect (expand-file-name f iensu-org-dir))
       org-agenda-dim-blocked-tasks nil
       org-deadline-warning-days -7
       org-agenda-block-separator "")
