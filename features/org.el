@@ -136,7 +136,7 @@
          (is-proj (string-equal state "PROJ"))
          (mark-as-done (string-match-p "\\[100%\\]" headline)))
     (when (and is-proj mark-as-done)
-      (org-todo "PROJ"))))
+      (org-todo "DONE"))))
 
 (add-hook 'org-after-todo-statistics-hook 'iensu/gtd-maybe-mark-project-as-done)
 
