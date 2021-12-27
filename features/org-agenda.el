@@ -11,6 +11,7 @@
              (tags-todo "+TODO=\"PROJ\""
                         ((org-agenda-overriding-header "Active projects")
                          (org-agenda-prefix-format "  ")
+                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'regexp ":recurring:"))
                          (org-agenda-max-entries 10)))
              (agenda ""
                      ((org-agenda-start-day "0d")
