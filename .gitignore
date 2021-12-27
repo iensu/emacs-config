@@ -47,7 +47,7 @@ persist/
 *~
 projects
 eln-cache/
-elpher-bookmarks
+elpher-bookmarks*
 
 straight/
 .org-generic-id-locations
