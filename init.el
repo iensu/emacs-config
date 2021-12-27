@@ -284,6 +284,8 @@
   (ispell-list-command "--list")
   (ispell-dictionary "en_US")
   :config
+  (unbind-key (kbd "C-.") 'flyspell-mode-map) ;; Using this binding for other stuff
+
   (defvar iensu--language-ring nil
     "Ispell language ring used to toggle current selected ispell dictionary")
 
@@ -298,6 +300,7 @@
       (ring-insert iensu--language-ring language)
       (ispell-change-dictionary language)
       (message (format "Switched to dictionary: %s" language)))))
+
 (use-package flyspell-popup :after (flyspell))
 
 ;; Use synosaurus to look up synonyms
@@ -390,7 +393,8 @@
 
 (use-package embark
   :bind
-  (("H-a"   . embark-act)
+  (("C-."   . embark-act)
+   ("H-a"   . embark-act)
    ("H-e"   . embark-export)
    ("C-h B" . embark-bindings)))
 
