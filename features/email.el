@@ -29,8 +29,8 @@
                               (:subject)))
 
   ;; Configuration for composing/sending emails
-  (setq user-mail-address "jens.ostlund@futurice.com")
   (setq user-full-name "Jens Östlund")
+  (setq user-mail-address "jostlund@gmail.com")
   (setq message-send-mail-function 'smtpmail-send-it)
   (setq smtpmail-debug-info t)
   (setq mu4e-sent-messages-behavior 'delete)
@@ -49,3 +49,29 @@
     ("e e" mu4e                            "open email")
     ("e c" mu4e-compose-new                "write email")
     ("e s" mu4e-headers-search             "search email"))))
+
+(defun iensu/mu4e-context (account-name name email smtp-server &optional vars)
+  "Simplify creating MU4E contexts."
+  (cl-flet ((is-account-match ()
+              (lexical-let ((email email))
+                #'(lambda (msg)
+                    (when msg
+                      (mu4e-message-contact-field-matches msg '(:from :to :cc :bcc) email))))))
+
+    (let* ((folder (concat "/" (downcase account-name)))
+           (vars (append `((mu4e-sent-folder . ,(format "%s/Sent" folder))
+                           (mu4e-drafts-folder . ,(format "%s/Drafts" folder))
+                           (mu4e-trash-folder . ,(format "%s/Trash" folder))
+                           (smtpmail-smtp-user . ,email)
+                           (smtpmail-smtp-service . 465)
+                           (smtpmail-stream-type . ssl)
+                           (smtpmail-smtp-server . ,smtp-server)
+                           (user-mail-address . ,email)
+                           (user-full-name . ,name))
+                         vars)))
+
+      (make-mu4e-context
+        :name account-name
+        :leave-func (lambda () (setq mu4e-maildir-list nil))
+        :match-func (is-account-match)
+        :vars vars))))
