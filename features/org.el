@@ -23,6 +23,8 @@
 
 (use-package org
   :straight (org :type git :repo "https://code.orgmode.org/bzg/org-mode.git" :branch "main")
+  :mode (("\\.org\\'" . org-mode)
+         ("\\.org.draft\\'" . org-mode))
   :bind (("C-c c" . org-capture)
          ("C-c a" . org-agenda)
          ("C-c l" . org-store-link)
