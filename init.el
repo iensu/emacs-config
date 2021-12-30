@@ -279,7 +279,7 @@
 (use-package flyspell
   :bind (:map flyspell-mode-map ("C-:" . flyspell-popup-correct))
   :custom
-  (ispell-program-name "/usr/local/bin/aspell")
+  (ispell-program-name "aspell")
   (ispell-extra-args '("--sug-mode=ultra"))
   (ispell-list-command "--list")
   (ispell-dictionary "en_US")
