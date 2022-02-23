@@ -40,6 +40,7 @@
   (require 'org)
   (require 'org-indent)
   (require 'org-tempo)
+  (require 'org-id)
   (require 'ob-js)
   :config
   (setq org-directory iensu-org-dir)
@@ -68,6 +69,9 @@
   (setq org-checkbox-hierarchical-statistics nil)
   (setq org-log-done 'time)
   (setq org-outline-path-complete-in-steps nil)
+
+  (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
+  (setq org-id-prefix "org")
 
   (setq org-export-initial-scope 'subtree)
   (setq org-catch-invisible-edits 'show-and-error)
