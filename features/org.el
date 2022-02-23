@@ -40,6 +40,7 @@
   (require 'org)
   (require 'org-indent)
   (require 'org-tempo)
+  (require 'ob-js)
   :config
   (setq org-directory iensu-org-dir)
   (setq org-default-notes-file (expand-file-name "notes.org" org-directory))
@@ -77,7 +78,8 @@
   (org-load-modules-maybe t)
 
   (dolist (lang '((emacs-lisp . t)
-                  (shell . t)))
+                  (shell . t)
+                  (js . t)))
     (add-to-list 'org-babel-load-languages lang))
 
   (let ((additional-org-templates '(("ssh" . "src shell")
