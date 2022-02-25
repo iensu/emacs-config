@@ -617,14 +617,19 @@
 (use-package doom-modeline
   :init (doom-modeline-mode 1))
 
-;; Set theme
-(use-package modus-themes
+(use-package dracula-theme
   :config
-  (load-theme 'modus-vivendi t)
-  (setq modus-themes-headings
-        '((t . bold)))
-  (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-  (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic))
+  (load-theme 'dracula t)
+  (cl-loop for index from 1 to 8
+           do (set-face-attribute (intern (format "org-level-%d" index)) nil :height 1.1)))
+
+;; (use-package modus-themes
+;;   :config
+;;   (load-theme 'modus-vivendi t)
+;;   (setq modus-themes-headings
+;;         '((t . bold)))
+;;   (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
+;;   (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic))
 
 
 ;;;; Version control
