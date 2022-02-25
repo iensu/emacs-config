@@ -605,6 +605,7 @@
 ;; Use dark mode on macOS.
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 (add-to-list 'default-frame-alist '(ns-appearence . dark))
+(setq frame-title-format nil)
 
 ;; Use different colored parentheses based on scope.
 ;;(use-package rainbow-delimiters
