@@ -272,6 +272,7 @@
 
 ;; Install vterm for better terminal support
 (use-package vterm)
+(use-package multi-vterm)
 
 ;;;;; Text editing tools
 
