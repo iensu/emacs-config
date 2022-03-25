@@ -943,7 +943,11 @@ Falls back to looking for .projectile for compatibility reasons."
 (use-package prettier-js)
 
 ;; HTTP requests
-(use-package restclient :mode ("\\.rest$" "\\.restclient$"))
+(use-package restclient
+  :mode (("\\.rest$" . restclient-mode)
+         ("\\.restclient$" . restclient-mode)
+         ("\\.http$" . restclient-mode)))
+
 ;; HTTP requests in Org files
 (use-package ob-restclient
   :after (org)
