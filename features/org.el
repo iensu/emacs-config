@@ -251,6 +251,28 @@
   ;; (setq org-mind-map-engine "circo")  ; Circular Layout
   )
 
+(defun iensu/org-get-anchor-link-friendly-custom-id ()
+  "Gets the the `CUSTOM_ID' property of the current org entry or generates an anchor link friendly ID
+based on the title."
+  (interactive)
+  (let ((existing-id (org-entry-get nil "CUSTOM_ID")))
+    (if (and existing-id (string-match "\\S+" existing-id))
+        existing-id
+      (cl-flet ((title->id (title)
+                  (let* ((no-subtitle (first (split-string title ":")))
+                         (lowercase (downcase no-subtitle))
+                         (no-weird-chars (replace-regexp-in-string "[\.\,\+\?\(\)\~\!]+" "" lowercase))
+                         (no-whitespace (replace-regexp-in-string "\s+" "-" no-weird-chars)))
+                    no-whitespace)))
+        (let* ((title (org-entry-get nil "ITEM"))
+               (id (title->id title)))
+          (org-entry-put nil "CUSTOM_ID" id)
+          id)))))
+
+(defun iensu/org-add-anchor-link-friendly-ids-to-headlines-in-file ()
+  (interactive)
+  (org-map-entries #'iensu/org-get-anchor-link-friendly-custom-id))
+
 (use-package org-tree-slide)
 (global-set-key (kbd "<f8>") 'org-tree-slide-mode)
 (global-set-key (kbd "S-<f8>") 'org-tree-slide-skip-done-toggle)
