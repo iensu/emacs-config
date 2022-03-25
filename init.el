@@ -536,6 +536,12 @@
 (global-set-key (kbd "M-o") 'occur)
 (global-unset-key (kbd "C-z")) ;; Disable the suspend Emacs key-binding
 
+;; Trying out some of Steve Yegge's re-bindings
+(global-set-key "\C-w" 'backward-kill-word)
+(global-set-key "\C-x\C-k" 'kill-region)
+(global-set-key "\M-p" 'previous-line)
+(global-set-key "\M-n" 'next-line)
+
 ;; `windmove' enables navigation using `<shift>-<direction>'. These bindings conflict `org-mode' so
 ;; we make `windmove' take precedence.
 (windmove-default-keybindings)
