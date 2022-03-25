@@ -81,10 +81,10 @@
 
   (org-load-modules-maybe t)
 
-  (dolist (lang '((emacs-lisp . t)
-                  (shell . t)
-                  (js . t)))
-    (add-to-list 'org-babel-load-languages lang))
+  (org-babel-do-load-languages 'org-babel-load-languages '((emacs-lisp . t)
+                                                           (shell . t)
+                                                           (js . t)
+                                                           (C . t)))
 
   (let ((additional-org-templates '(("ssh" . "src shell")
                                     ("sb"  . "src bash")
