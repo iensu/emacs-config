@@ -94,11 +94,12 @@
                                     ("st"  . "src typescript"))))
     (dolist (template additional-org-templates)
       (add-to-list 'org-structure-template-alist template)))
-  (dolist (face '(org-special-keyword
-                  org-drawer
-                  org-date))
-    (set-face-attribute face nil :height 0.8))
-  (set-face-attribute 'org-link nil :underline nil))
+  ;; (dolist (face '(org-special-keyword
+  ;;                 org-drawer
+  ;;                 org-date))
+  ;;   (set-face-attribute face nil :height 0.8))
+  ;; (set-face-attribute 'org-link nil :underline nil)
+  )
 
 ;; YAML support in source blocks
 (defun org-babel-execute:yaml (body params) body)
@@ -148,10 +149,10 @@
 
 (add-hook 'org-after-todo-statistics-hook 'iensu/gtd-maybe-mark-project-as-done)
 
-(setq org-todo-keyword-faces
-      '(("BLOCKED"   . (:foreground "#dd0066" :weight bold))
-        ("CANCELED" . (:foreground "#6272a4"))
-        ("POSTPONED" . (:foreground "#3388ff"))))
+;; (setq org-todo-keyword-faces
+;;       '(("BLOCKED"   . (:foreground "#dd0066" :weight bold))
+;;         ("CANCELED" . (:foreground "#6272a4"))
+;;         ("POSTPONED" . (:foreground "#3388ff"))))
 
 ;; Customize PRIORITIES
 (setq org-highest-priority ?A
