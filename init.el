@@ -739,6 +739,9 @@ Falls back to looking for .projectile for compatibility reasons."
 
 (use-package treemacs-magit :after treemacs magit)
 
+;; Force all ediff windows to be in the same frame
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
 ;;;;; Project-based TODO lists
 
 ;; Create a TODO list based on TODO items in a project's `.project-notes.org' file. The
