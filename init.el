@@ -655,6 +655,9 @@
     (setq magit-git-executable "/usr/bin/git"))
   (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
+(use-package forge
+  :after magit)
+
 ;; `smerge-mode' is a merge conflict resolution tool which is great but unfortunately has awful
 ;; default keybindings. Here I define a hydra to make `smerge' easier to work with.
 (use-package smerge-mode
