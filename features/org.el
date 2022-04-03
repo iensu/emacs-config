@@ -19,8 +19,11 @@
 (defvar iensu--timer:org-save-buffers nil
   "Org save buffers timer object. Can be used to cancel the timer.")
 
-;;;; Org package configuration
+;; HTTP requests in Org files
+(use-package ob-restclient
+  :after (org))
 
+;;;; Org package configuration
 (use-package org
   :straight (org :type git :repo "https://code.orgmode.org/bzg/org-mode.git" :branch "main")
   :mode (("\\.org\\'" . org-mode)
@@ -84,7 +87,8 @@
   (org-babel-do-load-languages 'org-babel-load-languages '((emacs-lisp . t)
                                                            (shell . t)
                                                            (js . t)
-                                                           (C . t)))
+                                                           (C . t)
+                                                           (restclient . t)))
 
   (let ((additional-org-templates '(("ssh" . "src shell")
                                     ("sb"  . "src bash")

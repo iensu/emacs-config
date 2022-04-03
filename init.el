@@ -960,12 +960,6 @@ Falls back to looking for .projectile for compatibility reasons."
          ("\\.restclient$" . restclient-mode)
          ("\\.http$" . restclient-mode)))
 
-;; HTTP requests in Org files
-(use-package ob-restclient
-  :after (org)
-  :config
-  (org-babel-do-load-languages 'org-babel-load-languages '((restclient . t))))
-
 (use-package direnv
   :config
   (direnv-mode)
