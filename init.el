@@ -72,8 +72,10 @@
 
 
 ;; Load settings
-(load-file (expand-file-name "local-settings.el"
-                             user-emacs-directory))
+(let ((local-settings-file (expand-file-name "local-settings.el" user-emacs-directory)))
+  (when (file-exists-p local-settings-file)
+    (load-file (expand-file-name "local-settings.el"
+				 user-emacs-directory))))
 
 
 ;;;; Helper functions
