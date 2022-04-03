@@ -627,9 +627,7 @@
 
 (use-package dracula-theme
   :config
-  (load-theme 'dracula t)
-  (cl-loop for index from 1 to 8
-           do (set-face-attribute (intern (format "org-level-%d" index)) nil :height 1.1)))
+  (load-theme 'dracula t))
 
 ;; (use-package modus-themes
 ;;   :config
