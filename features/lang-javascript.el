@@ -53,6 +53,3 @@
     '(add-hook 'js-mode-hook #'add-node-modules-path))
   (eval-after-load 'rjsx-mode
     '(add-hook 'js-mode-hook #'add-node-modules-path)))
-
-;;;; Org src block support
-(add-to-list 'org-babel-load-languages '(js . t))
