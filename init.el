@@ -64,9 +64,6 @@
 (defvar iensu-email-directory "~/Mail"
   "Path to email directory.")
 
-(defvar iensu-email-mu4e-package-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
-  "Path to mu4e Emacs package.")
-
 (defvar iensu-enabled-features-alist nil
   "Locally enabled features. Available features are stored in the `features/' directory.")
 

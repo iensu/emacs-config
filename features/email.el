@@ -1,6 +1,5 @@
 (use-package mu4e
   :straight nil
-  :load-path iensu-email-mu4e-package-path
   :bind (:map mu4e-view-mode-map
               ("<tab>" . shr-next-link)
               ("<backtab>" . shr-previous-link))
@@ -9,6 +8,7 @@
   :init
   (require 'mu4e)
   :config
+  (setq mu4e-mu-binary (executable-find "mu"))
   (setq mail-user-agent 'mu4e-user-agent)
   (setq mu4e-maildir iensu-email-directory)
   (setq mu4e-confirm-quit nil)
