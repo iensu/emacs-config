@@ -88,7 +88,8 @@
                                                            (shell . t)
                                                            (js . t)
                                                            (C . t)
-                                                           (restclient . t)))
+                                                           (restclient . t)
+                                                           (calc . t)))
 
   (let ((additional-org-templates '(("ssh" . "src shell")
                                     ("sb"  . "src bash")
