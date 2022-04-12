@@ -32,9 +32,9 @@
   (exec-path-from-shell-initialize))
 
 (when (and (fboundp 'native-comp-available-p)
-      	    (native-comp-available-p))
-	 (message "Native compilation enabled!")
-   (setq comp-deferred-compilation t))
+      	   (native-comp-available-p))
+	(message "Native compilation enabled!")
+  (setq comp-deferred-compilation t))
 
 
 ;;;; System local configuration
@@ -72,7 +72,7 @@
 (let ((local-settings-file (expand-file-name "local-settings.el" user-emacs-directory)))
   (when (file-exists-p local-settings-file)
     (load-file (expand-file-name "local-settings.el"
-				 user-emacs-directory))))
+				                         user-emacs-directory))))
 
 
 ;;;; Helper functions
@@ -425,7 +425,7 @@
 (setq-default dired-listing-switches "-alGh --group-directories-first"
               dired-dwim-target t)
 (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
-    (setq insert-directory-program "/usr/local/bin/gls"))
+  (setq insert-directory-program "/usr/local/bin/gls"))
 
 ;;;; Navigation
 
@@ -759,9 +759,9 @@ Falls back to looking for .projectile for compatibility reasons."
   (let* ((versioned-dir (locate-dominating-file (buffer-file-name)
                                                 ".git"))
          (project-dir (expand-file-name (or versioned-dir
-                                           (file-name-directory (buffer-file-name)))))
+                                            (file-name-directory (buffer-file-name)))))
          (project-name (car (last (remove-if (lambda (x) (string-equal ""
-                                                                  x))
+                                                                       x))
                                              (split-string project-dir
                                                            "/")))))
          (notes-link (concat project-dir ".project-notes.org"))
