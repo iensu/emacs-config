@@ -966,6 +966,43 @@ Falls back to looking for .projectile for compatibility reasons."
 (global-auto-revert-mode 1)
 
 
+;;;; Window buffer management
+(defun iensu--should-display-in-bottom (buffer-name _action)
+  (let ((mode (buffer-local-value 'major-mode (get-buffer buffer-name))))
+    (member mode '(calc-mode
+                   compilation-mode
+                   shell-mode
+                   eshell-mode
+                   flycheck-error-list-mode
+                   navi-mode
+                   occur-mode
+                   vterm-mode))))
+
+(defun iensu--should-display-to-right (buffer-name _action)
+  (let ((mode (buffer-local-value 'major-mode (get-buffer buffer-name))))
+    (member mode '(helpful-mode
+                   help-mode
+                   Man-mode
+                   woman-mode
+                   Info-mode))))
+
+(setq display-buffer-alist
+      '((iensu--should-display-in-bottom
+         (display-buffer-reuse-window
+          display-buffer-in-side-window)
+         (side . bottom)
+         (window-height . 0.25)
+         (quit-restore ('window 'window nil nil)))
+
+        (iensu--should-display-to-right
+         (display-buffer-reuse-window
+          display-buffer-reuse-mode-window
+          display-buffer-in-side-window)
+         (side . right)
+         (window-width . 70)
+         (quit-restore ('window 'window nil nil)))))
+
+
 ;;;; Load features
 
 (dolist (feature iensu-enabled-features-alist)
