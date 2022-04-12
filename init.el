@@ -604,7 +604,7 @@
 
 ;;;; Make Emacs prettier
 
-(setq-default cursor-type '(bar . 2))
+(setq-default cursor-type 'box)
 (global-prettify-symbols-mode 1)
 (global-font-lock-mode 1)
 
