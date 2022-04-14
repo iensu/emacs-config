@@ -557,8 +557,10 @@
     ("t"   toggle-truncate-lines                   "truncate lines")
     ("u"   revert-buffer                           "reload buffer")
     ("D"   iensu/cycle-ispell-dictionary           "change dictionary")
-    ("+"   (lambda () (enlarge-window-horizontally 10)) "enlarge horizontally")
-    ("?"   (lambda () (enlarge-window 5))               "enlarge vertically"))
+    ("+"   (lambda () (interactive) (enlarge-window-horizontally 10)) "enlarge horizontally" :exit nil)
+    ("?"   (lambda () (interactive) (enlarge-window 5))               "enlarge vertically" :exit nil)
+    ("-"   (lambda () (interactive) (shrink-window-horizontally 10))  "shrink horizontally" :exit nil)
+    ("_"   (lambda () (interactive) (shrink-window 5))                "shrink vertically" :exit nil))
    "Bookmarks"
    (("l"   list-bookmarks                  "list bookmarks")
     ("b"   bookmark-set                    "set bookmark"))
@@ -566,9 +568,7 @@
    (("å"   iensu/treemacs                  "open treemacs view")
     ("P"   iensu/project-todo-list         "project todo list")
     ("p"   iensu/open-project-org-file     "open project notes file")
-    ("i"   list-bookmarks                  "list bookmarks")
-    ("+"   enlarge-window-horizontally     "enlarge window" :exit nil)
-    ("-"   shrink-window-horizontally      "shrink window" :exit nil))
+    ("ä"   iensu/promote-side-window       "promote side window"))
    "Hide/show"
    (("h h" hs-toggle-hiding                "toggle block visibility")
     ("h l" hs-hide-level                   "hide all blocks at same level")
@@ -1001,6 +1001,14 @@ Falls back to looking for .projectile for compatibility reasons."
          (side . right)
          (window-width . 70)
          (quit-restore ('window 'window nil nil)))))
+
+(defun iensu/promote-side-window ()
+  "Promotes a side window to a main window so it can be manipulated more easily."
+  (interactive)
+  (let ((buf (current-buffer)))
+    (when (window-at-side-p (get-buffer-window buf))
+      (display-buffer-use-some-window buf '((reusable-frames . nil)))
+      (delete-window))))
 
 
 ;;;; Load features
