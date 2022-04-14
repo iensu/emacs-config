@@ -969,22 +969,24 @@ Falls back to looking for .projectile for compatibility reasons."
 ;;;; Window buffer management
 (defun iensu--should-display-in-bottom (buffer-name _action)
   (let ((mode (buffer-local-value 'major-mode (get-buffer buffer-name))))
-    (member mode '(calc-mode
-                   compilation-mode
-                   shell-mode
-                   eshell-mode
-                   flycheck-error-list-mode
-                   navi-mode
-                   occur-mode
-                   vterm-mode))))
+    (or (member mode '(calc-mode
+                       compilation-mode
+                       shell-mode
+                       eshell-mode
+                       flycheck-error-list-mode
+                       navi-mode
+                       occur-mode
+                       vterm-mode))
+        (string-match "^\\*Org Src .+\\*$" buffer-name))))
 
 (defun iensu--should-display-to-right (buffer-name _action)
   (let ((mode (buffer-local-value 'major-mode (get-buffer buffer-name))))
-    (member mode '(helpful-mode
-                   help-mode
-                   Man-mode
-                   woman-mode
-                   Info-mode))))
+    (or (member mode '(helpful-mode
+                       help-mode
+                       Man-mode
+                       woman-mode
+                       Info-mode))
+        (string-match "^\\*HTTP Response\\*" buffer-name))))
 
 (setq display-buffer-alist
       '((iensu--should-display-in-bottom
