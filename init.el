@@ -102,6 +102,18 @@
 ;; The week starts on Monday.
 (setq calendar-week-start-day 1)
 
+(setq calendar-intermonth-text
+      '(propertize
+        (format "%2d"
+                (car
+                 (calendar-iso-from-absolute
+                  (calendar-absolute-from-gregorian (list month day year)))))
+        'font-lock-face 'font-lock-warning-face))
+
+(setq calendar-intermonth-header
+      (propertize "Wk" 'font-lock-face 'font-lock-keyword-face))
+
+
 ;; Make sure that buffer names become unique when opening multiple files of the same name.
 (setq-default frame-title-format "%b (%f)"
               uniquify-buffer-name-style 'post-forward
