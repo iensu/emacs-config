@@ -43,9 +43,23 @@
   (add-to-list 'mu4e-view-actions '("EWW" . iensu--mu4e-view-in-eww) t)
   (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t))
 
+(defun iensu/get-email ()
+  "Fetches email ensuring that we are \"authenticated\" and updates the mu index."
+  (interactive)
+  (when (executable-find "offlineimap")
+    (epa-decrypt-file "~/.dummy.yaml.gpg" "/dev/null")
+    (let* ((command "offlineimap -o")
+           (process (start-process-shell-command "offlineimap" "*offlineimap -o*" command)))
+      (set-process-sentinel process
+                            (lambda (proc event)
+                              (cond ((string-match-p "finished" event) (progn
+                                                                         (message "Fetched email, updating index...")
+                                                                         (kill-buffer "*offlineimap -o*")
+                                                                         (mu4e-update-index)))))))))
+
 (pretty-hydra-define+ iensu-hydra ()
   ("Email"
-   (("e u" mu4u-update-index               "update" :exit nil)
+   (("e u" iensu/get-email                 "update")
     ("e e" mu4e                            "open email")
     ("e c" mu4e-compose-new                "write email")
     ("e s" mu4e-headers-search             "search email"))))
