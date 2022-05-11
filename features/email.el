@@ -43,7 +43,7 @@
   (add-to-list 'mu4e-view-actions '("EWW" . iensu--mu4e-view-in-eww) t)
   (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t))
 
-(defun iensu/get-email ()
+(defun iensu/update-email ()
   "Fetches email ensuring that we are \"authenticated\" and updates the mu index."
   (interactive)
   (when (executable-find "offlineimap")
@@ -59,10 +59,10 @@
 
 (pretty-hydra-define+ iensu-hydra ()
   ("Email"
-   (("e u" iensu/get-email                 "update")
-    ("e e" mu4e                            "open email")
-    ("e c" mu4e-compose-new                "write email")
-    ("e s" mu4e-headers-search             "search email"))))
+   (("e u" iensu/update-email  "update")
+    ("e e" mu4e                "open email")
+    ("e c" mu4e-compose-new    "write email")
+    ("e s" mu4e-headers-search "search email"))))
 
 (defun iensu/mu4e-context (account-name name email smtp-server &optional vars)
   "Simplify creating MU4E contexts."
