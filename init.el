@@ -545,6 +545,7 @@
 (global-set-key (kbd "M-<backspace>") 'fixup-whitespace)
 (global-set-key (kbd "M-i") 'imenu)
 (global-set-key (kbd "M-o") 'occur)
+(global-set-key (kbd "M-/") 'hippie-expand)
 (global-unset-key (kbd "C-z")) ;; Disable the suspend Emacs key-binding
 
 ;; Trying out some of Steve Yegge's re-bindings
