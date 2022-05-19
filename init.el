@@ -425,15 +425,6 @@
   (setq epa-pinentry-mode 'loopback)
   (pinentry-start))
 
-;; Improved file browsing
-;; (use-package dired+
-;;   :custom
-;;   (dired-listing-switches "-alGh --group-directories-first")
-;;   (dired-dwim-target t)
-;;   :config
-;;   (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
-;;     (setq insert-directory-program "/usr/local/bin/gls")))
-
 (setq-default dired-listing-switches "-alGh --group-directories-first"
               dired-dwim-target t)
 (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
