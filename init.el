@@ -537,7 +537,8 @@
 (global-set-key (kbd "M-i") 'imenu)
 (global-set-key (kbd "M-o") 'occur)
 (global-set-key (kbd "M-/") 'hippie-expand)
-(global-unset-key (kbd "C-z")) ;; Disable the suspend Emacs key-binding
+(global-unset-key (kbd "C-z")) ;; Disable the suspend Emacs ikey-binding
+(global-set-key (kbd "C-z C-z") 'window-toggle-side-windows)
 
 ;; Trying out some of Steve Yegge's re-bindings
 (global-set-key "\C-w" 'backward-kill-word)
@@ -997,7 +998,7 @@ Falls back to looking for .projectile for compatibility reasons."
          (display-buffer-reuse-window
           display-buffer-in-side-window)
          (side . bottom)
-         (window-height . 0.25)
+         (window-height . 0.30)
          (quit-restore ('window 'window nil nil)))
 
         (iensu--should-display-to-right
@@ -1013,7 +1014,7 @@ Falls back to looking for .projectile for compatibility reasons."
   (interactive)
   (let ((buf (current-buffer)))
     (when (window-at-side-p (get-buffer-window buf))
-      (display-buffer-use-some-window buf '((reusable-frames . nil)))
+      (display-buffer-use-some-window buf '())
       (delete-window))))
 
 
