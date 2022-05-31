@@ -20,7 +20,7 @@
   (setq mu4e-show-images t)
   (setq mu4e-view-use-gnus t)
   (setq mu4e-view-image-max-width 800)
-  (setq mu4e-compose-format-flowed t)
+  (setq mu4e-compose-format-flowed nil) ;; do not add newlines when sending email
   (setq mu4e-view-show-addresses t)
   (setq mu4e-headers-fields '((:human-date . 12)
                               (:flags . 6)
@@ -37,7 +37,9 @@
   (setq message-kill-buffer-on-exit t)
   (setq mu4e-compose-context-policy 'ask-if-none)
 
-  (add-hook 'mu4e-compose-mode-hook (lambda () (auto-fill-mode -1)))
+  (add-hook 'mu4e-compose-mode-hook (lambda ()
+                                      (auto-fill-mode -1)
+                                      (visual-fill-column-mode 1)))
 
   ;; Add email viewing modes
   (add-to-list 'mu4e-view-actions '("EWW" . iensu--mu4e-view-in-eww) t)
