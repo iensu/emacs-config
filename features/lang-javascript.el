@@ -4,7 +4,7 @@
 (define-key js-mode-map (kbd "M-.") nil)
 
 (use-package js2-mode
-  :mode ("\\.js\\'")
+  :mode ("\\.js\\'" "\\.mjs\\'" "\\.cjs\\'")
   :interpreter ("node" "nodejs")
   :custom
   (js2-indent-level 2)
