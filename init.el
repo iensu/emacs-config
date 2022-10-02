@@ -538,7 +538,7 @@
 (global-set-key (kbd "M-o") 'occur)
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-unset-key (kbd "C-z")) ;; Disable the suspend Emacs ikey-binding
-(global-set-key (kbd "C-z C-z") 'window-toggle-side-windows)
+(global-set-key (kbd "C-ö") 'window-toggle-side-windows)
 
 ;; Trying out some of Steve Yegge's re-bindings
 (global-set-key "\C-w" 'backward-kill-word)

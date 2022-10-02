@@ -10,11 +10,12 @@
 (defun iensu/org-save-buffers ()
   "Saves all org buffers."
   (interactive)
-  (save-some-buffers 'no-confirm
-                     (lambda ()
-                       (string-match-p
-                        (expand-file-name org-directory)
-                        (buffer-file-name (current-buffer))))))
+  (let ((before-save-hook '()))
+    (save-some-buffers 'no-confirm
+                       (lambda ()
+                         (string-match-p
+                          (expand-file-name org-directory)
+                          (buffer-file-name (current-buffer)))))))
 
 (defvar iensu--timer:org-save-buffers nil
   "Org save buffers timer object. Can be used to cancel the timer.")
