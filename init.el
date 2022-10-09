@@ -653,9 +653,10 @@
   :custom
   (magit-bury-buffer-function 'quit-window)
   :config
-  (when (executable-find "/usr/bin/git") ; Speeds up git operations on macOS
-    (setq magit-git-executable "/usr/bin/git"))
-  (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+  (when (executable-find "~/.nix-profile/bin/git") ; Speeds up git operations on macOS
+    (setq magit-git-executable "~/.nix-profile/bin/git"))
+  (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+  (setq magit-refresh-status-buffer nil))
 
 (use-package forge
   :after magit)
