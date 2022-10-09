@@ -49,5 +49,6 @@ projects
 eln-cache/
 elpher-bookmarks*
 
-straight/
+straight/*
+!straight/versions
 .org-generic-id-locations
