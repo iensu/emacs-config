@@ -52,3 +52,4 @@ elpher-bookmarks*
 straight/*
 !straight/versions
 .org-generic-id-locations
+forge-database-*.sql
