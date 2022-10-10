@@ -1,7 +1,7 @@
 (setq flycheck-disabled-checkers (append flycheck-disabled-checkers '(javascript-jshint)))
 
 (setq js-switch-indent-offset 2)
-(define-key js-mode-map (kbd "M-.") nil)
+; (define-key js-mode-map (kbd "M-.") nil) ;; 
 
 (use-package js2-mode
   :mode ("\\.js\\'" "\\.mjs\\'" "\\.cjs\\'")
