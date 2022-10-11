@@ -2,6 +2,9 @@
 
 ;;;; Package installation and management
 
+;; Do not issue warnings during byte compilation. Not sure if this is a good idea though :D
+(setq byte-compile-warnings nil)
+
 ;; This section initializes `straight' as the package manager and installs `use-package' which is
 ;; used to install packages.
 
