@@ -1,1 +1,1 @@
-(add-hook 'python-mode-hook #'lsp)
+; (add-hook 'python-mode-hook #'lsp)
