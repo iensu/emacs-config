@@ -900,6 +900,18 @@ Falls back to looking for .projectile for compatibility reasons."
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 (use-package flycheck-popup-tip)
 
+(pretty-hydra-define prog-mode-hydra
+  (:color teal :quit-key "q" :title "Programming")
+  ("Exploration"
+    (("l" xref-find-references "list references")
+     ("d" eldoc-doc-buffer "describe symbol")
+     ("e" flycheck-list-errors "list buffer errors")
+     ("å" flycheck-previous-error "goto previous error in buffer")
+     ("ä" flycheck-next-error "goto next error in buffer ")
+     ("E" flymake-show-project-diagnostics "list workspace errors"))))
+
+(define-key prog-mode-map (kbd "C-c l") 'prog-mode-hydra/body)
+
 (use-package eglot
   :bind (:map eglot-mode-map
               ("C-c l" . eglot-hydra/body))
