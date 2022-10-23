@@ -1,7 +1,7 @@
 (setq flycheck-disabled-checkers (append flycheck-disabled-checkers '(javascript-jshint)))
 
 (setq js-switch-indent-offset 2)
-; (define-key js-mode-map (kbd "M-.") nil) ;; 
+; (define-key js-mode-map (kbd "M-.") nil) ;;
 
 (use-package js2-mode
   :mode ("\\.js\\'" "\\.mjs\\'" "\\.cjs\\'")
@@ -13,14 +13,13 @@
   (js2-mode . electric-indent-mode)
   (js2-mode . rainbow-delimiters-mode)
   (js2-mode . smartparens-mode)
-  (js2-mode . lsp)
+  (js2-mode . eglot-ensure)
   (js2-mode . prettier-js-mode)
   :config
   (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)
   (js2-mode-hide-warnings-and-errors)
   (flycheck-add-mode 'javascript-eslint 'js2-mode)
-  (add-to-list 'org-src-lang-modes '("javascript" . js2))
-  (add-to-list 'lsp-disabled-clients 'eslint))
+  (add-to-list 'org-src-lang-modes '("javascript" . js2)))
 
 (use-package rjsx-mode
   :mode ("\\.jsx\\'")
@@ -29,7 +28,7 @@
   (rjsx-mode . rainbow-delimiters-mode)
   (rjsx-mode . smartparens-mode)
   (rjsx-mode . emmet-mode)
-  (rjsx-mode . lsp)
+  (rjsx-mode . eglot-ensure)
   (rjsx-mode . prettier-js-mode)
   :init
   (add-to-list 'magic-mode-alist
@@ -39,8 +38,7 @@
                  . rjsx-mode))
   :config
   (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
-  (add-hook 'rjsx-mode-hook (lambda () (setq emmet-expand-jsx-className? t)))
-  (add-hook 'lsp-disabled-clients 'eslint))
+  (add-hook 'rjsx-mode-hook (lambda () (setq emmet-expand-jsx-className? t))))
 
 (use-package js2-refactor
   :hook

@@ -897,65 +897,24 @@ Falls back to looking for .projectile for compatibility reasons."
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 (use-package flycheck-popup-tip)
 
-;; LSP for intellisense
-(use-package lsp-mode
-  :commands (lsp lsp-deferred)
-  :bind (:map lsp-mode-map
-              ("C-c l" . lsp-mode-hydra/body))
-  :hook
-  (lsp-mode . lsp-enable-which-key-integration)
-  :config
-  (setq lsp-auto-guess-root nil)
-  (setq lsp-eldoc-render-all nil)
-  (setq lsp-idle-delay 0.5)
-  (lsp-lens-mode)
-  (setq lsp-lens-enable t)
-
+(use-package eglot
+  :bind (:map eglot-mode-map
+              ("C-c l" . eglot-hydra/body))
   :pretty-hydra
-  ((:title "LSP" :quit-key "q" :color teal)
+  ((:title "Eglot" :quit-key "q" :color teal)
    ("Exploration"
-    (("l" lsp-find-references "list references")
-     ("d" lsp-describe-thing-at-point "describe")
+    (("l" xref-find-references "list references")
      ("e" flycheck-list-errors "list buffer errors")
      ("å" flycheck-previous-error "goto previous error in buffer")
      ("ä" flycheck-next-error "goto next error in buffer ")
-     ("E" lsp-treemacs-errors-list "list workspace errors")
-     ("T" lsp-goto-type-definition "find type definition"))
+     ("E" flymake-show-project-diagnostics "list workspace errors"))
     "Refactoring"
-    (("a" lsp-execute-code-action "execute code action")
-     ("n" lsp-rename "rename symbol")
-     ("i" lsp-organize-imports "organize imports")
-     ("f" lsp-format-buffer "format buffer"))
+    (("a" eglot-code-actions "execute code action")
+     ("n" eglot-rename "rename symbol")
+     ("i" eglot-code-actions-organize-imports "organize imports")
+     ("f" eglot-format-buffer "format buffer"))
     "Misc"
-    (("w" lsp-restart-workspace "restart LSP server")))))
-
-;; `lsp-ui' enables in buffer documentation popups etc.
-(use-package lsp-ui
-  :commands lsp-ui-mode
-  :config
-  (lsp-ui-sideline-mode 1)
-  (defun iensu--lsp-ui-sideline-mode-hook ()
-    (setq lsp-ui-sideline-show-diagnostics nil
-          lsp-ui-sideline-show-code-actions nil
-          lsp-ui-sideline-show-symbol t
-          lsp-ui-sideline-show-hover nil))
-  (add-hook 'lsp-ui-sideline-mode-hook #'iensu--lsp-ui-sideline-mode-hook)
-  (lsp-ui-doc-mode 1))
-
-(use-package company-lsp :commands company-lsp)
-(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
-
-;; `dap-mode' for debugging
-
-(use-package dap-mode
-  :config
-  (setq lsp-enable-dap-auto-configure t)
-  (require 'dap-gdb-lldb)
-  (dap-gdb-lldb-setup)
-  (require 'dap-go)
-  (dap-go-setup)
-  (require 'dap-node)
-  (dap-node-setup))
+    (("w" eglot-reconnect "Reconnect to LSP server")))))
 
 ;; Autoformatting
 (use-package prettier-js)

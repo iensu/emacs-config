@@ -2,7 +2,7 @@
   :mode ("\\.ts$" "\\.tsx$")
   :hook
   ((typescript-mode . add-node-modules-path)
-   (typescript-mode . lsp)
+   (typescript-mode . eglot-ensure)
    (typescript-mode . prettier-js-mode))
   :custom
   (flycheck-check-syntax-automatically '(save mode-enabled))
@@ -13,4 +13,4 @@
             (lambda ()
               (when (and buffer-file-name
                          (string-equal "tsx" (file-name-extension buffer-file-name)))
-                (lsp)))))
+                (eglot-ensure)))))

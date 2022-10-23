@@ -1,6 +1,6 @@
 (use-package scala-mode
   :hook
-  (scala-mode . lsp)
+  (scala-mode . eglot-ensure)
   :mode "\\.s\\(cala\\|bt\\)$")
 
 (use-package sbt-mode
