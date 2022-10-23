@@ -152,6 +152,9 @@
 
       auto-save-list-file-name (expand-file-name ".local/auto-saves-list" user-emacs-directory))
 
+;; Don't allow eldoc to display more than one line in the echo area
+(setq eldoc-echo-area-use-multiline-p nil)
+
 ;; Enable autosaves
 (auto-save-mode 1)
 
@@ -904,6 +907,7 @@ Falls back to looking for .projectile for compatibility reasons."
   ((:title "Eglot" :quit-key "q" :color teal)
    ("Exploration"
     (("l" xref-find-references "list references")
+     ("d" eldoc-doc-buffer "describe symbol")
      ("e" flycheck-list-errors "list buffer errors")
      ("å" flycheck-previous-error "goto previous error in buffer")
      ("ä" flycheck-next-error "goto next error in buffer ")
