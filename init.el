@@ -951,18 +951,6 @@ Falls back to looking for .projectile for compatibility reasons."
 
 
 ;;;; Window buffer management
-(defun iensu--should-display-in-bottom (buffer-name _action)
-  (let ((mode (buffer-local-value 'major-mode (get-buffer buffer-name))))
-    (or (member mode '(calc-mode
-                       compilation-mode
-                       shell-mode
-                       eshell-mode
-                       flycheck-error-list-mode
-                       navi-mode
-                       occur-mode
-                       vterm-mode))
-        (string-match "^\\*Org Src .+\\*$" buffer-name))))
-
 (defun iensu--should-display-to-right (buffer-name _action)
   (let ((mode (buffer-local-value 'major-mode (get-buffer buffer-name))))
     (or (member mode '(helpful-mode
@@ -973,14 +961,7 @@ Falls back to looking for .projectile for compatibility reasons."
         (string-match "^\\*HTTP Response\\*" buffer-name))))
 
 (setq display-buffer-alist
-      '((iensu--should-display-in-bottom
-         (display-buffer-reuse-window
-          display-buffer-in-side-window)
-         (side . bottom)
-         (window-height . 0.30)
-         (quit-restore ('window 'window nil nil)))
-
-        (iensu--should-display-to-right
+      '((iensu--should-display-to-right
          (display-buffer-reuse-window
           display-buffer-reuse-mode-window
           display-buffer-in-side-window)
