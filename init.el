@@ -146,6 +146,7 @@
       backup-by-copying t
       delete-old-versions t
       kept-new-versions 6
+      frame-inhibit-implied-resize 1
 
       delete-by-moving-to-trash t
       undo-limit 8000000
@@ -154,6 +155,8 @@
 
 ;; Don't allow eldoc to display more than one line in the echo area
 (setq eldoc-echo-area-use-multiline-p nil)
+
+(pixel-scroll-mode 1)
 
 ;; Enable autosaves
 (auto-save-mode 1)
