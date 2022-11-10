@@ -282,3 +282,8 @@ based on the title."
 (use-package org-tree-slide)
 (global-set-key (kbd "<f8>") 'org-tree-slide-mode)
 (global-set-key (kbd "S-<f8>") 'org-tree-slide-skip-done-toggle)
+
+(use-package denote
+  :straight (:source gnu-elpa-mirror)
+  :config
+  (setq denote-directory iensu-denote-dir))
