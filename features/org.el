@@ -286,4 +286,24 @@ based on the title."
 (use-package denote
   :straight (:source gnu-elpa-mirror)
   :config
-  (setq denote-directory iensu-denote-dir))
+  (setq denote-directory iensu-denote-dir)
+
+  (defun iensu/denote-journal ()
+  "Create an entry tagged 'journal' with the date as its title."
+  (interactive)
+  (denote
+   (format-time-string "%A %e %B %Y")
+   '("journal")
+   nil
+   (concat denote-directory "/journal")))
+  (defalias 'dj #'iensu/denote-journal)
+
+  (defun iensu/denote-work ()
+    "Create an entry in a 'work' subdirectory."
+    (interactive)
+    (denote
+     (denote-title-prompt)
+     (append (denote-keywords-prompt) '("work"))
+     nil
+     (concat denote-directory "/work")))
+  (defalias 'dw #'iensu/denote-work))
