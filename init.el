@@ -986,6 +986,31 @@ Falls back to looking for .projectile for compatibility reasons."
 (dolist (feature iensu-enabled-features-alist)
   (load-file (expand-file-name (concat "features/" feature ".el")
                                user-emacs-directory)))
+;; Use Denote for note taking
+(use-package denote
+  :straight (:source gnu-elpa-mirror)
+  :config
+  (setq denote-directory iensu-denote-dir)
+
+  (defun iensu/denote-journal ()
+  "Create an entry tagged 'journal' with the date as its title."
+  (interactive)
+  (denote
+   (format-time-string "%A %e %B %Y")
+   '("journal")
+   nil
+   (concat denote-directory "/journal")))
+  (defalias 'dj #'iensu/denote-journal)
+
+  (defun iensu/denote-work ()
+    "Create an entry in a 'work' subdirectory."
+    (interactive)
+    (denote
+     (denote-title-prompt)
+     (append (denote-keywords-prompt) '("work"))
+     nil
+     (concat denote-directory "/work")))
+  (defalias 'dw #'iensu/denote-work))
 
 ;; Load additional local feature configurations
 (let ((feature-conf (expand-file-name "local-feature-settings.el" user-emacs-directory)))
