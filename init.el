@@ -320,7 +320,9 @@
     (let ((language (ring-ref iensu--language-ring -1)))
       (ring-insert iensu--language-ring language)
       (ispell-change-dictionary language)
-      (message (format "Switched to dictionary: %s" language)))))
+      (message (format "Switched to dictionary: %s" language))))
+  (defalias 'sd #'iensu/cycle-ispell-dictionary
+    "Switch spellchecking dictionary."))
 
 (use-package flyspell-popup :after (flyspell))
 
