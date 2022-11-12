@@ -994,6 +994,8 @@ Falls back to looking for .projectile for compatibility reasons."
   :config
   (setq denote-directory iensu-denote-dir)
 
+  (defalias 'dg #'denote "Create a general Denote note")
+
   (defun iensu/denote-journal ()
   "Create an entry tagged 'journal' with the date as its title."
   (interactive)
