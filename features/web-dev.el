@@ -13,7 +13,10 @@
   (web-mode-enable-current-column-highlight t)
   :config
   (add-hook 'web-mode-hook
-            (lambda () (yas-activate-extra-mode 'js-mode)))
+            (lambda ()
+              (yas-activate-extra-mode 'js-mode)
+              (when (executable-find "prettier")
+                (prettier-js-mode 1))))
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 ;;;; CSS
