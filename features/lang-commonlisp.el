@@ -4,13 +4,7 @@
 ;; (quicklisp-quickstart:install)
 ;; (ql:quickload "quicklisp-slime-helper")
 
-(load (expand-file-name "~/quicklisp/slime-helper.el"))
-(setq inferior-lisp-program
-      (string-trim (shell-command-to-string "which sbcl")))
-
-(defun iensu-slime-hook ()
-  (smartparens-strict-mode 1)
-  (eldoc-mode 1))
+;(load (expand-file-name "~/quicklisp/slime-helper.el"))
 
 (use-package slime)
 
@@ -22,4 +16,11 @@
   (setq slime-company-completion 'fuzzy
         slime-company-after-completion 'slime-company-just-one-space))
 
-(add-hook 'slime-repl-mode-hook #'iensu-slime-hook)
+(defun iensu-lisp-hook ()
+  (smartparens-strict-mode 1)
+  (eldoc-mode 1))
+
+(add-hook 'lisp-mode-hook (lambda ()
+                            (setq inferior-lisp-program (executable-find "sbcl"))))
+(add-hook 'lisp-mode-hook #'iensu-lisp-hook)
+(add-hook 'slime-repl-mode-hook #'iensu-lisp-hook)
