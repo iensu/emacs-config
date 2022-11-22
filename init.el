@@ -868,34 +868,26 @@ Falls back to looking for .projectile for compatibility reasons."
 
 ;;;;; Autocompletion and intellisense
 
-;; Company as a completion frontend
-(use-package company
-  :init (global-company-mode)
-  :bind (:map company-active-map (("C-n" . company-select-next)
-                                  ("C-p" . company-select-previous)
-                                  ("C-d" . company-show-doc-buffer)
-                                  ("M-." . company-show-location)))
-  :config
-  (setq company-idle-delay 0.0)
-  (setq company-minimum-prefix-length 1)
-  (setq company-selection-wrap-around t)
-  (setq company-auto-complete t)
-  (setq company-tooltip-align-annotations t)
-  (setq company-dabbrev-downcase nil)
-  (setq company-auto-complete-chars nil)
+ ;; Corfu for completions
+(use-package corfu
+  :custom
+  (corfu-cycle t)
+  (corfu-auto t)
+  (corfu-auto-prefix 2)
+  (corfu-auto-delay 0.1)
+  (corfu-quit-at-boundary 'separator)
+  (corfu-echo-documentation 0.25)
+  (corfu-preview-current 'insert)
+  (corfu-preselect-first nil)
+  :init
+  (global-corfu-mode 1)
 
-  (defun iensu--emacs-lisp-mode-hook ()
-    (require 'company-elisp)
-    (add-to-list 'company-backends 'company-elisp))
-  (add-hook 'emacs-lisp-mode-hook #'iensu--emacs-lisp-mode-hook)
-  (add-hook 'lisp-interaction-mode-hook #'iensu--emacs-lisp-mode-hook))
+  (let ((corfu-extension-dir (concat straight-base-dir "straight/" straight-build-dir "/corfu/extensions/")))
+    (dolist (ext '("corfu-echo" "corfu-history"))
+      (load-file (concat corfu-extension-dir ext ".el"))))
 
-(use-package company-quickhelp
-  :bind (:map company-active-map
-              ("M-h" . company-quickhelp-manual-begin))
-  :config
-  (setq company-quickhelp-delay 1)
-  (eval-after-load 'company (company-quickhelp-mode 1)))
+  (corfu-echo-mode 1)
+  (corfu-history-mode 1))
 
 ;; Flycheck for on the fly error reporting
 (use-package flycheck

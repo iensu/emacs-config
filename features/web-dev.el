@@ -21,8 +21,6 @@
 
 ;;;; CSS
 (use-package css-mode
-  :bind (:map css-mode-map
-              ("C-." . company-complete-common-or-cycle))
   :hook
   (css-mode-hook . emmet-mode)
   (css-mode-hook . rainbow-delimiters-mode)

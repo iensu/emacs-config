@@ -8,14 +8,6 @@
 
 (use-package slime)
 
-(use-package slime-company
-  :after (slime company)
-  :config
-  (add-to-list 'slime-contribs 'slime-company)
-  (add-to-list 'company-backends #'company-slime)
-  (setq slime-company-completion 'fuzzy
-        slime-company-after-completion 'slime-company-just-one-space))
-
 (defun iensu-lisp-hook ()
   (smartparens-strict-mode 1)
   (eldoc-mode 1))
