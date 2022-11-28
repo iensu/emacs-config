@@ -361,20 +361,6 @@
 
 ;;;; Utility packages
 
-;; Use `selectrum' and `prescient' for candidate narrowing
-(use-package prescient
-  :config
-  (prescient-persist-mode 1))
-
-(use-package selectrum
-  :init
-  (selectrum-mode +1))
-
-(use-package selectrum-prescient
-  :after selectrum prescient
-  :config
-  (selectrum-prescient-mode 1))
-
 (use-package marginalia
   :init
   (marginalia-mode)
@@ -879,7 +865,7 @@ Falls back to looking for .projectile for compatibility reasons."
   (corfu-quit-at-boundary 'separator)
   (corfu-echo-documentation 0.25)
   (corfu-preview-current 'insert)
-  (corfu-preselect-first nil)
+  (corfu-preselect-first t)
   :init
   (global-corfu-mode 1)
 
@@ -889,6 +875,64 @@ Falls back to looking for .projectile for compatibility reasons."
 
   (corfu-echo-mode 1)
   (corfu-history-mode 1))
+
+(use-package cape
+  :bind (("H-c p" . completion-at-point)
+         ("H-c t" . complete-tag)
+         ("H-c d" . cape-dabbrev)
+         ("H-c h" . cape-history)
+         ("H-c f" . cape-file)
+         ("H-c k" . cape-keyword)
+         ("H-c s" . cape-symbol)
+         ("H-c a" . cape-abbrev)
+         ("H-c i" . cape-ispell)
+         ("H-c l" . cape-line)
+         ("H-c w" . cape-dict)
+         ("H-c \\" . cape-tex)
+         ("H-c _" . cape-tex)
+         ("H-c ^" . cape-tex)
+         ("H-c &" . cape-sgml)
+         ("H-c r" . cape-rfc1345))
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file))
+
+
+(use-package vertico
+  :init
+  (vertico-mode)
+  (setq vertico-cycle t))
+
+(use-package savehist
+  :init
+  (savehist-mode 1))
+
+(use-package orderless
+  :init
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+
+;; https://github.com/minad/vertico#configuration
+(use-package emacs
+  :init
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+  (setq read-extended-command-predicate #'command-completion-default-include-p)
+
+  ;; Enable recursive minibuffers
+  (setq enable-recursive-minibuffers t))
 
 ;; Flycheck for on the fly error reporting
 (use-package flycheck

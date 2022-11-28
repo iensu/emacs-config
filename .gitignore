@@ -14,6 +14,7 @@ transient/
 .dir-locals.el
 local-settings.el
 local-feature-settings.el
+/history
 
 /projectile-bookmarks.eld
 flycheck_init.el
