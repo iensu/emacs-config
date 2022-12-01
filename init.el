@@ -1031,16 +1031,29 @@ Falls back to looking for .projectile for compatibility reasons."
   :config
   (setq denote-directory iensu-denote-dir)
 
+  (add-to-list 'denote-file-types
+               '(org-gpg :extension ".org.gpg"
+                         :date-function denote-date-org-timestamp
+                         :front-matter denote-org-front-matter
+                         :title-key-regexp "^#\\+title\\s-*:"
+                         :title-value-function identity
+                         :title-value-reverse-function denote-trim-whitespace
+                         :keywords-key-regexp "^#\\+filetags\\s-*:"
+                         :keywords-value-function denote-format-keywords-for-org-front-matter
+                         :keywords-value-reverse-function denote-extract-keywords-from-front-matter
+                         :link denote-org-link-format
+                         :link-in-context-regexp denote-org-link-in-context-regexp))
+
   (defalias 'dg #'denote "Create a general Denote note")
 
   (defun iensu/denote-journal ()
-  "Create an entry tagged 'journal' with the date as its title."
-  (interactive)
-  (denote
-   (format-time-string "%A %e %B %Y")
-   '("journal")
-   nil
-   (concat denote-directory "/journal")))
+    "Create an entry tagged 'journal' with the date as its title."
+    (interactive)
+    (denote
+     (format-time-string "%A %e %B %Y")
+     '("journal")
+     'org-gpg
+     (concat denote-directory "/journal")))
   (defalias 'dj #'iensu/denote-journal)
 
   (defun iensu/denote-work ()
@@ -1049,7 +1062,7 @@ Falls back to looking for .projectile for compatibility reasons."
     (denote
      (denote-title-prompt)
      (append (denote-keywords-prompt) '("work"))
-     nil
+     'org-gpg
      (concat denote-directory "/work")))
   (defalias 'dw #'iensu/denote-work))
 
