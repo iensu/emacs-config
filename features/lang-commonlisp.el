@@ -6,13 +6,14 @@
 
 ;(load (expand-file-name "~/quicklisp/slime-helper.el"))
 
-(use-package slime)
+(use-package sly
+  :commands (sly)
+  :config (setq inferior-lisp-program (executable-find "sbcl")))
 
 (defun iensu-lisp-hook ()
   (smartparens-strict-mode 1)
   (eldoc-mode 1))
 
-(add-hook 'lisp-mode-hook (lambda ()
-                            (setq inferior-lisp-program (executable-find "sbcl"))))
+(add-hook 'sly-mode-hook #'iensu-lisp-hook)
 (add-hook 'lisp-mode-hook #'iensu-lisp-hook)
 (add-hook 'slime-repl-mode-hook #'iensu-lisp-hook)
