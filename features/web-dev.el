@@ -23,7 +23,6 @@
 (use-package css-mode
   :hook
   (css-mode-hook . emmet-mode)
-  (css-mode-hook . rainbow-delimiters-mode)
   :custom
   (css-indent-offset 2))
 

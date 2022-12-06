@@ -11,7 +11,6 @@
   (js2-highlight-level 3)
   :hook
   (js2-mode . electric-indent-mode)
-  (js2-mode . rainbow-delimiters-mode)
   (js2-mode . smartparens-mode)
   (js2-mode . eglot-ensure)
   (js2-mode . prettier-js-mode)
@@ -26,7 +25,6 @@
   :hook
   (rjsx-mode . electric-indent-mode)
   (rjsx-mode . rainbow-delimiters-mode)
-  (rjsx-mode . smartparens-mode)
   (rjsx-mode . emmet-mode)
   (rjsx-mode . eglot-ensure)
   (rjsx-mode . prettier-js-mode)

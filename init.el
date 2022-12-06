@@ -224,6 +224,15 @@
   (prog-mode . editorconfig-mode)
   (text-mode . editorconfig-mode))
 
+;; Make parentheses pretty
+(use-package rainbow-delimiters
+  :hook
+  (scheme-mode . rainbow-delimiters-mode)
+  (emacs-lisp-mode . rainbow-delimiters-mode)
+  (lisp-mode . rainbow-delimiters-mode)
+  (lisp-interaction-mode . rainbow-delimiters-mode)
+  (geiser-repl-mode . rainbow-delimiters-mode))
+
 ;; Enable multiple cursors for convenient editing. Use `iedit' for quick and dirty multi-cursor
 ;; functionality.
 (use-package iedit)
@@ -616,10 +625,6 @@
 (add-to-list 'default-frame-alist '(ns-appearence . dark))
 (setq frame-title-format nil)
 
-;; Use different colored parentheses based on scope.
-;;(use-package rainbow-delimiters
-;;  :hook (prog-mode . #'rainbow-delimiters-mode))
-
 ;; Use icons where applicable.
 (use-package all-the-icons)
 
@@ -630,14 +635,6 @@
 (use-package dracula-theme
   :config
   (load-theme 'dracula t))
-
-;; (use-package modus-themes
-;;   :config
-;;   (load-theme 'modus-vivendi t)
-;;   (setq modus-themes-headings
-;;         '((t . bold)))
-;;   (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-;;   (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic))
 
 
 ;;;; Version control
@@ -995,11 +992,7 @@ Falls back to looking for .projectile for compatibility reasons."
 ;;;; Window buffer management
 (defun iensu--should-display-to-right (buffer-name _action)
   (let ((mode (buffer-local-value 'major-mode (get-buffer buffer-name))))
-    (or (member mode '(helpful-mode
-                       help-mode
-                       Man-mode
-                       woman-mode
-                       Info-mode))
+    (or (member mode '())
         (string-match "^\\*HTTP Response\\*" buffer-name))))
 
 (setq display-buffer-alist
