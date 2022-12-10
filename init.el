@@ -636,6 +636,24 @@
   :config
   (load-theme 'dracula t))
 
+;; Pimp tab-bar-mode
+(use-package emacs
+  :config
+  (add-to-list 'tab-bar-format #'tab-bar-format-menu-bar)
+
+  (set-face-attribute 'tab-bar nil
+                      :family "Monospace"
+                      :background nil)
+  (set-face-attribute 'tab-bar-tab nil
+                      :box `(:line-width (4 . 8) :color ,(face-attribute 'default :background)))
+  (set-face-attribute 'tab-bar-tab-inactive nil
+                      :background nil
+                      :foreground "#969696")
+
+  (setq tab-bar-close-button-show nil
+        tab-bar-new-button-show nil
+        tab-bar-separator "  "))
+
 
 ;;;; Version control
 

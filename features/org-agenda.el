@@ -34,5 +34,15 @@
         (tags . " %i %-12:c")
         (search . " %i %-12:c")))
 
+;; https://christiantietze.de/posts/2022/12/manage-org-agenda-related-buffers-via-display-buffer-alist/
+(add-to-list 'display-buffer-alist
+             '("\\*Org Agenda\\*"
+               (display-buffer-in-tab display-buffer-reuse-mode-window)
+               (ignore-current-tab . t)
+               (tab-name . "Agenda")
+               (window-height . .8)
+               (dedicated . t)
+               (inhibit-same-window . nil)))
+
 ;; Update the calendar to contain Swedish holidays etc.
 (load-file (expand-file-name "packages/kalender.el" user-emacs-directory))
