@@ -2,6 +2,7 @@
   :mode ("\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$" "\\.vue$" "\\.php$")
   :hook
   (web-mode . emmet-mode)
+  (web-mode . flymake-eslint-enable)
   :custom
   (web-mode-css-indent-offset 2)
   (web-mode-code-indent-offset 2)
@@ -16,8 +17,7 @@
             (lambda ()
               (yas-activate-extra-mode 'js-mode)
               (when (executable-find "prettier")
-                (prettier-js-mode 1))))
-  (flycheck-add-mode 'javascript-eslint 'web-mode))
+                (prettier-js-mode 1)))))
 
 ;;;; CSS
 (use-package css-mode

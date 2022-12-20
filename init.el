@@ -962,22 +962,19 @@ Falls back to looking for .projectile for compatibility reasons."
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
 
-;; Flycheck for on the fly error reporting
-(use-package flycheck
-  :init
-  (global-flycheck-mode t)
-  :config
-  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
-(use-package flycheck-popup-tip)
+
+(add-hook 'prog-mode-hook (lambda ()
+                            (flymake-mode 1)))
+(use-package flymake-eslint)
 
 (pretty-hydra-define prog-mode-hydra
   (:color teal :quit-key "q" :title "Programming")
   ("Exploration"
     (("l" xref-find-references "list references")
      ("d" eldoc-doc-buffer "describe symbol")
-     ("e" flycheck-list-errors "list buffer errors")
-     ("å" flycheck-previous-error "goto previous error in buffer")
-     ("ä" flycheck-next-error "goto next error in buffer ")
+     ("e" flymake-show-buffer-diagnostics "list buffer errors")
+     ("å" flymake-goto-previous-error "goto previous error in buffer")
+     ("ä" flymake-goto-next-error "goto next error in buffer ")
      ("E" flymake-show-project-diagnostics "list workspace errors"))))
 
 (define-key prog-mode-map (kbd "C-c l") 'prog-mode-hydra/body)
@@ -990,9 +987,9 @@ Falls back to looking for .projectile for compatibility reasons."
    ("Exploration"
     (("l" xref-find-references "list references")
      ("d" eldoc-doc-buffer "describe symbol")
-     ("e" flycheck-list-errors "list buffer errors")
-     ("å" flycheck-previous-error "goto previous error in buffer")
-     ("ä" flycheck-next-error "goto next error in buffer ")
+     ("e" flymake-show-buffer-diagnostics "list buffer errors")
+     ("å" flymake-goto-previous-error "goto previous error in buffer")
+     ("ä" flymake-goto-next-error "goto next error in buffer ")
      ("E" flymake-show-project-diagnostics "list workspace errors"))
     "Refactoring"
     (("a" eglot-code-actions "execute code action")

@@ -5,10 +5,8 @@
    (typescript-mode . eglot-ensure)
    (typescript-mode . prettier-js-mode))
   :custom
-  (flycheck-check-syntax-automatically '(save mode-enabled))
   (typescript-indent-level 2)
   :config
-  (flycheck-add-mode 'typescript-tslint 'web-mode)
   (add-hook 'web-mode-hook
             (lambda ()
               (when (and buffer-file-name

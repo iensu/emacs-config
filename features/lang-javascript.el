@@ -1,7 +1,4 @@
-(setq flycheck-disabled-checkers (append flycheck-disabled-checkers '(javascript-jshint)))
-
 (setq js-switch-indent-offset 2)
-; (define-key js-mode-map (kbd "M-.") nil) ;;
 
 (use-package js2-mode
   :mode ("\\.js\\'" "\\.mjs\\'" "\\.cjs\\'")
@@ -14,10 +11,10 @@
   (js2-mode . smartparens-mode)
   (js2-mode . eglot-ensure)
   (js2-mode . prettier-js-mode)
+  (js2-mode . flymake-eslint-enable)
   :config
   (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)
   (js2-mode-hide-warnings-and-errors)
-  (flycheck-add-mode 'javascript-eslint 'js2-mode)
   (add-to-list 'org-src-lang-modes '("javascript" . js2)))
 
 (use-package rjsx-mode
@@ -35,7 +32,6 @@
                             (string-match "^import .* from [\"']react[\"']" (buffer-string))))
                  . rjsx-mode))
   :config
-  (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
   (add-hook 'rjsx-mode-hook (lambda () (setq emmet-expand-jsx-className? t))))
 
 (use-package js2-refactor

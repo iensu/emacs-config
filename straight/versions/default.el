@@ -50,8 +50,6 @@
  ("exec-path-from-shell" . "ddd24dc823de9a94435b4d8ea7569161657f31e2")
  ("expand-region.el" . "c5c4362741deebb0985a8a29f9b8b0e25160764a")
  ("f.el" . "d50dca48929575642912bb5bbb2585709ba38f82")
- ("flycheck" . "d72c29fec85f1da6584475d88c1265f80e1275ad")
- ("flycheck-popup-tip" . "ef86aad907f27ca076859d8d9416f4f7727619c6")
  ("flymake" . "6d6880639d6a6fe56e358d89c0bd1c8c827a138f")
  ("flyspell-popup" . "29311849bfd253b9b689bf331860b4c4d3bd4dde")
  ("forge" . "2a2c6dde1754679673ccb29eb384dabe1d43624c")
