@@ -301,7 +301,18 @@
             (lambda () (setq compilation-environment '("TERM=xterm-256color")))))
 
 ;; Install vterm for better terminal support
-(use-package vterm)
+(use-package vterm
+  :config
+  (defun iensu/project-vterm ()
+    "Open a vterm terminal at the current project root."
+    (interactive)
+    (let* ((default-directory (project-root (project-current t)))
+           (vterm-buffer-name (project-prefixed-buffer-name "vterm"))
+           (vterm-buffer (get-buffer vterm-buffer-name)))
+      (if (and vterm-buffer (not current-prefix-arg))
+          (pop-to-buffer vterm-buffer t)
+        (vterm current-prefix-arg)))))
+
 (use-package multi-vterm)
 
 ;;;;; Text editing tools
@@ -723,7 +734,8 @@
     (("p" project-switch-project "open project")
      ("k" project-kill-buffers "close project")
      ("a" iensu/project-save "remember project")
-     ("A" iensu/project-remove "forget project"))
+     ("A" iensu/project-remove "forget project")
+     ("v" iensu/project-vterm "vterm"))
     "Files & Buffers"
     (("f" project-find-file "open project file")
      ("o" iensu/open-project-org-file "open project org file")
