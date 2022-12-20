@@ -658,6 +658,7 @@
   (set-face-attribute 'tab-bar-tab nil
                       :box `(:line-width (4 . 8) :color ,(face-attribute 'default :background)))
   (set-face-attribute 'tab-bar-tab-inactive nil
+                      :box `(:line-width (4 . 8) :color ,(face-attribute 'default :background))
                       :background nil
                       :foreground "#969696")
 
