@@ -56,12 +56,6 @@
 (defvar iensu-org-agenda-files nil
   "Org files which should be used by org-agenda to generate TODO lists etc.")
 
-(defvar iensu-gcal-client-id nil
-  "Client ID for Gmail integration.")
-
-(defvar iensu-gcal-client-secret nil
-  "Client secret for Gmail integration.")
-
 (defvar iensu-org-capture-templates nil
   "Capture templates to be used by Org mode.")
 
@@ -639,10 +633,6 @@
 ;; Use icons where applicable.
 (use-package all-the-icons)
 
-;; Use a clean mode line
-(use-package doom-modeline
-  :init (doom-modeline-mode 1))
-
 (use-package dracula-theme
   :config
   (load-theme 'dracula t))
@@ -664,7 +654,8 @@
 
   (setq tab-bar-close-button-show nil
         tab-bar-new-button-show nil
-        tab-bar-separator "  "))
+        tab-bar-separator "  ")
+  (add-to-list 'desktop-path "~/.emacs.d/.local/"))
 
 
 ;;;; Version control

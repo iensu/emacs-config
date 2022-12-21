@@ -5,10 +5,7 @@
         org-gcal-dir (expand-file-name ".local/org-gcal/" user-emacs-directory))
 
   :config
-  (setq org-gcal-client-id iensu-gcal-client-id
-        org-gcal-client-secret iensu-gcal-client-secret
-
-        org-gcal-down-days 30
+  (setq org-gcal-down-days 30
         org-gcal-up-days 30
         org-gcal-remove-api-cancelled-events t
 
