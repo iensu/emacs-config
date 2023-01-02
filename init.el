@@ -633,9 +633,9 @@
 ;; Use icons where applicable.
 (use-package all-the-icons)
 
-(use-package dracula-theme
+(use-package modus-themes
   :config
-  (load-theme 'dracula t))
+  (load-theme 'modus-operandi-tinted t))
 
 ;; Pimp tab-bar-mode
 (use-package emacs
