@@ -105,7 +105,7 @@
  ("rainbow-mode" . "55a8c15782197cd9db8950d2f5ed1b9caca08dae")
  ("restclient.el" . "0ba72816f92f3d5906cdf76f418fd0a3ee72809b")
  ("rjsx-mode" . "b697fe4d92cc84fa99a7bcb476f815935ea0d919")
- ("rust-mode" . "384051e23f0f2e2950e6ce2efd1a2e8ac0c53613")
+ ("rust-mode" . "c6f2e8a800992b65d194590b72e3d4d135cba0aa")
  ("s.el" . "e957dcb0677da18b2bb60ad867db5df5c35b5616")
  ("scss-mode" . "cf58dbec5394280503eb5502938f3b5445d1b53d")
  ("separedit.el" . "91a41ff8044e7cbeb82159f6c595393606e5e744")
