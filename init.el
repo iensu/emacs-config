@@ -969,6 +969,7 @@ Falls back to looking for .projectile for compatibility reasons."
      ("E" flymake-show-project-diagnostics "list workspace errors"))))
 
 (define-key prog-mode-map (kbd "C-c l") 'prog-mode-hydra/body)
+(define-key prog-mode-map (kbd "M-<RET>") 'default-indent-new-line)
 
 (use-package eglot
   :bind (:map eglot-mode-map
