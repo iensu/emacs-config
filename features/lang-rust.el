@@ -3,7 +3,7 @@
               ("C-c C-c" . iensu/rust-check-project)
               ("C-c C-t" . rust-test))
   :hook
-  (rust-mode . eglot-ensure)
+  (rust-mode . lsp-deferred)
   :config
   (setq rust-format-on-save t))
 

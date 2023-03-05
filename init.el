@@ -991,6 +991,28 @@ Falls back to looking for .projectile for compatibility reasons."
     "Misc"
     (("w" eglot-reconnect "Reconnect to LSP server")))))
 
+(use-package lsp-mode
+  :bind (:map lsp-mode-map
+              ("C-c l" . lsp-mode-hydra/body))
+  :pretty-hydra
+  ((:title "LSP" :quit-key "q" :color teal)
+   ("Exploration"
+    (("l" xref-find-references "list references")
+     ("d" eldoc-doc-buffer "describe symbol")
+     ("e" flymake-show-buffer-diagnostics "list buffer errors")
+     ("å" flymake-goto-previous-error "goto previous error in buffer")
+     ("ä" flymake-goto-next-error "goto next error in buffer ")
+     ("E" flymake-show-project-diagnostics "list workspace errors"))
+    "Refactoring"
+    (("a" lsp-execute-code-action "execute code action")
+     ("n" lsp-rename "rename symbol")
+     ("i" lso-organize-imports "organize imports")
+     ("f" lsp-format-buffer "format buffer"))
+    "Misc"
+    (("w" lsp-workspace-restart "Reconnect to LSP server")))))
+
+(use-package lsp-ui :commands lsp-ui-mode)
+
 ;; Autoformatting
 (use-package prettier-js)
 
