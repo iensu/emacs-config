@@ -5,7 +5,8 @@
   :hook
   (rust-mode . lsp-deferred)
   :config
-  (setq rust-format-on-save t))
+  (setq rust-format-on-save t)
+  (setq lsp-rust-clippy-preference "on"))
 
 (defvar iensu-rust-check-project-clippy-params '()
   "Params to send to the clippy command.")
