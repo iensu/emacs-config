@@ -442,9 +442,15 @@
 (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
   (setq insert-directory-program "/usr/local/bin/gls"))
 
-;;;; Navigation
 
+;;;; Navigation
 ;; This section adds packages which enables quick navigation and search.
+
+;; Mark-ring tweaks
+(setq mark-ring-max 6
+      global-mark-ring-max 8)
+;; Simplify jumping between local marks (C-u C-<space>, C-<space> * n)
+(setq-default set-mark-command-repeat-pop t)
 
 (use-package deadgrep)
 
