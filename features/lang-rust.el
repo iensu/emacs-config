@@ -15,7 +15,8 @@
   "Run either Clippy or standard `cargo check' to check the current project."
   (interactive)
   (let* ((root-dir (project-root (project-current t)))
-         (cargo-file (expand-file-name (concat root-dir "Cargo.toml"))))
+         (cargo-file (expand-file-name (concat root-dir "Cargo.toml")))
+         (default-directory root-dir))
     (if (not (executable-find "cargo-clippy"))
         (compile (format "cargo check --manifest-path=%s --workspace" cargo-file))
       (let ((clippy-args (if iensu-rust-check-project-clippy-params
