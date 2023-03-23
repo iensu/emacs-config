@@ -15,11 +15,10 @@
   "Run either Clippy or standard `cargo check' to check the current project."
   (interactive)
   (let* ((root-dir (project-root (project-current t)))
-         (cargo-file (expand-file-name (concat root-dir "Cargo.toml")))
          (default-directory root-dir))
     (if (not (executable-find "cargo-clippy"))
-        (compile (format "cargo check --manifest-path=%s --workspace" cargo-file))
+        (compile (format "cargo check --workspace"))
       (let ((clippy-args (if iensu-rust-check-project-clippy-params
                              (string-join (append '("--") iensu-rust-check-project-clippy-params) " ")
                            "")))
-        (compile (format "cargo clippy --manifest-path=%s %s" cargo-file clippy-args))))))
+        (compile (format "cargo clippy %s" clippy-args))))))
