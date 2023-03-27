@@ -261,6 +261,7 @@
 (add-hook 'prog-mode-hook #'iensu--prog-mode-hook)
 
 ;; Manipulate parentheses and other code structures.
+;; Some of these commands might be intercepted by MacOS Mission Control shortcuts!
 (use-package smartparens
   :init
   (require 'smartparens-config)
