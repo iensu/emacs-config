@@ -643,7 +643,7 @@
 
 (use-package modus-themes
   :config
-  (load-theme 'modus-operandi-tinted t))
+  (load-theme 'modus-vivendi-tinted t))
 
 ;; Pimp tab-bar-mode
 (use-package emacs
