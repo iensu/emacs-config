@@ -22,7 +22,7 @@
 (setq org-agenda-files (cl-loop for f in '("projects.org")
                                 collect (expand-file-name f iensu-org-dir))
       org-agenda-dim-blocked-tasks nil
-      org-deadline-warning-days -7
+      org-deadline-warning-days -3
       org-agenda-block-separator "")
 
 (plist-put org-agenda-clockreport-parameter-plist :maxlevel 6)

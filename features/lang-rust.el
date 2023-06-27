@@ -6,7 +6,10 @@
   (rust-mode . lsp-deferred)
   :config
   (setq rust-format-on-save t)
-  (setq lsp-rust-clippy-preference "on"))
+  (setq lsp-rust-clippy-preference "on")
+  (lsp-rust-analyzer-inlay-hints-mode 1)
+  (setq lsp-rust-analyzer-server-display-inlay-hints t)
+  (set-face-attribute 'lsp-rust-analyzer-inlay-face nil :foreground "#8E8E93"))
 
 (defvar iensu-rust-check-project-clippy-params '()
   "Params to send to the clippy command.")

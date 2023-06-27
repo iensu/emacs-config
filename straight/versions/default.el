@@ -118,7 +118,6 @@
  ("terraform-mode" . "e67459fefc871fdbf20e27be8f85b98b10b97b1b")
  ("toml-mode.el" . "f6c61817b00f9c4a3cab1bae9c309e0fc45cdd06")
  ("transient" . "c6cf2f2705ab56cd89d807e723ce45b9fcdfb9e1")
- ("tree-sitter-langs" . "bf125472c185f098136b26b30d5e74332b4ee46b")
  ("treemacs" . "71e5df66b99ffe16de65fb4783e7484b05aae6cb")
  ("treepy.el" . "7c4a0d21322506a4d4b2301b4274ec955b429b47")
  ("typescript.el" . "c7004fc5a85591a795524bd920618e5e467746af")

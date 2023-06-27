@@ -192,6 +192,8 @@
 (setq-default indent-tabs-mode nil
               tab-width 2)
 
+(setq ns-right-command-modifier 'super)
+
 ;; Read-only buffers are visited in `view-mode'.
 (setq view-read-only t)
 
@@ -878,7 +880,6 @@ Falls back to looking for .projectile for compatibility reasons."
 (use-package tree-sitter
   :config
   (global-tree-sitter-mode))
-(use-package tree-sitter-langs)
 
 ;;;;; Autocompletion and intellisense
 
@@ -1028,7 +1029,10 @@ Falls back to looking for .projectile for compatibility reasons."
 (use-package restclient
   :mode (("\\.rest$" . restclient-mode)
          ("\\.restclient$" . restclient-mode)
-         ("\\.http$" . restclient-mode)))
+         ("\\.http$" . restclient-mode))
+  :hook (restclient-mode . outline-minor-mode)
+  :config
+  (setq outline-regexp "[#]+"))
 
 (use-package direnv
   :config
