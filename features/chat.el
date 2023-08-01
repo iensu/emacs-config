@@ -1,52 +1,56 @@
-(defcustom iensu-chat-config nil "A plist of options to connect to an IRC chat."
-  :group 'iensu-chat)
+;; Connection information when using the SourceHut bouncer service. First register the server
+;; using the web interface https://chat.sr.ht, then follow the instructions below:
+;;
+;; - https://man.sr.ht/chat.sr.ht/quickstart.md
+;; - https://git.sr.ht/~emersion/soju/tree/master/item/contrib/clients.md
+;;
+;; `erc-email-userid' must be set as below:
+;;   (setq erc-email-userid "<username>/<server>@<machine>")
 
-(use-package erc
-  :commands (erc erc-tls)
-  :config
-  (setq erc-prompt-for-nickserv-password t
-        erc-auto-query 'bury
-        erc-join-buffer 'bury
-        erc-interpret-mirc-color t
-        erc-rename-buffers t
-        erc-lurker-hide-list '("JOIN" "PART" "QUIT")
-        erc-track-exclude-types '("JOIN" "NICK" "QUIT" "MODE")
-        erc-fill-column 80
-        erc-fill-function 'erc-fill-static
-        erc-fill-static-center 20
-        erc-autojoin-channels-alist '(("libera.chat" . ("#emacs" "#systemcrafters" "#anime")))
-        erc-modules '(autoaway
-                      autojoin
-                      button
-                      completion
-                      fill
-                      irccontrols
-                      keep-place
-                      list
-                      match
-                      menu
-                      move-to-prompt
-                      netsplit
-                      networks
-                      noncommands
-                      readonly
-                      ring
-                      stamp
-                      track
-                      hl-nicks)))
+(require 'erc)
+
+(defvar iensu--erc-nickname nil "ERC nickname")
+(defvar iensu--erc-password nil "ERC password")
+
+(setq erc-auto-query 'bury
+      erc-join-buffer 'bury
+      erc-interpret-mirc-color t
+      erc-rename-buffers t
+      erc-lurker-hide-list '("JOIN" "PART" "QUIT")
+      erc-track-exclude-types '("JOIN" "NICK" "QUIT" "MODE")
+      erc-fill-column 80
+      erc-fill-function 'erc-fill-static
+      erc-fill-static-center 20)
 
 (use-package erc-hl-nicks :after erc)
 
-(use-package erc-image
-  :straight (erc-image :type git :host github :repo "kidd/erc-image.el")
-  :config
-  (add-to-list 'erc-modules 'image)
-  (erc-update-modules)
-  (setq-default erc-image-inline-rescale 'window))
+(setq erc-modules '(autoaway
+                    autojoin
+                    button
+                    completion
+                    fill
+                    irccontrols
+                    keep-place
+                    list
+                    match
+                    menu
+                    move-to-prompt
+                    netsplit
+                    networks
+                    noncommands
+                    readonly
+                    ring
+                    scrolltobottom
+                    stamp
+                    track
+                    hl-nicks))
+(erc-update-modules)
 
 (defun iensu/erc-connect ()
-  "Connect to ERC with the configuration specified by `iensu-chat-config'."
+  "Connect to ERC via the SourceHut bouncer service."
   (interactive)
-  (erc-tls :server (plist-get iensu-chat-config :server)
-           :port (plist-get iensu-chat-config :port)
-           :nick (plist-get iensu-chat-config :nick)))
+  (message "Connecting to %s with nick %s" erc-email-userid iensu--erc-nickname)
+  (erc-tls :server "chat.sr.ht"
+           :port 6697
+           :nick iensu--erc-nickname
+           :password iensu--erc-password))
