@@ -37,8 +37,7 @@
 
 (when (and (fboundp 'native-comp-available-p)
       	   (native-comp-available-p))
-	(message "Native compilation enabled!")
-  (setq comp-deferred-compilation t))
+	(message "Native compilation enabled!"))
 
 
 ;;;; System local configuration
@@ -665,6 +664,7 @@
   (setq tab-bar-close-button-show nil
         tab-bar-new-button-show nil
         tab-bar-separator "  ")
+  (require 'desktop)
   (add-to-list 'desktop-path "~/.emacs.d/.local/"))
 
 
