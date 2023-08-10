@@ -1,21 +1,18 @@
-(setq js-switch-indent-offset 2)
+(require 'js)
 
-(use-package js2-mode
-  :mode ("\\.js\\'" "\\.mjs\\'" "\\.cjs\\'")
-  :interpreter ("node" "nodejs")
-  :custom
-  (js2-indent-level 2)
-  (js2-highlight-level 3)
-  :hook
-  (js2-mode . electric-indent-mode)
-  (js2-mode . smartparens-mode)
-  (js2-mode . eglot-ensure)
-  (js2-mode . prettier-js-mode)
-  (js2-mode . flymake-eslint-enable)
-  :config
-  (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)
-  (js2-mode-hide-warnings-and-errors)
-  (add-to-list 'org-src-lang-modes '("javascript" . js2)))
+(dolist (ext '("\\.js\\'" "\\.mjs\\'" "\\.cjs\\'"))
+  (add-to-list 'auto-mode-alist `(,ext . js-mode)))
+
+(define-key js-ts-mode-map (kbd "C-c C-c") #'compile)
+
+(defun iensu/javascript-mode-hook ()
+  (electric-indent-mode 1)
+  (smartparens-mode 1)
+  (eglot-ensure)
+  (prettier-js-mode 1)
+  (js-ts-mode 1))
+
+(add-hook 'js-mode-hook #'iensu/javascript-mode-hook)
 
 (use-package rjsx-mode
   :mode ("\\.jsx\\'")
@@ -34,13 +31,6 @@
   :config
   (add-hook 'rjsx-mode-hook (lambda () (setq emmet-expand-jsx-className? t))))
 
-(use-package js2-refactor
-  :hook
-  (rjsx-mode . js2-refactor-mode)
-  (js2-mode . js2-refactor-mode))
-
-(use-package xref-js2)
-(use-package nvm)
 (use-package add-node-modules-path
   :config
   (eval-after-load 'js2-mode

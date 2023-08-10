@@ -1,1 +1,2 @@
-(use-package nix-mode)
+(use-package nix-mode
+  :mode (("\\flake.lock\\'" . json-ts-mode)))

@@ -3,7 +3,8 @@
   :hook
   ((typescript-mode . add-node-modules-path)
    (typescript-mode . eglot-ensure)
-   (typescript-mode . prettier-js-mode))
+   (typescript-mode . prettier-js-mode)
+   (typescript-mode . rainbow-mode))
   :custom
   (typescript-indent-level 2)
   :config
