@@ -66,7 +66,7 @@
     ("e c" mu4e-compose-new    "write email")
     ("e s" mu4e-headers-search "search email"))))
 
-(defun iensu/mu4e-context (account-name name email smtp-server &optional vars)
+(defun iensu/mu4e-context (account-name name email smtp-server &optional mail-folder smtp-user vars)
   "Simplify creating MU4E contexts."
   (cl-flet ((is-account-match ()
               (lexical-let ((email email))
@@ -74,11 +74,12 @@
                     (when msg
                       (mu4e-message-contact-field-matches msg '(:from :to :cc :bcc) email))))))
 
-    (let* ((folder (concat "/" (downcase account-name)))
-           (vars (append `((mu4e-sent-folder . ,(format "%s/Sent" folder))
-                           (mu4e-drafts-folder . ,(format "%s/Drafts" folder))
-                           (mu4e-trash-folder . ,(format "%s/Trash" folder))
-                           (smtpmail-smtp-user . ,email)
+    (let* ((folder (or mail-folder
+                       (concat "/" (downcase account-name))))
+           (vars (append `((mu4e-sent-folder . ,(format "/%s/Sent" folder))
+                           (mu4e-drafts-folder . ,(format "/%s/Drafts" folder))
+                           (mu4e-trash-folder . ,(format "/%s/Trash" folder))
+                           (smtpmail-smtp-user . ,(or smtp-user email))
                            (smtpmail-smtp-service . 465)
                            (smtpmail-stream-type . ssl)
                            (smtpmail-smtp-server . ,smtp-server)
