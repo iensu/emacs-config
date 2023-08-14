@@ -1,15 +1,13 @@
 (use-package typescript-mode
   :mode ("\\.ts$" "\\.tsx$")
-  :hook
-  ((typescript-mode . add-node-modules-path)
-   (typescript-mode . eglot-ensure)
-   (typescript-mode . prettier-js-mode)
-   (typescript-mode . rainbow-mode))
-  :custom
-  (typescript-indent-level 2)
   :config
-  (add-hook 'web-mode-hook
-            (lambda ()
-              (when (and buffer-file-name
-                         (string-equal "tsx" (file-name-extension buffer-file-name)))
-                (eglot-ensure)))))
+  (defun iensu/typescript-mode-hook ()
+    (setq typescript-indent-level 2)
+    (add-node-modules-path)
+    (rainbow-mode 1)
+    (prettier-js-mode 1)
+    (when (and buffer-file-name
+               (string-equal "tsx" (file-name-extension buffer-file-name)))
+      (tsx-ts-mode))
+    (eglot-ensure))
+  (add-hook 'typescript-mode-hook #'iensu/typescript-mode-hook))
