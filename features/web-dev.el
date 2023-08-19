@@ -21,10 +21,10 @@
 
 ;;;; CSS
 (use-package css-mode
-  :hook
-  (css-mode-hook . emmet-mode)
-  :custom
-  (css-indent-offset 2))
+  :config
+  (add-hook 'css-mode-hook (lambda ()
+                             (emmet-mode 1)
+                             (prettier-js-mode 1))))
 
 (use-package rainbow-mode :hook (css-mode))
 
