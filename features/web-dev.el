@@ -1,23 +1,23 @@
 (use-package web-mode
-  :mode ("\\.html$" "\\.hbs$" "\\.handlebars$" "\\.jsp$" "\\.eex$" "\\.vue$" "\\.php$")
-  :hook
-  (web-mode . emmet-mode)
-  (web-mode . flymake-eslint-enable)
-  :custom
-  (web-mode-css-indent-offset 2)
-  (web-mode-code-indent-offset 2)
-  (web-mode-markup-indent-offset 2)
-  (web-mode-attr-indent-offset 2)
-  (web-mode-attr-value-indent-offset 2)
-  (web-mode-enable-css-colorization t)
-  (web-mode-enable-current-element-highlight t)
-  (web-mode-enable-current-column-highlight t)
-  :config
-  (add-hook 'web-mode-hook
-            (lambda ()
-              (yas-activate-extra-mode 'js-mode)
-              (when (executable-find "prettier")
-                (prettier-js-mode 1)))))
+  :mode ("\\.html$"
+         "\\.hbs$"
+         "\\.handlebars$"
+         "\\.jsp$"
+         "\\.eex$"
+         "\\.vue$"
+         "\\.php$"
+         "\\.ejs$"
+         "\\.njk$"))
+
+(defun iensu--web-mode-hook ()
+  (when (seq-contains-p '("html" "php")
+                        (file-name-extension (buffer-file-name)))
+
+    (prettier-js-mode 1))
+  (rainbow-mode 1)
+  (emmet-mode 1))
+
+(add-hook 'web-mode-hook #'iensu--web-mode-hook)
 
 ;;;; CSS
 (use-package css-mode
