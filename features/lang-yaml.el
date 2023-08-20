@@ -1,10 +1,12 @@
-(use-package yaml-mode
-  :hook
-  (yaml-mode . display-line-numbers-mode)
-  (yaml-mode . flyspell-mode-off)
-  ;; YAML mode inherits from text-mode, so need to disable some settings
-  (yaml-mode . (lambda ()
-                 (visual-line-mode -1)
-                 (visual-fill-column-mode -1))))
+(require 'yaml-ts-mode)
 
-(use-package highlight-indentation :hook (yaml-mode . highlight-indentation-mode))
+(use-package highlight-indentation)
+
+(defun iensu--yaml-mode-hook ()
+  (display-line-numbers-mode 1)
+  (flyspell-mode-off)
+  (visual-line-mode -1)
+  (visual-fill-column-mode -1)
+  (highlight-indentation-mode 1))
+
+(add-hook 'yaml-ts-mode-hook #'iensu--yaml-mode-hook)
