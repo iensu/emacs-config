@@ -7,8 +7,8 @@
 (add-to-list 'auto-mode-alist '("function.proj$" . xml-mode))
 
 (defun iensu--csharp-mode-hook ()
-  (eglot-ensure)
   (c-set-offset 'arglist-intro '+)
-  (setq c-basic-offset 4))
+  (setq c-basic-offset 4)
+  (lsp-deferred))
 
 (add-hook 'csharp-ts-mode-hook #'iensu--csharp-mode-hook)
