@@ -998,7 +998,9 @@ Falls back to looking for .projectile for compatibility reasons."
      ("i" eglot-code-actions-organize-imports "organize imports")
      ("f" eglot-format-buffer "format buffer"))
     "Misc"
-    (("w" eglot-reconnect "Reconnect to LSP server")))))
+    (("w" eglot-reconnect "Reconnect to LSP server"))))
+  :config
+  (setq eglot-confirm-server-initiated-edits nil))
 
 (use-package lsp-mode
   :bind (:map lsp-mode-map
