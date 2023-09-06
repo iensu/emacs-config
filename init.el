@@ -415,7 +415,9 @@
    ("M-s e"    . consult-isearch)
    ("M-s l"    . consult-line))
   :config
-  (setq consult-narrow-key "<"))
+  (setq consult-narrow-key "<")
+  ;; Disable previews
+  (setq consult-preview-key nil))
 
 (use-package embark
   :bind
