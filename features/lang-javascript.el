@@ -10,7 +10,7 @@
   (smartparens-mode 1)
   (eglot-ensure)
   (prettier-js-mode 1)
-  (js-ts-mode 1))
+  (js-ts-mode))
 
 (add-hook 'js-mode-hook #'iensu/javascript-mode-hook)
 
