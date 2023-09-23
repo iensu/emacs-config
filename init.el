@@ -648,6 +648,25 @@
   :config
   (load-theme 'modus-vivendi-tinted t))
 
+(defvar iensu--font-ring nil)
+
+(let ((fonts '("Victor Mono-12"
+               "Victor Mono-14"
+               "Victor Mono-16"
+               "Victor Mono-18")))
+  (setq iensu--font-ring (make-ring (length fonts)))
+  (dolist (font fonts) (ring-insert iensu--font-ring font)))
+
+(defun iensu/cycle-fonts ()
+  "Change the current font or font size."
+  (interactive)
+  (let ((font (ring-ref iensu--font-ring -1)))
+    (ring-insert iensu--font-ring font)
+    (set-frame-font font :keep-size t)
+    (message "Using font %s" font)))
+
+(iensu/cycle-fonts)
+
 ;; Pimp tab-bar-mode
 (use-package emacs
   :config
