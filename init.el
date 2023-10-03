@@ -910,7 +910,7 @@ Falls back to looking for .projectile for compatibility reasons."
   (corfu-cycle t)
   (corfu-auto t)
   (corfu-auto-prefix 2)
-  (corfu-auto-delay 0.1)
+  (corfu-auto-delay 0.5)
   (corfu-quit-at-boundary 'separator)
   (corfu-echo-documentation 0.25)
   (corfu-preview-current 'insert)
