@@ -213,6 +213,9 @@
 (put 'narrow-to-page 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 
+;; Disable suspend key binding
+(global-unset-key (kbd "C-x C-z"))
+
 ;; Use the editorconfig package to conform to project formatting rules if present.
 (use-package editorconfig
   :hook
