@@ -245,20 +245,6 @@
     ("c s" org-clock-out     "stop clock")
     ("c g" org-clock-goto    "goto clocked task"))))
 
-(use-package org-mind-map
-  :load-path (lambda () (expand-file-name "packages" user-emacs-directory))
-  :init
-  (require 'ox-org)
-  :config
-  ;; (setq org-mind-map-engine "dot")       ; Default. Directed Graph
-  (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
-  ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
-  ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
-  ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
-  ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
-  ;; (setq org-mind-map-engine "circo")  ; Circular Layout
-  )
-
 (defun iensu/org-get-anchor-link-friendly-custom-id ()
   "Gets the the `CUSTOM_ID' property of the current org entry or generates an anchor link friendly ID
 based on the title."
