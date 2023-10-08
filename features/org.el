@@ -114,6 +114,9 @@
 ;; Standard markdown
 (require 'ox-md)
 
+;; Texinfo
+(require 'ox-texinfo)
+
 ;; Github-flavoured markdown
 (use-package ox-gfm
   :init
