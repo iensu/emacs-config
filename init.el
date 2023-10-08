@@ -1103,7 +1103,7 @@ Falls back to looking for .projectile for compatibility reasons."
   :straight (:source gnu-elpa-mirror)
   :config
   (setq denote-directory iensu-denote-dir)
-
+  (require 'denote-org-dblock)
   (add-to-list 'denote-file-types
                '(org-gpg :extension ".org.gpg"
                          :date-function denote-date-org-timestamp
