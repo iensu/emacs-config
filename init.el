@@ -920,11 +920,6 @@ Falls back to looking for .projectile for compatibility reasons."
   (corfu-preselect-first t)
   :init
   (global-corfu-mode 1)
-
-  (let ((corfu-extension-dir (concat straight-base-dir "straight/" straight-build-dir "/corfu/extensions/")))
-    (dolist (ext '("corfu-echo" "corfu-history"))
-      (load-file (concat corfu-extension-dir ext ".el"))))
-
   (corfu-echo-mode 1)
   (corfu-history-mode 1))
 
