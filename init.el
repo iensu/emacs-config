@@ -64,6 +64,8 @@
 (defvar iensu-enabled-features-alist nil
   "Locally enabled features. Available features are stored in the `features/' directory.")
 
+;; Use the new menu-bar
+(load-file (expand-file-name "packages/menu-bar.el" user-emacs-directory))
 
 ;; Load settings
 (let ((local-settings-file (expand-file-name "local-settings.el" user-emacs-directory)))
@@ -1095,7 +1097,8 @@ Falls back to looking for .projectile for compatibility reasons."
                                user-emacs-directory)))
 ;; Use Denote for note taking
 (use-package denote
-  :straight (:source gnu-elpa-mirror)
+  :straight (denote :type git :host github :repo "protesilaos/denote"
+                    :build (autoloads info))
   :config
   (setq denote-directory iensu-denote-dir)
   (require 'denote-org-dblock)
