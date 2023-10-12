@@ -1,5 +1,4 @@
 (use-package wat-mode
-  :load-path (lambda () (expand-file-name "packages/wat-mode" user-emacs-directory))
-  :straight nil
+  :vc (wat-mode :url "https://github.com/devonsparks/wat-mode")
   :config
   (add-to-list 'org-src-lang-modes '("wat" . wat)))

@@ -26,7 +26,6 @@
 
 ;;;; Org package configuration
 (use-package org
-  :straight (org :type git :repo "https://code.orgmode.org/bzg/org-mode.git" :branch "main")
   :mode (("\\.org\\'" . org-mode)
          ("\\.org.draft\\'" . org-mode))
   :bind (("C-c c" . org-capture)
@@ -40,7 +39,6 @@
                 (visual-line-mode 1)))
   :init
   ;; Necessary to make Org-mode stuff available
-  (require 'org)
   (require 'org-indent)
   (require 'org-tempo)
   (require 'org-id)
@@ -98,49 +96,17 @@
                                     ("sa"  . "src artist")
                                     ("st"  . "src typescript"))))
     (dolist (template additional-org-templates)
-      (add-to-list 'org-structure-template-alist template)))
-  ;; (dolist (face '(org-special-keyword
-  ;;                 org-drawer
-  ;;                 org-date))
-  ;;   (set-face-attribute face nil :height 0.8))
-  ;; (set-face-attribute 'org-link nil :underline nil)
-  )
+      (add-to-list 'org-structure-template-alist template))))
 
-;; YAML support in source blocks
 (defun org-babel-execute:yaml (body params) body)
-
-;;;; Markdown exporters
-
-;; Standard markdown
 (require 'ox-md)
-
-;; Texinfo
 (require 'ox-texinfo)
-
-;; Github-flavoured markdown
 (use-package ox-gfm
   :init
   (eval-after-load "org"
     '(require 'ox-gfm nil t)))
 
-;;;; Capture things everywhere
-
-;;`org-protocol' enables capturing from outside of Emacs.
-(require 'org-protocol)
-
-(defadvice org-capture-finalize
-    (after delete-capture-frame activate)
-  "Advise capture-finalize to close the frame"
-  (if (equal "capture" (frame-parameter nil 'name))
-      (delete-frame)))
-
-(defadvice org-capture-destroy
-    (after delete-capture-frame activate)
-  "Advise capture-destroy to close the frame"
-  (if (equal "capture" (frame-parameter nil 'name))
-      (delete-frame)))
-
-;;;; TODO keyword and priorities setup
+;; TODO keyword and priorities setup
 (setq org-todo-keywords
       '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "WAITING(w)" "BLOCKED(b)"
                   "|"
@@ -157,10 +123,10 @@
 
 (add-hook 'org-after-todo-statistics-hook 'iensu/gtd-maybe-mark-project-as-done)
 
-;; (setq org-todo-keyword-faces
-;;       '(("BLOCKED"   . (:foreground "#dd0066" :weight bold))
-;;         ("CANCELED" . (:foreground "#6272a4"))
-;;         ("POSTPONED" . (:foreground "#3388ff"))))
+(setq org-todo-keyword-faces
+      '(("BLOCKED"   . (:foreground "#dd0066" :weight bold))
+        ("CANCELED" . (:foreground "#6272a4"))
+        ("POSTPONED" . (:foreground "#3388ff"))))
 
 ;; Customize PRIORITIES
 (setq org-highest-priority ?A
@@ -183,60 +149,9 @@
   :config
   (setq org-superstar-headline-bullets-list '(?◉)))
 
-;;;; Autosaving org buffers
+;; Autosaving org buffers
 (setq iensu--timer:org-save-buffers
       (run-at-time t (* 5 60) #'iensu/org-save-buffers))
-
-;;;; Capture templates
-(iensu-add-to-list 'iensu-org-capture-templates
-                   `("T" "TODO with link" entry (file ,(expand-file-name "refile.org" iensu-org-dir))
-                     ,(concat "* TODO %?\n"
-                              "%a")
-                     :empty-lines 1)
-
-                   `("t" "TODO" entry (file ,(expand-file-name "refile.org" iensu-org-dir))
-                     ,(concat "* TODO %?\n")
-                     :empty-lines 1)
-
-                   `("j" "Journal" entry (file+datetree ,(expand-file-name "journal.org.gpg" iensu-org-dir))
-                     ,(concat "* %^{Titel}\n"
-                              "%U, %^{Location|Stockholm, Sverige}\n\n"
-                              "%?")
-                     :empty-lines 1)
-
-                   `("d" "Date entry" entry (file ,(expand-file-name "refile.org" iensu-org-dir))
-                     ,(concat "* %<%Y-%m-%d %A>\n"
-                              "%t\n"
-                              "%?"))
-
-                   `("l" "Link" entry (file ,(expand-file-name "refile.org" iensu-org-dir))
-                     ,(concat "* %? %^L %^G \n"
-                              "%U")
-                     :prepend t)
-
-                   `("L" "Browser Link" entry (file ,(expand-file-name "links.org" iensu-org-dir))
-                     ,(concat "* %:description\n"
-                              "%:link\n"
-                              "%U\n")
-                     :prepend t :immediate-finish t :empty-lines 1)
-
-                   `("p" "Browser Link with Selection" entry (file ,(expand-file-name "links.org" iensu-org-dir))
-                     ,(concat "* %^{Title}\n"
-                              "Source: %u, %c\n\n"
-                              "#+BEGIN_QUOTE\n"
-                              "%i\n"
-                              "#+END_QUOTE\n\n\n%?")
-                     :prepend t :empty-lines 1)
-
-                   `("b" "Book" entry (file+headline ,(expand-file-name "private.org" iensu-org-dir) "Reading list")
-                     ,(concat "* %^{Title}"
-                              " %^{Author}p"
-                              " %^{Genre}p"
-                              " %^{Published}p"
-                              " %(org-set-property \"Added\" (iensu--get-current-inactive-timestamp))")
-                     :prepend t :empty-lines 1))
-
-(setq org-capture-templates iensu-org-capture-templates)
 
 (pretty-hydra-define+ iensu-hydra ()
   ("Org clock"

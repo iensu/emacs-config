@@ -2,31 +2,19 @@
 
 ;;;; Package installation and management
 
-;; Do not issue warnings during byte compilation. Not sure if this is a good idea though :D
-(setq byte-compile-warnings nil)
-(setq native-comp-async-report-warnings-errors nil)
+(require 'package)
+(require 'use-package)
 
-;; This section initializes `straight' as the package manager and installs `use-package' which is
-;; used to install packages.
+(setq package-enable-at-startup t
+      use-package-always-ensure t
+      byte-compile-warnings nil
+      native-comp-async-report-warnings-errors nil) ; silence noisy warnings
 
-(setq package-enable-at-startup nil)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
-(straight-use-package 'use-package)
-
-(setq straight-use-package-by-default t)
+;; The :vc keyword is not enabled in use-package yet, so using this additional package.
+(unless (package-installed-p 'vc-use-package)
+  (package-vc-install "https://github.com/slotThe/vc-use-package"))
 
 ;; Make system path variables accessible in Emacs
 (use-package exec-path-from-shell
@@ -34,10 +22,6 @@
   (exec-path-from-shell-check-startup-files nil)
   :init
   (exec-path-from-shell-initialize))
-
-(when (and (fboundp 'native-comp-available-p)
-      	   (native-comp-available-p))
-	(message "Native compilation enabled!"))
 
 
 ;;;; System local configuration
@@ -64,14 +48,13 @@
 (defvar iensu-enabled-features-alist nil
   "Locally enabled features. Available features are stored in the `features/' directory.")
 
-;; Use the new menu-bar
-(load-file (expand-file-name "packages/menu-bar.el" user-emacs-directory))
-
 ;; Load settings
 (let ((local-settings-file (expand-file-name "local-settings.el" user-emacs-directory)))
   (when (file-exists-p local-settings-file)
     (load-file (expand-file-name "local-settings.el"
 				                         user-emacs-directory))))
+
+;; (setq load-path (cons (concat user-emacs-directory "features") load-path))
 
 
 ;;;; Helper functions
@@ -870,42 +853,11 @@ Falls back to looking for .projectile for compatibility reasons."
 ;; Reset org-agenda-files when the project TODO list buffer is closed
 (add-hook 'kill-buffer-hook #'iensu/reset-org-agenda-files)
 
-;; Add some org-capture templates for project notes.
-(iensu-add-to-list 'iensu-org-capture-templates
-                   `("m" "Project note" entry (file+headline iensu--org-capture-project-notes-file "Notes")
-                     ,(concat "* %^{Title}\n"
-                              "%U\n\n"
-                              "%?")
-                     :empty-lines 1)
-
-                   `("n" "Project note with link" entry (file+headline iensu--org-capture-project-notes-file "Notes")
-                     ,(concat "* %^{Title}\n"
-                              "%U\n\n"
-                              "Link: %a\n\n"
-                              "%?")
-                     :empty-lines 1)
-
-                   `("N" "Project note with link + code quote" entry (file+headline iensu--org-capture-project-notes-file "Notes")
-                     ,(concat "* %^{Title}\n"
-                              "%U\n\n"
-                              "Link: %a\n\n"
-                              "#+begin_src %^{Language}\n"
-                              "%i\n"
-                              "#+end_src"
-                              "\n\n"
-                              "%?")
-                     :empty-lines 1))
-
 
 ;;;; IDE features
 
 ;; Highlight TODOs in programming buffers
 (use-package hl-todo :hook ((prog-mode . hl-todo-mode)))
-
-;; Use tree-sitter for syntax highlighting where availaible
-(use-package tree-sitter
-  :config
-  (global-tree-sitter-mode))
 
 ;;;;; Autocompletion and intellisense
 
@@ -1097,8 +1049,7 @@ Falls back to looking for .projectile for compatibility reasons."
                                user-emacs-directory)))
 ;; Use Denote for note taking
 (use-package denote
-  :straight (denote :type git :host github :repo "protesilaos/denote"
-                    :build (autoloads info))
+  :vc (denote :url "https://github.com/protesilaos/denote")
   :config
   (setq denote-directory iensu-denote-dir)
   (require 'denote-org-dblock)
