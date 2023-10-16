@@ -44,41 +44,42 @@
   (require 'org-id)
   (require 'ob-js)
   :config
-  (setq org-directory iensu-org-dir)
-  (setq org-default-notes-file (expand-file-name "notes.org" org-directory))
+  (setopt org-directory iensu-org-dir)
+  (setopt org-default-notes-file (expand-file-name "notes.org" org-directory))
 
-  (setq org-src-fontify-natively t)
-  (setq org-fontify-quote-and-verse-blocks t)
-  (setq org-fontify-done-headline t)
-  (setq org-fontify-whole-heading-line t)
+  (setopt org-src-fontify-natively t)
+  (setopt org-fontify-quote-and-verse-blocks t)
+  (setopt org-fontify-done-headline t)
+  (setopt org-fontify-whole-heading-line t)
 
-  (setq org-hide-emphasis-markers t)
-  (setq org-ellipsis " ▾")
+  (setopt org-hide-emphasis-markers t)
+  (setopt org-ellipsis " ▾")
 
-  (setq org-refile-targets `((,(append
-                                (directory-files iensu-org-dir :full-path "\\.org$")
-                                (directory-files-recursively (concat iensu-org-dir "/projects") "\\.org$"))
-                              :maxlevel . 10)))
-  (setq org-refile-allow-creating-parent-nodes 'confirm)
-  (setq org-refile-use-outline-path 'file)
+  (setopt org-refile-targets
+          (let ((org-root-files (directory-files iensu-org-dir :full-path "\\.org$"))
+                (org-project-files (directory-files-recursively (concat iensu-org-dir "/projects") "\\.org$")))
+            (mapcar (lambda (f) `(,f . (:maxlevel . 10)))
+                    (append org-root-files org-project-files))))
+  (setopt org-refile-allow-creating-parent-nodes 'confirm)
+  (setopt org-refile-use-outline-path 'file)
 
-  (setq org-image-actual-width nil)
+  (setopt org-image-actual-width nil)
 
-  (setq org-adapt-indentation nil)
-  (setq org-hide-leading-stars t)
-  (setq org-indent-indentation-per-level 2)
-  (setq org-checkbox-hierarchical-statistics nil)
-  (setq org-log-done 'time)
-  (setq org-outline-path-complete-in-steps nil)
+  (setopt org-adapt-indentation nil)
+  (setopt org-hide-leading-stars t)
+  (setopt org-indent-indentation-per-level 2)
+  (setopt org-checkbox-hierarchical-statistics nil)
+  (setopt org-log-done 'time)
+  (setopt org-outline-path-complete-in-steps nil)
 
-  (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
-  (setq org-id-prefix "org")
+  (setopt org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
+  (setopt org-id-prefix "org")
 
-  (setq org-export-initial-scope 'subtree)
-  (setq org-catch-invisible-edits 'show-and-error)
-  (setq org-archive-location "archive/%s_archive::")
+  (setopt org-export-initial-scope 'subtree)
+  (setopt org-catch-invisible-edits 'show-and-error)
+  (setopt org-archive-location "archive/%s_archive::")
 
-  (setq org-modules '(org-protocol))
+  (setopt org-modules '(org-protocol))
 
   (org-load-modules-maybe t)
 
@@ -107,10 +108,10 @@
     '(require 'ox-gfm nil t)))
 
 ;; TODO keyword and priorities setup
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "WAITING(w)" "BLOCKED(b)"
-                  "|"
-                  "CANCELED(C@/!)" "DELEGATED(d)" "POSTPONED(P@/!)" "DONE(D)")))
+(setopt org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "WAITING(w)" "BLOCKED(b)"
+                    "|"
+                    "CANCELED(C@/!)" "DELEGATED(d)" "POSTPONED(P@/!)" "DONE(D)")))
 
 (defun iensu/gtd-maybe-mark-project-as-done (_n-done _n-not-done)
   "Mark PROJ as done if it has a completion rate of 100%."
@@ -123,23 +124,23 @@
 
 (add-hook 'org-after-todo-statistics-hook 'iensu/gtd-maybe-mark-project-as-done)
 
-(setq org-todo-keyword-faces
-      '(("BLOCKED"   . (:foreground "#dd0066" :weight bold))
-        ("CANCELED" . (:foreground "#6272a4"))
-        ("POSTPONED" . (:foreground "#3388ff"))))
+(setopt org-todo-keyword-faces
+        '(("BLOCKED"   . (:foreground "#dd0066" :weight bold))
+          ("CANCELED" . (:foreground "#6272a4"))
+          ("POSTPONED" . (:foreground "#3388ff"))))
 
 ;; Customize PRIORITIES
-(setq org-highest-priority ?A
-      org-default-priority ?D
-      org-lowest-priority  ?E)
+(setopt org-highest-priority ?A
+        org-default-priority ?D
+        org-lowest-priority  ?E)
 
-(setq org-clock-in-switch-to-state "DOING")
-(setq org-log-into-drawer t)
+(setopt org-clock-in-switch-to-state "DOING")
+(setopt org-log-into-drawer t)
 
 ;;;;; Make org-mode prettier
 
 ;; Make view more compact
-(setq org-cycle-separator-lines 0)
+(setopt org-cycle-separator-lines 0)
 
 ;; Only display one bullet per headline for a cleaner look.
 (use-package org-superstar
@@ -147,7 +148,7 @@
   :init
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
   :config
-  (setq org-superstar-headline-bullets-list '(?◉)))
+  (setopt org-superstar-headline-bullets-list '(?◉)))
 
 ;; Autosaving org buffers
 (setq iensu--timer:org-save-buffers

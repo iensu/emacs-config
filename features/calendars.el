@@ -3,12 +3,12 @@
 (defvar iensu--diary-file "~/diary")
 (defvar iensu--ics-calendars nil)
 
-(setq diary-file iensu--diary-file)
+(setopt diary-file iensu--diary-file)
 (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
 (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
 
 (if (boundp 'org-agenda-include-diary)
-    (setq org-agenda-include-diary t))
+    (setopt org-agenda-include-diary t))
 
 (defun iensu/sync-ics-calendars ()
   (interactive)

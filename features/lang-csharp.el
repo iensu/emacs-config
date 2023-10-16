@@ -8,7 +8,7 @@
 
 (defun iensu--csharp-mode-hook ()
   (c-set-offset 'arglist-intro '+)
-  (setq c-basic-offset 4)
+  (setopt c-basic-offset 4)
   (lsp-deferred))
 
 (add-hook 'csharp-ts-mode-hook #'iensu--csharp-mode-hook)

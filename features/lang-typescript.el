@@ -11,3 +11,10 @@
 
 (add-hook 'typescript-ts-mode-hook #'iensu--typescript-mode-hook)
 (add-hook 'tsx-ts-mode-hook #'iensu--typescript-mode-hook)
+
+(defun iensu/tsx-ts-mark-node ()
+  (interactive)
+  (let ((node (treesit-node-parent (treesit-node-at (point)))))
+    (push-mark (treesit-node-end node) nil t)))
+
+(defalias 'mn 'iensu/tsx-ts-mark-node)

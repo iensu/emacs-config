@@ -5,10 +5,10 @@
 (require 'package)
 (require 'use-package)
 
-(setq package-enable-at-startup t
-      use-package-always-ensure t
-      byte-compile-warnings nil
-      native-comp-async-report-warnings-errors nil) ; silence noisy warnings
+(setopt package-enable-at-startup t
+        use-package-always-ensure t
+        byte-compile-warnings nil
+        native-comp-async-report-warnings-errors nil) ; silence noisy warnings
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
@@ -36,9 +36,6 @@
 (defvar iensu-org-refile-targets nil
   "Org files which can be used as refiling targets.")
 
-(defvar iensu-org-agenda-files nil
-  "Org files which should be used by org-agenda to generate TODO lists etc.")
-
 (defvar iensu-org-capture-templates nil
   "Capture templates to be used by Org mode.")
 
@@ -54,7 +51,7 @@
     (load-file (expand-file-name "local-settings.el"
 				                         user-emacs-directory))))
 
-;; (setq load-path (cons (concat user-emacs-directory "features") load-path))
+;; (setopt load-path (cons (concat user-emacs-directory "features") load-path))
 
 
 ;;;; Helper functions
@@ -70,70 +67,69 @@
 ;; This contains some basic default configuration which does not depend on any external packages.
 
 ;; Cleanup the UI by removing the menu tool and scroll bars.
-(mapc (lambda (mode)
-        (when (fboundp mode)
-          (funcall mode -1)))
-      '(menu-bar-mode tool-bar-mode scroll-bar-mode))
+(menu-bar-mode   -1)
+(tool-bar-mode   -1)
+(scroll-bar-mode -1)
 
 ;; Remove the warning bell.
-(setq ring-bell-function 'ignore)
+(setopt ring-bell-function 'ignore)
 
 ;; Remove the GNU/Emacs startup screen to boot direct to the Scratch buffer.
-(setq inhibit-startup-screen t)
+(setopt inhibit-startup-screen t)
 
 ;; The week starts on Monday.
-(setq calendar-week-start-day 1)
+(setopt calendar-week-start-day 1)
 
-(setq calendar-intermonth-text
-      '(propertize
-        (format "%2d"
-                (car
-                 (calendar-iso-from-absolute
-                  (calendar-absolute-from-gregorian (list month day year)))))
-        'font-lock-face 'font-lock-warning-face))
+(setopt calendar-intermonth-text
+        '(propertize
+          (format "%2d"
+                  (car
+                   (calendar-iso-from-absolute
+                    (calendar-absolute-from-gregorian (list month day year)))))
+          'font-lock-face 'font-lock-warning-face))
 
-(setq calendar-intermonth-header
-      (propertize "Wk" 'font-lock-face 'font-lock-keyword-face))
+(setopt calendar-intermonth-header
+        (propertize "Wk" 'font-lock-face 'font-lock-keyword-face))
 
 
 ;; Make sure that buffer names become unique when opening multiple files of the same name.
-(setq-default frame-title-format "%b (%f)"
-              uniquify-buffer-name-style 'post-forward
-              uniquify-separator ":")
+(setq frame-title-format "%b (%f)")
+(setopt uniquify-buffer-name-style 'post-forward
+        uniquify-separator ":")
 
 ;; Ask before killing Emacs.
-(setq confirm-kill-emacs 'y-or-n-p)
+(setopt confirm-kill-emacs 'y-or-n-p)
 
 ;; Always just ask y/n instead of yes/no
 (fset #'yes-or-no-p #'y-or-n-p)
 
 ;; Put any Emacs generated customizations into ./custom.el instead of ./init.el.
-(setq custom-file (expand-file-name "custom.el"
-                                    user-emacs-directory))
+(setopt custom-file (expand-file-name "custom.el"
+                                      user-emacs-directory))
 
 ;; Prefer to recompile newer files instead of using already compiled code
-(setq load-prefer-newer t)
+(setopt load-prefer-newer t)
 
 ;; Improve performance by increasing the garbage collector threshold and max LISP evaluation depth.
-(setq gc-cons-threshold 100000000
-      max-lisp-eval-depth 2000
-      read-process-output-max (* 1024 1024))
+(setopt gc-cons-threshold 100000000
+      max-lisp-eval-depth 2000)
+(setq read-process-output-max (* 1024 1024))
 
 ;; Move backups and auto-saves
-(setq create-lockfiles nil
-      backup-directory-alist `(("." . ,(expand-file-name ".local/backups/" user-emacs-directory)))
-      backup-by-copying t
-      delete-old-versions t
-      kept-new-versions 6
-      frame-inhibit-implied-resize 1
+(setopt create-lockfiles nil
+        backup-directory-alist `(("." . ,(expand-file-name ".local/backups/" user-emacs-directory)))
+        backup-by-copying t
+        delete-old-versions t
+        kept-new-versions 6
+        frame-inhibit-implied-resize 1
 
-      delete-by-moving-to-trash t
-      undo-limit 8000000
+        delete-by-moving-to-trash t
+        undo-limit 8000000)
 
-      auto-save-list-file-name (expand-file-name ".local/auto-saves-list" user-emacs-directory))
+(setq auto-save-list-file-name (expand-file-name ".local/auto-saves-list" user-emacs-directory))
 
 ;; Don't allow eldoc to display more than one line in the echo area
-(setq eldoc-echo-area-use-multiline-p nil)
+(setopt eldoc-echo-area-use-multiline-p nil)
 
 (pixel-scroll-mode 1)
 
@@ -148,23 +144,36 @@
   (recentf-load-list)
   :init
   (recentf-mode 1)
-  (setq recentf-save-file (expand-file-name ".local/recentf" user-emacs-directory)))
+  (setopt recentf-save-file (expand-file-name ".local/recentf" user-emacs-directory)))
 
 ;; Keep some files in ~/.emacs.d/.local to avoid cluttering the configuration root directory.
-(setq url-configuration-directory (expand-file-name ".local/uri/" user-emacs-directory)
-      image-dired-dir (expand-file-name ".local/image-dired-thumbnails/" user-emacs-directory)
-      bookmark-default-file (expand-file-name ".local/bookmarks" user-emacs-directory)
-      tramp-auto-save-directory (expand-file-name ".local/tramp-autosaves/" user-emacs-directory))
+(setopt url-configuration-directory (expand-file-name ".local/uri/" user-emacs-directory)
+        bookmark-default-file (expand-file-name ".local/bookmarks" user-emacs-directory)
+        tramp-auto-save-directory (expand-file-name ".local/tramp-autosaves/" user-emacs-directory))
+(setq image-dired-dir (expand-file-name ".local/image-dired-thumbnails/" user-emacs-directory))
 
 ;; Setup authentication file.
-(setq auth-sources '("~/.authinfo.gpg"
-                     "~/.netrc"))
+(setopt auth-sources '("~/.authinfo.gpg"
+                       "~/.netrc"))
+
+;; File encryption
+(use-package age
+  :ensure t
+  :demand t
+  :config
+  (age-file-enable)
+  (setopt age-default-identity  "/Users/iensu/.ssh/id_ed25519"
+          age-default-recipient "/Users/iensu/.ssh/id_ed25519.pub"
+          age-pinentry-mode 'ask
+          age-debug t
+        ; age doesn't work with pinentry, so using rage instead
+          age-program (executable-find "rage")))
 
 ;; Auto scroll through output in compilation buffers.
-(setq compilation-scroll-output t)
+(setopt compilation-scroll-output t)
 
 ;; Save bookmarks when changed
-(setq bookmark-save-flag 1)
+(setopt bookmark-save-flag 1)
 
 
 ;;;; Editor default settings
@@ -173,22 +182,22 @@
 ;; expectations.
 
 ;; Use spaces instead of tabs.
-(setq-default indent-tabs-mode nil
-              tab-width 2)
+(setopt indent-tabs-mode nil
+        tab-width 2)
 
-(setq ns-right-command-modifier 'super)
+(setopt ns-right-command-modifier 'super)
 
 ;; Read-only buffers are visited in `view-mode'.
-(setq view-read-only t)
+(setopt view-read-only t)
 
-(setq-default require-final-newline t) ; Files should always have a final newline.
+(setopt require-final-newline t) ; Files should always have a final newline.
 
-(setq-default sentence-end-double-space nil) ; Sentence end does not require two spaces.
+(setopt sentence-end-double-space nil) ; Sentence end does not require two spaces.
 
 ;; Fix buffer scrolling behavior.
-(setq-default scroll-conservatively 0
-              scroll-step 4
-              next-screen-context-lines 20)
+(setopt scroll-conservatively 0
+        scroll-step 4
+        next-screen-context-lines 20)
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace) ; Delete trailing whitespace on save.
 
@@ -242,8 +251,8 @@
   (eldoc-mode 1) ; display documentation in minibuffer
   (display-line-numbers-mode 1) ;; display line numbers
   (show-paren-mode 1) ; highlight matching parentheses
-  (setq-default show-paren-when-point-in-periphery t
-                show-paren-when-point-inside-paren t)
+  (setopt show-paren-when-point-in-periphery t
+          show-paren-when-point-inside-paren t)
   (hs-minor-mode 1) ; hide-show code and comment blocks
   (outline-minor-mode 1)) ; Navigate by outlines
 
@@ -282,7 +291,7 @@
                         (xterm-color-filter string) string)))
   (advice-add 'compilation-filter :around #'iensu--advice-compilation-filter)
   (add-hook 'compilation-mode-hook
-            (lambda () (setq compilation-environment '("TERM=xterm-256color")))))
+            (lambda () (setopt compilation-environment '("TERM=xterm-256color")))))
 
 ;; Install vterm for better terminal support
 (use-package vterm
@@ -346,10 +355,10 @@
 ;; document-like editing.
 (use-package visual-fill-column
   :config
-  (setq-default visual-fill-column-center-text t)
+  (setopt visual-fill-column-center-text t)
   (let ((column-width 130))
-    (setq-default visual-fill-column-width column-width)
-    (setq fill-column column-width)))
+    (setopt visual-fill-column-width column-width)
+    (setopt fill-column column-width)))
 
 (defun iensu/text-editing-mode-hook ()
   "Enables text editing tools such as spell checking and thesaurus support"
@@ -403,9 +412,9 @@
    ("M-s e"    . consult-isearch)
    ("M-s l"    . consult-line))
   :config
-  (setq consult-narrow-key "<")
+  (setopt consult-narrow-key "<")
   ;; Disable previews
-  (setq consult-preview-key nil))
+  (setopt consult-preview-key nil))
 
 (use-package embark
   :bind
@@ -426,11 +435,11 @@
 ;; Password entry in minibuffer
 (use-package pinentry
   :init
-  (setq epa-pinentry-mode 'loopback)
+  (setopt epa-pinentry-mode 'loopback)
   (pinentry-start))
 
-(setq-default dired-listing-switches "-alGh --group-directories-first"
-              dired-dwim-target t)
+(setopt dired-listing-switches "-alGh --group-directories-first"
+        dired-dwim-target t)
 (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
   (setq insert-directory-program "/usr/local/bin/gls"))
 
@@ -439,17 +448,17 @@
 ;; This section adds packages which enables quick navigation and search.
 
 ;; Mark-ring tweaks
-(setq mark-ring-max 6
-      global-mark-ring-max 8)
+(setopt mark-ring-max 6
+        global-mark-ring-max 8)
 ;; Simplify jumping between local marks (C-u C-<space>, C-<space> * n)
-(setq-default set-mark-command-repeat-pop t)
+(setopt set-mark-command-repeat-pop t)
 
 (use-package deadgrep)
 
 (use-package wgrep
   :load-path (lambda () (expand-file-name "packages/wgrep" user-emacs-directory))
   :config
-  (setq wgrep-auto-save-buffer t)
+  (setopt wgrep-auto-save-buffer t)
   (require 'wgrep-deadgrep))
 
 ;; Snippet expansion for less repetitive text editing
@@ -457,11 +466,11 @@
   :delight yas-minor-mode
   :init
   (yas-global-mode 1)
-  (setq yas-snippet-dirs (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" user-emacs-directory)))
+  (setopt yas-snippet-dirs (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" user-emacs-directory)))
   :config
   (add-hook 'snippet-mode-hook (lambda ()
-                                 (setq mode-require-final-newline nil
-                                       require-final-newline nil))))
+                                 (setopt mode-require-final-newline nil
+                                         require-final-newline nil))))
 
 ;; When all else fails
 (use-package dumb-jump
@@ -538,7 +547,7 @@
 ;; `windmove' enables navigation using `<shift>-<direction>'. These bindings conflict `org-mode' so
 ;; we make `windmove' take precedence.
 (windmove-default-keybindings)
-(setq org-replace-disputed-keys t) ; This line needs to occur before `org-mode' is loaded.
+(setopt org-replace-disputed-keys t) ; This line needs to occur before `org-mode' is loaded.
 
 ;;;;; Global hydra
 
@@ -579,9 +588,9 @@
 ;; Set command to act as `meta' (`M-') and disable the `option' key since that button is needed to
 ;; type various characters on a Swedish keyboard. Also make the right `option' key act as `hyper'
 ;; (`H-') to give us more keybindings to work with.
-(setq mac-command-modifier 'meta
-      mac-option-modifier 'none
-      mac-right-option-modifier 'hyper)
+(setopt mac-command-modifier 'meta
+        mac-option-modifier 'none
+        mac-right-option-modifier 'hyper)
 
 ;; An unfortunate workaround required when switching to an external keyboard.
 (defun iensu/switch-left-and-right-option-keys ()
@@ -592,13 +601,13 @@
   (interactive)
   (let ((current-left  mac-option-modifier)
         (current-right mac-right-option-modifier))
-    (setq mac-option-modifier       current-right
-          mac-right-option-modifier current-left)))
+    (setopt mac-option-modifier       current-right
+            mac-right-option-modifier current-left)))
 
 
 ;;;; Make Emacs prettier
 
-(setq-default cursor-type 'box)
+(setopt cursor-type 'box)
 (global-prettify-symbols-mode 1)
 (global-font-lock-mode 1)
 
@@ -648,9 +657,9 @@
                       :background nil
                       :foreground "#969696")
 
-  (setq tab-bar-close-button-show nil
-        tab-bar-new-button-show nil
-        tab-bar-separator "  ")
+  (setopt tab-bar-close-button-show nil
+          tab-bar-new-button-show nil)
+  (setq tab-bar-separator "  ")
   (require 'desktop)
   (add-to-list 'desktop-path "~/.emacs.d/.local/"))
 
@@ -658,7 +667,7 @@
 ;;;; Version control
 
 ;; Make `magit' and other version control tools follow symlinks.
-(setq vc-follow-symlinks t)
+(setopt vc-follow-symlinks t)
 
 ;; Use `magit' for a great `git' experience.
 (use-package magit
@@ -667,9 +676,9 @@
   (magit-bury-buffer-function 'quit-window)
   :config
   (when (executable-find "~/.nix-profile/bin/git") ; Speeds up git operations on macOS
-    (setq magit-git-executable "~/.nix-profile/bin/git"))
-  (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
-  (setq magit-refresh-status-buffer nil))
+    (setopt magit-git-executable "~/.nix-profile/bin/git"))
+  (setopt magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+  (setopt magit-refresh-status-buffer nil))
 
 ;; `smerge-mode' is a merge conflict resolution tool which is great but unfortunately has awful
 ;; default keybindings. Here I define a hydra to make `smerge' easier to work with.
@@ -730,8 +739,8 @@
     (("s" iensu/project-ripgrep "search")
      ("r" project-query-replace-regexp "query replace"))))
   :config
-  (setq project-list-file (expand-file-name "projects"
-                                            (concat user-emacs-directory ".local/")))
+  (setopt project-list-file (expand-file-name "projects"
+                                              (concat user-emacs-directory ".local/")))
 
   ;; Handle projects which are not version controlled
   (defun iensu--locate-non-vc-project (dir)
@@ -757,7 +766,7 @@ Falls back to looking for .projectile for compatibility reasons."
 (use-package treemacs-magit :after treemacs magit)
 
 ;; Force all ediff windows to be in the same frame
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(setopt ediff-window-setup-function 'ediff-setup-windows-plain)
 
 
 ;;;; IDE features
@@ -808,7 +817,7 @@ Falls back to looking for .projectile for compatibility reasons."
 (use-package vertico
   :init
   (vertico-mode)
-  (setq vertico-cycle t))
+  (setopt vertico-cycle t))
 
 (use-package savehist
   :init
@@ -816,9 +825,9 @@ Falls back to looking for .projectile for compatibility reasons."
 
 (use-package orderless
   :init
-  (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
+  (setopt completion-styles '(orderless basic)
+          completion-category-overrides '((file (styles partial-completion))))
+  (setq completion-category-defaults nil))
 
 ;; https://github.com/minad/vertico#configuration
 (use-package emacs
@@ -832,14 +841,14 @@ Falls back to looking for .projectile for compatibility reasons."
           (cdr args)))
   (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
-  (setq minibuffer-prompt-properties
+  (setopt minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
-  (setq read-extended-command-predicate #'command-completion-default-include-p)
+  (setopt read-extended-command-predicate #'command-completion-default-include-p)
 
   ;; Enable recursive minibuffers
-  (setq enable-recursive-minibuffers t))
+  (setopt enable-recursive-minibuffers t))
 
 
 (add-hook 'prog-mode-hook (lambda ()
@@ -879,7 +888,7 @@ Falls back to looking for .projectile for compatibility reasons."
     "Misc"
     (("w" eglot-reconnect "Reconnect to LSP server"))))
   :config
-  (setq eglot-confirm-server-initiated-edits nil))
+  (setopt eglot-confirm-server-initiated-edits nil))
 
 (use-package lsp-mode
   :bind (:map lsp-mode-map
@@ -930,14 +939,14 @@ Falls back to looking for .projectile for compatibility reasons."
     (or (member mode '())
         (string-match "^\\*HTTP Response\\*" buffer-name))))
 
-(setq display-buffer-alist
-      '((iensu--should-display-to-right
-         (display-buffer-reuse-window
-          display-buffer-reuse-mode-window
-          display-buffer-in-side-window)
-         (side . right)
-         (window-width . 70)
-         (quit-restore ('window 'window nil nil)))))
+(setopt display-buffer-alist
+        '((iensu--should-display-to-right
+           (display-buffer-reuse-window
+            display-buffer-reuse-mode-window
+            display-buffer-in-side-window)
+           (side . right)
+           (window-width . 70)
+           (quit-restore ('window 'window nil nil)))))
 
 (defun iensu/promote-side-window ()
   "Promotes a side window to a main window so it can be manipulated more easily."
@@ -951,7 +960,7 @@ Falls back to looking for .projectile for compatibility reasons."
 (use-package denote
   :vc (denote :url "https://github.com/protesilaos/denote")
   :config
-  (setq denote-directory iensu-denote-dir)
+  (setopt denote-directory iensu-denote-dir)
   (require 'denote-org-dblock)
   (add-to-list 'denote-file-types
                '(org-gpg :extension ".org.gpg"
@@ -999,3 +1008,4 @@ Falls back to looking for .projectile for compatibility reasons."
 (let ((feature-conf (expand-file-name "local-feature-settings.el" user-emacs-directory)))
   (when (file-exists-p feature-conf)
     (load-file feature-conf)))
+(put 'downcase-region 'disabled nil)

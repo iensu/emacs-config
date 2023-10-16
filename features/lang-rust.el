@@ -5,9 +5,14 @@
   :hook
   (rust-mode . lsp-deferred)
   :config
-  (setq rust-format-on-save t)
-  (setq lsp-rust-clippy-preference "on")
-  (setq lsp-rust-analyzer-server-display-inlay-hints t))
+  (setopt rust-format-on-save t)
+  (setopt lsp-rust-clippy-preference "on")
+  (setopt lsp-rust-analyzer-lens-enable t)
+  (setopt lsp-rust-analyzer-closing-brace-hints t)
+  (setopt lsp-rust-analyzer-display-chaining-hints t)
+  (setopt lsp-rust-analyzer-display-reborrow-hints "always")
+  (setopt lsp-rust-analyzer-lens-references-method-enable t)
+  (setopt lsp-rust-analyzer-display-closure-return-type-hints t))
 
 (defvar iensu-rust-check-project-clippy-params '()
   "Params to send to the clippy command.")

@@ -12,38 +12,38 @@
 (defvar iensu--erc-nickname nil "ERC nickname")
 (defvar iensu--erc-password nil "ERC password")
 
-(setq erc-auto-query 'bury
-      erc-join-buffer 'bury
-      erc-interpret-mirc-color t
-      erc-rename-buffers t
-      erc-lurker-hide-list '("JOIN" "PART" "QUIT")
-      erc-track-exclude-types '("JOIN" "NICK" "QUIT" "MODE")
-      erc-fill-column 80
-      erc-fill-function 'erc-fill-static
-      erc-fill-static-center 20)
+(setopt erc-auto-query 'bury
+        erc-join-buffer 'bury
+        erc-interpret-mirc-color t
+        erc-rename-buffers t
+        erc-lurker-hide-list '("JOIN" "PART" "QUIT")
+        erc-track-exclude-types '("JOIN" "NICK" "QUIT" "MODE")
+        erc-fill-column 80
+        erc-fill-function 'erc-fill-static
+        erc-fill-static-center 20)
 
 (use-package erc-hl-nicks :after erc)
 
-(setq erc-modules '(autoaway
-                    autojoin
-                    button
-                    completion
-                    fill
-                    irccontrols
-                    keep-place
-                    list
-                    match
-                    menu
-                    move-to-prompt
-                    netsplit
-                    networks
-                    noncommands
-                    readonly
-                    ring
-                    scrolltobottom
-                    stamp
-                    track
-                    hl-nicks))
+(setopt erc-modules '(autoaway
+                      autojoin
+                      button
+                      completion
+                      fill
+                      irccontrols
+                      keep-place
+                      list
+                      match
+                      menu
+                      move-to-prompt
+                      netsplit
+                      networks
+                      noncommands
+                      readonly
+                      ring
+                      scrolltobottom
+                      stamp
+                      track
+                      hl-nicks))
 (erc-update-modules)
 
 (defun iensu/erc-connect ()

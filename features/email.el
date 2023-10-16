@@ -8,34 +8,34 @@
   :init
   (require 'mu4e)
   :config
-  (setq mu4e-mu-binary (executable-find "mu"))
-  (setq mail-user-agent 'mu4e-user-agent)
+  (setopt mu4e-mu-binary (executable-find "mu"))
+  (setopt mail-user-agent 'mu4e-user-agent)
   (setq mu4e-maildir iensu-email-directory)
-  (setq mu4e-confirm-quit nil)
-  (setq mu4e-context-policy 'pick-first)
-  (setq mu4e-headers-date-format "%Y-%m-%d")
+  (setopt mu4e-confirm-quit nil)
+  (setopt mu4e-context-policy 'pick-first)
+  (setopt mu4e-headers-date-format "%Y-%m-%d")
 
   ;; Configuration for viewing emails
   (setq mu4e-view-show-images t)
   (setq mu4e-show-images t)
   (setq mu4e-view-use-gnus t)
   (setq mu4e-view-image-max-width 800)
-  (setq mu4e-compose-format-flowed nil) ;; do not add newlines when sending email
+  (setopt mu4e-compose-format-flowed nil) ;; do not add newlines when sending email
   (setq mu4e-view-show-addresses t)
-  (setq mu4e-headers-fields '((:human-date . 12)
-                              (:flags . 6)
-                              (:tags . 16)
-                              (:from . 22)
-                              (:subject)))
+  (setopt mu4e-headers-fields '((:human-date . 12)
+                                (:flags . 6)
+                                (:tags . 16)
+                                (:from . 22)
+                                (:subject)))
 
   ;; Configuration for composing/sending emails
-  (setq user-full-name "Jens Östlund")
-  (setq user-mail-address "jostlund@gmail.com")
-  (setq message-send-mail-function 'smtpmail-send-it)
-  (setq smtpmail-debug-info t)
-  (setq mu4e-sent-messages-behavior 'delete)
-  (setq message-kill-buffer-on-exit t)
-  (setq mu4e-compose-context-policy 'ask-if-none)
+  (setopt user-full-name "Jens Östlund")
+  (setopt user-mail-address "jostlund@gmail.com")
+  (setopt message-send-mail-function 'smtpmail-send-it)
+  (setopt smtpmail-debug-info t)
+  (setopt mu4e-sent-messages-behavior 'delete)
+  (setopt message-kill-buffer-on-exit t)
+  (setopt mu4e-compose-context-policy 'ask-if-none)
 
   (add-hook 'mu4e-compose-mode-hook (lambda ()
                                       (auto-fill-mode -1)

@@ -7,10 +7,10 @@
   :config
   (setq org-gcal-down-days 30
         org-gcal-up-days 30
-        org-gcal-remove-api-cancelled-events t
+        org-gcal-remove-api-cancelled-events t)
 
-        ;; https://github.com/kidd/org-gcal.el/issues/107
-        org-id-locations-file (expand-file-name ".local/.org-id-locations" user-emacs-directory))
+  ;; https://github.com/kidd/org-gcal.el/issues/107
+  (setopt org-id-locations-file (expand-file-name ".local/.org-id-locations" user-emacs-directory))
 
   (let ((work-calendar (expand-file-name "calendars/work.org" org-directory)))
     (setq org-gcal-file-alist `(("jens.ostlund@futurice.com" . ,work-calendar)))
