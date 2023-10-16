@@ -910,7 +910,21 @@ Falls back to looking for .projectile for compatibility reasons."
     "Misc"
     (("w" lsp-workspace-restart "Reconnect to LSP server")))))
 
-(use-package lsp-ui :commands lsp-ui-mode)
+(use-package lsp-ui :commands lsp-ui-mode
+  :bind
+  (:map lsp-mode-map
+        ("C-c C-ä" . lsp-ui-doc-focus-frame))
+  (:map lsp-ui-doc-frame-mode-map
+        ("q" . lsp-ui-doc-unfocus-frame))
+
+  :config
+  (setopt lsp-ui-sideline-show-hover nil
+          lsp-ui-sideline-show-symbol nil
+          lsp-ui-sideline-show-diagnostics nil
+          lsp-ui-doc-show-with-cursor t
+          lsp-ui-doc-delay 1
+          lsp-ui-doc-max-height iensu--lsp-ui-doc-default-height
+          lsp-ui-doc-max-width 100))
 
 ;; Autoformatting
 (use-package prettier-js)
