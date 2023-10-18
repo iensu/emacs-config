@@ -296,6 +296,7 @@
 ;; Install vterm for better terminal support
 (use-package vterm
   :config
+  (setopt vterm-shell (executable-find "fish"))
   (defun iensu/project-vterm ()
     "Open a vterm terminal at the current project root."
     (interactive)
