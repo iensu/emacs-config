@@ -920,11 +920,15 @@ Falls back to looking for .projectile for compatibility reasons."
   :config
   (setopt lsp-ui-sideline-show-hover nil
           lsp-ui-sideline-show-symbol nil
-          lsp-ui-sideline-show-diagnostics nil
+          lsp-ui-sideline-show-diagnostics t
           lsp-ui-doc-show-with-cursor t
           lsp-ui-doc-delay 1
-          lsp-ui-doc-max-height iensu--lsp-ui-doc-default-height
-          lsp-ui-doc-max-width 100))
+          lsp-ui-doc-max-height 40
+          lsp-ui-doc-max-width 100)
+  (defun iensu--maybe-lsp-format-buffer()
+    (when lsp-mode
+      (lsp-format-buffer)))
+  (add-hook 'before-save-hook #'iensu--maybe-lsp-format-buffer))
 
 ;; Autoformatting
 (use-package prettier-js)
