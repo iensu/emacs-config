@@ -10,10 +10,14 @@
   :config
   (setopt mu4e-mu-binary (executable-find "mu"))
   (setopt mail-user-agent 'mu4e-user-agent)
-  (setq mu4e-maildir iensu-email-directory)
+  (setq mu4e-maildir "~/Mail")
   (setopt mu4e-confirm-quit nil)
   (setopt mu4e-context-policy 'pick-first)
   (setopt mu4e-headers-date-format "%Y-%m-%d")
+  (setopt mu4e-update-interval nil)
+  ;; isync (mbsync) tweaks
+  (setopt mu4e-change-filenames-when-moving t) ;; Works better with mbsync
+  (setopt mu4e-get-mail-command  (format "INSIDE_EMACS=%s mbsync -a" emacs-version))
 
   ;; Configuration for viewing emails
   (setq mu4e-view-show-images t)
@@ -28,12 +32,25 @@
                                 (:from . 22)
                                 (:subject)))
 
+  ;; Don't delete, just move to trash
+  (defun iensu/mu4e-move-to-trash ()
+    "Mark email at point to be moved to trash."
+    (interactive)
+    (mu4e-mark-set 'move (substring mu4e-trash-folder 0)))
+
+  (define-key mu4e-headers-mode-map (kbd "d") #'iensu/mu4e-move-to-trash)
+  (define-key mu4e-view-mode-map    (kbd "d") #'iensu/mu4e-move-to-trash)
+
   ;; Configuration for composing/sending emails
   (setopt user-full-name "Jens Östlund")
   (setopt user-mail-address "jostlund@gmail.com")
   (setopt message-send-mail-function 'smtpmail-send-it)
   (setopt smtpmail-debug-info t)
-  (setopt mu4e-sent-messages-behavior 'delete)
+  (setq mu4e-sent-messages-behavior
+        (lambda ()
+          (if (string-suffix-p "gmail.com" (message-sendmail-envelope-from))
+              'delete
+            'sent)))
   (setopt message-kill-buffer-on-exit t)
   (setopt mu4e-compose-context-policy 'ask-if-none)
 
@@ -44,20 +61,6 @@
   ;; Add email viewing modes
   (add-to-list 'mu4e-view-actions '("EWW" . iensu--mu4e-view-in-eww) t)
   (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t))
-
-(defun iensu/update-email ()
-  "Fetches email ensuring that we are \"authenticated\" and updates the mu index."
-  (interactive)
-  (when (executable-find "offlineimap")
-    (epa-decrypt-file "~/.dummy.yaml.gpg" "/dev/null")
-    (let* ((command "offlineimap -o")
-           (process (start-process-shell-command "offlineimap" "*offlineimap -o*" command)))
-      (set-process-sentinel process
-                            (lambda (proc event)
-                              (cond ((string-match-p "finished" event) (progn
-                                                                         (message "Fetched email, updating index...")
-                                                                         (kill-buffer "*offlineimap -o*")
-                                                                         (mu4e-update-index)))))))))
 
 (pretty-hydra-define+ iensu-hydra ()
   ("Email"
@@ -75,13 +78,15 @@
                       (mu4e-message-contact-field-matches msg '(:from :to :cc :bcc) email))))))
 
     (let* ((folder (or mail-folder
-                       (concat "/" (downcase account-name))))
+                       (downcase account-name)))
+           (smtp-port 465)
+           (stream-type 'ssl)
            (vars (append `((mu4e-sent-folder . ,(format "/%s/Sent" folder))
                            (mu4e-drafts-folder . ,(format "/%s/Drafts" folder))
                            (mu4e-trash-folder . ,(format "/%s/Trash" folder))
                            (smtpmail-smtp-user . ,(or smtp-user email))
-                           (smtpmail-smtp-service . 465)
-                           (smtpmail-stream-type . ssl)
+                           (smtpmail-smtp-service . ,smtp-port)
+                           (smtpmail-stream-type . ,stream-type)
                            (smtpmail-smtp-server . ,smtp-server)
                            (user-mail-address . ,email)
                            (user-full-name . ,name))

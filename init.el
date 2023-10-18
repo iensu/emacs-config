@@ -432,10 +432,14 @@
 ;; Armor exported PGP-keys
 (setq epa-armor t)
 
+;; Solving issue with Emacs 29.1 and GnuPG 2.4.1+
+(eval-after-load "epa"
+  (fset 'epg-wait-for-status 'ignore))
+
 ;; Password entry in minibuffer
 (use-package pinentry
   :init
-  (setopt epa-pinentry-mode 'loopback)
+  (setopt epa-pinentry-mode 'ask)
   (pinentry-start))
 
 (setopt dired-listing-switches "-alGh --group-directories-first"
