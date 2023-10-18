@@ -42,8 +42,6 @@
   (define-key mu4e-view-mode-map    (kbd "d") #'iensu/mu4e-move-to-trash)
 
   ;; Configuration for composing/sending emails
-  (setopt user-full-name "Jens Östlund")
-  (setopt user-mail-address "jostlund@gmail.com")
   (setopt message-send-mail-function 'smtpmail-send-it)
   (setopt smtpmail-debug-info t)
   (setq mu4e-sent-messages-behavior
