@@ -14,6 +14,12 @@
   (setopt lsp-rust-analyzer-lens-references-method-enable t)
   (setopt lsp-rust-analyzer-display-closure-return-type-hints t))
 
+(use-package flymake-clippy
+  :hook
+  (rust-mode . flymake-clippy-setup-backend)
+  :config
+  (setopt flymake-clippy-bin-args '("--" "-W" "clippy::pedantic" "-W" "clippy::nursery")))
+
 (defvar iensu-rust-check-project-clippy-params '()
   "Params to send to the clippy command.")
 
