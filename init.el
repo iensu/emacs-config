@@ -749,6 +749,11 @@
   :config
   (setopt project-list-file (expand-file-name "projects"
                                               (concat user-emacs-directory ".local/")))
+  (setopt project-switch-commands '((project-find-file "Find file")
+                                    (project-find-regexp "Find regexp")
+                                    (project-find-dir "Find directory")
+                                    (iensu/project-vterm "Vterm" ?v)
+                                    (magit-project-status "Magit")))
 
   ;; Handle projects which are not version controlled
   (defun iensu--locate-non-vc-project (dir)
