@@ -954,7 +954,8 @@ Falls back to looking for .projectile for compatibility reasons."
   :config
   (direnv-mode)
   ;; Handle .direnv as shell file
-  (add-to-list 'auto-mode-alist '("\\.envrc$" . sh-mode)))
+  (add-to-list 'auto-mode-alist '("\\.envrc\\'" . sh-mode))
+  (add-to-list 'auto-mode-alist '("\\.env\\.[a-zA-Z]+\\'" . conf-mode)))
 
 (global-auto-revert-mode 1)
 
