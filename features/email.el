@@ -95,3 +95,8 @@
         :leave-func (lambda () (setq mu4e-maildir-list nil))
         :match-func (is-account-match)
         :vars vars))))
+
+(defun iensu/fetch-emails ()
+  "Fetches emails in the background."
+  (interactive)
+  (mu4e-update-mail-and-index :run-in-background))
