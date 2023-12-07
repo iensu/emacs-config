@@ -8,10 +8,15 @@
                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("PROJ") 'regexp ":(books|music|movies|refile|links):"))
                          (org-agenda-sorting-strategy '(priority-down deadline-up))
                          (org-agenda-max-entries 20)))
-             (tags-todo "+TODO=\"PROJ\""
-                        ((org-agenda-overriding-header "Active projects")
+             (tags-todo "+@work+TODO=\"PROJ\"-recurring"
+                        ((org-agenda-overriding-header "Work projects")
                          (org-agenda-prefix-format "  ")
-                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'regexp ":recurring:"))
+                         (org-agenda-sorting-strategy '(priority-down deadline-up))
+                         (org-agenda-max-entries 10)))
+             (tags-todo "-@work+TODO=\"PROJ\"-recurring"
+                        ((org-agenda-overriding-header "Private projects")
+                         (org-agenda-prefix-format "  ")
+                         (org-agenda-sorting-strategy '(priority-down deadline-up))
                          (org-agenda-max-entries 10)))
              (agenda ""
                      ((org-agenda-start-day "0d")
