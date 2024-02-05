@@ -49,8 +49,15 @@
 
   (setopt org-src-fontify-natively t)
   (setopt org-fontify-quote-and-verse-blocks t)
-  (setopt org-fontify-done-headline t)
+  (setopt org-fontify-done-headline nil)
+  (setopt org-fontify-todo-headline nil)
   (setopt org-fontify-whole-heading-line t)
+
+  (setopt org-goto-interface 'outline-path-completion)
+  (setopt org-outline-path-complete-in-steps nil)
+  (setopt org-goto-max-level 3)
+
+  (setopt org-insert-heading-respect-content t)
 
   (setopt org-hide-emphasis-markers t)
   (setopt org-ellipsis " ▾")
