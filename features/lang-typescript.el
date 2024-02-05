@@ -16,6 +16,16 @@
   (interactive)
   (compile "tsc --pretty false"))
 
+(defun iensu/nextjs-compile ()
+  (interactive)
+  (let ((default-directory (expand-file-name (locate-dominating-file "." ".git"))))
+    (compile "next build")))
+
+(defun iensu/nextjs-lint ()
+  (interactive)
+  (let ((default-directory (expand-file-name (locate-dominating-file "." ".git"))))
+    (compile "next lint")))
+
 (define-key typescript-ts-mode-map (kbd "C-c C-c") #'iensu/typescript-compile)
 (define-key tsx-ts-mode-map (kbd "C-c C-c") #'iensu/typescript-compile)
 
