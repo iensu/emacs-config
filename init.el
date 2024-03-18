@@ -955,6 +955,10 @@ Falls back to looking for .projectile for compatibility reasons."
   :config
   (setq outline-regexp "[#]+"))
 
+(use-package hurl-mode
+  :vc (hurl-mode :url "https://github.com/JasZhe/hurl-mode")
+  :mode (("\\.hurl$" . hurl-mode)))
+
 (use-package direnv
   :config
   (direnv-mode)
