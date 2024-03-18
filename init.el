@@ -633,10 +633,13 @@
 
 (defvar iensu--font-ring nil)
 
-(let ((fonts '("Victor Mono-12"
-               "Victor Mono-14"
-               "Victor Mono-16"
-               "Victor Mono-18")))
+(let ((fonts (cl-loop with base-font   = "Monaspace Xenon"
+                      with base-size   = 14
+                      with base-offset = 2
+                      for i from 0 to 4
+                      collect (format "%s-%d" base-font
+                                      (+ base-size (* base-offset
+                                                      i))))))
   (setq iensu--font-ring (make-ring (length fonts)))
   (dolist (font fonts) (ring-insert iensu--font-ring font)))
 
