@@ -962,6 +962,8 @@ Falls back to looking for .projectile for compatibility reasons."
   (add-to-list 'auto-mode-alist '("\\.envrc\\'" . sh-mode))
   (add-to-list 'auto-mode-alist '("\\.env\\.[a-zA-Z]+\\'" . conf-mode)))
 
+(add-to-list 'auto-mode-alist '("\\.env$" . conf-mode))
+
 (global-auto-revert-mode 1)
 
 
