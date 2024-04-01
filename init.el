@@ -756,7 +756,7 @@
                                     (project-find-regexp "Find regexp")
                                     (project-find-dir "Find directory")
                                     (iensu/project-vterm "Vterm" ?v)
-                                    (magit-project-status "Magit")))
+                                    (magit-project-status "Magit" ?m)))
 
   ;; Handle projects which are not version controlled
   (defun iensu--locate-non-vc-project (dir)
