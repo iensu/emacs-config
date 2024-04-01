@@ -1,5 +1,6 @@
 (use-package sql-mode
   :mode "\\.psql$"
+  :ensure nil
   :config
   (add-hook 'sql-mode-hook
             (lambda ()
