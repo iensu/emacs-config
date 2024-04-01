@@ -1002,7 +1002,7 @@ Falls back to looking for .projectile for compatibility reasons."
   :vc (denote :url "https://github.com/protesilaos/denote")
   :config
   (setopt denote-directory iensu-denote-dir)
-  (require 'denote-org-dblock)
+  (require 'denote-org-extras)
   (add-to-list 'denote-file-types
                '(org-gpg :extension ".org.gpg"
                          :date-function denote-date-org-timestamp
