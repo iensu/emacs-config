@@ -461,7 +461,11 @@
 ;; Simplify jumping between local marks (C-u C-<space>, C-<space> * n)
 (setopt set-mark-command-repeat-pop t)
 
-(use-package deadgrep)
+(use-package deadgrep
+  :config
+  (add-to-list 'deadgrep-extra-arguments "--follow") ; follow symlinks
+  (add-to-list 'deadgrep-extra-arguments "--hidden") ; search hidden files
+  )
 
 (use-package wgrep
   :load-path (lambda () (expand-file-name "packages/wgrep" user-emacs-directory))
@@ -634,7 +638,7 @@
 (defvar iensu--font-ring nil)
 
 (let ((fonts (cl-loop with base-font   = "Monaspace Xenon"
-                      with base-size   = 14
+                      with base-size   = 13
                       with base-offset = 2
                       for i from 0 to 4
                       collect (format "%s-%d" base-font
