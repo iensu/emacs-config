@@ -67,7 +67,7 @@
     ("e c" mu4e-compose-new    "write email")
     ("e s" mu4e-headers-search "search email"))))
 
-(defun iensu/mu4e-context (account-name name email smtp-server &optional mail-folder smtp-user vars)
+(defun iensu/mu4e-context (account-name &rest args)
   "Simplify creating MU4E contexts."
   (cl-flet ((is-account-match ()
               (lexical-let ((email email))
@@ -75,20 +75,21 @@
                     (when msg
                       (mu4e-message-contact-field-matches msg '(:from :to :cc :bcc) email))))))
 
-    (let* ((folder (or mail-folder
+    (let* ((folder (or (plist-get args :mail-folder)
                        (downcase account-name)))
            (smtp-port 465)
            (stream-type 'ssl)
-           (vars (append `((mu4e-sent-folder . ,(format "/%s/Sent" folder))
-                           (mu4e-drafts-folder . ,(format "/%s/Drafts" folder))
-                           (mu4e-trash-folder . ,(format "/%s/Trash" folder))
-                           (smtpmail-smtp-user . ,(or smtp-user email))
-                           (smtpmail-smtp-service . ,smtp-port)
-                           (smtpmail-stream-type . ,stream-type)
-                           (smtpmail-smtp-server . ,smtp-server)
-                           (user-mail-address . ,email)
-                           (user-full-name . ,name))
-                         vars)))
+           (email (plist-get args :address))
+           (vars `((mu4e-sent-folder . ,(format "/%s/Sent" folder))
+                   (mu4e-drafts-folder . ,(format "/%s/Drafts" folder))
+                   (mu4e-trash-folder . ,(format "/%s/Trash" folder))
+                   (smtpmail-smtp-user . ,(or (plist-get args :smtp-user) email))
+                   (smtpmail-smtp-service . ,smtp-port)
+                   (smtpmail-stream-type . ,stream-type)
+                   (smtpmail-smtp-server . ,(plist-get args :smtp-server))
+                   (user-mail-address . ,email)
+                   (user-full-name . ,(plist-get args :display-name))
+                   (message-signature . ,(plist-get args :signature)))))
 
       (make-mu4e-context
         :name account-name
