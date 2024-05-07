@@ -1042,6 +1042,10 @@ Falls back to looking for .projectile for compatibility reasons."
      (concat denote-directory "/work")))
   (defalias 'dw #'iensu/denote-work))
 
+;; http://yummymelon.com/devnull/mathing-in-emacs-with-casual.html
+(use-package casual
+  :bind (:map calc-mode-map (("C-o" . casual-main-menu))))
+
 
 ;;;; Load features
 
