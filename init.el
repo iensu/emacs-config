@@ -560,6 +560,10 @@
 ;; we make `windmove' take precedence.
 (windmove-default-keybindings)
 (setopt org-replace-disputed-keys t) ; This line needs to occur before `org-mode' is loaded.
+(global-set-key (kbd "s-a") 'windmove-swap-states-left)
+(global-set-key (kbd "s-w") 'windmove-swap-states-up)
+(global-set-key (kbd "s-s") 'windmove-swap-states-down)
+(global-set-key (kbd "s-d") 'windmove-swap-states-right)
 
 ;;;;; Global hydra
 
