@@ -62,7 +62,7 @@
 
 (pretty-hydra-define+ iensu-hydra ()
   ("Email"
-   (("e u" iensu/update-email  "update")
+   (("e u" iensu/fetch-emails  "update")
     ("e e" mu4e                "open email")
     ("e c" mu4e-compose-new    "write email")
     ("e s" mu4e-headers-search "search email"))))
@@ -100,4 +100,14 @@
 (defun iensu/fetch-emails ()
   "Fetches emails in the background."
   (interactive)
-  (mu4e-update-mail-and-index :run-in-background))
+  (mu4e-update-mail-and-index :run-in-background)
+  (set-process-sentinel
+   (get-process mu4e--update-name) ;; Name of mail update process
+   (lambda (proc _msg)
+     (when (eq (process-status proc) 'exit)
+       (let* ((command "mu find 'flag:new' | wc -l")
+              (result (string-trim (shell-command-to-string command)))
+              (new-email-count (string-to-number result)))
+         (message (cond ((= 0 new-email-count) "No new emails...")
+                        ((= 1 new-email-count) "1 new email!")
+                        (t (format "%s new emails!" new-email-count)))))))))
