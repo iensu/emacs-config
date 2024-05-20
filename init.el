@@ -30,8 +30,14 @@
 ;; version control, for instance credentials and system specific feature flags.
 
 ;; System local variables which can be set in local-settings.el
-(defvar iensu-org-dir nil
+(defvar iensu-org-dir "~/org"
   "Directory containing Org files.")
+
+(defvar iensu-denote-dir "~/notes"
+  "Directory containing Denote notes.")
+
+(defvar iensu-email-directory "~/Mail"
+  "Path to email directory.")
 
 (defvar iensu-org-refile-targets nil
   "Org files which can be used as refiling targets.")
@@ -39,10 +45,24 @@
 (defvar iensu-org-capture-templates nil
   "Capture templates to be used by Org mode.")
 
-(defvar iensu-email-directory "~/Mail"
-  "Path to email directory.")
-
-(defvar iensu-enabled-features-alist nil
+(defvar iensu-enabled-features-alist '("elpher"
+                                       "pdf"
+                                       "web-dev"
+                                       "lang-bash"
+                                       "lang-docker"
+                                       "lang-fish"
+                                       "lang-go"
+                                       "lang-graphviz"
+                                       "lang-javascript"
+                                       "lang-json"
+                                       "lang-markdown"
+                                       "lang-nix"
+                                       "lang-terraform"
+                                       "lang-toml"
+                                       "lang-typescript"
+                                       "lang-rust"
+                                       "lang-wasm"
+                                       "lang-yaml")
   "Locally enabled features. Available features are stored in the `features/' directory.")
 
 ;; Load settings
@@ -1061,4 +1081,21 @@ Falls back to looking for .projectile for compatibility reasons."
 (let ((feature-conf (expand-file-name "local-feature-settings.el" user-emacs-directory)))
   (when (file-exists-p feature-conf)
     (load-file feature-conf)))
+
+
+;;;; Stuff set by Emacs
 (put 'downcase-region 'disabled nil)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-vc-selected-packages
+   '((vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package"))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
