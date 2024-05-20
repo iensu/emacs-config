@@ -659,28 +659,6 @@
   :config
   (load-theme 'modus-vivendi-tinted t))
 
-(defvar iensu--font-ring nil)
-
-(let ((fonts (cl-loop with base-font   = "Monaspace Xenon"
-                      with base-size   = 13
-                      with base-offset = 2
-                      for i from 0 to 4
-                      collect (format "%s-%d" base-font
-                                      (+ base-size (* base-offset
-                                                      i))))))
-  (setq iensu--font-ring (make-ring (length fonts)))
-  (dolist (font fonts) (ring-insert iensu--font-ring font)))
-
-(defun iensu/cycle-fonts ()
-  "Change the current font or font size."
-  (interactive)
-  (let ((font (ring-ref iensu--font-ring -1)))
-    (ring-insert iensu--font-ring font)
-    (set-frame-font font :keep-size t)
-    (message "Using font %s" font)))
-
-(iensu/cycle-fonts)
-
 ;; Pimp tab-bar-mode
 (use-package emacs
   :config
@@ -1081,6 +1059,30 @@ Falls back to looking for .projectile for compatibility reasons."
 (let ((feature-conf (expand-file-name "local-feature-settings.el" user-emacs-directory)))
   (when (file-exists-p feature-conf)
     (load-file feature-conf)))
+
+
+;;;; Setup fonts
+(defvar iensu--font-ring nil)
+
+(let ((fonts (cl-loop with base-font   = "Monaspace Xenon"
+                      with base-size   = 13
+                      with base-offset = 2
+                      for i from 0 to 4
+                      collect (format "%s-%d" base-font
+                                      (+ base-size (* base-offset
+                                                      i))))))
+  (setq iensu--font-ring (make-ring (length fonts)))
+  (dolist (font fonts) (ring-insert iensu--font-ring font)))
+
+(defun iensu/cycle-fonts ()
+  "Change the current font or font size."
+  (interactive)
+  (let ((font (ring-ref iensu--font-ring -1)))
+    (ring-insert iensu--font-ring font)
+    (set-frame-font font :keep-size t)
+    (message "Using font %s" font)))
+
+(iensu/cycle-fonts)
 
 
 ;;;; Stuff set by Emacs
