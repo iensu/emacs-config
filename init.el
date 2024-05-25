@@ -948,7 +948,7 @@ Falls back to looking for .projectile for compatibility reasons."
           lsp-ui-doc-max-height 40
           lsp-ui-doc-max-width 100)
   (defun iensu--maybe-lsp-format-buffer()
-    (when lsp-mode
+    (when (and lsp-mode (not prettier-js-mode))
       (lsp-format-buffer)))
   (add-hook 'before-save-hook #'iensu--maybe-lsp-format-buffer))
 
