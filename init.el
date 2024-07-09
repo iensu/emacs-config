@@ -39,6 +39,11 @@
 (defvar iensu-email-directory "~/Mail"
   "Path to email directory.")
 
+(defvar iensu-age-encrypted-key nil
+  "Path to encrypted key.")
+
+(defvar iensu-age-session-duration "15 minutes")
+
 (defvar iensu-org-refile-targets nil
   "Org files which can be used as refiling targets.")
 
@@ -182,12 +187,43 @@
   :demand t
   :config
   (age-file-enable)
-  (setopt age-default-identity  "/Users/iensu/.ssh/id_ed25519"
-          age-default-recipient "/Users/iensu/.ssh/id_ed25519.pub"
+  (setopt age-default-identity  "/Users/iensu/.identities/main.txt"
+          age-default-recipient "/Users/iensu/.recipients"
           age-pinentry-mode 'ask
           age-debug t
-        ; age doesn't work with pinentry, so using rage instead
-          age-program (executable-find "rage")))
+          ;; age doesn't work with pinentry, so using rage instead
+          age-program (executable-find "rage"))
+
+  (setq iensu--age-session-timer nil)
+
+  (defun iensu/age-session-start ()
+    "Starts an age session by decrypting the age key.
+
+The decrypted key will be deleted either after `iensu-age-session-duration' or when Emacs is exited."
+    (interactive)
+    (if iensu--age-session-timer
+        (message "Age session is already running!")
+      ;; rage is needed for pinentry support!
+      (if (not (executable-find "rage"))
+          (message "'rage' executable not found!")
+        (let ((decrypted-key (string-replace ".age" ".txt" iensu-age-encrypted-key)))
+          (when (file-exists-p decrypted-key)
+            (shell-command (format "rm %s" decrypted-key)))
+          (shell-command (format "rage -d %s -o %s" iensu-age-encrypted-key decrypted-key))
+          (setq iensu--age-session-timer
+                (run-at-time iensu-age-session-duration nil #'iensu/age-session-end))))))
+
+  (defun iensu/age-session-end ()
+    "Ends an age session by deleting the decrypted file and cancelling the age session timer."
+    (interactive)
+    (let ((decrypted-key (string-replace ".age" ".txt" iensu-age-encrypted-key)))
+      (when (file-exists-p decrypted-key)
+        (shell-command (format "rm %s" decrypted-key)))
+      (when iensu--age-session-timer
+        (cancel-timer iensu--age-session-timer)
+        (setq iensu--age-session-timer nil))))
+
+  (add-hook 'kill-emacs-hook #'iensu/age-session-end))
 
 ;; Auto scroll through output in compilation buffers.
 (setopt compilation-scroll-output t)
