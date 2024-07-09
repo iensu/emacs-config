@@ -452,19 +452,15 @@
 
 ;; Armor exported PGP-keys
 (setq epa-armor t)
+;; Password entry in minibuffer
+(setopt epa-pinentry-mode 'loopback)
 
 (defun iensu/fix-gpg ()
   "Solving issue with Emacs 29.1 and GnuPG 2.4.1+."
   (interactive)
   (fset 'epg-wait-for-status 'ignore))
 
-(iensu/fix-gpg)
-
-;; Password entry in minibuffer
-(use-package pinentry
-  :init
-  (setopt epa-pinentry-mode 'ask)
-  (pinentry-start))
+;; (iensu/fix-gpg)
 
 (setopt dired-listing-switches "-alGh --group-directories-first"
         dired-dwim-target t)
