@@ -9,13 +9,15 @@
          "\\.ejs$"
          "\\.njk$"))
 
+;; For HTML + CSS LSP support, install `vscode-langservers-extracted'
 (defun iensu--web-mode-hook ()
   (when (seq-contains-p '("html" "php")
                         (file-name-extension (buffer-file-name)))
 
     (prettier-js-mode 1))
   (rainbow-mode 1)
-  (emmet-mode 1))
+  (emmet-mode 1)
+  (lsp-deferred))
 
 (add-hook 'web-mode-hook #'iensu--web-mode-hook)
 
@@ -24,7 +26,8 @@
   :config
   (add-hook 'css-mode-hook (lambda ()
                              (emmet-mode 1)
-                             (prettier-js-mode 1))))
+                             (prettier-js-mode 1)
+                             (lsp-deferred))))
 
 (use-package rainbow-mode :hook (css-mode))
 
