@@ -70,7 +70,7 @@
 (defun iensu/mu4e-context (account-name &rest args)
   "Simplify creating MU4E contexts."
   (cl-flet ((is-account-match ()
-              (lexical-let ((email email))
+              (let ((email email))
                 #'(lambda (msg)
                     (when msg
                       (mu4e-message-contact-field-matches msg '(:from :to :cc :bcc) email))))))
