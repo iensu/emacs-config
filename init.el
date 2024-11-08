@@ -576,18 +576,6 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
       (profiler-reset)
       (profiler-start 'cpu+mem))))
 
-(defun iensu/duplicate-line (n)
-  "Copy the current line N times and insert it below."
-  (interactive "P")
-  (let ((cur-pos (point)))
-    (dotimes (i (prefix-numeric-value n))
-      (move-beginning-of-line nil)
-      (kill-line)
-      (yank)
-      (newline)
-      (insert (string-trim-right (car kill-ring)))
-      (goto-char cur-pos))))
-
 
 ;;;; Global key-bindings
 
@@ -623,11 +611,11 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 (pretty-hydra-define iensu-hydra
   (:color teal :quit-key "q" :title "Global commands")
   ("Utilities"
-   (("d"   iensu/duplicate-line                    "duplicate line" :exit nil)
-    ("s"   deadgrep                                "search")
-    ("t"   toggle-truncate-lines                   "truncate lines")
-    ("u"   revert-buffer                           "reload buffer")
-    ("D"   iensu/cycle-ispell-dictionary           "change dictionary")
+   (("d"   duplicate-dwim                                        "duplicate DWIM" :exit nil)
+    ("s"   deadgrep                                              "search")
+    ("t"   toggle-truncate-lines                                 "truncate lines")
+    ("u"   revert-buffer                                         "reload buffer")
+    ("D"   iensu/cycle-ispell-dictionary                         "change dictionary")
     ("+"   (lambda () (interactive) (enlarge-window-horizontally 10)) "enlarge horizontally" :exit nil)
     ("?"   (lambda () (interactive) (enlarge-window 5))               "enlarge vertically" :exit nil)
     ("-"   (lambda () (interactive) (shrink-window-horizontally 10))  "shrink horizontally" :exit nil)
