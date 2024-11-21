@@ -624,8 +624,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
    (("l"   list-bookmarks                  "list bookmarks")
     ("b"   bookmark-set                    "set bookmark"))
    "Misc"
-   (("å"   iensu/treemacs                  "open treemacs view")
-    ("P"   iensu/project-todo-list         "project todo list")
+   (("P"   iensu/project-todo-list         "project todo list")
     ("p"   iensu/open-project-org-file     "open project notes file")
     ("ä"   iensu/promote-side-window       "promote side window"))
    "Hide/show"
@@ -795,17 +794,6 @@ Falls back to looking for .projectile for compatibility reasons."
   (cl-defmethod project-root ((project (head non-vc)))
     "Handle `non-vc' projects, i.e. projects which are not version controlled."
     (cdr project)))
-
-(use-package treemacs
-  :init
-  (defun iensu/treemacs ()
-    "Open Treemacs and query for the active workspace."
-    (interactive)
-    (unless (treemacs-get-local-window)
-      (treemacs))
-    (treemacs-switch-workspace nil)))
-
-(use-package treemacs-magit :after treemacs magit)
 
 ;; Force all ediff windows to be in the same frame
 (setopt ediff-window-setup-function 'ediff-setup-windows-plain)
