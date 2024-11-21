@@ -507,6 +507,22 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;;;; Navigation
 ;; This section adds packages which enables quick navigation and search.
 
+(use-package dired-sidebar
+  :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
+  :ensure t
+  :commands (dired-sidebar-toggle-sidebar)
+  :init
+  (add-hook 'dired-sidebar-mode-hook
+            (lambda ()
+              (unless (file-remote-p default-directory)
+                (auto-revert-mode))))
+  :config
+  (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
+  (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+  (setopt dired-sidebar-theme 'none)
+  (setopt dired-sidebar-use-term-integration t)
+  (setopt dired-sidebar-use-custom-font t))
+
 ;; Mark-ring tweaks
 (setopt mark-ring-max 6
         global-mark-ring-max 8)
