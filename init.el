@@ -431,6 +431,8 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 ;;;; Utility packages
 
+(use-package rfc-mode)
+
 (use-package marginalia
   :init
   (marginalia-mode)
@@ -822,7 +824,7 @@ Falls back to looking for .projectile for compatibility reasons."
 
 ;;;;; Autocompletion and intellisense
 
- ;; Corfu for completions
+;; Corfu for completions
 (use-package corfu
   :custom
   (corfu-cycle t)
@@ -836,7 +838,10 @@ Falls back to looking for .projectile for compatibility reasons."
   :init
   (global-corfu-mode 1)
   (corfu-echo-mode 1)
-  (corfu-history-mode 1))
+  (corfu-history-mode 1)
+  :config
+  (add-hook 'emacs-lisp-mode-hook (lambda ()
+                                    (setopt corfu-auto nil))))
 
 (use-package cape
   :bind (("H-c p" . completion-at-point)
@@ -896,10 +901,6 @@ Falls back to looking for .projectile for compatibility reasons."
   ;; Enable recursive minibuffers
   (setopt enable-recursive-minibuffers t))
 
-
-(add-hook 'prog-mode-hook (lambda ()
-                            (flymake-mode 1)))
-(use-package flymake-eslint)
 
 (pretty-hydra-define prog-mode-hydra
   (:color teal :quit-key "q" :title "Programming")

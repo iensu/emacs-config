@@ -4,6 +4,7 @@
               ("C-c C-t" . rust-test))
   :hook
   (rust-mode . lsp-deferred)
+  (rust-mode . flymake-mode)
   :config
   (setopt rust-format-on-save t)
   (setopt lsp-rust-clippy-preference "on")
