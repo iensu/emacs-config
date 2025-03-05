@@ -5,6 +5,11 @@
       (let ((fname (buffer-file-name)))
         (when (file-exists-p fname)
           (shell-command (format "terraform fmt %s" fname))
+          (revert-buffer nil t))))
+    (when (executable-find "tofu")
+      (let ((fname (buffer-file-name)))
+        (when (file-exists-p fname)
+          (shell-command (format "tofu fmt %s" fname))
           (revert-buffer nil t)))))
 
   (add-hook 'terraform-mode-hook
