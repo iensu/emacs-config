@@ -844,7 +844,8 @@ Falls back to looking for .projectile for compatibility reasons."
                                     (setopt corfu-auto nil))))
 
 (use-package cape
-  :bind (("H-c p" . completion-at-point)
+  :bind (("C-<tab>" . completion-at-point)
+         ("H-c p" . completion-at-point)
          ("H-c t" . complete-tag)
          ("H-c d" . cape-dabbrev)
          ("H-c h" . cape-history)
