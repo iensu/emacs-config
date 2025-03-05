@@ -732,7 +732,8 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (when (executable-find "~/.nix-profile/bin/git") ; Speeds up git operations on macOS
     (setopt magit-git-executable "~/.nix-profile/bin/git"))
   (setopt magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
-  (setopt magit-refresh-status-buffer nil))
+  (setopt magit-refresh-status-buffer nil)
+  (setopt magit-log-margin '(t "%Y-%m-%d " magit-log-margin-width t 18)))
 
 ;; `smerge-mode' is a merge conflict resolution tool which is great but unfortunately has awful
 ;; default keybindings. Here I define a hydra to make `smerge' easier to work with.
