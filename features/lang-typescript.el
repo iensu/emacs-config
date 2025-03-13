@@ -3,8 +3,24 @@
 (add-to-list 'auto-mode-alist '("\\.ts$"  . typescript-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx$" . tsx-ts-mode))
 
+(require 'eglot)
+
+
+(defun iensu--deno-ts-project-p ()
+  (when-let* ((project (project-current))
+              (p-root (project-root project)))
+    (or (file-exists-p (concat p-root "deno.json"))
+        (file-exists-p (concat p-root ".deno-project")))))
+
+(defun iensu--ts-server-program (&rest _)
+  (cond ((iensu--deno-ts-project-p) '("deno" "lsp" :initializationOptions
+                                         (:enable t :lint t)))
+         (t '("typescript-language-server" "--stdio"))))
+
+(add-to-list 'eglot-server-programs '((typescript-ts-mode :language-id "typescript") . iensu--ts-server-program))
+
 (defun iensu--typescript-mode-hook ()
-  (lsp-deferred)
+  (eglot-ensure)
   (add-node-modules-path)
   (rainbow-mode 1)
   (prettier-js-mode 1)
