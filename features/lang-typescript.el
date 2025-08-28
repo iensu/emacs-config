@@ -21,10 +21,12 @@
 
 (defun iensu--typescript-mode-hook ()
   (eglot-ensure)
+  (eglot-inlay-hints-mode 1)
   (add-node-modules-path)
   (rainbow-mode 1)
   (prettier-js-mode 1)
   (flymake-mode 1)
+  (setq-local forward-sexp-function #'forward-sexp-default-function)
   (when (executable-find "eslint")
     (flymake-eslint-enable)))
 
