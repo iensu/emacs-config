@@ -1035,7 +1035,32 @@ Falls back to looking for .projectile for compatibility reasons."
   :vc (denote :url "https://github.com/protesilaos/denote")
   :config
   (setopt denote-directory iensu-denote-dir)
-  (require 'denote-org-extras)
+
+  (defalias 'dg #'denote "Create a general Denote note")
+
+  (defun iensu/denote-journal ()
+    "Create an entry tagged 'journal' with the date as its title."
+    (interactive)
+    (denote
+     (format-time-string "%A %e %B %Y")
+     '("journal")
+     'org-age
+     (concat denote-directory "/journal")))
+  (defalias 'dj #'iensu/denote-journal)
+
+  (defun iensu/denote-work ()
+    "Create an entry in a 'work' subdirectory."
+    (interactive)
+    (denote
+     (denote-title-prompt)
+     (append (denote-keywords-prompt) '("work"))
+     'org-age
+     (concat denote-directory "/work")))
+  (defalias 'dw #'iensu/denote-work))
+
+(use-package denote-org
+  :vc (denote-org :url "https://github.com/protesilaos/denote-org")
+  :config
   (add-to-list 'denote-file-types
                '(org-gpg :extension ".org.gpg"
                          :date-function denote-date-org-timestamp
@@ -1060,29 +1085,7 @@ Falls back to looking for .projectile for compatibility reasons."
                          :keywords-value-reverse-function denote-extract-keywords-from-front-matter
                          :link denote-org-link-format
                          :link-in-context-regexp denote-org-link-in-context-regexp))
-
-  (setopt denote-file-type 'org)
-  (defalias 'dg #'denote "Create a general Denote note")
-
-  (defun iensu/denote-journal ()
-    "Create an entry tagged 'journal' with the date as its title."
-    (interactive)
-    (denote
-     (format-time-string "%A %e %B %Y")
-     '("journal")
-     'org-age
-     (concat denote-directory "/journal")))
-  (defalias 'dj #'iensu/denote-journal)
-
-  (defun iensu/denote-work ()
-    "Create an entry in a 'work' subdirectory."
-    (interactive)
-    (denote
-     (denote-title-prompt)
-     (append (denote-keywords-prompt) '("work"))
-     'org-age
-     (concat denote-directory "/work")))
-  (defalias 'dw #'iensu/denote-work))
+  (setopt denote-file-type 'org))
 
 ;; http://yummymelon.com/devnull/mathing-in-emacs-with-casual.html
 (use-package casual
@@ -1134,7 +1137,8 @@ Falls back to looking for .projectile for compatibility reasons."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-vc-selected-packages
-   '((vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package"))))
+   '((vc-use-package :vc-backend Git :url
+		     "https://github.com/slotThe/vc-use-package"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
