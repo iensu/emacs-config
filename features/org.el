@@ -116,9 +116,9 @@
 
 ;; TODO keyword and priorities setup
 (setopt org-todo-keywords
-        '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "WAITING(w)" "BLOCKED(b)"
+        '((sequence "TODO(t)" "NEXT(n)" "STARTED(s!)" "PROJ(p)" "BLOCKED(b)"
                     "|"
-                    "CANCELED(C@/!)" "DELEGATED(d)" "POSTPONED(P@/!)" "DONE(D)")))
+                    "CANCELED(C@/!)" "POSTPONED(P@/!)" "DONE(D)")))
 
 (defun iensu/gtd-maybe-mark-project-as-done (_n-done _n-not-done)
   "Mark PROJ as done if it has a completion rate of 100%."
@@ -141,7 +141,7 @@
         org-default-priority ?D
         org-lowest-priority  ?E)
 
-(setopt org-clock-in-switch-to-state "DOING")
+(setopt org-clock-in-switch-to-state "STARTED")
 (setopt org-log-into-drawer t)
 
 ;;;;; Make org-mode prettier

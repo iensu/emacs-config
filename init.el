@@ -1048,6 +1048,16 @@ Falls back to looking for .projectile for compatibility reasons."
      (concat denote-directory "/journal")))
   (defalias 'dj #'iensu/denote-journal)
 
+  (defun iensu/denote-log ()
+    "Create an entry tagged 'log' with the date as its title."
+    (interactive)
+    (denote
+     (format-time-string "%A %e %B %Y")
+     '("log")
+     'org
+     (concat denote-directory "/log")))
+  (defalias 'dl #'iensu/denote-log)
+
   (defun iensu/denote-work ()
     "Create an entry in a 'work' subdirectory."
     (interactive)

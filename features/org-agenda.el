@@ -2,38 +2,20 @@
 
 (dolist (agenda-command
          '(("z" "One week agenda"
-            ((tags-todo "+TODO=\"NEXT\""
-                        ((org-agenda-overriding-header "Next actions")
+            ((todo "TODO|STARTED"
+                        ((org-agenda-overriding-header "TODOs")
                          (org-agenda-prefix-format "  ")
-                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("PROJ") 'regexp ":(books|music|movies|refile|links):"))
                          (org-agenda-sorting-strategy '(priority-down deadline-up))
                          (org-agenda-max-entries 20)))
-             (tags-todo "+TODO=\"BLOCKED\""
-                        ((org-agenda-overriding-header "Blocked")
-                         (org-agenda-prefix-format "  ")
-                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("PROJ") 'regexp ":(books|music|movies|refile|links):"))
-                         (org-agenda-sorting-strategy '(priority-down deadline-up))
-                         (org-agenda-max-entries 20)))
-             (tags-todo "+@work+TODO=\"PROJ\"-recurring"
-                        ((org-agenda-overriding-header "Work projects")
-                         (org-agenda-prefix-format "  ")
-                         (org-agenda-sorting-strategy '(priority-down deadline-up))
-                         (org-agenda-max-entries 10)))
-             (tags-todo "-@work+TODO=\"PROJ\"-recurring"
-                        ((org-agenda-overriding-header "Private projects")
-                         (org-agenda-prefix-format "  ")
-                         (org-agenda-sorting-strategy '(priority-down deadline-up))
-                         (org-agenda-max-entries 10)))
              (agenda ""
                      ((org-agenda-start-day "0d")
                       (org-agenda-span 1)
                       (org-agenda-start-on-weekday nil)))))))
   (add-to-list 'org-agenda-custom-commands agenda-command))
 
-(setopt org-agenda-files (cl-loop for f in '("projects.org")
-                                collect (expand-file-name f iensu-org-dir))
+(setopt org-agenda-files (directory-files "~/Nextcloud/notes/log" :full ".+.org$")
         org-agenda-dim-blocked-tasks nil
-        org-deadline-warning-days -3
+        org-deadline-warning-days -5
         org-agenda-block-separator "")
 
 (plist-put org-agenda-clockreport-parameter-plist :maxlevel 6)
@@ -61,3 +43,7 @@
 (defun iensu/open-project-org-file ()
   (interactive)
   (find-file (iensu--org-capture-project-notes-file)))
+
+(defun iensu/refresh-agenda-files ()
+  (interactive)
+  (setopt org-agenda-files (directory-files "~/Nextcloud/notes/log" :full ".+.org$")))
