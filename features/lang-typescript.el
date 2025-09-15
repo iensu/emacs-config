@@ -5,20 +5,6 @@
 
 (require 'eglot)
 
-
-(defun iensu--deno-ts-project-p ()
-  (when-let* ((project (project-current))
-              (p-root (project-root project)))
-    (or (file-exists-p (concat p-root "deno.json"))
-        (file-exists-p (concat p-root ".deno-project")))))
-
-(defun iensu--ts-server-program (&rest _)
-  (cond ((iensu--deno-ts-project-p) '("deno" "lsp" :initializationOptions
-                                         (:enable t :lint t)))
-         (t '("typescript-language-server" "--stdio"))))
-
-(add-to-list 'eglot-server-programs '((typescript-ts-mode :language-id "typescript") . iensu--ts-server-program))
-
 (defun iensu--typescript-mode-hook ()
   (eglot-ensure)
   (eglot-inlay-hints-mode 1)
@@ -58,3 +44,17 @@
     (push-mark (treesit-node-end node) nil t)))
 
 (defalias 'mn 'iensu/tsx-ts-mark-node)
+
+;; Handle Deno or TypeScript depending on the project type.
+
+(require 'eglot)
+
+(add-to-list 'eglot-server-programs
+             `(typescript-ts-mode . ,(eglot-alternatives
+                                      '(("typescript-language-server" "--stdio")
+                                        ("deno" "lsp"
+                                         :initializationOptions
+                                         '( :enable t
+                                            :unstable t
+                                            :typescript (:inlayHints (:variableTypes (:enabled t)
+                                                                      :parameterTypes (:enabled t)))))))))
