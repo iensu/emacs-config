@@ -6,7 +6,8 @@
 (define-key js-ts-mode-map (kbd "C-c C-c") #'compile)
 
 (defun iensu/javascript-mode-hook ()
-  (lsp-deferred)
+  (eglot-ensure)
+  (eglot-inlay-hints-mode 1)
   (electric-indent-mode 1)
   (smartparens-mode 1)
   (prettier-js-mode 1)
