@@ -3,13 +3,20 @@
 (add-to-list 'auto-mode-alist '("\\.ts$"  . typescript-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx$" . tsx-ts-mode))
 
-(require 'eglot)
-
 (use-package add-node-modules-path)
 
+(defun iensu--deno-project-p ()
+  (when-let* ((project (project-current))
+              (p-root (project-root project)))
+    (or (file-exists-p (concat p-root "deno.json"))
+        (file-exists-p (concat p-root ".deno-project")))))
+
 (defun iensu--typescript-mode-hook ()
-  (eglot-ensure)
-  (eglot-inlay-hints-mode 1)
+  ;; Ensure we use deno lsp for deno projects
+  (when (and (iensu--deno-project-p)
+             (executable-find "deno"))
+    (add-to-list 'lsp-disabled-clients 'ts-ls))
+  (lsp-deferred)
   (add-node-modules-path)
   (rainbow-mode 1)
   (prettier-js-mode 1)
@@ -46,28 +53,3 @@
     (push-mark (treesit-node-end node) nil t)))
 
 (defalias 'mn 'iensu/tsx-ts-mark-node)
-
-;; Handle Deno or TypeScript depending on the project type.
-
-(defun iensu--deno-ts-project-p ()
-  (when-let* ((project (project-current))
-              (p-root (project-root project)))
-    (or (file-exists-p (concat p-root "deno.json"))
-        (file-exists-p (concat p-root ".deno-project")))))
-
-(defun iensu--ts-server-program (&rest _)
-  (message "--- SELECTING LSP SERVER ---")
-  (cond ((iensu--deno-ts-project-p) '("deno" "lsp"
-                                         :initializationOptions
-                                         '( :enable t
-                                            :unstable t
-                                            :typescript (:inlayHints (:variableTypes (:enabled t)
-                                                                                     :parameterTypes (:enabled t)))))
-         t '("typescript-language-server" "--stdio"))))
-
-(add-to-list 'eglot-server-programs
-             `(((js-mode :language-id "javascript")
-                (js-ts-mode :language-id "javascript")
-                (tsx-ts-mode :language-id "typescriptreact")
-                (typescript-ts-mode :language-id "typescript")
-                (typescript-mode :language-id "typescript")) . iensu--ts-server-program))
