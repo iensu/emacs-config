@@ -5,6 +5,8 @@
 
 (require 'eglot)
 
+(use-package add-node-modules-path)
+
 (defun iensu--typescript-mode-hook ()
   (eglot-ensure)
   (eglot-inlay-hints-mode 1)
