@@ -11,6 +11,9 @@
         native-comp-async-report-warnings-errors nil) ; silence noisy warnings
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
+
+
 
 ;; The :vc keyword is not enabled in use-package yet, so using this additional package.
 (unless (package-installed-p 'vc-use-package)
@@ -376,7 +379,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (ispell-list-command "--list")
   (ispell-dictionary "en_US")
   :config
-  (unbind-key (kbd "C-.") 'flyspell-mode-map) ;; Using this binding for other stuff
+  (unbind-key "C-." 'flyspell-mode-map) ;; Using this binding for other stuff
 
   (defvar iensu--language-ring nil
     "Ispell language ring used to toggle current selected ispell dictionary")
@@ -1118,9 +1121,9 @@ Falls back to looking for .projectile for compatibility reasons."
 (defvar iensu--font-ring nil)
 
 (let ((fonts (cl-loop with base-font   = "Monaspace Xenon"
-                      with base-size   = 13
+                      with base-size   = 10
                       with base-offset = 2
-                      for i from 0 to 4
+                      for i from 0 to 6
                       collect (format "%s-%d" base-font
                                       (+ base-size (* base-offset
                                                       i))))))

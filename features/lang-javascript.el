@@ -1,29 +1,11 @@
+;;; Module for JavaScript, TypeScript, Deno and everything else...
+
+(require 'typescript-ts-mode)
 (require 'js)
 
-(dolist (ext '("\\.js\\'" "\\.mjs\\'" "\\.cjs\\'"))
-  (add-to-list 'auto-mode-alist `(,ext . js-ts-mode)))
-
-(define-key js-ts-mode-map (kbd "C-c C-c") #'compile)
-
-(defun iensu/javascript-mode-hook ()
-  (eglot-ensure)
-  (eglot-inlay-hints-mode 1)
-  (electric-indent-mode 1)
-  (smartparens-mode 1)
-  (prettier-js-mode 1)
-  (when (executable-find "eslint")
-    (flymake-eslint-enable)))
-
-(add-hook 'js-ts-mode-hook #'iensu/javascript-mode-hook)
-
+(use-package flymake-eslint)
+(use-package add-node-modules-path)
 (use-package rjsx-mode
-  :mode ("\\.jsx\\'")
-  :hook
-  (rjsx-mode . electric-indent-mode)
-  (rjsx-mode . rainbow-delimiters-mode)
-  (rjsx-mode . emmet-mode)
-  (rjsx-mode . lsp-deferred)
-  (rjsx-mode . prettier-js-mode)
   :init
   (add-to-list 'magic-mode-alist
                '((lambda () (and buffer-file-name
@@ -33,9 +15,44 @@
   :config
   (add-hook 'rjsx-mode-hook (lambda () (setq emmet-expand-jsx-className? t))))
 
-(use-package add-node-modules-path
-  :config
-  (eval-after-load 'js2-mode
-    '(add-hook 'js-mode-hook #'add-node-modules-path))
-  (eval-after-load 'rjsx-mode
-    '(add-hook 'js-mode-hook #'add-node-modules-path)))
+(add-to-list 'auto-mode-alist '("\\.ts$"  . typescript-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx$" . tsx-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx$" . rjsx-mode))
+(dolist (ext '("\\.js\\'" "\\.mjs\\'" "\\.cjs\\'"))
+  (add-to-list 'auto-mode-alist `(,ext . js-ts-mode)))
+
+(defun iensu--deno-project-p ()
+  (when-let* ((project (project-current))
+              (p-root (project-root project)))
+    (or (file-exists-p (concat p-root "deno.json"))
+        (file-exists-p (concat p-root ".deno-project")))))
+
+(defun iensu--typescript-hook ()
+  ;; Ensure we use deno lsp for deno projects
+  (when (and (iensu--deno-project-p)
+             (executable-find "deno"))
+    (add-to-list 'lsp-disabled-clients 'ts-ls))
+  (lsp-deferred)
+  (add-node-modules-path)
+  (rainbow-mode 1)
+  (prettier-js-mode 1)
+  (flymake-mode 1)
+  (setq-local forward-sexp-function #'forward-sexp-default-function)
+  (when (executable-find "eslint")
+    (flymake-eslint-enable)))
+
+(defun iensu--typescript-jsx-hook ()
+  (iensu--typescript-hook)
+  (emmet-mode 1))
+
+(add-hook 'typescript-ts-mode-hook #'iensu--typescript-hook)
+(add-hook 'js-ts-hook              #'iensu--typescript-hook)
+(add-hook 'tsx-ts-mode-hook        #'iensu--typescript-jsx-hook)
+(add-hook 'rjsx-mode-hook          #'iensu--typescript-jsx-hook)
+
+(defun iensu/typescript-compile ()
+  (interactive)
+  (project-compile "tsc --pretty false"))
+
+(define-key typescript-ts-mode-map (kbd "C-c C-c") #'iensu/typescript-compile)
+(define-key tsx-ts-mode-map        (kbd "C-c C-c") #'iensu/typescript-compile)
