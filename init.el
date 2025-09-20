@@ -1141,6 +1141,11 @@ Falls back to looking for .projectile for compatibility reasons."
 
 (iensu/cycle-fonts)
 
+;;;; Start Emacs server
+(when (not (server-running-p))
+  (message "Starting Emacs server...")
+  (server-start))
+
 
 ;;;; Stuff set by Emacs
 (put 'downcase-region 'disabled nil)
