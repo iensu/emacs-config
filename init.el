@@ -558,11 +558,6 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
                                  (setopt mode-require-final-newline nil
                                          require-final-newline nil))))
 
-;; When all else fails
-(use-package dumb-jump
-  :config
-  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
-
 ;; Speedbar for file navigation
 (require 'speedbar)
 (defun iensu/speedbar-reset-layout ()
