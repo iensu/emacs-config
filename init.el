@@ -145,6 +145,7 @@
 
 ;; Move backups and auto-saves
 (setopt create-lockfiles nil
+        auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
         backup-directory-alist `(("." . ,(expand-file-name ".local/backups/" user-emacs-directory)))
         backup-by-copying t
         delete-old-versions t
