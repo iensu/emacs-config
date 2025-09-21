@@ -1140,6 +1140,7 @@ Falls back to looking for .projectile for compatibility reasons."
 (iensu/cycle-fonts)
 
 ;;;; Start Emacs server
+(require 'server)
 (when (not (server-running-p))
   (message "Starting Emacs server...")
   (server-start))
