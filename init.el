@@ -622,6 +622,9 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 (global-set-key (kbd "s-s") 'windmove-swap-states-down)
 (global-set-key (kbd "s-d") 'windmove-swap-states-right)
 
+;; Justfile support
+(use-package just-ts-mode)
+
 ;;;;; Global hydra
 
 ;; Setup a global hydra with keybindings I use very often.
