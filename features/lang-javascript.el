@@ -22,16 +22,16 @@
   (add-to-list 'auto-mode-alist `(,ext . js-ts-mode)))
 
 (defun iensu--deno-project-p ()
-  (when-let* ((project (project-current))
-              (p-root (project-root project)))
-    (or (file-exists-p (concat p-root "deno.json"))
-        (file-exists-p (concat p-root ".deno-project")))))
+  (let ((fname (buffer-file-name)))
+    (or (locate-dominating-file fname "deno.json")
+        (locate-dominating-file fname ".deno-project"))))
 
 (defun iensu--typescript-hook ()
   ;; Ensure we use deno lsp for deno projects
   (when (and (iensu--deno-project-p)
              (executable-find "deno"))
-    (add-to-list 'lsp-disabled-clients 'ts-ls))
+    (dolist (client '(ts-ls jsts-ls))
+      (add-to-list 'lsp-disabled-clients client)))
   (lsp-deferred)
   (add-node-modules-path)
   (rainbow-mode 1)
