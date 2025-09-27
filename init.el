@@ -1142,11 +1142,31 @@ Falls back to looking for .projectile for compatibility reasons."
 
 (iensu/cycle-fonts)
 
+(use-package ultra-scroll
+  :vc (:url "https://github.com/jdtsmith/ultra-scroll")
+  :init
+  (setq scroll-conservatively 3 ; or whatever value you prefer, since v0.4
+        scroll-margin 0)        ; important: scroll-margin>0 not yet supported
+  :config
+  (ultra-scroll-mode 1))
+
 ;;;; Start Emacs server
 (require 'server)
 (when (not (server-running-p))
   (message "Starting Emacs server...")
   (server-start))
+
+
+;;;; Load features
+
+(dolist (feature iensu-enabled-features-alist)
+  (load-file (expand-file-name (concat "features/" feature ".el")
+                               user-emacs-directory)))
+
+;; Load additional local feature configurations
+(let ((feature-conf (expand-file-name "local-feature-settings.el" user-emacs-directory)))
+  (when (file-exists-p feature-conf)
+    (load-file feature-conf)))
 
 
 ;;;; Stuff set by Emacs
