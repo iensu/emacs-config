@@ -559,14 +559,16 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
                                          require-final-newline nil))))
 
 ;; Speedbar for file navigation
-(require 'speedbar)
-(defun iensu/speedbar-reset-layout ()
-  (setf (alist-get 'width speedbar-frame-parameters) 60)
-  (setf (alist-get 'height speedbar-frame-parameters) 45)
-  (setf (alist-get 'left speedbar-frame-parameters) 0)
-  (setf (alist-get 'top speedbar-frame-parameters) 0))
+;; (require 'speedbar)
+;; (defun iensu/speedbar-reset-layout ()
+;;   (setf (alist-get 'width speedbar-frame-parameters) 60)
+;;   (setf (alist-get 'height speedbar-frame-parameters) 45)
+;;   (setf (alist-get 'left speedbar-frame-parameters) 0)
+;;   (setf (alist-get 'top speedbar-frame-parameters) 0))
 
-(add-hook 'speedbar-after-create-hook #'iensu/speedbar-reset-layout)
+;; (add-hook 'speedbar-after-create-hook #'iensu/speedbar-reset-layout)
+;; (define-key speedbar-file-key-map (kbd "<tab>") #'speedbar-toggle-line-expansion)
+;; (global-set-key (kbd "C-ä") #'speedbar)
 
 (define-key speedbar-file-key-map (kbd "<tab>") #'speedbar-toggle-line-expansion)
 (global-set-key (kbd "C-ä") #'speedbar)
