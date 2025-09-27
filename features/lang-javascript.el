@@ -28,10 +28,15 @@
 
 (defun iensu--typescript-hook ()
   ;; Ensure we use deno lsp for deno projects
-  (when (and (iensu--deno-project-p)
+  (let ((js-clients '(ts-ls jsts-ls)))
+    (if (and (iensu--deno-project-p)
              (executable-find "deno"))
-    (dolist (client '(ts-ls jsts-ls))
-      (add-to-list 'lsp-disabled-clients client)))
+        (dolist (client js-clients)
+          (add-to-list 'lsp-disabled-clients client))
+      (setq lsp-disabled-clients (cl-remove-if
+                                  (lambda (c) (seq-contains-p js-clients
+                                                         c))
+                                  lsp-disabled-clients))))
   (lsp-deferred)
   (add-node-modules-path)
   (rainbow-mode 1)
