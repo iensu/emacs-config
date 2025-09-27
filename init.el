@@ -395,6 +395,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
     (let ((language (ring-ref iensu--language-ring -1)))
       (ring-insert iensu--language-ring language)
       (ispell-change-dictionary language)
+      (flyspell-buffer)
       (message (format "Switched to dictionary: %s" language))))
   (defalias 'sd #'iensu/cycle-ispell-dictionary
     "Switch spellchecking dictionary."))
