@@ -257,7 +257,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;; Fix buffer scrolling behavior.
 (setopt scroll-conservatively 0
         scroll-step 4
-        next-screen-context-lines 20)
+        next-screen-context-lines 40)
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace) ; Delete trailing whitespace on save.
 
@@ -571,8 +571,8 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;; (define-key speedbar-file-key-map (kbd "<tab>") #'speedbar-toggle-line-expansion)
 ;; (global-set-key (kbd "C-ä") #'speedbar)
 
-(define-key speedbar-file-key-map (kbd "<tab>") #'speedbar-toggle-line-expansion)
-(global-set-key (kbd "C-ä") #'speedbar)
+(global-set-key (kbd "C-ä") #'scroll-up)
+(global-set-key (kbd "C-Ä") #'scroll-down)
 
 
 ;;;; Custom commands
@@ -1105,18 +1105,6 @@ Falls back to looking for .projectile for compatibility reasons."
 ;; http://yummymelon.com/devnull/mathing-in-emacs-with-casual.html
 (use-package casual
   :bind (:map calc-mode-map (("C-o" . casual-main-menu))))
-
-
-;;;; Load features
-
-(dolist (feature iensu-enabled-features-alist)
-  (load-file (expand-file-name (concat "features/" feature ".el")
-                               user-emacs-directory)))
-
-;; Load additional local feature configurations
-(let ((feature-conf (expand-file-name "local-feature-settings.el" user-emacs-directory)))
-  (when (file-exists-p feature-conf)
-    (load-file feature-conf)))
 
 
 ;;;; Setup fonts
