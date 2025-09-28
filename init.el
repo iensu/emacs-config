@@ -1028,14 +1028,13 @@ Falls back to looking for .projectile for compatibility reasons."
       (display-buffer-use-some-window buf '())
       (delete-window))))
 
-;; Use Denote for note taking
 (use-package denote
-  :vc (denote :url "https://github.com/protesilaos/denote")
+  :ensure t
   :config
+  (add-hook 'dired-mode-hook #'denote-dired-mode)
   (setopt denote-directory iensu-denote-dir)
 
   (defalias 'dg #'denote "Create a general Denote note")
-
   (defun iensu/denote-journal ()
     "Create an entry tagged 'journal' with the date as its title."
     (interactive)
@@ -1067,7 +1066,7 @@ Falls back to looking for .projectile for compatibility reasons."
   (defalias 'dw #'iensu/denote-work))
 
 (use-package denote-org
-  :vc (denote-org :url "https://github.com/protesilaos/denote-org")
+  :ensure t
   :config
   (add-to-list 'denote-file-types
                '(org-gpg :extension ".org.gpg"
@@ -1159,8 +1158,7 @@ Falls back to looking for .projectile for compatibility reasons."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-vc-selected-packages
-   '((vc-use-package :vc-backend Git :url
-		     "https://github.com/slotThe/vc-use-package"))))
+   '()))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
