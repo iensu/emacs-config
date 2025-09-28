@@ -498,13 +498,6 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;; Password entry in minibuffer
 (setopt epa-pinentry-mode 'loopback)
 
-(defun iensu/fix-gpg ()
-  "Solving issue with Emacs 29.1 and GnuPG 2.4.1+."
-  (interactive)
-  (fset 'epg-wait-for-status 'ignore))
-
-;; (iensu/fix-gpg)
-
 (setopt dired-listing-switches "-alGh --group-directories-first"
         dired-dwim-target t)
 (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
