@@ -32,11 +32,11 @@
     (if (and (iensu--deno-project-p)
              (executable-find "deno"))
         (dolist (client js-clients)
-          (add-to-list 'lsp-disabled-clients client))
-      (setq lsp-disabled-clients (cl-remove-if
-                                  (lambda (c) (seq-contains-p js-clients
-                                                         c))
-                                  lsp-disabled-clients))))
+          (add-to-list (make-local-variable 'lsp-disabled-clients) client))
+      (set (make-local-variable 'lsp-disabled-clients) (cl-remove-if
+                                                        (lambda (c) (seq-contains-p js-clients
+                                                                               c))
+                                                        lsp-disabled-clients))))
   (lsp-deferred)
   (add-node-modules-path)
   (rainbow-mode 1)
