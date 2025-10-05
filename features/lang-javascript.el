@@ -51,7 +51,7 @@
   (emmet-mode 1))
 
 (add-hook 'typescript-ts-mode-hook #'iensu--typescript-hook)
-(add-hook 'js-ts-hook              #'iensu--typescript-hook)
+(add-hook 'js-ts-mode-hook         #'iensu--typescript-hook)
 (add-hook 'tsx-ts-mode-hook        #'iensu--typescript-jsx-hook)
 (add-hook 'rjsx-mode-hook          #'iensu--typescript-jsx-hook)
 
