@@ -398,7 +398,15 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
       (flyspell-buffer)
       (message (format "Switched to dictionary: %s" language))))
   (defalias 'sd #'iensu/cycle-ispell-dictionary
-    "Switch spellchecking dictionary."))
+    "Switch spellchecking dictionary.")
+
+  (defun iensu/switch-ispell-dictionary (dict)
+    (interactive
+     (let ((candidates (string-split (shell-command-to-string "aspell dump dicts"))))
+       (list (completing-read "Select dictionary: " candidates))))
+    (ispell-change-dictionary dict)
+    (flyspell-buffer)
+    (message (format "Switched dictionary to %s" dict))))
 
 (use-package flyspell-popup :after (flyspell))
 
