@@ -572,8 +572,8 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;; (define-key speedbar-file-key-map (kbd "<tab>") #'speedbar-toggle-line-expansion)
 ;; (global-set-key (kbd "C-ä") #'speedbar)
 
-(global-set-key (kbd "C-ä") #'scroll-up)
-(global-set-key (kbd "C-Ä") #'scroll-down)
+(global-set-key (kbd "C-Ä") (lambda () (interactive)(forward-line -10)))
+(global-set-key (kbd "C-ä") (lambda () (interactive)(forward-line  10)))
 
 
 ;;;; Custom commands
