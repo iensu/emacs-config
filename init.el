@@ -597,6 +597,11 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
       (profiler-reset)
       (profiler-start 'cpu+mem))))
 
+(defun iensu/apply-ansi-colors ()
+  "Apply ansi color filter in a buffer."
+  (interactive)
+  (ansi-color-apply-on-region (point-min) (point-max)))
+
 
 ;;;; Global key-bindings
 
