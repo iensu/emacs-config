@@ -365,7 +365,23 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
            (vterm-buffer (get-buffer vterm-buffer-name)))
       (if (and vterm-buffer (not current-prefix-arg))
           (pop-to-buffer vterm-buffer t)
-        (vterm current-prefix-arg)))))
+        (vterm current-prefix-arg))))
+
+  (defun iensu--vterm-start (buffer-name directory &optional start-hook)
+    (let ((default-directory directory)
+          (vterm-buffer-name buffer-name))
+      (vterm)
+      (vterm-insert "direnv reload")
+      (vterm-send "RET")
+      (when start-hook
+        (funcall start-hook))))
+
+  (defun iensu--vterm-shutdown (buffer-name &optional shutdown-hook)
+    (let ((vterm-buffer-name buffer-name))
+      (vterm-send "C-c")
+      (when shutdown-hook
+        (funcall shutdown-hook))
+      (kill-buffer buffer-name))))
 
 (use-package multi-vterm)
 
