@@ -1135,6 +1135,20 @@ Falls back to looking for .projectile for compatibility reasons."
 
 (iensu/cycle-fonts)
 
+(defun iensu/change-font-size (font)
+  (interactive
+   (let ((fonts (sort (ring-elements iensu--font-ring))))
+     (list (completing-read "Select font: "
+                            fonts
+                            nil
+                            :require-match
+                            (ring-ref iensu--font-ring 0)))))
+  (if (not (ring-member iensu--font-ring font))
+      (message "Unsupported font!")
+    (ring-insert iensu--font-ring font)
+    (set-frame-font font :keep-size t)
+    (message "Using font %s" font)))
+
 (use-package ultra-scroll
   :vc (:url "https://github.com/jdtsmith/ultra-scroll")
   :init
