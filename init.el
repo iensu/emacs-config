@@ -708,7 +708,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;;;; Make Emacs prettier
 
 (setopt cursor-type 'box)
-(global-prettify-symbols-mode 1)
+;; (global-prettify-symbols-mode 1)
 (global-font-lock-mode 1)
 
 ;; Use dark mode on macOS.
