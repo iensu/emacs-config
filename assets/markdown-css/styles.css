@@ -1,0 +1,44 @@
+html {
+  font-family: Helvetica;
+  background: #fffdf0;
+  color: #000022;
+}
+
+body {
+  margin: 0 auto;
+  padding: 24px;
+  max-width: 1400px;
+}
+
+table {
+  table-layout: fixed;
+  width: 90%;
+  margin: 10px auto;
+  border-collapse: collapse;
+  border-top: 1px solid #999999;
+  border-bottom: 1px solid #999999;
+}
+
+th,
+td {
+  vertical-align: center;
+  padding: 0.6em;
+}
+tr td {
+  text-align: left;
+  width: 30%;
+}
+th {
+  text-align: left;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #fdfde0;
+}
+
+thead {
+  border-bottom: 1px solid #999999;
+}
+tfoot {
+  border-top: 1px solid #999999;
+}
