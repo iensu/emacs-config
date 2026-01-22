@@ -28,8 +28,7 @@
 (use-package org
   :mode (("\\.org\\'" . org-mode)
          ("\\.org.draft\\'" . org-mode))
-  :bind (("C-c c" . org-capture)
-         ("C-c a" . org-agenda)
+  :bind (("C-c a" . org-agenda)
          ("C-c l" . org-store-link)
          :map org-mode-map
          ("H-."   . org-time-stamp-inactive)
