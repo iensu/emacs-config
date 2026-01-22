@@ -1131,7 +1131,7 @@ Falls back to looking for .projectile for compatibility reasons."
 ;;;; Setup fonts
 (defvar iensu--font-ring nil)
 
-(let ((fonts (cl-loop with base-font   = "Monaspace Xenon"
+(let ((fonts (cl-loop with base-font   = "Maple Mono NF CN"
                       with base-size   = 10
                       with base-offset = 2
                       for i from 0 to 6
