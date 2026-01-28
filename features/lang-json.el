@@ -1,6 +1,6 @@
 (require 'json-ts-mode)
 
-(add-to-list 'auto-mode-alist '("\\.json\\'" . json-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.jsonl?\\'" . json-ts-mode))
 
 (defun iensu/json-mode-hook ()
   (setopt js-indent-level 2))
