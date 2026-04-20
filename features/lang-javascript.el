@@ -14,6 +14,8 @@
                  . rjsx-mode))
   :config
   (add-hook 'rjsx-mode-hook (lambda () (setq emmet-expand-jsx-className? t))))
+(use-package lsp-biome
+    :vc (:url "https://github.com/cxa/lsp-biome" :rev :newest))
 
 (add-to-list 'auto-mode-alist '("\\.ts$"  . typescript-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx$" . tsx-ts-mode))
