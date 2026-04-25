@@ -2,6 +2,8 @@
 
 (require 'typescript-ts-mode)
 (require 'js)
+(require 'html-ts-mode)
+(require 'css-mode)
 
 (use-package flymake-eslint)
 (use-package add-node-modules-path)
@@ -9,19 +11,133 @@
   :init
   (add-to-list 'magic-mode-alist
                '((lambda () (and buffer-file-name
-                            (string-equal "js" (file-name-extension buffer-file-name))
-                            (string-match "^import .* from [\"']react[\"']" (buffer-string))))
+                                 (string-equal "js" (file-name-extension buffer-file-name))
+                                 (string-match "^import .* from [\"']react[\"']" (buffer-string))))
                  . rjsx-mode))
   :config
   (add-hook 'rjsx-mode-hook (lambda () (setq emmet-expand-jsx-className? t))))
 (use-package lsp-biome
-    :vc (:url "https://github.com/cxa/lsp-biome" :rev :newest))
+  :vc (:url "https://github.com/cxa/lsp-biome" :rev :newest)
+  :config
+  (defun iensu--biome-hook ()
+    (prettier-js-mode -1))
+  (add-hook 'lsp-biome-active-hook #'iensu--biome-hook))
 
 (add-to-list 'auto-mode-alist '("\\.ts$"  . typescript-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx$" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx$" . rjsx-mode))
 (dolist (ext '("\\.js\\'" "\\.mjs\\'" "\\.cjs\\'"))
   (add-to-list 'auto-mode-alist `(,ext . js-ts-mode)))
+
+(defvar iensu--js-embedded-css-font-lock-settings
+  (treesit-font-lock-rules
+   :language 'css
+   :override t
+   :feature 'comment
+   '((comment) @font-lock-comment-face)
+
+   :language 'css
+   :override t
+   :feature 'string
+   '((string_value) @font-lock-string-face)
+
+   :language 'css
+   :override t
+   :feature 'keyword
+   '(["@media" "@import" "@charset" "@namespace" "@keyframes"] @font-lock-builtin-face
+     ["and" "or" "not" "only" "selector"] @font-lock-keyword-face)
+
+   :language 'css
+   :override t
+   :feature 'variable
+   '((plain_value) @font-lock-variable-name-face)
+
+   :language 'css
+   :override t
+   :feature 'operator
+   '(["=" "~=" "^=" "|=" "*=" "$="] @font-lock-operator-face)
+
+   :language 'css
+   :override t
+   :feature 'selector
+   '((class_selector) @css-selector
+     (child_selector) @css-selector
+     (id_selector) @css-selector
+     (tag_name) @css-selector
+     (class_name) @css-selector)
+
+   :language 'css
+   :override t
+   :feature 'property
+   '((property_name) @css-property)
+
+   :language 'css
+   :override t
+   :feature 'function
+   '((function_name) @font-lock-function-name-face)
+
+   :language 'css
+   :override t
+   :feature 'constant
+   '((integer_value) @font-lock-number-face
+     (float_value) @font-lock-number-face
+     (unit) @font-lock-constant-face
+     (important) @font-lock-builtin-face)
+
+   :language 'css
+   :override t
+   :feature 'query
+   '((keyword_query) @font-lock-property-use-face
+     (feature_name) @font-lock-property-use-face)
+
+   :language 'css
+   :override t
+   :feature 'bracket
+   '((["(" ")" "[" "]" "{" "}"]) @font-lock-bracket-face)
+
+   :language 'css
+   :override t
+   :feature 'error
+   '((ERROR) @error))
+  "Tree-sitter font-lock settings for css`...` template literals.")
+
+(defun iensu--js-setup-template-literal-ranges ()
+  "Enable HTML/CSS highlighting inside html`...` and css`...` template literals."
+  (let ((host-lang (cond ((derived-mode-p 'tsx-ts-mode) 'tsx)
+                         ((derived-mode-p 'typescript-ts-mode) 'typescript)
+                         (t 'javascript))))
+    (when (and (treesit-ready-p host-lang t)
+               (treesit-ready-p 'html t)
+               (treesit-ready-p 'css t))
+      ;; Match template string fragments instead of the whole template_string.
+      ;; This keeps embedding stable when `${...}` contains nested html`...`
+      ;; expressions, because each static fragment gets an independent range.
+      ;; HTML ranges intentionally share one parser (no :local t), which keeps
+      ;; context across interpolations so closing tags are highlighted reliably.
+      (setq-local treesit-range-settings
+                  (append
+                   (treesit-range-rules
+                    :embed 'html
+                    :host host-lang
+                    `((call_expression
+                       function: (identifier) @_tag
+                       (:match "^\\(html\\|HTML\\)$" @_tag)
+                       arguments: (template_string
+                                   (string_fragment) @capture))))
+                   (treesit-range-rules
+                    :embed 'css
+                    :host host-lang
+                    `((call_expression
+                       function: (identifier) @_tag
+                       (:match "^\\(css\\|CSS\\)$" @_tag)
+                       arguments: (template_string
+                                   (string_fragment) @capture))))
+                   (or treesit-range-settings '())))
+      (treesit-update-ranges)
+      ;; treesit-add-font-lock-rules explicitly enables all rules (enable=t).
+      (treesit-add-font-lock-rules html-ts-mode--font-lock-settings)
+      (treesit-add-font-lock-rules iensu--js-embedded-css-font-lock-settings)
+      (font-lock-flush))))
 
 (defun iensu--deno-project-p ()
   (let ((fname (buffer-file-name)))
@@ -37,7 +153,7 @@
           (add-to-list (make-local-variable 'lsp-disabled-clients) client))
       (set (make-local-variable 'lsp-disabled-clients) (cl-remove-if
                                                         (lambda (c) (seq-contains-p js-clients
-                                                                               c))
+                                                                                    c))
                                                         lsp-disabled-clients))))
   (lsp-deferred)
   (add-node-modules-path)
@@ -47,7 +163,8 @@
   (flymake-mode 1)
   (setq-local forward-sexp-function #'forward-sexp-default-function)
   (when (executable-find "eslint")
-    (flymake-eslint-enable)))
+    (flymake-eslint-enable))
+  (iensu--js-setup-template-literal-ranges))
 
 (defun iensu--typescript-jsx-hook ()
   (iensu--typescript-hook)
