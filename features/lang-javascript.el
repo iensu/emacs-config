@@ -101,6 +101,39 @@
    '((ERROR) @error))
   "Tree-sitter font-lock settings for css`...` template literals.")
 
+(defun iensu--js-language-at-point (pos)
+  "Return the language of the parser covering POS.
+Needed as `treesit-language-at-point-function' because creating the HTML and
+CSS embedded parsers adds them to the parser list; without this function
+`treesit-language-at' returns whichever parser happens to be first in the list
+rather than the one whose range covers POS."
+  (catch 'lang
+    (dolist (parser (treesit-parser-list))
+      (when (and (memq (treesit-parser-language parser) '(html css))
+                 (treesit-parser-range-on parser pos pos))
+        (throw 'lang (treesit-parser-language parser))))
+    (treesit-parser-language
+     (or (and (boundp 'treesit-primary-parser) treesit-primary-parser)
+         (car (treesit-parser-list))))))
+
+;; html-ts-mode--indent-rules has ((parent-is "fragment") column-0 0), which
+;; pushes the outermost HTML elements to column 0.  In a template literal the
+;; top-level content should keep whatever indentation the author typed, so we
+;; replace that rule with no-indent and leave the rest unchanged.
+(defvar iensu--js-embedded-html-indent-rules
+  `((html
+     ((parent-is "fragment") no-indent)
+     ((node-is "/>") parent-bol 0)
+     ((node-is ">") parent-bol 0)
+     ((node-is "end_tag") parent-bol 0)
+     ((parent-is "comment") prev-adaptive-prefix 0)
+     ((parent-is "element") parent-bol html-ts-mode-indent-offset)
+     ((parent-is "script_element") parent-bol html-ts-mode-indent-offset)
+     ((parent-is "style_element") parent-bol html-ts-mode-indent-offset)
+     ((parent-is "start_tag") parent-bol html-ts-mode-indent-offset)
+     ((parent-is "self_closing_tag") parent-bol html-ts-mode-indent-offset)))
+  "HTML indent rules for embedded html`...` template literals.")
+
 (defun iensu--js-setup-template-literal-ranges ()
   "Enable HTML/CSS highlighting inside html`...` and css`...` template literals."
   (let ((host-lang (cond ((derived-mode-p 'tsx-ts-mode) 'tsx)
@@ -134,6 +167,17 @@
                                    (string_fragment) @capture))))
                    (or treesit-range-settings '())))
       (treesit-update-ranges)
+      ;; With multiple parsers in the buffer (JS + HTML + CSS), treesit-language-at
+      ;; returns the first parser's language for every position, which is wrong.
+      ;; This function checks the embedded parser ranges instead.
+      (setq-local treesit-language-at-point-function
+                  #'iensu--js-language-at-point)
+      ;; Add indent rules for embedded languages.  Use modified HTML rules that
+      ;; do not force top-level elements to column-0 (see iensu--js-embedded-html-indent-rules).
+      (setq-local treesit-simple-indent-rules
+                  (append treesit-simple-indent-rules
+                          iensu--js-embedded-html-indent-rules
+                          css--treesit-indent-rules))
       ;; treesit-add-font-lock-rules explicitly enables all rules (enable=t).
       (treesit-add-font-lock-rules html-ts-mode--font-lock-settings)
       (treesit-add-font-lock-rules iensu--js-embedded-css-font-lock-settings)
