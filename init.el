@@ -1022,12 +1022,23 @@ Falls back to looking for .projectile for compatibility reasons."
   :vc (hurl-mode :url "https://github.com/JasZhe/hurl-mode")
   :mode (("\\.hurl$" . hurl-mode)))
 
-(use-package direnv
+(use-package envrc
+  :ensure t
+  :hook (after-init . envrc-global-mode)
   :config
-  (direnv-mode)
-  ;; Handle .direnv as shell file
   (add-to-list 'auto-mode-alist '("\\.envrc\\'" . sh-mode))
   (add-to-list 'auto-mode-alist '("\\.env\\.[a-zA-Z]+\\'" . conf-mode)))
+
+(defun iensu--compilation-with-env (orig &rest args)
+  ;; fish sources its config even for -c invocations, prepending user paths and
+  ;; overriding the envrc-managed process-environment. Use /bin/sh instead so
+  ;; PATH is inherited as-is from the calling buffer's process-environment.
+  (let ((process-environment process-environment)
+        (exec-path exec-path)
+        (shell-file-name "/bin/sh"))
+    (apply orig args)))
+
+(advice-add 'compilation-start :around #'iensu--compilation-with-env)
 
 (add-to-list 'auto-mode-alist '("\\.env$" . conf-mode))
 
