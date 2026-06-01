@@ -437,15 +437,6 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   :custom
   (emojify-emojis-dir (expand-file-name ".local/emojis" user-emacs-directory)))
 
-;; `visual-fill-column' makes it possible to visually wrap and center text which is good for
-;; document-like editing.
-(use-package visual-fill-column
-  :config
-  (setopt visual-fill-column-center-text t)
-  (let ((column-width 130))
-    (setopt visual-fill-column-width column-width)
-    (setopt fill-column column-width)))
-
 (defun iensu/text-editing-mode-hook ()
   "Enables text editing tools such as spell checking and thesaurus support"
   (interactive)
@@ -453,7 +444,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (synosaurus-mode 1)
   (emojify-mode 1)
   (visual-line-mode 1)
-  (visual-fill-column-mode 1))
+  (column-number-mode))
 
 (add-hook 'text-mode-hook #'iensu/text-editing-mode-hook)
 

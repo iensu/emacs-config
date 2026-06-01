@@ -53,8 +53,7 @@
   (setopt mu4e-compose-context-policy 'ask-if-none)
 
   (add-hook 'mu4e-compose-mode-hook (lambda ()
-                                      (auto-fill-mode -1)
-                                      (visual-fill-column-mode 1)))
+                                      (auto-fill-mode -1))
 
   ;; Add email viewing modes
   (add-to-list 'mu4e-view-actions '("EWW" . iensu--mu4e-view-in-eww) t)
