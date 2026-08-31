@@ -1,13 +1,19 @@
-(use-package markdown-mode
-  :commands (markdown-mode gfm-mode)
-  :mode (("\\.md\\'"       . gfm-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :config
-  (when (executable-find "multimarkdown")
-    (setopt markdown-command "multimarkdown"))
-  (add-to-list 'markdown-css-paths (concat user-emacs-directory "assets/markdown-css/styles.css")))
+;; -*- lexical-binding: t; -*-
 
-(use-package markdown-toc)
+(use-package markdown-ts-mode
+  :ensure nil
+  :mode ("\\.md\\'" "\\.mdx\\'" "\\.markdown\\'")
+  :config
+  (require 'markdown-ts-mode-x))
+
+;; (use-package markdown-mode
+;;   :commands (markdown-mode gfm-mode)
+;;   :mode (("\\.md\\'"       . gfm-mode)
+;;          ("\\.markdown\\'" . markdown-mode))
+;;   :config
+;;   (when (executable-find "multimarkdown")
+;;     (setopt markdown-command "multimarkdown"))
+;;   (add-to-list 'markdown-css-paths (concat user-emacs-directory "assets/markdown-css/styles.css")))
 
 (use-package separedit
   :config

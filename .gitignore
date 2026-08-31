@@ -57,3 +57,5 @@ straight/*
 forge-database-*.sql
 
 /session.*
+
+tree-sitter/

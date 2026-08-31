@@ -53,24 +53,7 @@
 (defvar iensu-org-capture-templates nil
   "Capture templates to be used by Org mode.")
 
-(defvar iensu-enabled-features-alist '("elpher"
-                                       "pdf"
-                                       "web-dev"
-                                       "lang-bash"
-                                       "lang-docker"
-                                       "lang-fish"
-                                       "lang-go"
-                                       "lang-graphviz"
-                                       "lang-javascript"
-                                       "lang-json"
-                                       "lang-markdown"
-                                       "lang-nix"
-                                       "lang-terraform"
-                                       "lang-toml"
-                                       "lang-typescript"
-                                       "lang-rust"
-                                       "lang-wasm"
-                                       "lang-yaml")
+(defvar iensu-enabled-features-alist '("elpher")
   "Locally enabled features. Available features are stored in the `features/' directory.")
 
 ;; Load settings
@@ -220,12 +203,13 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (defun iensu/age-session-end ()
     "Ends an age session by deleting the decrypted file and cancelling the age session timer."
     (interactive)
-    (let ((decrypted-key (string-replace ".age" ".txt" iensu-age-encrypted-key)))
-      (when (file-exists-p decrypted-key)
-        (shell-command (format "rm %s" decrypted-key)))
-      (when iensu--age-session-timer
-        (cancel-timer iensu--age-session-timer)
-        (setq iensu--age-session-timer nil))))
+    (when iensu-age-encrypted-key
+      (let ((decrypted-key (string-replace ".age" ".txt" iensu-age-encrypted-key)))
+        (when (file-exists-p decrypted-key)
+          (shell-command (format "rm %s" decrypted-key)))
+        (when iensu--age-session-timer
+          (cancel-timer iensu--age-session-timer)
+          (setq iensu--age-session-timer nil)))))
 
   (add-hook 'kill-emacs-hook #'iensu/age-session-end))
 
@@ -426,12 +410,6 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 (use-package flyspell-popup :after (flyspell))
 
-;; Use synosaurus to look up synonyms
-(use-package synosaurus
-  :custom
-  (synosaurus-backend 'synosaurus-backend-wordnet)
-  (synosaurus-choose-method 'popup))
-
 ;; Emoji support because reasons...
 (use-package emojify
   :custom
@@ -441,7 +419,6 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   "Enables text editing tools such as spell checking and thesaurus support"
   (interactive)
   (flyspell-mode 1)
-  (synosaurus-mode 1)
   (emojify-mode 1)
   (visual-line-mode 1)
   (column-number-mode))
@@ -516,11 +493,16 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 (setopt dired-listing-switches "-alGh --group-directories-first"
         dired-dwim-target t)
 (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
-  (setq insert-directory-program "/usr/local/bin/gls"))
+  (setq insert-directory-program (executable-find "gls")))
 
 
 ;;;; Navigation
 ;; This section adds packages which enables quick navigation and search.
+
+(use-package dired-subtree
+  :commands (dired-subtree-toggle dired-subtree-cycle)
+  :config
+  (setopt dired-subtree-use-backgrounds nil))
 
 (use-package dired-sidebar
   :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
@@ -534,9 +516,9 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   :config
   (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
   (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
-  (setopt dired-sidebar-theme 'none)
   (setopt dired-sidebar-use-term-integration t)
-  (setopt dired-sidebar-use-custom-font t))
+  (setopt dired-sidebar-use-custom-font t)
+  (setopt dired-sidebar-theme 'nerd))
 
 ;; Mark-ring tweaks
 (setopt mark-ring-max 6
