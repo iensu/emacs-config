@@ -1,4 +1,5 @@
 (use-package haskell-mode
+  :ensure t
   :mode ("\\.hs\\'" "\\.xmobarrc")
   :config
   (add-hook 'haskell-mode-hook 'eglot-ensure)

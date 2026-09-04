@@ -22,6 +22,7 @@
 
 ;; HTTP requests in Org files
 (use-package ob-restclient
+  :ensure t
   :after (org))
 
 ;;;; Org package configuration
@@ -109,6 +110,7 @@
 (require 'ox-md)
 (require 'ox-texinfo)
 (use-package ox-gfm
+  :ensure t
   :init
   (eval-after-load "org"
     '(require 'ox-gfm nil t)))
@@ -150,6 +152,7 @@
 
 ;; Only display one bullet per headline for a cleaner look.
 (use-package org-superstar
+  :ensure t
   :after (org)
   :init
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
@@ -189,6 +192,6 @@ based on the title."
   (interactive)
   (org-map-entries #'iensu/org-get-anchor-link-friendly-custom-id))
 
-(use-package org-tree-slide)
+(use-package org-tree-slide :ensure t)
 (global-set-key (kbd "<f8>") 'org-tree-slide-mode)
 (global-set-key (kbd "S-<f8>") 'org-tree-slide-skip-done-toggle)

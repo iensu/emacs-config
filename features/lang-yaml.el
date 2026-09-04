@@ -1,6 +1,6 @@
 (require 'yaml-ts-mode)
 
-(use-package highlight-indentation)
+(use-package highlight-indentation :ensure t)
 
 (defun iensu--yaml-mode-hook ()
   (display-line-numbers-mode 1)

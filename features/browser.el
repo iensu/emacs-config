@@ -1,4 +1,4 @@
-(use-package w3m)
+(use-package w3m :ensure t)
 
 (defun iensu/query-ddg (query)
   "Send a query to DuckDuckGo using w3m"

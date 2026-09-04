@@ -19,6 +19,7 @@
   (setopt lsp-rust-analyzer-display-closure-return-type-hints t))
 
 (use-package flymake-clippy
+  :ensure t
   :hook
   (rust-mode . flymake-clippy-setup)
   :config

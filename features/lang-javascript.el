@@ -5,9 +5,10 @@
 (require 'html-ts-mode)
 (require 'css-mode)
 
-(use-package flymake-eslint)
-(use-package add-node-modules-path)
+(use-package flymake-eslint :ensure t)
+(use-package add-node-modules-path :ensure t)
 (use-package rjsx-mode
+  :ensure t
   :init
   (add-to-list 'magic-mode-alist
                '((lambda () (and buffer-file-name

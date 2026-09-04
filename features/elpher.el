@@ -1,6 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 
-(use-package elpher)
+(use-package elpher :ensure t)
 
 (defun iensu-elpher--org-link-store ()
   "Store `elpher' in org-mode."

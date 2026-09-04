@@ -1,7 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 
 (use-package markdown-ts-mode
-  :ensure nil
   :mode ("\\.md\\'" "\\.mdx\\'" "\\.markdown\\'")
   :config
   (require 'markdown-ts-mode-x))
@@ -16,5 +15,6 @@
 ;;   (add-to-list 'markdown-css-paths (concat user-emacs-directory "assets/markdown-css/styles.css")))
 
 (use-package separedit
+  :ensure t
   :config
   (setq separedit-default-mode 'markdown-mode))

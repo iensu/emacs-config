@@ -1,4 +1,5 @@
 (use-package gptel
+  :ensure t
   :config
   (global-set-key (kbd "C-c RET") 'gptel-send)
 

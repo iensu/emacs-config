@@ -1,4 +1,5 @@
 (use-package web-mode
+  :ensure t
   :mode ("\\.html$"
          "\\.hbs$"
          "\\.handlebars$"
@@ -29,11 +30,12 @@
                              (prettier-js-mode 1)
                              (lsp-deferred))))
 
-(use-package rainbow-mode :hook (css-mode))
+(use-package rainbow-mode :ensure t :hook (css-mode))
 
 (use-package scss-mode :mode ("\\.scss$" "\\.styl$"))
 
 (use-package emmet-mode
+  :ensure t
   :config
   (add-hook 'emmet-mode-hook
             (lambda ()

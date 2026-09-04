@@ -1,1 +1,1 @@
-(use-package fish-mode)
+(use-package fish-mode :ensure t)

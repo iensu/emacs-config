@@ -1,10 +1,11 @@
 (use-package geiser
+  :ensure t
   :hook
   (geiser-repl-mode . smartparens-strict-mode)
   :config
   (geiser-autodoc-mode 1))
 
-(use-package geiser-guile)
+(use-package geiser-guile :ensure t)
 
 (defun iensu-scheme-hook ()
   (smartparens-strict-mode 1)

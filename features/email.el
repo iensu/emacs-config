@@ -1,5 +1,4 @@
 (use-package mu4e
-  :ensure nil
   :bind (:map mu4e-view-mode-map
               ("<tab>" . shr-next-link)
               ("<backtab>" . shr-previous-link))

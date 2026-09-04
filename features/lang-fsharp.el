@@ -1,4 +1,5 @@
 (use-package fsharp-mode
+  :ensure t
   :defer t
   :hook
   (fsharp-mode . eglot-ensure)

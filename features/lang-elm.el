@@ -1,4 +1,5 @@
 (use-package elm-mode
+  :ensure t
   :config
   (setq elm-tags-on-save t
         elm-sort-imports-on-save t

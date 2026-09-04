@@ -1,9 +1,11 @@
 (use-package scala-mode
+  :ensure t
   :hook
   (scala-mode . eglot-ensure)
   :mode "\\.s\\(cala\\|bt\\)$")
 
 (use-package sbt-mode
+  :ensure t
   :commands (sbt-start sbt-command)
   :custom
   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152

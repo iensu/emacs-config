@@ -6,7 +6,7 @@
 (require 'use-package)
 
 (setopt package-enable-at-startup t
-        use-package-always-ensure t
+        use-package-always-ensure nil
         byte-compile-warnings nil
         native-comp-async-report-warnings-errors nil) ; silence noisy warnings
 
@@ -17,6 +17,7 @@
 
 ;; Make system path variables accessible in Emacs
 (use-package exec-path-from-shell
+  :ensure t
   :custom
   (exec-path-from-shell-check-startup-files nil)
   :init
@@ -246,13 +247,13 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 ;; Use the built-in editorconfig package to conform to project formatting rules if present.
 (use-package editorconfig
-  :ensure nil
   :hook
   (prog-mode . editorconfig-mode)
   (text-mode . editorconfig-mode))
 
 ;; Make parentheses pretty
 (use-package rainbow-delimiters
+  :ensure t
   :hook
   (scheme-mode . rainbow-delimiters-mode)
   (emacs-lisp-mode . rainbow-delimiters-mode)
@@ -262,8 +263,9 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 ;; Enable multiple cursors for convenient editing. Use `iedit' for quick and dirty multi-cursor
 ;; functionality.
-(use-package iedit)
+(use-package iedit :ensure t)
 (use-package multiple-cursors
+  :ensure t
   :bind
   (("M-="           . mc/edit-lines)
    ("C-S-<right>"   . mc/mark-next-like-this)
@@ -274,6 +276,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 ;; Expand region from current region or point.
 (use-package expand-region
+  :ensure t
   :bind
   (("C-=" . er/expand-region)
    ("C-M-=" . er/contract-region)))
@@ -296,6 +299,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;; Manipulate parentheses and other code structures.
 ;; Some of these commands might be intercepted by MacOS Mission Control shortcuts!
 (use-package smartparens
+  :ensure t
   :init
   (require 'smartparens-config)
   :bind (:map smartparens-mode-map
@@ -317,6 +321,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 ;; Prettify compilation-mode buffers
 (use-package xterm-color
+  :ensure t
   :init
   (defun iensu--advice-compilation-filter (f proc string)
     ;; Apply `xterm-color' only to real compilation buffers, and not buffers which rely on the
@@ -330,6 +335,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 ;; Install vterm for better terminal support
 (use-package vterm
+  :ensure t
   :config
   (setopt vterm-shell (executable-find "fish"))
   (defun iensu/project-vterm ()
@@ -358,7 +364,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
         (funcall shutdown-hook))
       (kill-buffer buffer-name))))
 
-(use-package multi-vterm)
+(use-package multi-vterm :ensure t)
 
 ;;;;; Text editing tools
 
@@ -399,10 +405,11 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
     (flyspell-buffer)
     (message (format "Switched dictionary to %s" dict))))
 
-(use-package flyspell-popup :after (flyspell))
+(use-package flyspell-popup :ensure t :after (flyspell))
 
 ;; Emoji support because reasons...
 (use-package emojify
+  :ensure t
   :custom
   (emojify-emojis-dir (expand-file-name ".local/emojis" user-emacs-directory)))
 
@@ -420,16 +427,19 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;;;; Utility packages
 
 (use-package rfc-mode
+  :ensure t
   :config
   (setopt rfc-mode-directory (expand-file-name "rfcs" user-emacs-directory)))
 
 (use-package marginalia
+  :ensure t
   :init
   (marginalia-mode)
   :config
   (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil)))
 
 (use-package consult
+  :ensure t
   :bind
   (("C-c h"    . consult-history)
    ("C-x M-:"  . consult-complex-command)
@@ -466,17 +476,18 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (setopt consult-preview-key nil))
 
 (use-package embark
+  :ensure t
   :bind
   (("C-."   . embark-act)
    ("H-a"   . embark-act)
    ("H-e"   . embark-export)
    ("C-h B" . embark-bindings)))
 
-(use-package embark-consult)
+(use-package embark-consult :ensure t)
 
 ;; Install `hydra' with `pretty-hydra' which simplifies hydra definitions
-(use-package hydra)
-(use-package pretty-hydra :after (hydra))
+(use-package hydra :ensure t)
+(use-package pretty-hydra :ensure t :after (hydra))
 
 ;; Armor exported PGP-keys
 (setq epa-armor t)
@@ -493,6 +504,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;; This section adds packages which enables quick navigation and search.
 
 (use-package dired-subtree
+  :ensure t
   :commands (dired-subtree-toggle dired-subtree-cycle)
   :config
   (setopt dired-subtree-use-backgrounds nil))
@@ -520,6 +532,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 (setopt set-mark-command-repeat-pop t)
 
 (use-package deadgrep
+  :ensure t
   :config
   (add-to-list 'deadgrep-extra-arguments "--follow") ; follow symlinks
   (add-to-list 'deadgrep-extra-arguments "--hidden") ; search hidden files
@@ -533,6 +546,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 ;; Snippet expansion for less repetitive text editing
 (use-package yasnippet
+  :ensure t
   :delight yas-minor-mode
   :init
   (yas-global-mode 1)
@@ -614,7 +628,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 (global-set-key (kbd "s-d") 'windmove-swap-states-right)
 
 ;; Justfile support
-(use-package just-ts-mode)
+(use-package just-ts-mode :ensure t)
 
 ;;;;; Global hydra
 
@@ -677,9 +691,10 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 (setq frame-title-format nil)
 
 ;; Use icons where applicable.
-(use-package all-the-icons)
+(use-package all-the-icons :ensure t)
 
 (use-package modus-themes
+  :ensure t
   :config
   (load-theme 'modus-vivendi-tinted t))
 
@@ -712,6 +727,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 ;; Use `magit' for a great `git' experience.
 (use-package magit
+  :ensure t
   :bind (("C-x g" . magit-status))
   :custom
   (magit-bury-buffer-function 'quit-window)
@@ -806,12 +822,13 @@ Falls back to looking for .projectile for compatibility reasons."
 ;;;; IDE features
 
 ;; Highlight TODOs in programming buffers
-(use-package hl-todo :hook ((prog-mode . hl-todo-mode)))
+(use-package hl-todo :ensure t :hook ((prog-mode . hl-todo-mode)))
 
 ;;;;; Autocompletion and intellisense
 
 ;; Corfu for completions
 (use-package corfu
+  :ensure t
   :custom
   (corfu-cycle t)
   (corfu-auto t)
@@ -830,6 +847,7 @@ Falls back to looking for .projectile for compatibility reasons."
                                     (setopt corfu-auto nil))))
 
 (use-package cape
+  :ensure t
   :bind (("C-<tab>" . completion-at-point)
          ("H-c p" . completion-at-point)
          ("H-c t" . complete-tag)
@@ -853,6 +871,7 @@ Falls back to looking for .projectile for compatibility reasons."
 
 
 (use-package vertico
+  :ensure t
   :init
   (vertico-mode)
   (setopt vertico-cycle t))
@@ -862,6 +881,7 @@ Falls back to looking for .projectile for compatibility reasons."
   (savehist-mode 1))
 
 (use-package orderless
+  :ensure t
   :init
   (setopt completion-styles '(orderless basic)
           completion-category-overrides '((file (styles partial-completion))))
@@ -925,6 +945,7 @@ Falls back to looking for .projectile for compatibility reasons."
   (setopt eglot-confirm-server-initiated-edits nil))
 
 (use-package lsp-mode
+  :ensure t
   :commands (lsp lsp-deferred)
   :bind (:map lsp-mode-map
               ("C-c l" . lsp-mode-hydra/body))
@@ -945,7 +966,7 @@ Falls back to looking for .projectile for compatibility reasons."
     "Misc"
     (("w" lsp-workspace-restart "Reconnect to LSP server")))))
 
-(use-package lsp-ui :commands lsp-ui-mode
+(use-package lsp-ui :ensure t :commands lsp-ui-mode
   :bind
   (:map lsp-mode-map
         ("C-c C-ä" . lsp-ui-doc-focus-frame))
@@ -966,10 +987,11 @@ Falls back to looking for .projectile for compatibility reasons."
   (add-hook 'before-save-hook #'iensu--maybe-lsp-format-buffer))
 
 ;; Autoformatting
-(use-package prettier-js)
+(use-package prettier-js :ensure t)
 
 ;; HTTP requests
 (use-package restclient
+  :ensure t
   :mode (("\\.rest$" . restclient-mode)
          ("\\.restclient$" . restclient-mode)
          ("\\.http$" . restclient-mode))

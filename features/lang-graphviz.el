@@ -1,4 +1,5 @@
 (use-package graphviz-dot-mode
+  :ensure t
   :bind (:map graphviz-dot-mode-map
               ("C-c C-c" . graphviz-dot-preview))
   :hook
