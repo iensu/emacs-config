@@ -1,4 +1,4 @@
-;;; Org mode configuration
+;;; Org mode configuration  -*- lexical-binding: t; -*-
 
 ;;; Code:
 
