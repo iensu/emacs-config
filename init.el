@@ -133,7 +133,7 @@
 ;; Don't allow eldoc to display more than one line in the echo area
 (setopt eldoc-echo-area-use-multiline-p nil)
 
-(pixel-scroll-mode 1)
+(pixel-scroll-precision-mode 1)
 
 ;; Enable autosaves
 (auto-save-mode 1)
@@ -1130,14 +1130,6 @@ Falls back to looking for .projectile for compatibility reasons."
     (ring-insert iensu--font-ring font)
     (set-frame-font font :keep-size t)
     (message "Using font %s" font)))
-
-(use-package ultra-scroll
-  :vc (:url "https://github.com/jdtsmith/ultra-scroll")
-  :init
-  (setq scroll-conservatively 3 ; or whatever value you prefer, since v0.4
-        scroll-margin 0)        ; important: scroll-margin>0 not yet supported
-  :config
-  (ultra-scroll-mode 1))
 
 ;;;; Start Emacs server
 (require 'server)
