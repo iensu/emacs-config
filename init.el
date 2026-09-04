@@ -244,8 +244,9 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;; Disable suspend key binding
 (global-unset-key (kbd "C-x C-z"))
 
-;; Use the editorconfig package to conform to project formatting rules if present.
+;; Use the built-in editorconfig package to conform to project formatting rules if present.
 (use-package editorconfig
+  :ensure nil
   :hook
   (prog-mode . editorconfig-mode)
   (text-mode . editorconfig-mode))
