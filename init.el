@@ -47,12 +47,6 @@
 
 (defvar iensu-age-session-duration "15 minutes")
 
-(defvar iensu-org-refile-targets nil
-  "Org files which can be used as refiling targets.")
-
-(defvar iensu-org-capture-templates nil
-  "Capture templates to be used by Org mode.")
-
 (defvar iensu-enabled-features-alist '("elpher")
   "Locally enabled features. Available features are stored in the `features/' directory.")
 
@@ -644,9 +638,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
    (("l"   list-bookmarks                  "list bookmarks")
     ("b"   bookmark-set                    "set bookmark"))
    "Misc"
-   (("P"   iensu/project-todo-list         "project todo list")
-    ("p"   iensu/open-project-org-file     "open project notes file")
-    ("ä"   iensu/promote-side-window       "promote side window"))
+   (("ä"   iensu/promote-side-window       "promote side window"))
    "Hide/show"
    (("h h" hs-toggle-hiding                "toggle block visibility")
     ("h l" hs-hide-level                   "hide all blocks at same level")
@@ -789,9 +781,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
      ("A" iensu/project-remove "forget project")
      ("v" iensu/project-vterm "vterm"))
     "Files & Buffers"
-    (("f" project-find-file "open project file")
-     ("o" iensu/open-project-org-file "open project org file")
-     ("T" iensu/project-todo-list "open project TODO list"))
+    (("f" project-find-file "open project file"))
     "Search"
     (("s" iensu/project-ripgrep "search")
      ("r" project-query-replace-regexp "query replace"))))

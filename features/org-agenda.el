@@ -40,10 +40,6 @@
 ;; Update the calendar to contain Swedish holidays etc.
 (load-file (expand-file-name "packages/kalender.el" user-emacs-directory))
 
-(defun iensu/open-project-org-file ()
-  (interactive)
-  (find-file (iensu--org-capture-project-notes-file)))
-
 (defun iensu/refresh-agenda-files ()
   (interactive)
   (setopt org-agenda-files (directory-files "~/Nextcloud/notes/log" :full ".+.org$")))
