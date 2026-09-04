@@ -636,8 +636,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
    ("d"   "duplicate DWIM" duplicate-dwim :transient t)
    ("s"   "search" deadgrep)
    ("t"   "truncate lines" toggle-truncate-lines)
-   ("u"   "reload buffer" revert-buffer)
-   ("D"   "change dictionary" iensu/cycle-ispell-dictionary)]
+   ("u"   "reload buffer" revert-buffer)]
   ["Bookmarks"
    ("l"   "list bookmarks" list-bookmarks)
    ("b"   "set bookmark" bookmark-set)]
