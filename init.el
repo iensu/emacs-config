@@ -4,6 +4,7 @@
 
 (require 'package)
 (require 'use-package)
+(require 'transient)
 
 (setopt package-enable-at-startup t
         use-package-always-ensure nil
@@ -630,29 +631,29 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;; Justfile support
 (use-package just-ts-mode :ensure t)
 
-;;;;; Global hydra
+;;;;; Global transient
 
-;; Setup a global hydra with keybindings I use very often.
-(pretty-hydra-define iensu-hydra
-  (:color teal :quit-key "q" :title "Global commands")
-  ("Utilities"
-   (("d"   duplicate-dwim                                        "duplicate DWIM" :exit nil)
-    ("s"   deadgrep                                              "search")
-    ("t"   toggle-truncate-lines                                 "truncate lines")
-    ("u"   revert-buffer                                         "reload buffer")
-    ("D"   iensu/cycle-ispell-dictionary                         "change dictionary"))
-   "Bookmarks"
-   (("l"   list-bookmarks                  "list bookmarks")
-    ("b"   bookmark-set                    "set bookmark"))
-   "Misc"
-   (("ä"   iensu/promote-side-window       "promote side window"))
-   "Hide/show"
-   (("h h" hs-toggle-hiding                "toggle block visibility")
-    ("h l" hs-hide-level                   "hide all blocks at same level")
-    ("h a" hs-hide-all                     "hide all")
-    ("h s" hs-show-all                     "show all"))))
+;; Setup a global transient menu with keybindings I use very often.
+(transient-define-prefix iensu-transient ()
+  "Global commands"
+  ["Utilities"
+   ("d"   "duplicate DWIM" duplicate-dwim :transient t)
+   ("s"   "search" deadgrep)
+   ("t"   "truncate lines" toggle-truncate-lines)
+   ("u"   "reload buffer" revert-buffer)
+   ("D"   "change dictionary" iensu/cycle-ispell-dictionary)]
+  ["Bookmarks"
+   ("l"   "list bookmarks" list-bookmarks)
+   ("b"   "set bookmark" bookmark-set)]
+  ["Misc"
+   ("ä"   "promote side window" iensu/promote-side-window)]
+  ["Hide/show"
+   ("h h" "toggle block visibility" hs-toggle-hiding)
+   ("h l" "hide all blocks at same level" hs-hide-level)
+   ("h a" "hide all" hs-hide-all)
+   ("h s" "show all" hs-show-all)])
 
-(global-set-key (kbd "C-å") #'iensu-hydra/body)
+(global-set-key (kbd "C-å") #'iensu-transient)
 
 ;; Enhance explorability with by listing possible completions while doing key chords.
 (use-package which-key :config (which-key-mode))

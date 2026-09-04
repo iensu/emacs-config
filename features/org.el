@@ -163,12 +163,12 @@
 (setq iensu--timer:org-save-buffers
       (run-at-time t (* 5 60) #'iensu/org-save-buffers))
 
-(pretty-hydra-define+ iensu-hydra ()
-  ("Org clock"
-   (("c c" org-clock-in      "start clock")
-    ("c r" org-clock-in-last "resume clock")
-    ("c s" org-clock-out     "stop clock")
-    ("c g" org-clock-goto    "goto clocked task"))))
+(transient-append-suffix 'iensu-transient (list 3)
+  ["Org clock"
+   ("c c" "start clock" org-clock-in)
+   ("c r" "resume clock" org-clock-in-last)
+   ("c s" "stop clock" org-clock-out)
+   ("c g" "goto clocked task" org-clock-goto)])
 
 (defun iensu/org-get-anchor-link-friendly-custom-id ()
   "Gets the the `CUSTOM_ID' property of the current org entry or generates an anchor link friendly ID

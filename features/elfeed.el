@@ -1,6 +1,6 @@
-(require 'elfeed)
+(use-package elfeed :ensure t)
 
-(pretty-hydra-define+ iensu-hydra ()
-  ("Elfeed"
-   (("f f" elfeed)
-    ("f u" elfeed-update))))
+(transient-append-suffix 'iensu-transient (list 3)
+  ["Elfeed"
+   ("f f" "open" elfeed)
+   ("f u" "update" elfeed-update)])

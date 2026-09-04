@@ -58,12 +58,12 @@
   (add-to-list 'mu4e-view-actions '("EWW" . iensu--mu4e-view-in-eww) t)
   (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t))
 
-(pretty-hydra-define+ iensu-hydra ()
-  ("Email"
-   (("e u" iensu/fetch-emails  "update")
-    ("e e" mu4e                "open email")
-    ("e c" mu4e-compose-new    "write email")
-    ("e s" mu4e-headers-search "search email"))))
+(transient-append-suffix 'iensu-transient (list 3)
+  ["Email"
+   ("e u" "update" iensu/fetch-emails)
+   ("e e" "open email" mu4e)
+   ("e c" "write email" mu4e-compose-new)
+   ("e s" "search email" mu4e-headers-search)])
 
 (defun iensu/mu4e-context (account-name &rest args)
   "Simplify creating MU4E contexts."
