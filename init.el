@@ -428,7 +428,9 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 ;;;; Utility packages
 
-(use-package rfc-mode)
+(use-package rfc-mode
+  :config
+  (setopt rfc-mode-directory (expand-file-name "rfcs" user-emacs-directory)))
 
 (use-package marginalia
   :init
@@ -940,6 +942,7 @@ Falls back to looking for .projectile for compatibility reasons."
   (setopt eglot-confirm-server-initiated-edits nil))
 
 (use-package lsp-mode
+  :commands (lsp lsp-deferred)
   :bind (:map lsp-mode-map
               ("C-c l" . lsp-mode-hydra/body))
   :pretty-hydra
@@ -990,10 +993,6 @@ Falls back to looking for .projectile for compatibility reasons."
   :hook (restclient-mode . outline-minor-mode)
   :config
   (setq outline-regexp "[#]+"))
-
-(use-package hurl-mode
-  :vc (hurl-mode :url "https://github.com/JasZhe/hurl-mode")
-  :mode (("\\.hurl$" . hurl-mode)))
 
 (use-package envrc
   :ensure t
@@ -1106,10 +1105,6 @@ Falls back to looking for .projectile for compatibility reasons."
                          :link denote-org-link-format
                          :link-in-context-regexp denote-org-link-in-context-regexp))
   (setopt denote-file-type 'org))
-
-;; http://yummymelon.com/devnull/mathing-in-emacs-with-casual.html
-(use-package casual
-  :bind (:map calc-mode-map (("C-o" . casual-main-menu))))
 
 
 ;;;; Setup fonts

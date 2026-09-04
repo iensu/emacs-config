@@ -1,10 +1,13 @@
-(use-package rust-mode
-  :bind (:map rust-mode-map
+(defun iensu--rust-hook ()
+  (lsp-deferred)
+  (flymake-mode 1))
+
+(use-package rust-ts-mode
+  :bind (:map rust-ts-mode-map
               ("C-c C-c" . iensu/rust-check-project)
               ("C-c C-t" . rust-test))
-  :hook
-  (rust-mode . lsp-deferred)
-  (rust-mode . flymake-mode)
+  :init
+  (add-hook 'rust-ts-mode-hook 'iensu--rust-hook)
   :config
   (setopt rust-format-on-save t)
   (setopt lsp-rust-clippy-preference "on")
@@ -17,7 +20,7 @@
 
 (use-package flymake-clippy
   :hook
-  (rust-mode . flymake-clippy-setup-backend)
+  (rust-mode . flymake-clippy-setup)
   :config
   (setopt flymake-clippy-bin-args '("--" "-W" "clippy::pedantic" "-W" "clippy::nursery")))
 
