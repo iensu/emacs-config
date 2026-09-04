@@ -740,25 +740,26 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (setopt magit-log-margin '(t "%Y-%m-%d " magit-log-margin-width t 18)))
 
 ;; `smerge-mode' is a merge conflict resolution tool which is great but unfortunately has awful
-;; default keybindings. Here I define a hydra to make `smerge' easier to work with.
+;; default keybindings. Here I define a transient to make `smerge' easier to work with.
+(transient-define-prefix smerge-transient ()
+  "Smerge - Git conflicts"
+  ["Resolving"
+   ("RET" "Keep current" smerge-keep-current :transient t)
+   ("l"   "Keep lower" smerge-keep-lower :transient t)
+   ("u"   "Keep upper" smerge-keep-upper :transient t)
+   ("b"   "Keep base" smerge-keep-base :transient t)
+   ("C"   "Combine with next" smerge-combine-with-next)
+   ("a"   "Keep all" smerge-keep-all :transient t)
+   ("r"   "Resolve" smerge-resolve)]
+  ["Navigation"
+   ("n"   "Next conflict" smerge-next :transient t)
+   ("p"   "Previous conflict" smerge-prev :transient t)
+   ("R"   "Highlight differences" smerge-refine :transient t)]
+  ["Misc"
+   ("E"   "Open in Ediff" smerge-ediff)])
+
 (use-package smerge-mode
-  :bind (:map smerge-mode-map (("C-c ö" . smerge-mode-hydra/body)))
-  :pretty-hydra
-  ((:color teal :quit-key "q" :title "Smerge - Git conflicts")
-   ("Resolving"
-    (("RET" smerge-keep-current      "Keep current"          :exit nil)
-     ("l"   smerge-keep-lower        "Keep lower"            :exit nil)
-     ("u"   smerge-keep-upper        "Keep upper"            :exit nil)
-     ("b"   smerge-keep-base         "Keep base"             :exit nil)
-     ("C"   smerge-combine-with-next "Combine with next")
-     ("a"   smerge-keep-all          "Keep all"              :exit nil)
-     ("r"   smerge-resolve           "Resolve"))
-    "Navigation"
-    (("n"   smerge-next              "Next conflict"         :exit nil)
-     ("p"   smerge-prev              "Previous conflict"     :exit nil)
-     ("R"   smerge-refine            "Highlight differences" :exit nil))
-    "Misc"
-    (("E"   smerge-ediff             "Open in Ediff")))))
+  :bind (:map smerge-mode-map (("C-c ö" . smerge-transient))))
 
 
 ;;;; Project management
@@ -779,22 +780,23 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (interactive)
   (consult-ripgrep (project-root (project-current))))
 
+(transient-define-prefix project-transient ()
+  "Project management"
+  ["Project"
+   ("p" "open project" project-switch-project)
+   ("k" "close project" project-kill-buffers)
+   ("a" "remember project" iensu/project-save)
+   ("A" "forget project" iensu/project-remove)
+   ("v" "vterm" iensu/project-vterm)]
+  ["Files & Buffers"
+   ("f" "open project file" project-find-file)]
+  ["Search"
+   ("s" "search" iensu/project-ripgrep)
+   ("r" "query replace" project-query-replace-regexp)])
+
 (use-package project
   :bind
-  (("C-c p" . project-hydra/body))
-  :pretty-hydra
-  ((:color teal :quit-key "q" :title "Project management")
-   ("Project"
-    (("p" project-switch-project "open project")
-     ("k" project-kill-buffers "close project")
-     ("a" iensu/project-save "remember project")
-     ("A" iensu/project-remove "forget project")
-     ("v" iensu/project-vterm "vterm"))
-    "Files & Buffers"
-    (("f" project-find-file "open project file"))
-    "Search"
-    (("s" iensu/project-ripgrep "search")
-     ("r" project-query-replace-regexp "query replace"))))
+  (("C-c p" . project-transient))
   :config
   (setopt project-list-file (expand-file-name "projects"
                                               (concat user-emacs-directory ".local/")))
