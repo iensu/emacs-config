@@ -616,38 +616,6 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;; Justfile support
 (use-package just-ts-mode)
 
-;;;;; Window resizing (repeat-mode)
-
-(repeat-mode 1)
-
-(defun iensu/enlarge-window-horizontally ()
-  (interactive)
-  (enlarge-window-horizontally 10))
-
-(defun iensu/enlarge-window-vertically ()
-  (interactive)
-  (enlarge-window 5))
-
-(defun iensu/shrink-window-horizontally ()
-  (interactive)
-  (shrink-window-horizontally 10))
-
-(defun iensu/shrink-window-vertically ()
-  (interactive)
-  (shrink-window 5))
-
-(defvar-keymap iensu-window-resize-repeat-map
-  :repeat t
-  "+" #'iensu/enlarge-window-horizontally
-  "?" #'iensu/enlarge-window-vertically
-  "-" #'iensu/shrink-window-horizontally
-  "_" #'iensu/shrink-window-vertically)
-
-(global-set-key (kbd "C-c w +") #'iensu/enlarge-window-horizontally)
-(global-set-key (kbd "C-c w ?") #'iensu/enlarge-window-vertically)
-(global-set-key (kbd "C-c w -") #'iensu/shrink-window-horizontally)
-(global-set-key (kbd "C-c w _") #'iensu/shrink-window-vertically)
-
 ;;;;; Global hydra
 
 ;; Setup a global hydra with keybindings I use very often.
