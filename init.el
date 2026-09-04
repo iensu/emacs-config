@@ -912,62 +912,64 @@ Falls back to looking for .projectile for compatibility reasons."
   (setopt enable-recursive-minibuffers t))
 
 
-(pretty-hydra-define prog-mode-hydra
-  (:color teal :quit-key "q" :title "Programming")
-  ("Exploration"
-    (("l" xref-find-references "list references")
-     ("d" eldoc-doc-buffer "describe symbol")
-     ("e" flymake-show-buffer-diagnostics "list buffer errors")
-     ("å" flymake-goto-previous-error "goto previous error in buffer")
-     ("ä" flymake-goto-next-error "goto next error in buffer ")
-     ("E" flymake-show-project-diagnostics "list workspace errors"))))
+(transient-define-prefix prog-mode-transient ()
+  "Programming"
+  ["Exploration"
+   ("l" "list references" xref-find-references)
+   ("d" "describe symbol" eldoc-doc-buffer)
+   ("e" "list buffer errors" flymake-show-buffer-diagnostics)
+   ("å" "goto previous error in buffer" flymake-goto-previous-error)
+   ("ä" "goto next error in buffer" flymake-goto-next-error)
+   ("E" "list workspace errors" flymake-show-project-diagnostics)])
 
-(define-key prog-mode-map (kbd "C-c l") 'prog-mode-hydra/body)
+(define-key prog-mode-map (kbd "C-c l") 'prog-mode-transient)
 (define-key prog-mode-map (kbd "M-<RET>") 'default-indent-new-line)
+
+(transient-define-prefix eglot-transient ()
+  "Eglot"
+  ["Exploration"
+   ("l" "list references" xref-find-references)
+   ("d" "describe symbol" eldoc-doc-buffer)
+   ("e" "list buffer errors" flymake-show-buffer-diagnostics)
+   ("å" "goto previous error in buffer" flymake-goto-previous-error)
+   ("ä" "goto next error in buffer" flymake-goto-next-error)
+   ("E" "list workspace errors" flymake-show-project-diagnostics)]
+  ["Refactoring"
+   ("a" "execute code action" eglot-code-actions)
+   ("n" "rename symbol" eglot-rename)
+   ("i" "organize imports" eglot-code-actions-organize-imports)
+   ("f" "format buffer" eglot-format-buffer)]
+  ["Misc"
+   ("w" "Reconnect to LSP server" eglot-reconnect)])
 
 (use-package eglot
   :bind (:map eglot-mode-map
-              ("C-c l" . eglot-hydra/body))
-  :pretty-hydra
-  ((:title "Eglot" :quit-key "q" :color teal)
-   ("Exploration"
-    (("l" xref-find-references "list references")
-     ("d" eldoc-doc-buffer "describe symbol")
-     ("e" flymake-show-buffer-diagnostics "list buffer errors")
-     ("å" flymake-goto-previous-error "goto previous error in buffer")
-     ("ä" flymake-goto-next-error "goto next error in buffer ")
-     ("E" flymake-show-project-diagnostics "list workspace errors"))
-    "Refactoring"
-    (("a" eglot-code-actions "execute code action")
-     ("n" eglot-rename "rename symbol")
-     ("i" eglot-code-actions-organize-imports "organize imports")
-     ("f" eglot-format-buffer "format buffer"))
-    "Misc"
-    (("w" eglot-reconnect "Reconnect to LSP server"))))
+              ("C-c l" . eglot-transient))
   :config
   (setopt eglot-confirm-server-initiated-edits nil))
+
+(transient-define-prefix lsp-mode-transient ()
+  "LSP"
+  ["Exploration"
+   ("l" "list references" xref-find-references)
+   ("d" "describe symbol" eldoc-doc-buffer)
+   ("e" "list buffer errors" flymake-show-buffer-diagnostics)
+   ("å" "goto previous error in buffer" flymake-goto-previous-error)
+   ("ä" "goto next error in buffer" flymake-goto-next-error)
+   ("E" "list workspace errors" flymake-show-project-diagnostics)]
+  ["Refactoring"
+   ("a" "execute code action" lsp-execute-code-action)
+   ("n" "rename symbol" lsp-rename)
+   ("i" "organize imports" lsp-organize-imports)
+   ("f" "format buffer" lsp-format-buffer)]
+  ["Misc"
+   ("w" "Reconnect to LSP server" lsp-workspace-restart)])
 
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-deferred)
   :bind (:map lsp-mode-map
-              ("C-c l" . lsp-mode-hydra/body))
-  :pretty-hydra
-  ((:title "LSP" :quit-key "q" :color teal)
-   ("Exploration"
-    (("l" xref-find-references "list references")
-     ("d" eldoc-doc-buffer "describe symbol")
-     ("e" flymake-show-buffer-diagnostics "list buffer errors")
-     ("å" flymake-goto-previous-error "goto previous error in buffer")
-     ("ä" flymake-goto-next-error "goto next error in buffer ")
-     ("E" flymake-show-project-diagnostics "list workspace errors"))
-    "Refactoring"
-    (("a" lsp-execute-code-action "execute code action")
-     ("n" lsp-rename "rename symbol")
-     ("i" lso-organize-imports "organize imports")
-     ("f" lsp-format-buffer "format buffer"))
-    "Misc"
-    (("w" lsp-workspace-restart "Reconnect to LSP server")))))
+              ("C-c l" . lsp-mode-transient)))
 
 (use-package lsp-ui :ensure t :commands lsp-ui-mode
   :bind
