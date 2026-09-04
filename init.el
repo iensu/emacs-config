@@ -486,10 +486,6 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 (use-package embark-consult :ensure t)
 
-;; Install `hydra' with `pretty-hydra' which simplifies hydra definitions
-(use-package hydra :ensure t)
-(use-package pretty-hydra :ensure t :after (hydra))
-
 ;; Armor exported PGP-keys
 (setq epa-armor t)
 ;; Password entry in minibuffer
