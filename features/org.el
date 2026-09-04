@@ -175,7 +175,7 @@ based on the title."
     (if (and existing-id (string-match "\\S+" existing-id))
         existing-id
       (cl-flet ((title->id (title)
-                  (let* ((no-subtitle (first (split-string title ":")))
+                  (let* ((no-subtitle (car (split-string title ":")))
                          (lowercase (downcase no-subtitle))
                          (no-weird-chars (replace-regexp-in-string "[\.\,\+\?\(\)\~\!]+" "" lowercase))
                          (no-whitespace (replace-regexp-in-string "\s+" "-" no-weird-chars)))

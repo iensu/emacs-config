@@ -113,7 +113,7 @@ rather than the one whose range covers POS."
                  (treesit-parser-range-on parser pos pos))
         (throw 'lang (treesit-parser-language parser))))
     (treesit-parser-language
-     (or (and (boundp 'treesit-primary-parser) treesit-primary-parser)
+     (or treesit-primary-parser
          (car (treesit-parser-list))))))
 
 ;; html-ts-mode--indent-rules has ((parent-is "fragment") column-0 0), which

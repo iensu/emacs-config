@@ -7,8 +7,7 @@
 (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
 (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
 
-(if (boundp 'org-agenda-include-diary)
-    (setopt org-agenda-include-diary t))
+(setopt org-agenda-include-diary t)
 
 (defun iensu/sync-ics-calendars ()
   (interactive)
