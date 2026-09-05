@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; Module for JavaScript, TypeScript, Deno and everything else...
 
 (require 'typescript-ts-mode)

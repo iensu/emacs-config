@@ -14,8 +14,6 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
 
-
-
 ;; Make system path variables accessible in Emacs
 (use-package exec-path-from-shell
   :ensure t

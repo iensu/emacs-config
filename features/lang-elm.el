@@ -1,7 +1,0 @@
-(use-package elm-mode
-  :ensure t
-  :config
-  (setq elm-tags-on-save t
-        elm-sort-imports-on-save t
-        elm-format-on-save t)
-  (add-hook 'elm-mode-hook 'eglot-ensure))

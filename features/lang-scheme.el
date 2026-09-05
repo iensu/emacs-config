@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (use-package geiser
   :ensure t
   :hook
