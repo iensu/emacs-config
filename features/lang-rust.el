@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (defun iensu--rust-hook ()
   (lsp-deferred)
   (flymake-mode 1))

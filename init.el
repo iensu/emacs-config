@@ -1,4 +1,4 @@
-;;; Code:
+;;; Code:  -*- lexical-binding: t; -*-
 
 ;;;; Package installation and management
 
@@ -125,7 +125,7 @@
         backup-by-copying t
         delete-old-versions t
         kept-new-versions 6
-        frame-inhibit-implied-resize 1
+        frame-inhibit-implied-resize t
 
         delete-by-moving-to-trash t
         undo-limit 8000000)
@@ -476,16 +476,6 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   ;; Disable previews
   (setopt consult-preview-key nil))
 
-(use-package embark
-  :ensure t
-  :bind
-  (("C-."   . embark-act)
-   ("H-a"   . embark-act)
-   ("H-e"   . embark-export)
-   ("C-h B" . embark-bindings)))
-
-(use-package embark-consult :ensure t)
-
 ;; Armor exported PGP-keys
 (setq epa-armor t)
 ;; Password entry in minibuffer
@@ -552,18 +542,6 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (add-hook 'snippet-mode-hook (lambda ()
                                  (setopt mode-require-final-newline nil
                                          require-final-newline nil))))
-
-;; Speedbar for file navigation
-;; (require 'speedbar)
-;; (defun iensu/speedbar-reset-layout ()
-;;   (setf (alist-get 'width speedbar-frame-parameters) 60)
-;;   (setf (alist-get 'height speedbar-frame-parameters) 45)
-;;   (setf (alist-get 'left speedbar-frame-parameters) 0)
-;;   (setf (alist-get 'top speedbar-frame-parameters) 0))
-
-;; (add-hook 'speedbar-after-create-hook #'iensu/speedbar-reset-layout)
-;; (define-key speedbar-file-key-map (kbd "<tab>") #'speedbar-toggle-line-expansion)
-;; (global-set-key (kbd "C-ä") #'speedbar)
 
 (global-set-key (kbd "C-Ä") (lambda () (interactive)(forward-line -10)))
 (global-set-key (kbd "C-ä") (lambda () (interactive)(forward-line  10)))
@@ -1133,8 +1111,6 @@ Falls back to looking for .projectile for compatibility reasons."
     (set-frame-font font :keep-size t)
     (message "Using font %s" font)))
 
-(iensu/cycle-fonts)
-
 (defun iensu/change-font-size (font)
   (interactive
    (let ((fonts (sort (ring-elements iensu--font-ring))))
@@ -1148,6 +1124,8 @@ Falls back to looking for .projectile for compatibility reasons."
     (ring-insert iensu--font-ring font)
     (set-frame-font font :keep-size t)
     (message "Using font %s" font)))
+
+(iensu/change-font-size "Maple Mono NF CN-14")
 
 ;;;; Start Emacs server
 (require 'server)

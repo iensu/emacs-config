@@ -1,4 +1,4 @@
-;; WebAssembly Text Format (WAT)
+;; WebAssembly Text Format (WAT)  -*- lexical-binding: t; -*-
 (use-package wat-mode
   :vc (wat-mode :url "https://github.com/devonsparks/wat-mode")
   :config

@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (require 'yaml-ts-mode)
 
 (use-package highlight-indentation :ensure t)

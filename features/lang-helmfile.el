@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (load-file (expand-file-name "packages/helmfile-gotmpl-mode.el" user-emacs-directory))
 
 (defun iensu--helmfile-gotmpl-mode-hook ()

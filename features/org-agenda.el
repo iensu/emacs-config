@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (require 'org-agenda)
 
 (dolist (agenda-command

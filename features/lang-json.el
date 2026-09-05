@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (require 'json-ts-mode)
 
 (add-to-list 'auto-mode-alist '("\\.jsonl?d?\\'" . json-ts-mode))

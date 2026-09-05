@@ -1,4 +1,4 @@
-;;; helmfile-gotmpl-mode.el --- major mode for helmfile Go-template (.gotmpl) files
+;;; helmfile-gotmpl-mode.el --- major mode for helmfile Go-template (.gotmpl) files  -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
