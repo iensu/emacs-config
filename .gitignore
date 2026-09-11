@@ -60,3 +60,4 @@ forge-database-*.sql
 
 tree-sitter/
 rfcs/
+packages-local/

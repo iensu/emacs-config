@@ -14,6 +14,28 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
 
+(define-advice use-package-vc-install
+    (:around (orig arg &optional local-path) iensu-sync-pinned-rev)
+  "Check out the `:rev' pinned in a `:vc' form even if the package is
+  already installed.  `use-package' only installs when the package is
+  missing, so a `:rev' bump is otherwise silently ignored."
+  (funcall orig arg local-path)                 ; unchanged: install if missing
+  (pcase-let* ((`(,name ,_opts ,rev) arg)
+               (desc (cadr (assq name package-alist))))
+    (when (and (stringp rev)                    ; concrete pin; nil = :newest, symbol = :last-release
+               desc (package-vc-p desc))
+      (let* ((dir (package-desc-dir desc))
+             (default-directory (file-name-as-directory dir))
+             (head (ignore-errors
+                     (car (process-lines "git" "rev-parse" "HEAD")))))
+        (unless (and head (string-prefix-p rev head))
+          (message "use-package :vc — syncing %s to %s" name rev)
+          (unless (zerop (call-process "git" nil nil nil "checkout" "--detach" rev))
+            (call-process "git" nil nil nil "fetch" "--all" "--tags")
+            (unless (zerop (call-process "git" nil nil nil "checkout" "--detach" rev))
+              (warn "use-package :vc — could not check out %s for %s" rev name)))
+          (package-vc-rebuild desc))))))
+
 ;; Make system path variables accessible in Emacs
 (use-package exec-path-from-shell
   :ensure t
@@ -426,9 +448,10 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;;;; Utility packages
 
 (use-package rfc-mode
-  :ensure t
+  :vc (rfc-mode :url "https://github.com/iensu/rfc-mode"
+                :rev "51d64553c120cfc302671611b83dd4e6b2ef942a")
   :config
-  (setopt rfc-mode-directory (expand-file-name "rfcs" user-emacs-directory)))
+  (setopt rfc-mode-directory (expand-file-name ".local/rfcs" user-emacs-directory)))
 
 (use-package marginalia
   :ensure t
