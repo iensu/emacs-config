@@ -74,8 +74,6 @@
     (load-file (expand-file-name "local-settings.el"
 				                         user-emacs-directory))))
 
-;; (setopt load-path (cons (concat user-emacs-directory "features") load-path))
-
 
 ;;;; Helper functions
 
