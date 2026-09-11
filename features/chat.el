@@ -22,7 +22,7 @@
         erc-fill-function 'erc-fill-static
         erc-fill-static-center 20)
 
-(use-package erc-hl-nicks :after erc)
+(use-package erc-hl-nicks :ensure t :after erc)
 
 (setopt erc-modules '(autoaway
                       autojoin

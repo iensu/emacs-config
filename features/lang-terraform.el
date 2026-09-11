@@ -1,4 +1,7 @@
+;; -*- lexical-binding: t; -*-
+
 (use-package terraform-mode
+  :ensure t
   :config
   (defun iensu--terraform-format ()
     (when (executable-find "terraform")

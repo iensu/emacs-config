@@ -7,6 +7,7 @@
 ;(load (expand-file-name "~/quicklisp/slime-helper.el"))
 
 (use-package sly
+  :ensure t
   :commands (sly)
   :config (setq inferior-lisp-program (executable-find "sbcl")))
 

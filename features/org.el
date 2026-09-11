@@ -1,4 +1,4 @@
-;;; Org mode configuration
+;;; Org mode configuration  -*- lexical-binding: t; -*-
 
 ;;; Code:
 
@@ -22,6 +22,7 @@
 
 ;; HTTP requests in Org files
 (use-package ob-restclient
+  :ensure t
   :after (org))
 
 ;;;; Org package configuration
@@ -109,6 +110,7 @@
 (require 'ox-md)
 (require 'ox-texinfo)
 (use-package ox-gfm
+  :ensure t
   :init
   (eval-after-load "org"
     '(require 'ox-gfm nil t)))
@@ -150,6 +152,7 @@
 
 ;; Only display one bullet per headline for a cleaner look.
 (use-package org-superstar
+  :ensure t
   :after (org)
   :init
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
@@ -160,12 +163,12 @@
 (setq iensu--timer:org-save-buffers
       (run-at-time t (* 5 60) #'iensu/org-save-buffers))
 
-(pretty-hydra-define+ iensu-hydra ()
-  ("Org clock"
-   (("c c" org-clock-in      "start clock")
-    ("c r" org-clock-in-last "resume clock")
-    ("c s" org-clock-out     "stop clock")
-    ("c g" org-clock-goto    "goto clocked task"))))
+(transient-append-suffix 'iensu-transient (list 3)
+  ["Org clock"
+   ("c c" "start clock" org-clock-in)
+   ("c r" "resume clock" org-clock-in-last)
+   ("c s" "stop clock" org-clock-out)
+   ("c g" "goto clocked task" org-clock-goto)])
 
 (defun iensu/org-get-anchor-link-friendly-custom-id ()
   "Gets the the `CUSTOM_ID' property of the current org entry or generates an anchor link friendly ID
@@ -175,7 +178,7 @@ based on the title."
     (if (and existing-id (string-match "\\S+" existing-id))
         existing-id
       (cl-flet ((title->id (title)
-                  (let* ((no-subtitle (first (split-string title ":")))
+                  (let* ((no-subtitle (car (split-string title ":")))
                          (lowercase (downcase no-subtitle))
                          (no-weird-chars (replace-regexp-in-string "[\.\,\+\?\(\)\~\!]+" "" lowercase))
                          (no-whitespace (replace-regexp-in-string "\s+" "-" no-weird-chars)))
@@ -189,6 +192,6 @@ based on the title."
   (interactive)
   (org-map-entries #'iensu/org-get-anchor-link-friendly-custom-id))
 
-(use-package org-tree-slide)
+(use-package org-tree-slide :ensure t)
 (global-set-key (kbd "<f8>") 'org-tree-slide-mode)
 (global-set-key (kbd "S-<f8>") 'org-tree-slide-skip-done-toggle)

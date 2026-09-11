@@ -1,6 +1,9 @@
+;; -*- lexical-binding: t; -*-
+
 (add-hook 'python-mode-hook 'eglot-ensure)
 
 (use-package python-black
+  :ensure t
   :demand t
   :after python
   :config

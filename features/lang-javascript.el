@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; Module for JavaScript, TypeScript, Deno and everything else...
 
 (require 'typescript-ts-mode)
@@ -5,9 +7,10 @@
 (require 'html-ts-mode)
 (require 'css-mode)
 
-(use-package flymake-eslint)
-(use-package add-node-modules-path)
+(use-package flymake-eslint :ensure t)
+(use-package add-node-modules-path :ensure t)
 (use-package rjsx-mode
+  :ensure t
   :init
   (add-to-list 'magic-mode-alist
                '((lambda () (and buffer-file-name
@@ -113,7 +116,7 @@ rather than the one whose range covers POS."
                  (treesit-parser-range-on parser pos pos))
         (throw 'lang (treesit-parser-language parser))))
     (treesit-parser-language
-     (or (and (boundp 'treesit-primary-parser) treesit-primary-parser)
+     (or treesit-primary-parser
          (car (treesit-parser-list))))))
 
 ;; html-ts-mode--indent-rules has ((parent-is "fragment") column-0 0), which

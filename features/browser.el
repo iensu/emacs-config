@@ -1,4 +1,4 @@
-(use-package w3m)
+(use-package w3m :ensure t)
 
 (defun iensu/query-ddg (query)
   "Send a query to DuckDuckGo using w3m"
@@ -6,8 +6,8 @@
   (let ((q (shr-encode-url query)))
     (w3m-goto-url (format "https://duckduckgo.com?q=%s" q))))
 
-(pretty-hydra-define+ iensu-hydra ()
-  ("Browsing"
-   (("w w" w3m-goto-url       "go to URL")
-    ("w q" iensu/query-ddg    "query DuckDuckGo")
-    ("w b" w3m-bookmark-view "w3m bookmarks"))))
+(transient-append-suffix 'iensu-transient (list 3)
+  ["Browsing"
+   ("w w" "go to URL" w3m-goto-url)
+   ("w q" "query DuckDuckGo" iensu/query-ddg)
+   ("w b" "w3m bookmarks" w3m-bookmark-view)])

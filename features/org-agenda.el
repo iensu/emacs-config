@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (require 'org-agenda)
 
 (dolist (agenda-command
@@ -39,10 +41,6 @@
 
 ;; Update the calendar to contain Swedish holidays etc.
 (load-file (expand-file-name "packages/kalender.el" user-emacs-directory))
-
-(defun iensu/open-project-org-file ()
-  (interactive)
-  (find-file (iensu--org-capture-project-notes-file)))
 
 (defun iensu/refresh-agenda-files ()
   (interactive)
