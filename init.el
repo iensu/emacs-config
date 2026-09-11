@@ -354,38 +354,16 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (add-hook 'compilation-mode-hook
             (lambda () (setopt compilation-environment '("TERM=xterm-256color")))))
 
-;; Install vterm for better terminal support
-(use-package vterm
-  :ensure t
+;; Install ghostel for better terminal support
+(use-package ghostel
+  :vc (ghostel :url "https://github.com/dakra/ghostel"
+               :lisp-dir "lisp"
+               :rev "2bea18f3b52bf97d8222fea706da6fabdfc2cbb8")
+  :init
+  (use-package ghostel-compile
+    :hook (after-init . ghostel-compile-global-mode))
   :config
-  (setopt vterm-shell (executable-find "fish"))
-  (defun iensu/project-vterm ()
-    "Open a vterm terminal at the current project root."
-    (interactive)
-    (let* ((default-directory (project-root (project-current t)))
-           (vterm-buffer-name (project-prefixed-buffer-name "vterm"))
-           (vterm-buffer (get-buffer vterm-buffer-name)))
-      (if (and vterm-buffer (not current-prefix-arg))
-          (pop-to-buffer vterm-buffer t)
-        (vterm current-prefix-arg))))
-
-  (defun iensu--vterm-start (buffer-name directory &optional start-hook)
-    (let ((default-directory directory)
-          (vterm-buffer-name buffer-name))
-      (vterm)
-      (vterm-insert "direnv reload")
-      (vterm-send "RET")
-      (when start-hook
-        (funcall start-hook))))
-
-  (defun iensu--vterm-shutdown (buffer-name &optional shutdown-hook)
-    (let ((vterm-buffer-name buffer-name))
-      (vterm-send "C-c")
-      (when shutdown-hook
-        (funcall shutdown-hook))
-      (kill-buffer buffer-name))))
-
-(use-package multi-vterm :ensure t)
+  (setopt ghostel-shell (executable-find "fish")))
 
 ;;;;; Text editing tools
 
@@ -781,7 +759,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
    ("k" "close project" project-kill-buffers)
    ("a" "remember project" iensu/project-save)
    ("A" "forget project" iensu/project-remove)
-   ("v" "vterm" iensu/project-vterm)]
+   ("v" "terminal" ghostel-project)]
   ["Files & Buffers"
    ("f" "open project file" project-find-file)]
   ["Search"
@@ -797,7 +775,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (setopt project-switch-commands '((project-find-file "Find file")
                                     (project-find-regexp "Find regexp")
                                     (project-find-dir "Find directory")
-                                    (iensu/project-vterm "Vterm" ?v)
+                                    (ghostel-project "Terminal" ?v)
                                     (magit-project-status "Magit" ?m)))
 
   ;; Handle projects which are not version controlled
