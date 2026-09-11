@@ -20,15 +20,17 @@
   already installed.  `use-package' only installs when the package is
   missing, so a `:rev' bump is otherwise silently ignored."
   (funcall orig arg local-path)                 ; unchanged: install if missing
+  ; update package if package :rev has changed
   (pcase-let* ((`(,name ,_opts ,rev) arg)
                (desc (cadr (assq name package-alist))))
-    (when (and (stringp rev)                    ; concrete pin; nil = :newest, symbol = :last-release
-               desc (package-vc-p desc))
+    (when (and (stringp rev)                    ; rev is a concrete pin
+               desc
+               (package-vc-p desc))
       (let* ((dir (package-desc-dir desc))
              (default-directory (file-name-as-directory dir))
-             (head (ignore-errors
+             (cur-git-hash (ignore-errors
                      (car (process-lines "git" "rev-parse" "HEAD")))))
-        (unless (and head (string-prefix-p rev head))
+        (unless (and cur-git-hash (string-prefix-p rev cur-git-hash))
           (message "use-package :vc — syncing %s to %s" name rev)
           (unless (zerop (call-process "git" nil nil nil "checkout" "--detach" rev))
             (call-process "git" nil nil nil "fetch" "--all" "--tags")
