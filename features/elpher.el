@@ -1,6 +1,9 @@
 ;; -*- lexical-binding: t; -*-
 
-(use-package elpher :ensure t)
+(use-package elpher
+  :ensure t
+  :vc (elpher :url "https://github.com/emacsmirror/elpher"
+              :rev "d799c467a1f35934f96d33960d638ddf796f01ba"))
 
 (defun iensu-elpher--org-link-store ()
   "Store `elpher' in org-mode."

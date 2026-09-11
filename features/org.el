@@ -23,6 +23,8 @@
 ;; HTTP requests in Org files
 (use-package ob-restclient
   :ensure t
+  :vc (ob-restclient :url "https://github.com/alf/ob-restclient.el"
+                     :rev "94dd9cd98ff50717135ed5089afb378616faf11a")
   :after (org))
 
 ;;;; Org package configuration
@@ -111,6 +113,8 @@
 (require 'ox-texinfo)
 (use-package ox-gfm
   :ensure t
+  :vc (ox-gfm :url "https://github.com/larstvei/ox-gfm"
+              :rev "4f774f13d34b3db9ea4ddb0b1edc070b1526ccbb")
   :init
   (eval-after-load "org"
     '(require 'ox-gfm nil t)))
@@ -150,15 +154,6 @@
 ;; Make view more compact
 (setopt org-cycle-separator-lines 0)
 
-;; Only display one bullet per headline for a cleaner look.
-(use-package org-superstar
-  :ensure t
-  :after (org)
-  :init
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
-  :config
-  (setopt org-superstar-headline-bullets-list '(?◉)))
-
 ;; Autosaving org buffers
 (setq iensu--timer:org-save-buffers
       (run-at-time t (* 5 60) #'iensu/org-save-buffers))
@@ -191,7 +186,3 @@ based on the title."
 (defun iensu/org-add-anchor-link-friendly-ids-to-headlines-in-file ()
   (interactive)
   (org-map-entries #'iensu/org-get-anchor-link-friendly-custom-id))
-
-(use-package org-tree-slide :ensure t)
-(global-set-key (kbd "<f8>") 'org-tree-slide-mode)
-(global-set-key (kbd "S-<f8>") 'org-tree-slide-skip-done-toggle)

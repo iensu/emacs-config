@@ -2,7 +2,10 @@
 
 (require 'yaml-ts-mode)
 
-(use-package highlight-indentation :ensure t)
+(use-package highlight-indentation
+  :ensure t
+  :vc (highlight-indentation :url "https://github.com/antonj/Highlight-Indentation-for-Emacs"
+                             :rev "d88db4248882da2d4316e76ed673b4ac1fa99ce3"))
 
 (defun iensu--yaml-mode-hook ()
   (display-line-numbers-mode 1)

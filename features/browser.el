@@ -1,4 +1,7 @@
-(use-package w3m :ensure t)
+(use-package w3m
+  :ensure t
+  :vc (w3m :url "https://github.com/emacs-w3m/emacs-w3m"
+           :rev "4945c16910b5d3041db805c724604aad92ad0e69"))
 
 (defun iensu/query-ddg (query)
   "Send a query to DuckDuckGo using w3m"

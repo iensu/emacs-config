@@ -7,10 +7,14 @@
 (require 'html-ts-mode)
 (require 'css-mode)
 
-(use-package flymake-eslint :ensure t)
-(use-package add-node-modules-path :ensure t)
+(use-package add-node-modules-path
+  :ensure t
+  :vc (add-node-modules-path :url "https://github.com/codesuki/add-node-modules-path"
+                             :rev "841e93dfed50448da66c89a977c9182bb18796a1"))
 (use-package rjsx-mode
   :ensure t
+  :vc (rjsx-mode :url "https://github.com/felipeochoa/rjsx-mode"
+                 :rev "b697fe4d92cc84fa99a7bcb476f815935ea0d919")
   :init
   (add-to-list 'magic-mode-alist
                '((lambda () (and buffer-file-name
@@ -20,7 +24,8 @@
   :config
   (add-hook 'rjsx-mode-hook (lambda () (setq emmet-expand-jsx-className? t))))
 (use-package lsp-biome
-  :vc (:url "https://github.com/cxa/lsp-biome" :rev :newest)
+  :vc (:url "https://github.com/cxa/lsp-biome"
+       :rev "ba967468c41ac9647dae7fcc7e0f430a6d77a36f")
   :config
   (defun iensu--biome-hook ()
     (prettier-js-mode -1))

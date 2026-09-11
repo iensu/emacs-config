@@ -22,6 +22,8 @@
 
 (use-package flymake-clippy
   :ensure t
+  :vc (flymake-clippy :url "https://github.com/mak-kirkland/flymake-clippy"
+                      :rev "5a3873f40f4c4ddfa1fbf2c520a071b5aafb169f")
   :hook
   (rust-mode . flymake-clippy-setup)
   :config

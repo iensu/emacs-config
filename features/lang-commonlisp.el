@@ -8,6 +8,8 @@
 
 (use-package sly
   :ensure t
+  :vc (sly :url "https://github.com/joaotavora/sly"
+           :rev "3ffa216d0818972f7a7fea38a566a6b570349f3b")
   :commands (sly)
   :config (setq inferior-lisp-program (executable-find "sbcl")))
 

@@ -41,6 +41,8 @@
 ;; Make system path variables accessible in Emacs
 (use-package exec-path-from-shell
   :ensure t
+  :vc (exec-path-from-shell :url "https://github.com/purcell/exec-path-from-shell"
+                            :rev "dae820da35ad46234cbca31626ffb6da7928694a")
   :custom
   (exec-path-from-shell-check-startup-files nil)
   :init
@@ -183,6 +185,8 @@
 ;; File encryption
 (use-package age
   :ensure t
+  :vc (age :url "https://github.com/anticomputer/age.el"
+           :rev "e99165ef5274bc4512b8d77ba2ac208c59b5d456")
   :demand t
   :config
   (age-file-enable)
@@ -272,21 +276,17 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (prog-mode . editorconfig-mode)
   (text-mode . editorconfig-mode))
 
-;; Make parentheses pretty
-(use-package rainbow-delimiters
-  :ensure t
-  :hook
-  (scheme-mode . rainbow-delimiters-mode)
-  (emacs-lisp-mode . rainbow-delimiters-mode)
-  (lisp-mode . rainbow-delimiters-mode)
-  (lisp-interaction-mode . rainbow-delimiters-mode)
-  (geiser-repl-mode . rainbow-delimiters-mode))
-
 ;; Enable multiple cursors for convenient editing. Use `iedit' for quick and dirty multi-cursor
 ;; functionality.
-(use-package iedit :ensure t)
+(use-package iedit
+  :ensure t
+  :vc (iedit :url "https://github.com/victorhge/iedit"
+             :rev "14161daa295332a49dda92b97c00d62efd38acfe"))
+
 (use-package multiple-cursors
   :ensure t
+  :vc (multiple-cursors :url "https://github.com/magnars/multiple-cursors.el"
+                        :rev "ddd677091afc7d65ce56d11866e18aeded110ada")
   :bind
   (("M-="           . mc/edit-lines)
    ("C-S-<right>"   . mc/mark-next-like-this)
@@ -298,6 +298,8 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;; Expand region from current region or point.
 (use-package expand-region
   :ensure t
+  :vc (expand-region :url "https://github.com/magnars/expand-region.el"
+                     :rev "351279272330cae6cecea941b0033a8dd8bcc4e8")
   :bind
   (("C-=" . er/expand-region)
    ("C-M-=" . er/contract-region)))
@@ -321,6 +323,8 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;; Some of these commands might be intercepted by MacOS Mission Control shortcuts!
 (use-package smartparens
   :ensure t
+  :vc (smartparens :url "https://github.com/Fuco1/smartparens/"
+                   :rev "82d2cf084a19b0c2c3812e0550721f8a61996056")
   :init
   (require 'smartparens-config)
   :bind (:map smartparens-mode-map
@@ -340,19 +344,19 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (ielm-mode . smartparens-strict-mode)
   (emacs-lisp-mode . smartparens-strict-mode))
 
-;; Prettify compilation-mode buffers
-(use-package xterm-color
-  :ensure t
-  :init
-  (defun iensu--advice-compilation-filter (f proc string)
-    ;; Apply `xterm-color' only to real compilation buffers, and not buffers which rely on the
-    ;; color codes for parsing (ag.el, rg.el)
-    ;; More info: https://github.com/atomontage/xterm-color/issues/37
-    (funcall f proc (if (string-prefix-p "*compilation" (buffer-name (process-buffer proc)))
-                        (xterm-color-filter string) string)))
-  (advice-add 'compilation-filter :around #'iensu--advice-compilation-filter)
-  (add-hook 'compilation-mode-hook
-            (lambda () (setopt compilation-environment '("TERM=xterm-256color")))))
+;; ;; Prettify compilation-mode buffers
+;; (use-package xterm-color
+;;   :ensure t
+;;   :init
+;;   (defun iensu--advice-compilation-filter (f proc string)
+;;     ;; Apply `xterm-color' only to real compilation buffers, and not buffers which rely on the
+;;     ;; color codes for parsing (ag.el, rg.el)
+;;     ;; More info: https://github.com/atomontage/xterm-color/issues/37
+;;     (funcall f proc (if (string-prefix-p "*compilation" (buffer-name (process-buffer proc)))
+;;                         (xterm-color-filter string) string)))
+;;   (advice-add 'compilation-filter :around #'iensu--advice-compilation-filter)
+;;   (add-hook 'compilation-mode-hook
+;;             (lambda () (setopt compilation-environment '("TERM=xterm-256color")))))
 
 ;; Install ghostel for better terminal support
 (use-package ghostel
@@ -369,7 +373,6 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 ;; Spellcheck using flyspell
 (use-package flyspell
-  :bind (:map flyspell-mode-map ("C-:" . flyspell-popup-correct))
   :custom
   (ispell-program-name "aspell")
   (ispell-extra-args '("--sug-mode=ultra"))
@@ -404,11 +407,11 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
     (flyspell-buffer)
     (message (format "Switched dictionary to %s" dict))))
 
-(use-package flyspell-popup :ensure t :after (flyspell))
-
 ;; Emoji support because reasons...
 (use-package emojify
   :ensure t
+  :vc (emojify :url "https://github.com/iqbalansari/emacs-emojify"
+               :rev "1b726412f19896abf5e4857d4c32220e33400b55")
   :custom
   (emojify-emojis-dir (expand-file-name ".local/emojis" user-emacs-directory)))
 
@@ -433,6 +436,8 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 (use-package marginalia
   :ensure t
+  :vc (marginalia :url "https://github.com/minad/marginalia"
+                  :rev "7ec0b70afb43a756ecd45a958c6ebe797717fc91")
   :init
   (marginalia-mode)
   :config
@@ -440,6 +445,8 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 (use-package consult
   :ensure t
+  :vc (consult :url "https://github.com/minad/consult"
+               :rev "788735b54e5ad9d33137613aebae055443e3e05e")
   :bind
   (("C-c h"    . consult-history)
    ("C-x M-:"  . consult-complex-command)
@@ -491,13 +498,17 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 (use-package dired-subtree
   :ensure t
+  :vc (dired-subtree :url "https://github.com/Fuco1/dired-hacks"
+                     :rev "de9336f4b47ef901799fe95315fa080fa6d77b48")
   :commands (dired-subtree-toggle dired-subtree-cycle)
   :config
   (setopt dired-subtree-use-backgrounds nil))
 
 (use-package dired-sidebar
-  :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
   :ensure t
+  :vc (dired-sidebar :url "https://github.com/jojojames/dired-sidebar"
+                     :rev "8159b8a8134c9b6d65e3b3b22c54e034ae54db0b")
+  :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
   :commands (dired-sidebar-toggle-sidebar)
   :init
   (add-hook 'dired-sidebar-mode-hook
@@ -519,6 +530,8 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 (use-package deadgrep
   :ensure t
+  :vc (deadgrep :url "https://github.com/Wilfred/deadgrep"
+                :rev "85257234fa696f412c5701b94f3aa5266a760252")
   :config
   (add-to-list 'deadgrep-extra-arguments "--follow") ; follow symlinks
   (add-to-list 'deadgrep-extra-arguments "--hidden") ; search hidden files
@@ -529,18 +542,6 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   :config
   (setopt wgrep-auto-save-buffer t)
   (require 'wgrep-deadgrep))
-
-;; Snippet expansion for less repetitive text editing
-(use-package yasnippet
-  :ensure t
-  :delight yas-minor-mode
-  :init
-  (yas-global-mode 1)
-  (setopt yas-snippet-dirs (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" user-emacs-directory)))
-  :config
-  (add-hook 'snippet-mode-hook (lambda ()
-                                 (setopt mode-require-final-newline nil
-                                         require-final-newline nil))))
 
 (global-set-key (kbd "C-Ä") (lambda () (interactive)(forward-line -10)))
 (global-set-key (kbd "C-ä") (lambda () (interactive)(forward-line  10)))
@@ -602,7 +603,10 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 (global-set-key (kbd "s-d") 'windmove-swap-states-right)
 
 ;; Justfile support
-(use-package just-ts-mode :ensure t)
+(use-package just-ts-mode
+  :ensure t
+  :vc (just-ts-mode :url "https://github.com/leon-barrett/just-ts-mode.el"
+                    :rev "9dd136bc809de85fa66a4665312eb0f55b1c8094"))
 
 ;;;;; Global transient
 
@@ -628,7 +632,8 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 (global-set-key (kbd "C-å") #'iensu-transient)
 
 ;; Enhance explorability with by listing possible completions while doing key chords.
-(use-package which-key :config (which-key-mode))
+(use-package which-key
+  :config (which-key-mode))
 
 ;;;;; macOS specific keybindings
 
@@ -664,10 +669,12 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 (setq frame-title-format nil)
 
 ;; Use icons where applicable.
-(use-package all-the-icons :ensure t)
+(use-package all-the-icons
+  :ensure t
+  :vc (all-the-icons :url "https://github.com/domtronn/all-the-icons.el"
+                     :rev "4778632b29c8c8d2b7cd9ce69535d0be01d846f9"))
 
 (use-package modus-themes
-  :ensure t
   :config
   (load-theme 'modus-vivendi-tinted t))
 
@@ -701,6 +708,8 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;; Use `magit' for a great `git' experience.
 (use-package magit
   :ensure t
+  :vc (magit :url "https://github.com/magit/magit"
+             :rev "659f89955cf60fe3d4326d881c412df06c69680d")
   :bind (("C-x g" . magit-status))
   :custom
   (magit-bury-buffer-function 'quit-window)
@@ -797,13 +806,19 @@ Falls back to looking for .projectile for compatibility reasons."
 ;;;; IDE features
 
 ;; Highlight TODOs in programming buffers
-(use-package hl-todo :ensure t :hook ((prog-mode . hl-todo-mode)))
+(use-package hl-todo
+  :ensure t
+  :vc (hl-todo :url "https://github.com/tarsius/hl-todo"
+               :rev "527d545b8c2f36243194cbe4a8d0e6ac9d50e6a7")
+  :hook ((prog-mode . hl-todo-mode)))
 
 ;;;;; Autocompletion and intellisense
 
 ;; Corfu for completions
 (use-package corfu
   :ensure t
+  :vc (corfu :url "https://github.com/minad/corfu"
+             :rev "4303506204bdf5df8f5e7d1457f6fca465a4da8e")
   :custom
   (corfu-cycle t)
   (corfu-auto t)
@@ -823,6 +838,8 @@ Falls back to looking for .projectile for compatibility reasons."
 
 (use-package cape
   :ensure t
+  :vc (cape :url "https://github.com/minad/cape"
+            :rev "f0135abaf95a22b9fb2c951751a5d0733ce61bbd")
   :bind (("C-<tab>" . completion-at-point)
          ("H-c p" . completion-at-point)
          ("H-c t" . complete-tag)
@@ -847,6 +864,8 @@ Falls back to looking for .projectile for compatibility reasons."
 
 (use-package vertico
   :ensure t
+  :vc (vertico :url "https://github.com/minad/vertico"
+               :rev "493ac505168006b008b0504366614ee17c63d844")
   :init
   (vertico-mode)
   (setopt vertico-cycle t))
@@ -857,6 +876,8 @@ Falls back to looking for .projectile for compatibility reasons."
 
 (use-package orderless
   :ensure t
+  :vc (orderless :url "https://github.com/oantolin/orderless"
+                 :rev "cebe19e3cf0f30604d1ed1bfaa74fff21a4e89a5")
   :init
   (setopt completion-styles '(orderless basic)
           completion-category-overrides '((file (styles partial-completion))))
@@ -939,11 +960,17 @@ Falls back to looking for .projectile for compatibility reasons."
 
 (use-package lsp-mode
   :ensure t
+  :vc (lsp-mode :url "https://github.com/emacs-lsp/lsp-mode"
+                :rev "913a6c07f163205cb568bc68d7dfe677dbc358ab")
   :commands (lsp lsp-deferred)
   :bind (:map lsp-mode-map
               ("C-c l" . lsp-mode-transient)))
 
-(use-package lsp-ui :ensure t :commands lsp-ui-mode
+(use-package lsp-ui
+  :ensure t
+  :vc (lsp-ui :url "https://github.com/emacs-lsp/lsp-ui"
+              :rev "176eca71d1c5498ed6258b5b27d73293ff7cd7ed")
+  :commands lsp-ui-mode
   :bind
   (:map lsp-mode-map
         ("C-c C-ä" . lsp-ui-doc-focus-frame))
@@ -964,11 +991,16 @@ Falls back to looking for .projectile for compatibility reasons."
   (add-hook 'before-save-hook #'iensu--maybe-lsp-format-buffer))
 
 ;; Autoformatting
-(use-package prettier-js :ensure t)
+(use-package prettier-js
+  :ensure t
+  :vc (prettier-js :url "https://github.com/prettier/prettier-emacs"
+                   :rev "29ea00ae63d2b45b5ae86a46a190924f2d589f2c"))
 
 ;; HTTP requests
 (use-package restclient
   :ensure t
+  :vc (restclient :url "https://github.com/emacsorphanage/restclient"
+                  :rev "d280632df39a175dac06037038105e32945624be")
   :mode (("\\.rest$" . restclient-mode)
          ("\\.restclient$" . restclient-mode)
          ("\\.http$" . restclient-mode))
@@ -978,6 +1010,8 @@ Falls back to looking for .projectile for compatibility reasons."
 
 (use-package envrc
   :ensure t
+  :vc (envrc :url "https://github.com/purcell/envrc"
+             :rev "0ccdd131fb642323527e67aa9e854c9a82598507")
   :hook (after-init . envrc-global-mode)
   :config
   (add-to-list 'auto-mode-alist '("\\.envrc\\'" . sh-mode))
@@ -1024,6 +1058,8 @@ Falls back to looking for .projectile for compatibility reasons."
 
 (use-package denote
   :ensure t
+  :vc (denote :url "https://github.com/protesilaos/denote"
+              :rev "9fd6692a32a99e236c377f12f114b77a91417ac2")
   :config
   (add-hook 'dired-mode-hook #'denote-dired-mode)
   (setopt denote-directory iensu-denote-dir)
@@ -1061,6 +1097,8 @@ Falls back to looking for .projectile for compatibility reasons."
 
 (use-package denote-org
   :ensure t
+  :vc (denote-org :url "https://github.com/protesilaos/denote-org"
+                  :rev "b6b788db84fbf0c918bce6b3ce65508dd651bb4c")
   :config
   (add-to-list 'denote-file-types
                '(org-gpg :extension ".org.gpg"
