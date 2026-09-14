@@ -108,6 +108,20 @@
     (dolist (template additional-org-templates)
       (add-to-list 'org-structure-template-alist template))))
 
+;; Age-based alternative to `org-crypt'; set `org-cryptage-key' and
+;; `org-cryptage-identity-file' to use it.
+;; Use the `org-fold-reveal' to decrypt an entry, or `C-c d' to decrypt all entries
+;; in a file.
+(use-package org-cryptage
+  :load-path "~/.emacs.d/packages"
+  :after (org)
+  :config
+  (org-cryptage-use-before-save-magic)
+  (define-key org-mode-map (kbd "C-c d") 'org-decrypt-entries)
+  (when-let* ((rage (executable-find "rage")))
+    (setopt org-cryptage-program rage))
+  (setopt org-cryptage-tag-matcher "crypt"))
+
 (defun org-babel-execute:yaml (body params) body)
 (require 'ox-md)
 (require 'ox-texinfo)
