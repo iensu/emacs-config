@@ -686,16 +686,10 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (set-face-attribute 'tab-bar nil
                       :family "Monospace"
                       :background nil)
-  (set-face-attribute 'tab-bar-tab nil
-                      :box `(:line-width (4 . 8) :color ,(face-attribute 'default :background)))
-  (set-face-attribute 'tab-bar-tab-inactive nil
-                      :box `(:line-width (4 . 8) :color ,(face-attribute 'default :background))
-                      :background nil
-                      :foreground "#969696")
-
-  (setopt tab-bar-close-button-show nil
-          tab-bar-new-button-show nil)
-  (setq tab-bar-separator "  ")
+  (setopt tab-bar-close-button-show t
+          tab-bar-new-button-show nil
+          tab-bar-menu-bar-button nil)
+  (setq tab-bar-separator "｜")
   (require 'desktop)
   (add-to-list 'desktop-path "~/.emacs.d/.local/"))
 
