@@ -1,7 +1,8 @@
 ;; -*- lexical-binding: t; -*-
 
 (defun iensu--rust-hook ()
-  (lsp-deferred)
+  ;; (lsp-deferred)
+  (eglot-ensure)
   (flymake-mode 1))
 
 (use-package rust-ts-mode
