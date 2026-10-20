@@ -344,30 +344,23 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (ielm-mode . smartparens-strict-mode)
   (emacs-lisp-mode . smartparens-strict-mode))
 
-;; ;; Prettify compilation-mode buffers
-;; (use-package xterm-color
-;;   :ensure t
-;;   :init
-;;   (defun iensu--advice-compilation-filter (f proc string)
-;;     ;; Apply `xterm-color' only to real compilation buffers, and not buffers which rely on the
-;;     ;; color codes for parsing (ag.el, rg.el)
-;;     ;; More info: https://github.com/atomontage/xterm-color/issues/37
-;;     (funcall f proc (if (string-prefix-p "*compilation" (buffer-name (process-buffer proc)))
-;;                         (xterm-color-filter string) string)))
-;;   (advice-add 'compilation-filter :around #'iensu--advice-compilation-filter)
-;;   (add-hook 'compilation-mode-hook
-;;             (lambda () (setopt compilation-environment '("TERM=xterm-256color")))))
-
 ;; Install ghostel for better terminal support
 (use-package ghostel
   :vc (ghostel :url "https://github.com/dakra/ghostel"
                :lisp-dir "lisp"
-               :rev "2bea18f3b52bf97d8222fea706da6fabdfc2cbb8")
+               :rev "b77eae6f58ed1fc9b36694807e84a4bb6dfbf9fd")
   :init
   (use-package ghostel-compile
     :hook (after-init . ghostel-compile-global-mode))
   :config
-  (setopt ghostel-shell (executable-find "fish")))
+  (setopt ghostel-shell (executable-find "fish"))
+
+  (defun iensu/ghostel-project ()
+    "Start a ghostel shell buffer or switch to it. Force create a new one with C-u."
+    (interactive)
+    (if current-prefix-arg
+        (ghostel-project-new)
+      (ghostel-project))))
 
 ;;;;; Text editing tools
 
@@ -762,7 +755,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
    ("k" "close project" project-kill-buffers)
    ("a" "remember project" iensu/project-save)
    ("A" "forget project" iensu/project-remove)
-   ("v" "terminal" ghostel-project)]
+   ("v" "terminal" iensu/ghostel-project)]
   ["Files & Buffers"
    ("f" "open project file" project-find-file)]
   ["Search"
@@ -918,13 +911,13 @@ Falls back to looking for .projectile for compatibility reasons."
    ("l" "list references" xref-find-references)
    ("d" "describe symbol" eldoc-doc-buffer)
    ("e" "list buffer errors" flymake-show-buffer-diagnostics)
-   ("å" "goto previous error in buffer" flymake-goto-previous-error)
-   ("ä" "goto next error in buffer" flymake-goto-next-error)
+;;   ("å" "goto previous error in buffer" flymake-goto-previous-error)
+;;   ("ä" "goto next error in buffer" flymake-goto-next-error)
    ("E" "list workspace errors" flymake-show-project-diagnostics)]
   ["Refactoring"
    ("a" "execute code action" eglot-code-actions)
    ("n" "rename symbol" eglot-rename)
-   ("i" "organize imports" eglot-code-actions-organize-imports)
+;;   ("i" "organize imports" eglot-code-actions-organize-imports)
    ("f" "format buffer" eglot-format-buffer)]
   ["Misc"
    ("w" "Reconnect to LSP server" eglot-reconnect)])
@@ -941,8 +934,8 @@ Falls back to looking for .projectile for compatibility reasons."
    ("l" "list references" xref-find-references)
    ("d" "describe symbol" eldoc-doc-buffer)
    ("e" "list buffer errors" flymake-show-buffer-diagnostics)
-   ("å" "goto previous error in buffer" flymake-goto-previous-error)
-   ("ä" "goto next error in buffer" flymake-goto-next-error)
+;;   ("å" "goto previous error in buffer" flymake-goto-previous-error)
+;;   ("ä" "goto next error in buffer" flymake-goto-next-error)
    ("E" "list workspace errors" flymake-show-project-diagnostics)]
   ["Refactoring"
    ("a" "execute code action" lsp-execute-code-action)
