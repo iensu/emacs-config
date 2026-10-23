@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 ;; Connection information when using the SourceHut bouncer service. First register the server
 ;; using the web interface https://chat.sr.ht, then follow the instructions below:
 ;;

@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (use-package graphviz-dot-mode
   :ensure t
   :vc (graphviz-dot-mode :url "https://github.com/ppareit/graphviz-dot-mode"

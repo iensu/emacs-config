@@ -50,6 +50,9 @@
   :ensure t
   :vc (emmet-mode :url "https://github.com/smihica/emmet-mode"
                   :rev "322d3bb112fced57d63b44863357f7a0b7eee1e3")
+  ;; package-vc puts src/ on `load-path' (MELPA's spec overrides any
+  ;; `:lisp-dir' given here), but emmet-mode.el lives in the repo root
+  :load-path "elpa/emmet-mode"
   :config
   (add-hook 'emmet-mode-hook
             (lambda ()

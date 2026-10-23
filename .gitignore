@@ -61,3 +61,4 @@ forge-database-*.sql
 tree-sitter/
 rfcs/
 packages-local/
+projects.eld

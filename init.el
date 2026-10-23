@@ -38,6 +38,12 @@
               (warn "use-package :vc — could not check out %s for %s" rev name)))
           (package-vc-rebuild desc))))))
 
+;; Work around an Emacs 31 package-vc bug: dependencies listed without a
+;; version (e.g. nix-mode's `magit-section reformatter') share the same
+;; ("0") list, which `package-vc--unpack-1' then converts twice, failing
+;; with "Version must be a string".
+(advice-add 'lm--prepare-package-dependencies :filter-return #'copy-tree)
+
 ;; Make system path variables accessible in Emacs
 (use-package exec-path-from-shell
   :ensure t
@@ -667,9 +673,7 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   :vc (all-the-icons :url "https://github.com/domtronn/all-the-icons.el"
                      :rev "4778632b29c8c8d2b7cd9ce69535d0be01d846f9"))
 
-(use-package modus-themes
-  :config
-  (load-theme 'modus-vivendi-tinted t))
+(load-theme 'modus-vivendi-tinted t)
 
 ;; Pimp tab-bar-mode
 (use-package emacs
@@ -806,6 +810,8 @@ Falls back to looking for .projectile for compatibility reasons."
   :ensure t
   :vc (corfu :url "https://github.com/minad/corfu"
              :rev "4303506204bdf5df8f5e7d1457f6fca465a4da8e")
+  ;; package-vc does not add the extensions directory to `load-path'
+  :load-path "elpa/corfu/extensions"
   :custom
   (corfu-cycle t)
   (corfu-auto t)
@@ -816,6 +822,8 @@ Falls back to looking for .projectile for compatibility reasons."
   (corfu-preview-current 'insert)
   (corfu-preselect-first t)
   :init
+  (require 'corfu-echo)
+  (require 'corfu-history)
   (global-corfu-mode 1)
   (corfu-echo-mode 1)
   (corfu-history-mode 1)
@@ -949,6 +957,8 @@ Falls back to looking for .projectile for compatibility reasons."
   :ensure t
   :vc (lsp-mode :url "https://github.com/emacs-lsp/lsp-mode"
                 :rev "913a6c07f163205cb568bc68d7dfe677dbc358ab")
+  ;; package-vc does not add the clients directory to `load-path'
+  :load-path "elpa/lsp-mode/clients"
   :commands (lsp lsp-deferred)
   :bind (:map lsp-mode-map
               ("C-c l" . lsp-mode-transient)))
