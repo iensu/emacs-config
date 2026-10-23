@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; Module for JavaScript, TypeScript, Deno and everything else...
 
 (require 'typescript-ts-mode)
@@ -5,9 +7,14 @@
 (require 'html-ts-mode)
 (require 'css-mode)
 
-(use-package flymake-eslint)
-(use-package add-node-modules-path)
+(use-package add-node-modules-path
+  :ensure t
+  :vc (add-node-modules-path :url "https://github.com/codesuki/add-node-modules-path"
+                             :rev "841e93dfed50448da66c89a977c9182bb18796a1"))
 (use-package rjsx-mode
+  :ensure t
+  :vc (rjsx-mode :url "https://github.com/felipeochoa/rjsx-mode"
+                 :rev "b697fe4d92cc84fa99a7bcb476f815935ea0d919")
   :init
   (add-to-list 'magic-mode-alist
                '((lambda () (and buffer-file-name
@@ -17,7 +24,8 @@
   :config
   (add-hook 'rjsx-mode-hook (lambda () (setq emmet-expand-jsx-className? t))))
 (use-package lsp-biome
-  :vc (:url "https://github.com/cxa/lsp-biome" :rev :newest)
+  :vc (:url "https://github.com/cxa/lsp-biome"
+       :rev "ba967468c41ac9647dae7fcc7e0f430a6d77a36f")
   :config
   (defun iensu--biome-hook ()
     (prettier-js-mode -1))
@@ -113,7 +121,7 @@ rather than the one whose range covers POS."
                  (treesit-parser-range-on parser pos pos))
         (throw 'lang (treesit-parser-language parser))))
     (treesit-parser-language
-     (or (and (boundp 'treesit-primary-parser) treesit-primary-parser)
+     (or treesit-primary-parser
          (car (treesit-parser-list))))))
 
 ;; html-ts-mode--indent-rules has ((parent-is "fragment") column-0 0), which

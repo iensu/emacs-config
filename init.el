@@ -1,26 +1,54 @@
-;;; Code:
+;;; Code:  -*- lexical-binding: t; -*-
 
 ;;;; Package installation and management
 
 (require 'package)
 (require 'use-package)
+(require 'transient)
 
 (setopt package-enable-at-startup t
-        use-package-always-ensure t
+        use-package-always-ensure nil
         byte-compile-warnings nil
         native-comp-async-report-warnings-errors nil) ; silence noisy warnings
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
 
+(define-advice use-package-vc-install
+    (:around (orig arg &optional local-path) iensu-sync-pinned-rev)
+  "Check out the `:rev' pinned in a `:vc' form even if the package is
+  already installed.  `use-package' only installs when the package is
+  missing, so a `:rev' bump is otherwise silently ignored."
+  (funcall orig arg local-path)                 ; unchanged: install if missing
+  ; update package if package :rev has changed
+  (pcase-let* ((`(,name ,_opts ,rev) arg)
+               (desc (cadr (assq name package-alist))))
+    (when (and (stringp rev)                    ; rev is a concrete pin
+               desc
+               (package-vc-p desc))
+      (let* ((dir (package-desc-dir desc))
+             (default-directory (file-name-as-directory dir))
+             (cur-git-hash (ignore-errors
+                     (car (process-lines "git" "rev-parse" "HEAD")))))
+        (unless (and cur-git-hash (string-prefix-p rev cur-git-hash))
+          (message "use-package :vc — syncing %s to %s" name rev)
+          (unless (zerop (call-process "git" nil nil nil "checkout" "--detach" rev))
+            (call-process "git" nil nil nil "fetch" "--all" "--tags")
+            (unless (zerop (call-process "git" nil nil nil "checkout" "--detach" rev))
+              (warn "use-package :vc — could not check out %s for %s" rev name)))
+          (package-vc-rebuild desc))))))
 
-
-;; The :vc keyword is not enabled in use-package yet, so using this additional package.
-(unless (package-installed-p 'vc-use-package)
-  (package-vc-install "https://github.com/slotThe/vc-use-package"))
+;; Work around an Emacs 31 package-vc bug: dependencies listed without a
+;; version (e.g. nix-mode's `magit-section reformatter') share the same
+;; ("0") list, which `package-vc--unpack-1' then converts twice, failing
+;; with "Version must be a string".
+(advice-add 'lm--prepare-package-dependencies :filter-return #'copy-tree)
 
 ;; Make system path variables accessible in Emacs
 (use-package exec-path-from-shell
+  :ensure t
+  :vc (exec-path-from-shell :url "https://github.com/purcell/exec-path-from-shell"
+                            :rev "dae820da35ad46234cbca31626ffb6da7928694a")
   :custom
   (exec-path-from-shell-check-startup-files nil)
   :init
@@ -47,30 +75,7 @@
 
 (defvar iensu-age-session-duration "15 minutes")
 
-(defvar iensu-org-refile-targets nil
-  "Org files which can be used as refiling targets.")
-
-(defvar iensu-org-capture-templates nil
-  "Capture templates to be used by Org mode.")
-
-(defvar iensu-enabled-features-alist '("elpher"
-                                       "pdf"
-                                       "web-dev"
-                                       "lang-bash"
-                                       "lang-docker"
-                                       "lang-fish"
-                                       "lang-go"
-                                       "lang-graphviz"
-                                       "lang-javascript"
-                                       "lang-json"
-                                       "lang-markdown"
-                                       "lang-nix"
-                                       "lang-terraform"
-                                       "lang-toml"
-                                       "lang-typescript"
-                                       "lang-rust"
-                                       "lang-wasm"
-                                       "lang-yaml")
+(defvar iensu-enabled-features-alist '("elpher")
   "Locally enabled features. Available features are stored in the `features/' directory.")
 
 ;; Load settings
@@ -78,8 +83,6 @@
   (when (file-exists-p local-settings-file)
     (load-file (expand-file-name "local-settings.el"
 				                         user-emacs-directory))))
-
-;; (setopt load-path (cons (concat user-emacs-directory "features") load-path))
 
 
 ;;;; Helper functions
@@ -150,7 +153,7 @@
         backup-by-copying t
         delete-old-versions t
         kept-new-versions 6
-        frame-inhibit-implied-resize 1
+        frame-inhibit-implied-resize t
 
         delete-by-moving-to-trash t
         undo-limit 8000000)
@@ -160,7 +163,7 @@
 ;; Don't allow eldoc to display more than one line in the echo area
 (setopt eldoc-echo-area-use-multiline-p nil)
 
-(pixel-scroll-mode 1)
+(pixel-scroll-precision-mode 1)
 
 ;; Enable autosaves
 (auto-save-mode 1)
@@ -188,6 +191,8 @@
 ;; File encryption
 (use-package age
   :ensure t
+  :vc (age :url "https://github.com/anticomputer/age.el"
+           :rev "e99165ef5274bc4512b8d77ba2ac208c59b5d456")
   :demand t
   :config
   (age-file-enable)
@@ -220,12 +225,13 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (defun iensu/age-session-end ()
     "Ends an age session by deleting the decrypted file and cancelling the age session timer."
     (interactive)
-    (let ((decrypted-key (string-replace ".age" ".txt" iensu-age-encrypted-key)))
-      (when (file-exists-p decrypted-key)
-        (shell-command (format "rm %s" decrypted-key)))
-      (when iensu--age-session-timer
-        (cancel-timer iensu--age-session-timer)
-        (setq iensu--age-session-timer nil))))
+    (when iensu-age-encrypted-key
+      (let ((decrypted-key (string-replace ".age" ".txt" iensu-age-encrypted-key)))
+        (when (file-exists-p decrypted-key)
+          (shell-command (format "rm %s" decrypted-key)))
+        (when iensu--age-session-timer
+          (cancel-timer iensu--age-session-timer)
+          (setq iensu--age-session-timer nil)))))
 
   (add-hook 'kill-emacs-hook #'iensu/age-session-end))
 
@@ -270,25 +276,23 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;; Disable suspend key binding
 (global-unset-key (kbd "C-x C-z"))
 
-;; Use the editorconfig package to conform to project formatting rules if present.
+;; Use the built-in editorconfig package to conform to project formatting rules if present.
 (use-package editorconfig
   :hook
   (prog-mode . editorconfig-mode)
   (text-mode . editorconfig-mode))
 
-;; Make parentheses pretty
-(use-package rainbow-delimiters
-  :hook
-  (scheme-mode . rainbow-delimiters-mode)
-  (emacs-lisp-mode . rainbow-delimiters-mode)
-  (lisp-mode . rainbow-delimiters-mode)
-  (lisp-interaction-mode . rainbow-delimiters-mode)
-  (geiser-repl-mode . rainbow-delimiters-mode))
-
 ;; Enable multiple cursors for convenient editing. Use `iedit' for quick and dirty multi-cursor
 ;; functionality.
-(use-package iedit)
+(use-package iedit
+  :ensure t
+  :vc (iedit :url "https://github.com/victorhge/iedit"
+             :rev "14161daa295332a49dda92b97c00d62efd38acfe"))
+
 (use-package multiple-cursors
+  :ensure t
+  :vc (multiple-cursors :url "https://github.com/magnars/multiple-cursors.el"
+                        :rev "ddd677091afc7d65ce56d11866e18aeded110ada")
   :bind
   (("M-="           . mc/edit-lines)
    ("C-S-<right>"   . mc/mark-next-like-this)
@@ -299,6 +303,9 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 ;; Expand region from current region or point.
 (use-package expand-region
+  :ensure t
+  :vc (expand-region :url "https://github.com/magnars/expand-region.el"
+                     :rev "351279272330cae6cecea941b0033a8dd8bcc4e8")
   :bind
   (("C-=" . er/expand-region)
    ("C-M-=" . er/contract-region)))
@@ -321,6 +328,9 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 ;; Manipulate parentheses and other code structures.
 ;; Some of these commands might be intercepted by MacOS Mission Control shortcuts!
 (use-package smartparens
+  :ensure t
+  :vc (smartparens :url "https://github.com/Fuco1/smartparens/"
+                   :rev "82d2cf084a19b0c2c3812e0550721f8a61996056")
   :init
   (require 'smartparens-config)
   :bind (:map smartparens-mode-map
@@ -340,56 +350,28 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (ielm-mode . smartparens-strict-mode)
   (emacs-lisp-mode . smartparens-strict-mode))
 
-;; Prettify compilation-mode buffers
-(use-package xterm-color
+;; Install ghostel for better terminal support
+(use-package ghostel
+  :vc (ghostel :url "https://github.com/dakra/ghostel"
+               :lisp-dir "lisp"
+               :rev "b77eae6f58ed1fc9b36694807e84a4bb6dfbf9fd")
   :init
-  (defun iensu--advice-compilation-filter (f proc string)
-    ;; Apply `xterm-color' only to real compilation buffers, and not buffers which rely on the
-    ;; color codes for parsing (ag.el, rg.el)
-    ;; More info: https://github.com/atomontage/xterm-color/issues/37
-    (funcall f proc (if (string-prefix-p "*compilation" (buffer-name (process-buffer proc)))
-                        (xterm-color-filter string) string)))
-  (advice-add 'compilation-filter :around #'iensu--advice-compilation-filter)
-  (add-hook 'compilation-mode-hook
-            (lambda () (setopt compilation-environment '("TERM=xterm-256color")))))
-
-;; Install vterm for better terminal support
-(use-package vterm
+  (use-package ghostel-compile
+    :hook (after-init . ghostel-compile-global-mode))
   :config
-  (setopt vterm-shell (executable-find "fish"))
-  (defun iensu/project-vterm ()
-    "Open a vterm terminal at the current project root."
+  (setopt ghostel-shell (executable-find "fish"))
+
+  (defun iensu/ghostel-project ()
+    "Start a ghostel shell buffer or switch to it. Force create a new one with C-u."
     (interactive)
-    (let* ((default-directory (project-root (project-current t)))
-           (vterm-buffer-name (project-prefixed-buffer-name "vterm"))
-           (vterm-buffer (get-buffer vterm-buffer-name)))
-      (if (and vterm-buffer (not current-prefix-arg))
-          (pop-to-buffer vterm-buffer t)
-        (vterm current-prefix-arg))))
-
-  (defun iensu--vterm-start (buffer-name directory &optional start-hook)
-    (let ((default-directory directory)
-          (vterm-buffer-name buffer-name))
-      (vterm)
-      (vterm-insert "direnv reload")
-      (vterm-send "RET")
-      (when start-hook
-        (funcall start-hook))))
-
-  (defun iensu--vterm-shutdown (buffer-name &optional shutdown-hook)
-    (let ((vterm-buffer-name buffer-name))
-      (vterm-send "C-c")
-      (when shutdown-hook
-        (funcall shutdown-hook))
-      (kill-buffer buffer-name))))
-
-(use-package multi-vterm)
+    (if current-prefix-arg
+        (ghostel-project-new)
+      (ghostel-project))))
 
 ;;;;; Text editing tools
 
 ;; Spellcheck using flyspell
 (use-package flyspell
-  :bind (:map flyspell-mode-map ("C-:" . flyspell-popup-correct))
   :custom
   (ispell-program-name "aspell")
   (ispell-extra-args '("--sug-mode=ultra"))
@@ -424,16 +406,11 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
     (flyspell-buffer)
     (message (format "Switched dictionary to %s" dict))))
 
-(use-package flyspell-popup :after (flyspell))
-
-;; Use synosaurus to look up synonyms
-(use-package synosaurus
-  :custom
-  (synosaurus-backend 'synosaurus-backend-wordnet)
-  (synosaurus-choose-method 'popup))
-
 ;; Emoji support because reasons...
 (use-package emojify
+  :ensure t
+  :vc (emojify :url "https://github.com/iqbalansari/emacs-emojify"
+               :rev "1b726412f19896abf5e4857d4c32220e33400b55")
   :custom
   (emojify-emojis-dir (expand-file-name ".local/emojis" user-emacs-directory)))
 
@@ -441,7 +418,6 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   "Enables text editing tools such as spell checking and thesaurus support"
   (interactive)
   (flyspell-mode 1)
-  (synosaurus-mode 1)
   (emojify-mode 1)
   (visual-line-mode 1)
   (column-number-mode))
@@ -451,15 +427,25 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 ;;;; Utility packages
 
-(use-package rfc-mode)
+(use-package rfc-mode
+  :vc (rfc-mode :url "https://github.com/iensu/rfc-mode"
+                :rev "51d64553c120cfc302671611b83dd4e6b2ef942a")
+  :config
+  (setopt rfc-mode-directory (expand-file-name ".local/rfcs" user-emacs-directory)))
 
 (use-package marginalia
+  :ensure t
+  :vc (marginalia :url "https://github.com/minad/marginalia"
+                  :rev "7ec0b70afb43a756ecd45a958c6ebe797717fc91")
   :init
   (marginalia-mode)
   :config
   (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil)))
 
 (use-package consult
+  :ensure t
+  :vc (consult :url "https://github.com/minad/consult"
+               :rev "788735b54e5ad9d33137613aebae055443e3e05e")
   :bind
   (("C-c h"    . consult-history)
    ("C-x M-:"  . consult-complex-command)
@@ -495,19 +481,6 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   ;; Disable previews
   (setopt consult-preview-key nil))
 
-(use-package embark
-  :bind
-  (("C-."   . embark-act)
-   ("H-a"   . embark-act)
-   ("H-e"   . embark-export)
-   ("C-h B" . embark-bindings)))
-
-(use-package embark-consult)
-
-;; Install `hydra' with `pretty-hydra' which simplifies hydra definitions
-(use-package hydra)
-(use-package pretty-hydra :after (hydra))
-
 ;; Armor exported PGP-keys
 (setq epa-armor t)
 ;; Password entry in minibuffer
@@ -516,15 +489,25 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 (setopt dired-listing-switches "-alGh --group-directories-first"
         dired-dwim-target t)
 (when (executable-find "gls") ;; native OSX ls works differently then GNU ls
-  (setq insert-directory-program "/usr/local/bin/gls"))
+  (setq insert-directory-program (executable-find "gls")))
 
 
 ;;;; Navigation
 ;; This section adds packages which enables quick navigation and search.
 
-(use-package dired-sidebar
-  :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
+(use-package dired-subtree
   :ensure t
+  :vc (dired-subtree :url "https://github.com/Fuco1/dired-hacks"
+                     :rev "de9336f4b47ef901799fe95315fa080fa6d77b48")
+  :commands (dired-subtree-toggle dired-subtree-cycle)
+  :config
+  (setopt dired-subtree-use-backgrounds nil))
+
+(use-package dired-sidebar
+  :ensure t
+  :vc (dired-sidebar :url "https://github.com/jojojames/dired-sidebar"
+                     :rev "8159b8a8134c9b6d65e3b3b22c54e034ae54db0b")
+  :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
   :commands (dired-sidebar-toggle-sidebar)
   :init
   (add-hook 'dired-sidebar-mode-hook
@@ -534,9 +517,9 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   :config
   (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
   (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
-  (setopt dired-sidebar-theme 'none)
   (setopt dired-sidebar-use-term-integration t)
-  (setopt dired-sidebar-use-custom-font t))
+  (setopt dired-sidebar-use-custom-font t)
+  (setopt dired-sidebar-theme 'nerd))
 
 ;; Mark-ring tweaks
 (setopt mark-ring-max 6
@@ -545,6 +528,9 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 (setopt set-mark-command-repeat-pop t)
 
 (use-package deadgrep
+  :ensure t
+  :vc (deadgrep :url "https://github.com/Wilfred/deadgrep"
+                :rev "85257234fa696f412c5701b94f3aa5266a760252")
   :config
   (add-to-list 'deadgrep-extra-arguments "--follow") ; follow symlinks
   (add-to-list 'deadgrep-extra-arguments "--hidden") ; search hidden files
@@ -555,29 +541,6 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   :config
   (setopt wgrep-auto-save-buffer t)
   (require 'wgrep-deadgrep))
-
-;; Snippet expansion for less repetitive text editing
-(use-package yasnippet
-  :delight yas-minor-mode
-  :init
-  (yas-global-mode 1)
-  (setopt yas-snippet-dirs (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" user-emacs-directory)))
-  :config
-  (add-hook 'snippet-mode-hook (lambda ()
-                                 (setopt mode-require-final-newline nil
-                                         require-final-newline nil))))
-
-;; Speedbar for file navigation
-;; (require 'speedbar)
-;; (defun iensu/speedbar-reset-layout ()
-;;   (setf (alist-get 'width speedbar-frame-parameters) 60)
-;;   (setf (alist-get 'height speedbar-frame-parameters) 45)
-;;   (setf (alist-get 'left speedbar-frame-parameters) 0)
-;;   (setf (alist-get 'top speedbar-frame-parameters) 0))
-
-;; (add-hook 'speedbar-after-create-hook #'iensu/speedbar-reset-layout)
-;; (define-key speedbar-file-key-map (kbd "<tab>") #'speedbar-toggle-line-expansion)
-;; (global-set-key (kbd "C-ä") #'speedbar)
 
 (global-set-key (kbd "C-Ä") (lambda () (interactive)(forward-line -10)))
 (global-set-key (kbd "C-ä") (lambda () (interactive)(forward-line  10)))
@@ -639,40 +602,37 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 (global-set-key (kbd "s-d") 'windmove-swap-states-right)
 
 ;; Justfile support
-(use-package just-ts-mode)
+(use-package just-ts-mode
+  :ensure t
+  :vc (just-ts-mode :url "https://github.com/leon-barrett/just-ts-mode.el"
+                    :rev "9dd136bc809de85fa66a4665312eb0f55b1c8094"))
 
-;;;;; Global hydra
+;;;;; Global transient
 
-;; Setup a global hydra with keybindings I use very often.
-(pretty-hydra-define iensu-hydra
-  (:color teal :quit-key "q" :title "Global commands")
-  ("Utilities"
-   (("d"   duplicate-dwim                                        "duplicate DWIM" :exit nil)
-    ("s"   deadgrep                                              "search")
-    ("t"   toggle-truncate-lines                                 "truncate lines")
-    ("u"   revert-buffer                                         "reload buffer")
-    ("D"   iensu/cycle-ispell-dictionary                         "change dictionary")
-    ("+"   (lambda () (interactive) (enlarge-window-horizontally 10)) "enlarge horizontally" :exit nil)
-    ("?"   (lambda () (interactive) (enlarge-window 5))               "enlarge vertically" :exit nil)
-    ("-"   (lambda () (interactive) (shrink-window-horizontally 10))  "shrink horizontally" :exit nil)
-    ("_"   (lambda () (interactive) (shrink-window 5))                "shrink vertically" :exit nil))
-   "Bookmarks"
-   (("l"   list-bookmarks                  "list bookmarks")
-    ("b"   bookmark-set                    "set bookmark"))
-   "Misc"
-   (("P"   iensu/project-todo-list         "project todo list")
-    ("p"   iensu/open-project-org-file     "open project notes file")
-    ("ä"   iensu/promote-side-window       "promote side window"))
-   "Hide/show"
-   (("h h" hs-toggle-hiding                "toggle block visibility")
-    ("h l" hs-hide-level                   "hide all blocks at same level")
-    ("h a" hs-hide-all                     "hide all")
-    ("h s" hs-show-all                     "show all"))))
+;; Setup a global transient menu with keybindings I use very often.
+(transient-define-prefix iensu-transient ()
+  "Global commands"
+  ["Utilities"
+   ("d"   "duplicate DWIM" duplicate-dwim :transient t)
+   ("s"   "search" deadgrep)
+   ("t"   "truncate lines" toggle-truncate-lines)
+   ("u"   "reload buffer" revert-buffer)]
+  ["Bookmarks"
+   ("l"   "list bookmarks" list-bookmarks)
+   ("b"   "set bookmark" bookmark-set)]
+  ["Misc"
+   ("ä"   "promote side window" iensu/promote-side-window)]
+  ["Hide/show"
+   ("h h" "toggle block visibility" hs-toggle-hiding)
+   ("h l" "hide all blocks at same level" hs-hide-level)
+   ("h a" "hide all" hs-hide-all)
+   ("h s" "show all" hs-show-all)])
 
-(global-set-key (kbd "C-å") #'iensu-hydra/body)
+(global-set-key (kbd "C-å") #'iensu-transient)
 
 ;; Enhance explorability with by listing possible completions while doing key chords.
-(use-package which-key :config (which-key-mode))
+(use-package which-key
+  :config (which-key-mode))
 
 ;;;;; macOS specific keybindings
 
@@ -708,11 +668,12 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 (setq frame-title-format nil)
 
 ;; Use icons where applicable.
-(use-package all-the-icons)
+(use-package all-the-icons
+  :ensure t
+  :vc (all-the-icons :url "https://github.com/domtronn/all-the-icons.el"
+                     :rev "4778632b29c8c8d2b7cd9ce69535d0be01d846f9"))
 
-(use-package modus-themes
-  :config
-  (load-theme 'modus-vivendi-tinted t))
+(load-theme 'modus-vivendi-tinted t)
 
 ;; Pimp tab-bar-mode
 (use-package emacs
@@ -722,16 +683,10 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (set-face-attribute 'tab-bar nil
                       :family "Monospace"
                       :background nil)
-  (set-face-attribute 'tab-bar-tab nil
-                      :box `(:line-width (4 . 8) :color ,(face-attribute 'default :background)))
-  (set-face-attribute 'tab-bar-tab-inactive nil
-                      :box `(:line-width (4 . 8) :color ,(face-attribute 'default :background))
-                      :background nil
-                      :foreground "#969696")
-
-  (setopt tab-bar-close-button-show nil
-          tab-bar-new-button-show nil)
-  (setq tab-bar-separator "  ")
+  (setopt tab-bar-close-button-show t
+          tab-bar-new-button-show nil
+          tab-bar-menu-bar-button nil)
+  (setq tab-bar-separator "｜")
   (require 'desktop)
   (add-to-list 'desktop-path "~/.emacs.d/.local/"))
 
@@ -743,6 +698,9 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
 
 ;; Use `magit' for a great `git' experience.
 (use-package magit
+  :ensure t
+  :vc (magit :url "https://github.com/magit/magit"
+             :rev "659f89955cf60fe3d4326d881c412df06c69680d")
   :bind (("C-x g" . magit-status))
   :custom
   (magit-bury-buffer-function 'quit-window)
@@ -754,25 +712,26 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (setopt magit-log-margin '(t "%Y-%m-%d " magit-log-margin-width t 18)))
 
 ;; `smerge-mode' is a merge conflict resolution tool which is great but unfortunately has awful
-;; default keybindings. Here I define a hydra to make `smerge' easier to work with.
+;; default keybindings. Here I define a transient to make `smerge' easier to work with.
+(transient-define-prefix smerge-transient ()
+  "Smerge - Git conflicts"
+  ["Resolving"
+   ("RET" "Keep current" smerge-keep-current :transient t)
+   ("l"   "Keep lower" smerge-keep-lower :transient t)
+   ("u"   "Keep upper" smerge-keep-upper :transient t)
+   ("b"   "Keep base" smerge-keep-base :transient t)
+   ("C"   "Combine with next" smerge-combine-with-next)
+   ("a"   "Keep all" smerge-keep-all :transient t)
+   ("r"   "Resolve" smerge-resolve)]
+  ["Navigation"
+   ("n"   "Next conflict" smerge-next :transient t)
+   ("p"   "Previous conflict" smerge-prev :transient t)
+   ("R"   "Highlight differences" smerge-refine :transient t)]
+  ["Misc"
+   ("E"   "Open in Ediff" smerge-ediff)])
+
 (use-package smerge-mode
-  :bind (:map smerge-mode-map (("C-c ö" . smerge-mode-hydra/body)))
-  :pretty-hydra
-  ((:color teal :quit-key "q" :title "Smerge - Git conflicts")
-   ("Resolving"
-    (("RET" smerge-keep-current      "Keep current"          :exit nil)
-     ("l"   smerge-keep-lower        "Keep lower"            :exit nil)
-     ("u"   smerge-keep-upper        "Keep upper"            :exit nil)
-     ("b"   smerge-keep-base         "Keep base"             :exit nil)
-     ("C"   smerge-combine-with-next "Combine with next")
-     ("a"   smerge-keep-all          "Keep all"              :exit nil)
-     ("r"   smerge-resolve           "Resolve"))
-    "Navigation"
-    (("n"   smerge-next              "Next conflict"         :exit nil)
-     ("p"   smerge-prev              "Previous conflict"     :exit nil)
-     ("R"   smerge-refine            "Highlight differences" :exit nil))
-    "Misc"
-    (("E"   smerge-ediff             "Open in Ediff")))))
+  :bind (:map smerge-mode-map (("C-c ö" . smerge-transient))))
 
 
 ;;;; Project management
@@ -793,31 +752,30 @@ The decrypted key will be deleted either after `iensu-age-session-duration' or w
   (interactive)
   (consult-ripgrep (project-root (project-current))))
 
+(transient-define-prefix project-transient ()
+  "Project management"
+  ["Project"
+   ("p" "open project" project-switch-project)
+   ("k" "close project" project-kill-buffers)
+   ("a" "remember project" iensu/project-save)
+   ("A" "forget project" iensu/project-remove)
+   ("v" "terminal" iensu/ghostel-project)]
+  ["Files & Buffers"
+   ("f" "open project file" project-find-file)]
+  ["Search"
+   ("s" "search" iensu/project-ripgrep)
+   ("r" "query replace" project-query-replace-regexp)])
+
 (use-package project
   :bind
-  (("C-c p" . project-hydra/body))
-  :pretty-hydra
-  ((:color teal :quit-key "q" :title "Project management")
-   ("Project"
-    (("p" project-switch-project "open project")
-     ("k" project-kill-buffers "close project")
-     ("a" iensu/project-save "remember project")
-     ("A" iensu/project-remove "forget project")
-     ("v" iensu/project-vterm "vterm"))
-    "Files & Buffers"
-    (("f" project-find-file "open project file")
-     ("o" iensu/open-project-org-file "open project org file")
-     ("T" iensu/project-todo-list "open project TODO list"))
-    "Search"
-    (("s" iensu/project-ripgrep "search")
-     ("r" project-query-replace-regexp "query replace"))))
+  (("C-c p" . project-transient))
   :config
   (setopt project-list-file (expand-file-name "projects"
                                               (concat user-emacs-directory ".local/")))
   (setopt project-switch-commands '((project-find-file "Find file")
                                     (project-find-regexp "Find regexp")
                                     (project-find-dir "Find directory")
-                                    (iensu/project-vterm "Vterm" ?v)
+                                    (ghostel-project "Terminal" ?v)
                                     (magit-project-status "Magit" ?m)))
 
   ;; Handle projects which are not version controlled
@@ -839,12 +797,21 @@ Falls back to looking for .projectile for compatibility reasons."
 ;;;; IDE features
 
 ;; Highlight TODOs in programming buffers
-(use-package hl-todo :hook ((prog-mode . hl-todo-mode)))
+(use-package hl-todo
+  :ensure t
+  :vc (hl-todo :url "https://github.com/tarsius/hl-todo"
+               :rev "527d545b8c2f36243194cbe4a8d0e6ac9d50e6a7")
+  :hook ((prog-mode . hl-todo-mode)))
 
 ;;;;; Autocompletion and intellisense
 
 ;; Corfu for completions
 (use-package corfu
+  :ensure t
+  :vc (corfu :url "https://github.com/minad/corfu"
+             :rev "4303506204bdf5df8f5e7d1457f6fca465a4da8e")
+  ;; package-vc does not add the extensions directory to `load-path'
+  :load-path "elpa/corfu/extensions"
   :custom
   (corfu-cycle t)
   (corfu-auto t)
@@ -855,6 +822,8 @@ Falls back to looking for .projectile for compatibility reasons."
   (corfu-preview-current 'insert)
   (corfu-preselect-first t)
   :init
+  (require 'corfu-echo)
+  (require 'corfu-history)
   (global-corfu-mode 1)
   (corfu-echo-mode 1)
   (corfu-history-mode 1)
@@ -863,6 +832,9 @@ Falls back to looking for .projectile for compatibility reasons."
                                     (setopt corfu-auto nil))))
 
 (use-package cape
+  :ensure t
+  :vc (cape :url "https://github.com/minad/cape"
+            :rev "f0135abaf95a22b9fb2c951751a5d0733ce61bbd")
   :bind (("C-<tab>" . completion-at-point)
          ("H-c p" . completion-at-point)
          ("H-c t" . complete-tag)
@@ -886,6 +858,9 @@ Falls back to looking for .projectile for compatibility reasons."
 
 
 (use-package vertico
+  :ensure t
+  :vc (vertico :url "https://github.com/minad/vertico"
+               :rev "493ac505168006b008b0504366614ee17c63d844")
   :init
   (vertico-mode)
   (setopt vertico-cycle t))
@@ -895,6 +870,9 @@ Falls back to looking for .projectile for compatibility reasons."
   (savehist-mode 1))
 
 (use-package orderless
+  :ensure t
+  :vc (orderless :url "https://github.com/oantolin/orderless"
+                 :rev "cebe19e3cf0f30604d1ed1bfaa74fff21a4e89a5")
   :init
   (setopt completion-styles '(orderless basic)
           completion-category-overrides '((file (styles partial-completion))))
@@ -922,62 +900,74 @@ Falls back to looking for .projectile for compatibility reasons."
   (setopt enable-recursive-minibuffers t))
 
 
-(pretty-hydra-define prog-mode-hydra
-  (:color teal :quit-key "q" :title "Programming")
-  ("Exploration"
-    (("l" xref-find-references "list references")
-     ("d" eldoc-doc-buffer "describe symbol")
-     ("e" flymake-show-buffer-diagnostics "list buffer errors")
-     ("å" flymake-goto-previous-error "goto previous error in buffer")
-     ("ä" flymake-goto-next-error "goto next error in buffer ")
-     ("E" flymake-show-project-diagnostics "list workspace errors"))))
+(transient-define-prefix prog-mode-transient ()
+  "Programming"
+  ["Exploration"
+   ("l" "list references" xref-find-references)
+   ("d" "describe symbol" eldoc-doc-buffer)
+   ("e" "list buffer errors" flymake-show-buffer-diagnostics)
+   ("å" "goto previous error in buffer" flymake-goto-previous-error)
+   ("ä" "goto next error in buffer" flymake-goto-next-error)
+   ("E" "list workspace errors" flymake-show-project-diagnostics)])
 
-(define-key prog-mode-map (kbd "C-c l") 'prog-mode-hydra/body)
+(define-key prog-mode-map (kbd "C-c l") 'prog-mode-transient)
 (define-key prog-mode-map (kbd "M-<RET>") 'default-indent-new-line)
+
+(transient-define-prefix eglot-transient ()
+  "Eglot"
+  ["Exploration"
+   ("l" "list references" xref-find-references)
+   ("d" "describe symbol" eldoc-doc-buffer)
+   ("e" "list buffer errors" flymake-show-buffer-diagnostics)
+;;   ("å" "goto previous error in buffer" flymake-goto-previous-error)
+;;   ("ä" "goto next error in buffer" flymake-goto-next-error)
+   ("E" "list workspace errors" flymake-show-project-diagnostics)]
+  ["Refactoring"
+   ("a" "execute code action" eglot-code-actions)
+   ("n" "rename symbol" eglot-rename)
+;;   ("i" "organize imports" eglot-code-actions-organize-imports)
+   ("f" "format buffer" eglot-format-buffer)]
+  ["Misc"
+   ("w" "Reconnect to LSP server" eglot-reconnect)])
 
 (use-package eglot
   :bind (:map eglot-mode-map
-              ("C-c l" . eglot-hydra/body))
-  :pretty-hydra
-  ((:title "Eglot" :quit-key "q" :color teal)
-   ("Exploration"
-    (("l" xref-find-references "list references")
-     ("d" eldoc-doc-buffer "describe symbol")
-     ("e" flymake-show-buffer-diagnostics "list buffer errors")
-     ("å" flymake-goto-previous-error "goto previous error in buffer")
-     ("ä" flymake-goto-next-error "goto next error in buffer ")
-     ("E" flymake-show-project-diagnostics "list workspace errors"))
-    "Refactoring"
-    (("a" eglot-code-actions "execute code action")
-     ("n" eglot-rename "rename symbol")
-     ("i" eglot-code-actions-organize-imports "organize imports")
-     ("f" eglot-format-buffer "format buffer"))
-    "Misc"
-    (("w" eglot-reconnect "Reconnect to LSP server"))))
+              ("C-c l" . eglot-transient))
   :config
   (setopt eglot-confirm-server-initiated-edits nil))
 
-(use-package lsp-mode
-  :bind (:map lsp-mode-map
-              ("C-c l" . lsp-mode-hydra/body))
-  :pretty-hydra
-  ((:title "LSP" :quit-key "q" :color teal)
-   ("Exploration"
-    (("l" xref-find-references "list references")
-     ("d" eldoc-doc-buffer "describe symbol")
-     ("e" flymake-show-buffer-diagnostics "list buffer errors")
-     ("å" flymake-goto-previous-error "goto previous error in buffer")
-     ("ä" flymake-goto-next-error "goto next error in buffer ")
-     ("E" flymake-show-project-diagnostics "list workspace errors"))
-    "Refactoring"
-    (("a" lsp-execute-code-action "execute code action")
-     ("n" lsp-rename "rename symbol")
-     ("i" lso-organize-imports "organize imports")
-     ("f" lsp-format-buffer "format buffer"))
-    "Misc"
-    (("w" lsp-workspace-restart "Reconnect to LSP server")))))
+(transient-define-prefix lsp-mode-transient ()
+  "LSP"
+  ["Exploration"
+   ("l" "list references" xref-find-references)
+   ("d" "describe symbol" eldoc-doc-buffer)
+   ("e" "list buffer errors" flymake-show-buffer-diagnostics)
+;;   ("å" "goto previous error in buffer" flymake-goto-previous-error)
+;;   ("ä" "goto next error in buffer" flymake-goto-next-error)
+   ("E" "list workspace errors" flymake-show-project-diagnostics)]
+  ["Refactoring"
+   ("a" "execute code action" lsp-execute-code-action)
+   ("n" "rename symbol" lsp-rename)
+   ("i" "organize imports" lsp-organize-imports)
+   ("f" "format buffer" lsp-format-buffer)]
+  ["Misc"
+   ("w" "Reconnect to LSP server" lsp-workspace-restart)])
 
-(use-package lsp-ui :commands lsp-ui-mode
+(use-package lsp-mode
+  :ensure t
+  :vc (lsp-mode :url "https://github.com/emacs-lsp/lsp-mode"
+                :rev "913a6c07f163205cb568bc68d7dfe677dbc358ab")
+  ;; package-vc does not add the clients directory to `load-path'
+  :load-path "elpa/lsp-mode/clients"
+  :commands (lsp lsp-deferred)
+  :bind (:map lsp-mode-map
+              ("C-c l" . lsp-mode-transient)))
+
+(use-package lsp-ui
+  :ensure t
+  :vc (lsp-ui :url "https://github.com/emacs-lsp/lsp-ui"
+              :rev "176eca71d1c5498ed6258b5b27d73293ff7cd7ed")
+  :commands lsp-ui-mode
   :bind
   (:map lsp-mode-map
         ("C-c C-ä" . lsp-ui-doc-focus-frame))
@@ -998,10 +988,16 @@ Falls back to looking for .projectile for compatibility reasons."
   (add-hook 'before-save-hook #'iensu--maybe-lsp-format-buffer))
 
 ;; Autoformatting
-(use-package prettier-js)
+(use-package prettier-js
+  :ensure t
+  :vc (prettier-js :url "https://github.com/prettier/prettier-emacs"
+                   :rev "29ea00ae63d2b45b5ae86a46a190924f2d589f2c"))
 
 ;; HTTP requests
 (use-package restclient
+  :ensure t
+  :vc (restclient :url "https://github.com/emacsorphanage/restclient"
+                  :rev "d280632df39a175dac06037038105e32945624be")
   :mode (("\\.rest$" . restclient-mode)
          ("\\.restclient$" . restclient-mode)
          ("\\.http$" . restclient-mode))
@@ -1009,12 +1005,10 @@ Falls back to looking for .projectile for compatibility reasons."
   :config
   (setq outline-regexp "[#]+"))
 
-(use-package hurl-mode
-  :vc (hurl-mode :url "https://github.com/JasZhe/hurl-mode")
-  :mode (("\\.hurl$" . hurl-mode)))
-
 (use-package envrc
   :ensure t
+  :vc (envrc :url "https://github.com/purcell/envrc"
+             :rev "0ccdd131fb642323527e67aa9e854c9a82598507")
   :hook (after-init . envrc-global-mode)
   :config
   (add-to-list 'auto-mode-alist '("\\.envrc\\'" . sh-mode))
@@ -1061,6 +1055,8 @@ Falls back to looking for .projectile for compatibility reasons."
 
 (use-package denote
   :ensure t
+  :vc (denote :url "https://github.com/protesilaos/denote"
+              :rev "9fd6692a32a99e236c377f12f114b77a91417ac2")
   :config
   (add-hook 'dired-mode-hook #'denote-dired-mode)
   (setopt denote-directory iensu-denote-dir)
@@ -1098,6 +1094,8 @@ Falls back to looking for .projectile for compatibility reasons."
 
 (use-package denote-org
   :ensure t
+  :vc (denote-org :url "https://github.com/protesilaos/denote-org"
+                  :rev "b6b788db84fbf0c918bce6b3ce65508dd651bb4c")
   :config
   (add-to-list 'denote-file-types
                '(org-gpg :extension ".org.gpg"
@@ -1125,10 +1123,6 @@ Falls back to looking for .projectile for compatibility reasons."
                          :link-in-context-regexp denote-org-link-in-context-regexp))
   (setopt denote-file-type 'org))
 
-;; http://yummymelon.com/devnull/mathing-in-emacs-with-casual.html
-(use-package casual
-  :bind (:map calc-mode-map (("C-o" . casual-main-menu))))
-
 
 ;;;; Setup fonts
 (defvar iensu--font-ring nil)
@@ -1151,8 +1145,6 @@ Falls back to looking for .projectile for compatibility reasons."
     (set-frame-font font :keep-size t)
     (message "Using font %s" font)))
 
-(iensu/cycle-fonts)
-
 (defun iensu/change-font-size (font)
   (interactive
    (let ((fonts (sort (ring-elements iensu--font-ring))))
@@ -1167,13 +1159,7 @@ Falls back to looking for .projectile for compatibility reasons."
     (set-frame-font font :keep-size t)
     (message "Using font %s" font)))
 
-(use-package ultra-scroll
-  :vc (:url "https://github.com/jdtsmith/ultra-scroll")
-  :init
-  (setq scroll-conservatively 3 ; or whatever value you prefer, since v0.4
-        scroll-margin 0)        ; important: scroll-margin>0 not yet supported
-  :config
-  (ultra-scroll-mode 1))
+(iensu/change-font-size "Maple Mono NF CN-14")
 
 ;;;; Start Emacs server
 (require 'server)
@@ -1197,13 +1183,6 @@ Falls back to looking for .projectile for compatibility reasons."
 ;;;; Stuff set by Emacs
 (put 'downcase-region 'disabled nil)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-vc-selected-packages
-   '()))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

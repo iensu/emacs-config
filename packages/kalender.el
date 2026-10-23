@@ -1,4 +1,4 @@
-;;; Swedish calendar settings
+;;; Swedish calendar settings  -*- lexical-binding: t; -*-
 ;;; Taken from sv-kalender.el: http://bigwalter.net/daniel/elisp/sv-kalender.el
 
 ;; Göm vissa helgdagar?

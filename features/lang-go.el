@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (require 'go-ts-mode)
 
 (defun iensu--go-mode-hook ()

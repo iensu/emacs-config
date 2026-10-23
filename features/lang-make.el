@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (require 'cmake-ts-mode)
 
 (add-hook 'makefile-mode-hook

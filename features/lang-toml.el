@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (require 'toml-ts-mode)
 
 (defun iensu--toml-mode-hook ()

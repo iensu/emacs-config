@@ -1,4 +1,4 @@
-;;; Org mode configuration
+;;; Org mode configuration  -*- lexical-binding: t; -*-
 
 ;;; Code:
 
@@ -22,6 +22,9 @@
 
 ;; HTTP requests in Org files
 (use-package ob-restclient
+  :ensure t
+  :vc (ob-restclient :url "https://github.com/alf/ob-restclient.el"
+                     :rev "94dd9cd98ff50717135ed5089afb378616faf11a")
   :after (org))
 
 ;;;; Org package configuration
@@ -105,10 +108,27 @@
     (dolist (template additional-org-templates)
       (add-to-list 'org-structure-template-alist template))))
 
+;; Age-based alternative to `org-crypt'; set `org-cryptage-key' and
+;; `org-cryptage-identity-file' to use it.
+;; Use the `org-fold-reveal' to decrypt an entry, or `C-c d' to decrypt all entries
+;; in a file.
+(use-package org-cryptage
+  :load-path "~/.emacs.d/packages"
+  :after (org)
+  :config
+  (org-cryptage-use-before-save-magic)
+  (define-key org-mode-map (kbd "C-c d") 'org-decrypt-entries)
+  (when-let* ((rage (executable-find "rage")))
+    (setopt org-cryptage-program rage))
+  (setopt org-cryptage-tag-matcher "crypt"))
+
 (defun org-babel-execute:yaml (body params) body)
 (require 'ox-md)
 (require 'ox-texinfo)
 (use-package ox-gfm
+  :ensure t
+  :vc (ox-gfm :url "https://github.com/larstvei/ox-gfm"
+              :rev "4f774f13d34b3db9ea4ddb0b1edc070b1526ccbb")
   :init
   (eval-after-load "org"
     '(require 'ox-gfm nil t)))
@@ -148,24 +168,16 @@
 ;; Make view more compact
 (setopt org-cycle-separator-lines 0)
 
-;; Only display one bullet per headline for a cleaner look.
-(use-package org-superstar
-  :after (org)
-  :init
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
-  :config
-  (setopt org-superstar-headline-bullets-list '(?◉)))
-
 ;; Autosaving org buffers
 (setq iensu--timer:org-save-buffers
       (run-at-time t (* 5 60) #'iensu/org-save-buffers))
 
-(pretty-hydra-define+ iensu-hydra ()
-  ("Org clock"
-   (("c c" org-clock-in      "start clock")
-    ("c r" org-clock-in-last "resume clock")
-    ("c s" org-clock-out     "stop clock")
-    ("c g" org-clock-goto    "goto clocked task"))))
+(transient-append-suffix 'iensu-transient (list 3)
+  ["Org clock"
+   ("c c" "start clock" org-clock-in)
+   ("c r" "resume clock" org-clock-in-last)
+   ("c s" "stop clock" org-clock-out)
+   ("c g" "goto clocked task" org-clock-goto)])
 
 (defun iensu/org-get-anchor-link-friendly-custom-id ()
   "Gets the the `CUSTOM_ID' property of the current org entry or generates an anchor link friendly ID
@@ -175,7 +187,7 @@ based on the title."
     (if (and existing-id (string-match "\\S+" existing-id))
         existing-id
       (cl-flet ((title->id (title)
-                  (let* ((no-subtitle (first (split-string title ":")))
+                  (let* ((no-subtitle (car (split-string title ":")))
                          (lowercase (downcase no-subtitle))
                          (no-weird-chars (replace-regexp-in-string "[\.\,\+\?\(\)\~\!]+" "" lowercase))
                          (no-whitespace (replace-regexp-in-string "\s+" "-" no-weird-chars)))
@@ -188,7 +200,3 @@ based on the title."
 (defun iensu/org-add-anchor-link-friendly-ids-to-headlines-in-file ()
   (interactive)
   (org-map-entries #'iensu/org-get-anchor-link-friendly-custom-id))
-
-(use-package org-tree-slide)
-(global-set-key (kbd "<f8>") 'org-tree-slide-mode)
-(global-set-key (kbd "S-<f8>") 'org-tree-slide-skip-done-toggle)

@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 ;; Connection information when using the SourceHut bouncer service. First register the server
 ;; using the web interface https://chat.sr.ht, then follow the instructions below:
 ;;
@@ -22,7 +24,11 @@
         erc-fill-function 'erc-fill-static
         erc-fill-static-center 20)
 
-(use-package erc-hl-nicks :after erc)
+(use-package erc-hl-nicks
+  :ensure t
+  :vc (erc-hl-nicks :url "https://github.com/leathekd/erc-hl-nicks"
+                    :rev "fd2759bde20c25226a332c3d19aed6c7f135bf10")
+  :after erc)
 
 (setopt erc-modules '(autoaway
                       autojoin

@@ -57,3 +57,8 @@ straight/*
 forge-database-*.sql
 
 /session.*
+
+tree-sitter/
+rfcs/
+packages-local/
+projects.eld

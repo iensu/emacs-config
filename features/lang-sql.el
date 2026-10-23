@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (require 'sql)
 
 (add-to-list 'auto-mode-alist '("\\.psql\\'" . sql-mode))
