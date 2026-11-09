@@ -21,7 +21,6 @@
 
     (prettier-js-mode 1))
   (rainbow-mode 1)
-  (emmet-mode 1)
   (lsp-deferred))
 
 (add-hook 'web-mode-hook #'iensu--web-mode-hook)
@@ -45,17 +44,3 @@
   :vc (scss-mode :url "https://github.com/antonj/scss-mode"
                  :rev "cf58dbec5394280503eb5502938f3b5445d1b53d")
   :mode ("\\.scss$" "\\.styl$"))
-
-(use-package emmet-mode
-  :ensure t
-  :vc (emmet-mode :url "https://github.com/smihica/emmet-mode"
-                  :rev "322d3bb112fced57d63b44863357f7a0b7eee1e3")
-  ;; package-vc puts src/ on `load-path' (MELPA's spec overrides any
-  ;; `:lisp-dir' given here), but emmet-mode.el lives in the repo root
-  :load-path "elpa/emmet-mode"
-  :config
-  (add-hook 'emmet-mode-hook
-            (lambda ()
-              (when (or (string-suffix-p ".jsx" (buffer-name))
-                        (string-suffix-p ".tsx" (buffer-name)))
-                (setq emmet-expand-jsx-className? t)))))

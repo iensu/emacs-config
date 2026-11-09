@@ -20,9 +20,7 @@
                '((lambda () (and buffer-file-name
                                  (string-equal "js" (file-name-extension buffer-file-name))
                                  (string-match "^import .* from [\"']react[\"']" (buffer-string))))
-                 . rjsx-mode))
-  :config
-  (add-hook 'rjsx-mode-hook (lambda () (setq emmet-expand-jsx-className? t))))
+                 . rjsx-mode)))
 (use-package lsp-biome
   :vc (:url "https://github.com/cxa/lsp-biome"
        :rev "ba967468c41ac9647dae7fcc7e0f430a6d77a36f")
@@ -219,8 +217,7 @@ rather than the one whose range covers POS."
   (iensu--js-setup-template-literal-ranges))
 
 (defun iensu--typescript-jsx-hook ()
-  (iensu--typescript-hook)
-  (emmet-mode 1))
+  (iensu--typescript-hook))
 
 (add-hook 'typescript-ts-mode-hook #'iensu--typescript-hook)
 (add-hook 'js-ts-mode-hook         #'iensu--typescript-hook)

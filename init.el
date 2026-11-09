@@ -809,9 +809,8 @@ Falls back to looking for .projectile for compatibility reasons."
 (use-package corfu
   :ensure t
   :vc (corfu :url "https://github.com/minad/corfu"
-             :rev "4303506204bdf5df8f5e7d1457f6fca465a4da8e")
-  ;; package-vc does not add the extensions directory to `load-path'
-  :load-path "elpa/corfu/extensions"
+             :rev "4303506204bdf5df8f5e7d1457f6fca465a4da8e"
+             :lisp-dir "extensions")
   :custom
   (corfu-cycle t)
   (corfu-auto t)
@@ -956,9 +955,8 @@ Falls back to looking for .projectile for compatibility reasons."
 (use-package lsp-mode
   :ensure t
   :vc (lsp-mode :url "https://github.com/emacs-lsp/lsp-mode"
-                :rev "913a6c07f163205cb568bc68d7dfe677dbc358ab")
-  ;; package-vc does not add the clients directory to `load-path'
-  :load-path "elpa/lsp-mode/clients"
+                :rev "913a6c07f163205cb568bc68d7dfe677dbc358ab"
+                :lisp-dir "clients")
   :commands (lsp lsp-deferred)
   :bind (:map lsp-mode-map
               ("C-c l" . lsp-mode-transient)))
